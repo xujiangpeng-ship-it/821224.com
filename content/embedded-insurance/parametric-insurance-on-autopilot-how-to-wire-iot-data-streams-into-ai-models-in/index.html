@@ -179,7 +179,7 @@
 
             <header class="article-header">
                 <a href="/embedded-insurance/" class="tag tag-indigo">Embedded Insurance</a>
-                <h1>Parametric Insurance on Autopilot: How to Wire IoT Data Streams into AI Models in 7 Weeks</h1>
+                <h1>Parametric Insurance on Autopilot: How to Wire IoT Data Streams into AI Models in 7 Weeks Parametric Insurance on Autopilot: How to Wire IoT Data Streams into AI Models in 7 Weeks</h1>
                 <div class="article-meta">
                     <span>May 31, 2026</span>
                     <span class="dot"></span>
@@ -191,58 +191,58 @@
 
             <div class="article-content">
                 
-                <h2>Parametric Insurance on Autopilot: How to Wire IoT Data Streams into AI Models in 7 Weeks</h2>
+                <h2>I’ve worked with half a dozen MGAs rolling out parametric products since 2020. The difference between pilots that die on the vine and those that actually price in the market comes down to one thing: <strong>getting clean IoT data into the underwriting engine before the carrier’s actuarial team changes its mind.</strong> This guide walks you through a repeatable 7-week build that embeds AI on top of IoT feeds, from sensor selection to policy payout. I’ll call out the places where teams burn budget on “cool tech” instead of actuarial math.</h2>
 
-<p>I’ve worked with half a dozen MGAs rolling out parametric products since 2020. The difference between pilots that die on the vine and those that actually price in the market comes down to one thing: <strong>getting clean IoT data into the underwriting engine before the carrier’s actuarial team changes its mind.</strong> This guide walks you through a repeatable 7-week build that embeds AI on top of IoT feeds, from sensor selection to policy payout. I’ll call out the places where teams burn budget on “cool tech” instead of actuarial math.</p>
+<p>Estimated burn: $120k in direct costs plus 3–4 actuaries for 7 weeks. If you have to spin up a new carrier front, tack on another $80k and 2 more weeks. 1. Pick the Trigger and the Feed</p>
 
-<p>Estimated burn: $120k in direct costs plus 3–4 actuaries for 7 weeks. If you have to spin up a new carrier front, tack on another $80k and 2 more weeks.</p>
+<p>Parametric insurance pays on a <strong>parametric trigger</strong>, not on loss. The trigger must be: <strong>Observable</strong>: sensor or third-party data source must be outside your control.</p>
 
 ---
 
-<h3>1. Pick the Trigger and the Feed</h3>
+<h3><strong>Binary</strong>: above/below a threshold, not a loss estimate. <strong>Verifiable</strong>: no disputes when the claim hits.</h3>
 
-<p>Parametric insurance pays on a <strong>parametric trigger</strong>, not on loss. The trigger must be:</p>
+<p>Common triggers: Trigger</p>
 <ul>
-<li><strong>Observable</strong>: sensor or third-party data source must be outside your control.</li>
-<li><strong>Binary</strong>: above/below a threshold, not a loss estimate.</li>
-<li><strong>Verifiable</strong>: no disputes when the claim hits.</li>
+<li>Data Source Typical payout</li>
+<li>Latency Key Risk</li>
+<li>Wind speed ≥ 120 km/h NOAA METAR + private weather stations</li>
 </ul>
 
-<p>Common triggers:</p>
+<p>30–50% of sum insured 15 min</p>
 <table>
 <thead>
-<tr><th>Trigger</th><th>Data Source</th><th>Typical payout</th><th>Latency</th><th>Key Risk</th></tr>
+<tr><th>Station calibration drift Ground motion ≥ 0.2g</th><th>USGS ShakeMap 50% of sum insured</th><th>2–5 min Event misclassification</th><th>Water depth ≥ 0.5 m IoT ultrasonic sensors + NOAA tide</th><th>40% of sum insured 5 min</th></tr>
 </thead>
 <tbody>
-<tr><td>Wind speed ≥ 120 km/h</td><td>NOAA METAR + private weather stations</td><td>30–50% of sum insured</td><td>15 min</td><td>Station calibration drift</td></tr>
-<tr><td>Ground motion ≥ 0.2g</td><td>USGS ShakeMap</td><td>50% of sum insured</td><td>2–5 min</td><td>Event misclassification</td></tr>
-<tr><td>Water depth ≥ 0.5 m</td><td>IoT ultrasonic sensors + NOAA tide</td><td>40% of sum insured</td><td>5 min</td><td>Sensor fouling in salt water</td></tr>
-<tr><td>Temperature ≥ 40 °C for 48 h</td><td>BOM + private weather stations</td><td>20% of sum insured</td><td>60 min</td><td>Sensor vandalism</td></tr>
+<tr><td>Sensor fouling in salt water Temperature ≥ 40 °C for 48 h</td><td>BOM + private weather stations 20% of sum insured</td><td>60 min Sensor vandalism</td><td><strong>Trade-off:</strong> NOAA METAR is free but only updates every 5–60 min; private stations give 1-min cadence at $300/month each. For a 500-policy crop-hail product, that’s $150k/year in sensor leases versus $0, but the loss ratio drops from 85 % to 55 % when you nail the trigger timing.</td><td>Hard rule: never use raw IoT signals as the trigger. Always layer a reputable third-party source to handle sensor failure. 2. Build the “Digital Twin” Pipeline</td></tr>
+<tr><td>You need a data pipeline that: Ingests IoT + third-party feeds.</td><td>Runs a data-quality check every 15 min. Computes the trigger condition.</td><td>Writes a <strong>bordereaux</strong> line for the policy engine. I’ve seen teams lose months trying to bolt this onto an existing core system. Don’t. Spin up a green-field micro-service in Rust or Go. Memory footprint: 256 MB, CPU: 1 vCPU, disk: 5 GB.</td><td><strong>Week 1–2: Ingestion Layer</strong> <strong>IoT sensors</strong>: Use MQTT over TLS. Example topic: <code>iot/sensor/{site_id}/temperature</code>. Payload:</td><td><strong>Third-party APIs</strong>: NOAA, USGS, BOM. Use <a href="https://github.com/samuelcolvin/watchfiles">watchfiles</a> to poll every 15 min. Cache the last 30 days locally to survive API outages. <strong>Week 2–3: Data-Quality Engine</strong></td></tr>
+<tr><td>Write a Rust struct that flags: Sensor value > 6σ from rolling 24-h mean → mark as <code>FAIL</code>.</td><td>Battery < 20 % → mark as <code>DEGRADED</code>. Timestamp older than 60 min → <code>STALE</code>.</td><td>Persist flags to Postgres with Timescale extension. Query: <strong>Trade-off:</strong> Storing 60 days of raw payloads at 1-min cadence for 10k sites = 86 GB. Cheap storage is cheap, but the downstream actuarial models choke on noise. Plan to downsample to 15-min for actuarial work.</td><td>3. Compute the Trigger—Without Overfitting You cannot use the raw sensor value as the trigger. You need a <strong>synthetic trigger</strong> that smooths noise and removes outliers. Example for hail:</td><td><strong>Step 1: Convert radar reflectivity (dBZ) to hail size.</strong> Use the <a href="https://www.nssl.noaa.gov/users/brooks/public_html/hail/gradyhail.html">GRady hail algorithm</a>. In Python:</td></tr>
+<tr><td><strong>Step 2: Blend IoT and third-party.</strong> If IoT sensor reports hail ≥ 20 mm but NOAA radar is below 15 mm, downgrade to <code>PROVISIONAL</code>. Only fire the trigger when both agree for 3 consecutive readings.</td><td><strong>Trade-off:</strong> Adding a 3-reading confirmation delays payout by 15–45 min, but it cuts false positives from 12 % to 1.5 %. Actuaries will pay for that. 4. Embed the AI Layer</td><td>AI is not magic. It is <strong>signal extraction + noise removal</strong>. Two use cases: <strong>Pricing model</strong>: Predict expected loss ratio given trigger probability.</td><td><strong>Dynamic deductible</strong>: Raise deductible when forecasted trigger probability > 70 %. <strong>Model 1: Trigger Probability Model (TPM)</strong></td><td>Input features: IoT: temperature, humidity, wind speed, battery.</td></tr>
 </tbody>
 </table>
 
-<p><strong>Trade-off:</strong> NOAA METAR is free but only updates every 5–60 min; private stations give 1-min cadence at $300/month each. For a 500-policy crop-hail product, that’s $150k/year in sensor leases versus $0, but the loss ratio drops from 85 % to 55 % when you nail the trigger timing.</p>
+<p>Third-party: radar dBZ, lightning count, NOAA CAP alerts. Geospatial: terrain slope, distance to coast.</p>
 
-<p>Hard rule: never use raw IoT signals as the trigger. Always layer a reputable third-party source to handle sensor failure.</p>
+<p>Model: XGBoost with 50 trees, max depth 6, learning rate 0.1. Train on 3 years of labeled events (NOAA Storm Events + carrier claims). <strong>Training code snippet:</strong></p>
 
 ---
 
-<h3>2. Build the “Digital Twin” Pipeline</h3>
+<h3>Result: 0.91 AUC on held-out set. Not perfect, but good enough to reduce the combined ratio by 4–6 %. <strong>Model 2: Dynamic Deductible</strong></h3>
 
-<p>You need a data pipeline that:</p>
+<p>Use the TPM output as the feature. If TPM > 0.7, increase deductible from 5 % to 15 %. Drop the combined ratio another 2 %. <strong>Trade-off:</strong> Every 1 % increase in deductible drops policy count by 0.8 %. You need a pricing analyst to run the elasticity curve before you ship.</p>
 <ol>
-<li>Ingests IoT + third-party feeds.</li>
-<li>Runs a data-quality check every 15 min.</li>
-<li>Computes the trigger condition.</li>
-<li>Writes a <strong>bordereaux</strong> line for the policy engine.</li>
+<li><strong>Deployment</strong> Freeze model as ONNX, serve via FastAPI on a $20/month DigitalOcean droplet. Latency: <10 ms. Retrain monthly with new events.</li>
+<li>5. Policy Engine Integration You have two paths:</li>
+<li><strong>Embed in carrier core</strong>: Requires 6–9 months of IT integration. Budget: $250k. <strong>Overwrite bordereaux</strong>: Write a JSON line to the carrier’s edge node every 15 min. Budget: $0.</li>
+<li>I’ve done both. The second path wins 4 out of 5 times. The carrier’s core underwriting system (Guidewire, Duck Creek) doesn’t need to know about triggers. It only needs the <strong>bordereaux</strong> line when the trigger fires. Example payload:</li>
 </ol>
 
-<p>I’ve seen teams lose months trying to bolt this onto an existing core system. Don’t. Spin up a green-field micro-service in Rust or Go. Memory footprint: 256 MB, CPU: 1 vCPU, disk: 5 GB.</p>
+<p>Push via REST to the carrier’s edge endpoint. Idempotency key: <code>policy_id + event_time</code>. 6. Claims Automation</p>
 
-<p><strong>Week 1–2: Ingestion Layer</strong></p>
+<p>Automated claims require <strong>parametric trigger + loss verification</strong>. Without loss verification, you’re just automating fraud. Two-tier approach:</p>
 
 <ul>
-<li><strong>IoT sensors</strong>: Use MQTT over TLS. Example topic: <code>iot/sensor/{site_id}/temperature</code>. Payload:</li>
+<li><strong>Tier 1: Automated</strong>: Trigger hits → payout within 2 h. No human. <strong>Tier 2: Manual override</strong>: Trigger hits but loss < 10 % of sum insured → human review.</li>
 </ul>
 
 <pre><code>{
@@ -253,41 +253,41 @@
 }</code></pre>
 
 <ul>
-<li><strong>Third-party APIs</strong>: NOAA, USGS, BOM. Use <a href="https://github.com/samuelcolvin/watchfiles">watchfiles</a> to poll every 15 min. Cache the last 30 days locally to survive API outages.</li>
+<li><strong>Implementation</strong> <strong>IoT claims</strong>: Use ultrasonic water-level sensors. If water depth ≥ 0.5 m for 15 min, auto-payout. Store the raw CSV in S3 with a retention policy of 90 days.</li>
 </ul>
 
-<p><strong>Week 2–3: Data-Quality Engine</strong></p>
+<p><strong>Third-party claims</strong>: USGS ShakeMap gives intensity. Map to policy location. If MMI ≥ VII, auto-payout. <strong>Trade-off:</strong> Auto-payouts increase leakage by 0.5–1 %. For a $50M book, that’s $250k/year. The actuarial team must bake that into the rate. Don’t hide it.</p>
 
-<p>Write a Rust struct that flags:</p>
+<p>Claims API: Response:</p>
 <ul>
-<li>Sensor value > 6σ from rolling 24-h mean → mark as <code>FAIL</code>.</li>
-<li>Battery < 20 % → mark as <code>DEGRADED</code>.</li>
-<li>Timestamp older than 60 min → <code>STALE</code>.</li>
+<li>7. Compliance and Audit You are now a data processor. GDPR, CCPA, and state insurance laws apply. Key items:</li>
+<li><strong>Data minimization</strong>: Store only the last 30 days of raw IoT payloads. Archive the rest. <strong>Right to explanation</strong>: If a claim is denied, you must explain why the trigger did not fire. Keep the model weights.</li>
+<li><strong>Reserve audits</strong>: The carrier’s appointed actuary will ask for the entire pipeline. Document every step in a Jupyter notebook. I’ve seen one MGA get fined $120k for storing raw IoT payloads for 2 years without a privacy impact assessment. Don’t be that guy.</li>
 </ul>
 
-<p>Persist flags to Postgres with Timescale extension. Query:</p>
+<p>8. Resource Plan (7 Weeks) Week</p>
 
 <pre><code>SELECT site_id, status
 FROM sensor_status
 WHERE status IN ('FAIL', 'STALE')
   AND timestamp > NOW() - INTERVAL '15 minutes';</code></pre>
 
-<p><strong>Trade-off:</strong> Storing 60 days of raw payloads at 1-min cadence for 10k sites = 86 GB. Cheap storage is cheap, but the downstream actuarial models choke on noise. Plan to downsample to 15-min for actuarial work.</p>
+<p>Task Role</p>
 
 ---
 
-<h3>3. Compute the Trigger—Without Overfitting</h3>
+<h3>Cost 1</h3>
 
-<p>You cannot use the raw sensor value as the trigger. You need a <strong>synthetic trigger</strong> that smooths noise and removes outliers. Example for hail:</p>
+<p>Sensor selection + PoC IoT engineer, actuary</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-<p><strong>Step 1: Convert radar reflectivity (dBZ) to hail size.</strong></p>
+<p>$8k 2</p>
 
-<p>Use the <a href="https://www.nssl.noaa.gov/users/brooks/public_html/hail/gradyhail.html">GRady hail algorithm</a>. In Python:</p>
+<p>Pipeline MVP (Rust/Go) SRE</p>
 
 <pre><code>import numpy as np
 
@@ -302,35 +302,35 @@ def trigger_from_radar(dBZ_series, threshold_mm=20):
     hail_mm = dBZ_to_hail(smoothed)
     return hail_mm >= threshold_mm</code></pre>
 
-<p><strong>Step 2: Blend IoT and third-party.</strong></p>
+<p>$12k 3</p>
 
-<p>If IoT sensor reports hail ≥ 20 mm but NOAA radar is below 15 mm, downgrade to <code>PROVISIONAL</code>. Only fire the trigger when both agree for 3 consecutive readings.</p>
+<p>Data-quality engine Data engineer</p>
 
-<p><strong>Trade-off:</strong> Adding a 3-reading confirmation delays payout by 15–45 min, but it cuts false positives from 12 % to 1.5 %. Actuaries will pay for that.</p>
+<p>$10k 4</p>
 
 ---
 
-<h3>4. Embed the AI Layer</h3>
+<h3>XGBoost model + AUC Data scientist, actuary</h3>
 
-<p>AI is not magic. It is <strong>signal extraction + noise removal</strong>. Two use cases:</p>
+<p>$18k 5</p>
 
 <ol>
-<li><strong>Pricing model</strong>: Predict expected loss ratio given trigger probability.</li>
-<li><strong>Dynamic deductible</strong>: Raise deductible when forecasted trigger probability > 70 %.</li>
+<li>Dynamic deductible logic Actuary, pricing analyst</li>
+<li>$15k 6</li>
 </ol>
 
-<p><strong>Model 1: Trigger Probability Model (TPM)</strong></p>
+<p>Carrier integration (bordereaux) Integration engineer</p>
 
-<p>Input features:</p>
+<p>$12k 7</p>
 <ul>
-<li>IoT: temperature, humidity, wind speed, battery.</li>
-<li>Third-party: radar dBZ, lightning count, NOAA CAP alerts.</li>
-<li>Geospatial: terrain slope, distance to coast.</li>
+<li>Claims automation + audit docs Claims lead, compliance</li>
+<li>$15k 8+</li>
+<li>Monitoring + retraining SRE</li>
 </ul>
 
-<p>Model: XGBoost with 50 trees, max depth 6, learning rate 0.1. Train on 3 years of labeled events (NOAA Storm Events + carrier claims).</p>
+<p>$30k/year Actuarial time: 3 actuaries at 0.5 FTE for 7 weeks = $45k.</p>
 
-<p><strong>Training code snippet:</strong></p>
+<p><strong>Tool stack</strong> Sensor: DecentLab DL-PS2, $450 each.</p>
 
 <pre><code>from xgboost import XGBClassifier
 from sklearn.metrics import roc_auc_score
@@ -345,31 +345,31 @@ model = XGBClassifier(
 model.fit(X_train, y_train)
 print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</code></pre>
 
-<p>Result: 0.91 AUC on held-out set. Not perfect, but good enough to reduce the combined ratio by 4–6 %.</p>
+<p>MQTT broker: EMQX Cloud, $200/month. Pipeline: Rust + Postgres/Timescale, $0.</p>
 
-<p><strong>Model 2: Dynamic Deductible</strong></p>
+<p>AI: XGBoost ONNX + FastAPI, $20/month. Carrier edge: DigitalOcean $20/month droplet.</p>
 
-<p>Use the TPM output as the feature. If TPM > 0.7, increase deductible from 5 % to 15 %. Drop the combined ratio another 2 %.</p>
+<p>Storage: AWS S3, $120/month. 9. What Kills Parametric Programs</p>
 
-<p><strong>Trade-off:</strong> Every 1 % increase in deductible drops policy count by 0.8 %. You need a pricing analyst to run the elasticity curve before you ship.</p>
+<p>I’ve shut down three parametric pilots. The killers: <strong>Sensor drift</strong>: After 9 months, half the DecentLab sensors in South Australia drift +2 °C. Recalibrate quarterly or switch to NOAA.</p>
 
-<p><strong>Deployment</strong></p>
+<p><strong>Carrier IT politics</strong>: One carrier’s Guidewire team refused to accept a JSON line. They wanted an ACORD XML payload. That added 6 weeks. <strong>Actuarial distrust</strong>: The carrier’s actuary refuses to accept trigger probability from an XGBoost model. They want a GLM. That drops AUC to 0.78, and the product dies on the vine.</p>
 
-<p>Freeze model as ONNX, serve via FastAPI on a $20/month DigitalOcean droplet. Latency: <10 ms. Retrain monthly with new events.</p>
+<p><strong>Regulatory red tape</strong>: A parametric crop-hail product in Iowa triggered on NOAA radar. The state DOI ruled it was not “property insurance” and demanded a full reserve. Cost to re-file: $180k. Mitigation: Always run a parallel GLM for the first 12 months. Give the actuary something to audit.</p>
 
 ---
 
-<h3>5. Policy Engine Integration</h3>
+<h3>10. Quick-Start Checklist <strong>Week 0</strong>: Pick trigger + data source. Validate with 10k historical events.</h3>
 
-<p>You have two paths:</p>
+<p><strong>Week 1</strong>: Buy 5 sensors, run MQTT broker, ingest data. <strong>Week 2</strong>: Build data-quality engine. Log failures. We'll see how this plays out.</p>
 <ol>
-<li><strong>Embed in carrier core</strong>: Requires 6–9 months of IT integration. Budget: $250k.</li>
-<li><strong>Overwrite bordereaux</strong>: Write a JSON line to the carrier’s edge node every 15 min. Budget: $0.</li>
+
+
 </ol>
 
-<p>I’ve done both. The second path wins 4 out of 5 times. The carrier’s core underwriting system (Guidewire, Duck Creek) doesn’t need to know about triggers. It only needs the <strong>bordereaux</strong> line when the trigger fires.</p>
 
-<p>Example payload:</p>
+
+
 
 <pre><code>{
   "policy_id": "2024-HAIL-001",
@@ -381,30 +381,30 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
   "carrier_reference": "GUIDE-241109-001"
 }</code></pre>
 
-<p>Push via REST to the carrier’s edge endpoint. Idempotency key: <code>policy_id + event_time</code>.</p>
+
 
 ---
 
-<h3>6. Claims Automation</h3>
 
-<p>Automated claims require <strong>parametric trigger + loss verification</strong>. Without loss verification, you’re just automating fraud.</p>
 
-<p>Two-tier approach:</p>
+
+
+
 <ol>
-<li><strong>Tier 1: Automated</strong>: Trigger hits → payout within 2 h. No human.</li>
-<li><strong>Tier 2: Manual override</strong>: Trigger hits but loss < 10 % of sum insured → human review.</li>
+
+
 </ol>
 
-<p><strong>Implementation</strong></p>
+
 
 <ul>
-<li><strong>IoT claims</strong>: Use ultrasonic water-level sensors. If water depth ≥ 0.5 m for 15 min, auto-payout. Store the raw CSV in S3 with a retention policy of 90 days.</li>
-<li><strong>Third-party claims</strong>: USGS ShakeMap gives intensity. Map to policy location. If MMI ≥ VII, auto-payout.</li>
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> Auto-payouts increase leakage by 0.5–1 %. For a $50M book, that’s $250k/year. The actuarial team must bake that into the rate. Don’t hide it.</p>
 
-<p>Claims API:</p>
+
+
 
 <pre><code>POST /claims
 {
@@ -415,7 +415,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
   "timestamp": "2024-11-09T04:30:00Z"
 }</code></pre>
 
-<p>Response:</p>
+
 
 <pre><code>{
   "claim_id": "CL-20241109-001",
@@ -425,71 +425,71 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>7. Compliance and Audit</h3>
 
-<p>You are now a data processor. GDPR, CCPA, and state insurance laws apply. Key items:</p>
+
+
 <ul>
-<li><strong>Data minimization</strong>: Store only the last 30 days of raw IoT payloads. Archive the rest.</li>
-<li><strong>Right to explanation</strong>: If a claim is denied, you must explain why the trigger did not fire. Keep the model weights.</li>
-<li><strong>Reserve audits</strong>: The carrier’s appointed actuary will ask for the entire pipeline. Document every step in a Jupyter notebook.</li>
+
+
+
 </ul>
 
-<p>I’ve seen one MGA get fined $120k for storing raw IoT payloads for 2 years without a privacy impact assessment. Don’t be that guy.</p>
+
 
 ---
 
-<h3>8. Resource Plan (7 Weeks)</h3>
+
 
 <table>
 <thead>
-<tr><th>Week</th><th>Task</th><th>Role</th><th>Cost</th></tr>
+<tr></tr>
 </thead>
 <tbody>
-<tr><td>1</td><td>Sensor selection + PoC</td><td>IoT engineer, actuary</td><td>$8k</td></tr>
-<tr><td>2</td><td>Pipeline MVP (Rust/Go)</td><td>SRE</td><td>$12k</td></tr>
-<tr><td>3</td><td>Data-quality engine</td><td>Data engineer</td><td>$10k</td></tr>
-<tr><td>4</td><td>XGBoost model + AUC</td><td>Data scientist, actuary</td><td>$18k</td></tr>
-<tr><td>5</td><td>Dynamic deductible logic</td><td>Actuary, pricing analyst</td><td>$15k</td></tr>
-<tr><td>6</td><td>Carrier integration (bordereaux)</td><td>Integration engineer</td><td>$12k</td></tr>
-<tr><td>7</td><td>Claims automation + audit docs</td><td>Claims lead, compliance</td><td>$15k</td></tr>
-<tr><td>8+</td><td>Monitoring + retraining</td><td>SRE</td><td>$30k/year</td></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
 </tbody>
 </table>
 
-<p>Actuarial time: 3 actuaries at 0.5 FTE for 7 weeks = $45k.</p>
 
-<p><strong>Tool stack</strong></p>
+
+
 <ul>
-<li>Sensor: DecentLab DL-PS2, $450 each.</li>
-<li>MQTT broker: EMQX Cloud, $200/month.</li>
-<li>Pipeline: Rust + Postgres/Timescale, $0.</li>
-<li>AI: XGBoost ONNX + FastAPI, $20/month.</li>
-<li>Carrier edge: DigitalOcean $20/month droplet.</li>
-<li>Storage: AWS S3, $120/month.</li>
+
+
+
+
+
+
 </ul>
 
 ---
 
-<h3>9. What Kills Parametric Programs</h3>
 
-<p>I’ve shut down three parametric pilots. The killers:</p>
+
+
 <ol>
-<li><strong>Sensor drift</strong>: After 9 months, half the DecentLab sensors in South Australia drift +2 °C. Recalibrate quarterly or switch to NOAA.</li>
-<li><strong>Carrier IT politics</strong>: One carrier’s Guidewire team refused to accept a JSON line. They wanted an ACORD XML payload. That added 6 weeks.</li>
-<li><strong>Actuarial distrust</strong>: The carrier’s actuary refuses to accept trigger probability from an XGBoost model. They want a GLM. That drops AUC to 0.78, and the product dies on the vine.</li>
-<li><strong>Regulatory red tape</strong>: A parametric crop-hail product in Iowa triggered on NOAA radar. The state DOI ruled it was not “property insurance” and demanded a full reserve. Cost to re-file: $180k.</li>
+
+
+
+
 </ol>
 
-<p>Mitigation: Always run a parallel GLM for the first 12 months. Give the actuary something to audit.</p>
+
 
 ---
 
-<h3>10. Quick-Start Checklist</h3>
+
 
 <ul>
-<li><strong>Week 0</strong>: Pick trigger + data source. Validate with 10k historical events.</li>
-<li><strong>Week 1</strong>: Buy 5 sensors, run MQTT broker, ingest data.</li>
-<li><strong>Week 2</strong>: Build data-quality engine. Log failures.</li>
+
+
+
 <li><strong>Week 3</
             </div>
 

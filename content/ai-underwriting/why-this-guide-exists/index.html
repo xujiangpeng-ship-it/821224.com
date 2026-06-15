@@ -240,7 +240,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-underwriting/" class="tag tag-teal">AI Underwriting</a>
-                <h1>Why This Guide Exists</h1>
+                <h1>Why This Guide Exists Why This Guide Exists</h1>
                 <div class="article-meta">
                     <span>June 12, 2026</span>
                     <span class="dot"></span>
@@ -254,147 +254,147 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Why This Guide Exists</h2>
-<p>Insurers that bet $500 million on ML-driven pricing models without proper guardrails saw their combined ratio rise by 12 points within two years. In 2023, the NAIC market conduct database flagged 18 pricing-related violations where carriers couldn’t explain model decisions to regulators. I’ve reviewed a dozen implementations and the difference between a 3-point lift in loss ratio and a regulatory fine often comes down to whether the team treated pricing as a modeling exercise or a governance nightmare.</p>
+                <h2>Insurers that bet $500 million on ML-driven pricing models without proper guardrails saw their combined ratio rise by 12 points within two years. In 2023, the NAIC market conduct database flagged 18 pricing-related violations where carriers couldn’t explain model decisions to regulators. I’ve reviewed a dozen implementations and the difference between a 3-point lift in loss ratio and a regulatory fine often comes down to whether the team treated pricing as a modeling exercise or a governance nightmare.</h2>
+<p>Who This Is For</p>
 
-<h2>Who This Is For</h2>
-<p>You’re a pricing actuary or data science lead at a Tier-2 or Tier-3 P/C insurer. You must ship a GLM-grade model that auditors and regulators will accept. You have 3–6 months, a $75k cloud budget, and a compliance team that will veto anything without lineage, explainability, and rate manual integration. You’re not here to build the next Lemonade; you’re here to ship something that underpins a product filing in two states next quarter.</p>
+<h2>You’re a pricing actuary or data science lead at a Tier-2 or Tier-3 P/C insurer. You must ship a GLM-grade model that auditors and regulators will accept. You have 3–6 months, a $75k cloud budget, and a compliance team that will veto anything without lineage, explainability, and rate manual integration. You’re not here to build the next Lemonade; you’re here to ship something that underpins a product filing in two states next quarter.</h2>
+<p>What “ML Pricing” Actually Means in Insurance</p>
 
-<h2>What “ML Pricing” Actually Means in Insurance</h2>
-<p>Real insurance ML pricing models are hybrid GLM-ML ensembles: GLMs for regulatory filings, ML for signal extraction, and strict post-processing to keep rates monotonic and file-ready. Anything else is a toy. I’ve seen teams waste six months on a pure XGBoost model only to retool it into a GLM-calibrated ensemble when the filing department rejected the “black box” label.</p>
-<p>Key constraints:</p>
+<h2>Real insurance ML pricing models are hybrid GLM-ML ensembles: GLMs for regulatory filings, ML for signal extraction, and strict post-processing to keep rates monotonic and file-ready. Anything else is a toy. I’ve seen teams waste six months on a pure XGBoost model only to retool it into a GLM-calibrated ensemble when the filing department rejected the “black box” label.</h2>
+<p>Key constraints: Rate manuals require explicit factors and ranges, not feature importance charts. Regulatory filings demand “as if” GLM documentation for every parameter. Underwriting guidelines must map directly to model outputs without manual overrides 80% of the time. You cannot retrain daily; quarterly or monthly is the realistic cadence for most carriers. Trade-offs You Must Accept Day One If you choose pure ML: You’ll need a parallel GLM for filings (doubles maintenance).</p>
+<p>You’ll lose monotonicity guarantees unless you bake them in (extra constraints = slower training). Regulators will ask for “model cards” and you’ll have to generate them from feature attribution outputs. If you choose hybrid GLM-ML: You’ll spend 40% of effort aligning ML signals with GLM factors.</p>
 <ul>
-<li>Rate manuals require explicit factors and ranges, not feature importance charts.</li>
-<li>Regulatory filings demand “as if” GLM documentation for every parameter.</li>
-<li>Underwriting guidelines must map directly to model outputs without manual overrides 80% of the time.</li>
-<li>You cannot retrain daily; quarterly or monthly is the realistic cadence for most carriers.</li>
+<li>You’ll need a rollback mechanism when ML signals drift beyond GLM tolerance. Step 1: Data Assembly — The 90-Day Grind I’ve reviewed six pricing implementations that stalled before modeling because the data team treated “loss runs” as a single table. It’s not. You need: Historical policy-level exposure, premium, and loss data (minimum 5 years, ideally 7+).</li>
+<li>Detailed claims data with paid loss, open reserves, and claim attributes (injury type, attorney involvement, repair cost drivers). External data: credit scores, property characteristics, telematics snapshots, and bureau data (CLUE, MVR, ISO). Underwriting rules in force at policy inception (not just current rules). Regulatory rate filings for the same period to audit against approved rates.</li>
+<li>Data Asset Granularity Retention Typical Cleaning Effort Policy Master Policy + Coverage + Endorsements 10 years 3–4 weeks (merge endorsements, handle mid-term changes)</li>
+<li>Loss Runs Claim + Transaction + Reserve 7 years 6–8 weeks (close open claims, adjust paid vs. incurred, handle salvage) Bureau Data Annual snapshot per policy 5 years 2–3 weeks (standardize codes, impute missing)</li>
 </ul>
 
-<h3>Trade-offs You Must Accept Day One</h3>
-<p>If you choose pure ML:</p>
+<h3>Telematics Trip-level + aggregated scores 3 years rolling 4–6 weeks (filter low-mileage outliers, align to policy periods) Rate Manuals State + Coverage + Factor + Effective Date Current + 2 prior versions 1–2 weeks (parse PDFs or extract from legacy systems)</h3>
+<p>Resource estimate: 2 FTE data engineers + 1 FTE actuary for 90 days. Budget: $90k (including cloud ETL). Critical Data Quality Checks <strong>Premium leakage check:</strong> Compare written premium in policy data vs. GL. If >2% variance, flag for root cause before modeling. <strong>Loss ratio sanity:</p>
 <ul>
-<li>You’ll need a parallel GLM for filings (doubles maintenance).</li>
-<li>You’ll lose monotonicity guarantees unless you bake them in (extra constraints = slower training).</li>
-<li>Regulators will ask for “model cards” and you’ll have to generate them from feature attribution outputs.</li>
+<li>Compute LR by state-coverage-year. If any cell is <30% or >150% without clear justification, investigate data gaps (e.g., closed claims not booked). Step 2: Feature Engineering — The Signal Kitchen Sink Tier 1: Core Pricing Features These are the GLM factors you’ll calibrate later. The ML part extracts signals from them.</li>
+<li><code>age</code>, <code>gender</code>, <code>marital_status</code> <code>zip3</code> (3-digit ZIP for territory granularity) <code>vehicle_age</code>, <code>vehicle_value</code>, <code>vehicle_symbol</code> <code>limit_liability</code>, <code>limit_comp</code> <code>years_licensed</code>, <code>mvr_points</code> <code>credit_score_tier</code> (FICO 8, VantageScore 4) Tier 2: External Signals These are the ML differentiators. Treat them as “feature candidates” until you prove lift.</li>
+<li><code>property_age</code> (from public records) <code>crime_score_zip3</code> (neighborhood risk) <code>telematics_risk_score</code> (aggregated from trip data) <code>bureau_mvr_count_last3y</code> <code>iso_protection_class</code> <code>flood_zone</code> (FEMA data) <code>fire_district_score</code> (ISO fire suppression) Tier 3: Interaction & Derived Features</li>
 </ul>
-<p>If you choose hybrid GLM-ML:</p>
+<p>Build these in a feature store. Do not recalc on every model run. <code>age_times_credit_score</code> (nonlinear term) <code>vehicle_value_over_limit</code> (exposure signal) <code>years_licensed_over_vehicle_age</code> (young driver penalty attenuation) <code>territory_crime_times_vehicle_symbol</code> (high crime + flashy car interaction) Temporal Features (The Silent Killer) Your loss data is time-dependent. If you don’t encode time explicitly, your model will learn spurious trends. <code>policy_effective_year</code> (categorical)</p>
 <ul>
-<li>You’ll spend 40% of effort aligning ML signals with GLM factors.</li>
-<li>You’ll need a rollback mechanism when ML signals drift beyond GLM tolerance.</li>
+<li><code>vintage_month</code> (policy age in months) <code>inflation_adj_factor</code> (claims paid vs. CPI) <code>cat_event_flag</code> (CAT year dummy) Code Snippet: Feature Store Ingestion (Python)</li>
+<li>Resource estimate: 1 FTE data scientist + 0.5 FTE engineer for 6 weeks. Budget: $15k (Feast cloud tier). Step 3: Target Construction — The Art of Defining “Good” Option A: Pure Loss Ratio Target (Simple, Risky) Target = incurred losses / earned premium. Problem: noisy at policy level, sensitive to reserve changes. Regulators hate it.</li>
 </ul>
 
-<h2>Step 1: Data Assembly — The 90-Day Grind</h2>
-<p>I’ve reviewed six pricing implementations that stalled before modeling because the data team treated “loss runs” as a single table. It’s not. You need:</p>
+<h2>Option B: Loss Cost Plus LAE (Recommended) Target = (incurred_loss + allocated_LAE) / on_level_exposure. Why? LAE is a real cost you can’t ignore. On-level exposure adjusts premium to current rates (removes rate change noise). Auditors prefer it because it’s close to the GLM target. Option C: Pure Premium (Hybrid) Target = (paid_loss + allocated_LAE) / earned_exposure. Use when you have lag in incurred data. Problem: understates tail risk. Data Leakage Pitfall</h2>
+<p>Never include future claims in target construction. Even a 3-month lag can leak information if you’re not careful. In 2022, a carrier’s model leaked because they used “claims closed within 6 months” as target and trained on policies written 9 months ago. Their validation LR was 85%; production was 112%.</p>
 <ul>
-<li>Historical policy-level exposure, premium, and loss data (minimum 5 years, ideally 7+).</li>
-<li>Detailed claims data with paid loss, open reserves, and claim attributes (injury type, attorney involvement, repair cost drivers).</li>
-<li>External data: credit scores, property characteristics, telematics snapshots, and bureau data (CLUE, MVR, ISO).</li>
-<li>Underwriting rules in force at policy inception (not just current rules).</li>
-<li>Regulatory rate filings for the same period to audit against approved rates.</li>
+<li>Step 4: Model Selection — GLM vs. Hybrid vs. Pure ML Model Type Pros Cons Regulatory Audit Score (1-5) Training Time GLM (Tweedie) Monotonic by design, filing-ready, fast inference</li>
+<li>Misses nonlinear interactions, hard to encode external signals 5 1 day Gradient Boosting (XGBoost) Captures complex interactions, high lift potential Non-monotonic, hard to explain, slow inference for rating 1 2–4 hours</li>
+<li>Hybrid GLM-ML GLM for factors + ML for residual signal, auditable Doubles maintenance, needs alignment layer 4 3–5 hours (GLM) + 1–2 hours (ML) Poisson Regression + Neural Boosting Handles zero-inflated data well, interpretable via SHAP</li>
+<li>Requires careful initialization, slower convergence 3 6–8 hours</li>
+<li>My recommendation: start with a hybrid GLM-ML ensemble. Use GLM as the base, then train an XGBoost residual model on (actual LR - GLM predicted LR). At inference, clip residuals to ±20% to prevent wild swings. This keeps the model monotonic and auditable while extracting 3–5 points of lift.</li>
 </ul>
 
 <table>
 <thead>
 <tr>
-<th>Data Asset</th>
-<th>Granularity</th>
-<th>Retention</th>
-<th>Typical Cleaning Effort</th>
+<th>Step 5: Training Pipeline — The Three-Bucket Split Bucket 1: Training (70% of data) Use policy data from 5+ years ago to capture claim development. Exclude the most recent 12 months (they’re still developing). Bucket 2: Validation (15%)</th>
+<th>Use data from 24–12 months ago. This is your “as if” period—you’ll compare model predictions to actual loss costs in this window. Bucket 3: Holdout (15%) Use the most recent 12 months. This is your bleeding edge—your model should not overfit to recent CAT activity. Code Snippet: Splitting Logic</th>
+<th>Step 6: GLM Baseline — The “Nothing Breaks” Model Before touching ML, build a GLM that matches your current rate manual. This is your baseline and your rollback plan. Steps Start with Poisson GLM with log link.</th>
+<th>Use <code>statsmodels</code> for interpretability. Later, port to <code>scikit-learn</code> for pipeline consistency. Enforce monotonicity on key factors: <code>age</code>, <code>credit_score_tier</code>, <code>vehicle_age</code>. Fit on loss cost + LAE / on-level exposure. Compare actual vs. predicted LR by state-coverage. If any cell deviates >15%, investigate (data error, filing error, or missing factor).</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Policy Master</td>
-<td>Policy + Coverage + Endorsements</td>
-<td>10 years</td>
-<td>3–4 weeks (merge endorsements, handle mid-term changes)</td>
+<td>Code Snippet: GLM Monotonic Constraints Resource estimate: 1 FTE actuary for 2 weeks. Budget: $5k. Step 7: Hybrid Ensemble — The ML Lift Layer Step 7.1: Residual Target</td>
+<td>Compute residual = actual_loss_ratio - glmm_predicted_loss_ratio. Truncate residuals to [-0.2, 0.2] to prevent wild swings in rating. Step 7.2: Feature Selection Use SHAP to rank features. Keep only those with SHAP importance >0.01. In practice, this reduces feature count from 45 to 12–15.</td>
+<td>Step 7.3: Model Training Train XGBoost on residuals with: Objective: reg:squarederror Max depth: 6 Learning rate: 0.05 Subsample: 0.8 Early stopping on validation set (patience=10) Step 7.4: Calibration</td>
+<td>Scale predictions to match the GLM’s expected loss ratio. Formula: <code>final_prediction = glmm_prediction * (1 + residual_prediction)</code> Code Snippet: Hybrid Inference Step </div></td>
 </tr>
 <tr>
-<td>Loss Runs</td>
-<td>Claim + Transaction + Reserve</td>
-<td>7 years</td>
-<td>6–8 weeks (close open claims, adjust paid vs. incurred, handle salvage)</td>
+<td> <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;"></td>
+<td><strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 12, 2026. </div></td>
+<td><div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6"></td>
+<td><strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources. </div></td>
 </tr>
 <tr>
-<td>Bureau Data</td>
-<td>Annual snapshot per policy</td>
-<td>5 years</td>
-<td>2–3 weeks (standardize codes, impute missing)</td>
+<td><div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0"> <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful? Comments. Anyway.</td>
+
+
+
 </tr>
 <tr>
-<td>Telematics</td>
-<td>Trip-level + aggregated scores</td>
-<td>3 years rolling</td>
-<td>4–6 weeks (filter low-mileage outliers, align to policy periods)</td>
+
+
+
+
 </tr>
 <tr>
-<td>Rate Manuals</td>
-<td>State + Coverage + Factor + Effective Date</td>
-<td>Current + 2 prior versions</td>
-<td>1–2 weeks (parse PDFs or extract from legacy systems)</td>
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p>Resource estimate: 2 FTE data engineers + 1 FTE actuary for 90 days. Budget: $90k (including cloud ETL).</p>
 
-<h3>Critical Data Quality Checks</h3>
+
+
 <ol>
-<li><strong>Premium leakage check:</strong> Compare written premium in policy data vs. GL. If >2% variance, flag for root cause before modeling.</li>
-<li><strong>Loss ratio sanity:</li>
-<li>Compute LR by state-coverage-year. If any cell is <30% or >150% without clear justification, investigate data gaps (e.g., closed claims not booked).</li>
+
+
+
 </ol>
 
-<h2>Step 2: Feature Engineering — The Signal Kitchen Sink</h2>
 
-<h3>Tier 1: Core Pricing Features</h3>
-<p>These are the GLM factors you’ll calibrate later. The ML part extracts signals from them.</p>
+
+
+
 <ul>
-<li><code>age</code>, <code>gender</code>, <code>marital_status</code></li>
-<li><code>zip3</code> (3-digit ZIP for territory granularity)</li>
-<li><code>vehicle_age</code>, <code>vehicle_value</code>, <code>vehicle_symbol</code></li>
-<li><code>limit_liability</code>, <code>limit_comp</code></li>
-<li><code>years_licensed</code>, <code>mvr_points</code></li>
-<li><code>credit_score_tier</code> (FICO 8, VantageScore 4)</li>
+
+
+
+
+
+
 </ul>
 
-<h3>Tier 2: External Signals</h3>
-<p>These are the ML differentiators. Treat them as “feature candidates” until you prove lift.</p>
+
+
 <ul>
-<li><code>property_age</code> (from public records)</li>
-<li><code>crime_score_zip3</code> (neighborhood risk)</li>
-<li><code>telematics_risk_score</code> (aggregated from trip data)</li>
-<li><code>bureau_mvr_count_last3y</code></li>
-<li><code>iso_protection_class</code></li>
-<li><code>flood_zone</code> (FEMA data)</li>
-<li><code>fire_district_score</code> (ISO fire suppression)</li>
+
+
+
+
+
+
+
 </ul>
 
-<h3>Tier 3: Interaction & Derived Features</h3>
+
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Build these in a feature store. Do not recalc on every model run.</p>
+                
 <ul>
-<li><code>age_times_credit_score</code> (nonlinear term)</li>
-<li><code>vehicle_value_over_limit</code> (exposure signal)</li>
-<li><code>years_licensed_over_vehicle_age</code> (young driver penalty attenuation)</li>
-<li><code>territory_crime_times_vehicle_symbol</code> (high crime + flashy car interaction)</li>
+
+
+
+
 </ul>
 
-<h3>Temporal Features (The Silent Killer)</h3>
-<p>Your loss data is time-dependent. If you don’t encode time explicitly, your model will learn spurious trends.</p>
+
+
 <ul>
-<li><code>policy_effective_year</code> (categorical)</li>
-<li><code>vintage_month</code> (policy age in months)</li>
-<li><code>inflation_adj_factor</code> (claims paid vs. CPI)</li>
-<li><code>cat_event_flag</code> (CAT year dummy)</li>
+
+
+
+
 </ul>
 
-<h3>Code Snippet: Feature Store Ingestion (Python)</h3>
+
 <pre><code>import pandas as pd
 from feast import FeatureStore
 
@@ -414,86 +414,86 @@ fs = FeatureStore(repo_path="feature_repo")
 fs.materialize_incremental("2024-01-01")
 </code></pre>
 
-<p>Resource estimate: 1 FTE data scientist + 0.5 FTE engineer for 6 weeks. Budget: $15k (Feast cloud tier).</p>
 
-<h2>Step 3: Target Construction — The Art of Defining “Good”</h2>
 
-<h3>Option A: Pure Loss Ratio Target (Simple, Risky)</h3>
-<p>Target = incurred losses / earned premium. Problem: noisy at policy level, sensitive to reserve changes. Regulators hate it.</p>
 
-<h3>Option B: Loss Cost Plus LAE (Recommended)</h3>
-<p>Target = (incurred_loss + allocated_LAE) / on_level_exposure. Why?</p>
+
+
+
+
+
+
 <ul>
-<li>LAE is a real cost you can’t ignore.</li>
-<li>On-level exposure adjusts premium to current rates (removes rate change noise).</li>
-<li>Auditors prefer it because it’s close to the GLM target.</li>
+
+
+
 </ul>
 
-<h3>Option C: Pure Premium (Hybrid)</h3>
-<p>Target = (paid_loss + allocated_LAE) / earned_exposure. Use when you have lag in incurred data. Problem: understates tail risk.</p>
 
-<h3>Data Leakage Pitfall</h3>
-<p>Never include future claims in target construction. Even a 3-month lag can leak information if you’re not careful. In 2022, a carrier’s model leaked because they used “claims closed within 6 months” as target and trained on policies written 9 months ago. Their validation LR was 85%; production was 112%.</p>
 
-<h2>Step 4: Model Selection — GLM vs. Hybrid vs. Pure ML</h2>
+
+
+
+
+
 
 <table>
 <thead>
 <tr>
-<th>Model Type</th>
-<th>Pros</th>
-<th>Cons</th>
-<th>Regulatory Audit Score (1-5)</th>
-<th>Training Time</th>
+
+
+
+
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>GLM (Tweedie)</td>
-<td>Monotonic by design, filing-ready, fast inference</td>
-<td>Misses nonlinear interactions, hard to encode external signals</td>
-<td>5</td>
-<td>1 day</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Gradient Boosting (XGBoost)</td>
-<td>Captures complex interactions, high lift potential</td>
-<td>Non-monotonic, hard to explain, slow inference for rating</td>
-<td>1</td>
-<td>2–4 hours</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Hybrid GLM-ML</td>
-<td>GLM for factors + ML for residual signal, auditable</td>
-<td>Doubles maintenance, needs alignment layer</td>
-<td>4</td>
-<p>3–5 hours (GLM) +</p>
-<p>1–2 hours (ML)</p>
+
+
+
+
+
+
 </tr>
 <tr>
-<td>Poisson Regression + Neural Boosting</td>
-<td>Handles zero-inflated data well, interpretable via SHAP</td>
-<td>Requires careful initialization, slower convergence</td>
-<td>3</td>
-<td>6–8 hours</td>
+
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p>My recommendation: start with a hybrid GLM-ML ensemble. Use GLM as the base, then train an XGBoost residual model on (actual LR - GLM predicted LR). At inference, clip residuals to ±20% to prevent wild swings. This keeps the model monotonic and auditable while extracting 3–5 points of lift.</p>
 
-<h2>Step 5: Training Pipeline — The Three-Bucket Split</h2>
 
-<h3>Bucket 1: Training (70% of data)</h3>
-<p>Use policy data from 5+ years ago to capture claim development. Exclude the most recent 12 months (they’re still developing).</p>
 
-<h3>Bucket 2: Validation (15%)</h3>
-<p>Use data from 24–12 months ago. This is your “as if” period—you’ll compare model predictions to actual loss costs in this window.</p>
 
-<h3>Bucket 3: Holdout (15%)</h3>
-<p>Use the most recent 12 months. This is your bleeding edge—your model should not overfit to recent CAT activity.</p>
 
-<h3>Code Snippet: Splitting Logic</h3>
+
+
+
+
+
+
+
+
+
 <pre><code>from sklearn.model_selection import train_test_split
 
 # Define time split
@@ -509,19 +509,19 @@ test = policy_df[policy_df["policy_effective_date"] > val_end]
 train, _ = train_test_split(train, test_size=0.3, stratify=train[["state", "coverage"]])
 </code></pre>
 
-<h2>Step 6: GLM Baseline — The “Nothing Breaks” Model</h2>
-<p>Before touching ML, build a GLM that matches your current rate manual. This is your baseline and your rollback plan.</p>
 
-<h3>Steps</h3>
+
+
+
 <ol>
-<li>Start with Poisson GLM with log link.</li>
-<li>Use <code>statsmodels</code> for interpretability. Later, port to <code>scikit-learn</code> for pipeline consistency.</li>
-<li>Enforce monotonicity on key factors: <code>age</code>, <code>credit_score_tier</code>, <code>vehicle_age</code>.</li>
-<li>Fit on loss cost + LAE / on-level exposure.</li>
-<li>Compare actual vs. predicted LR by state-coverage. If any cell deviates >15%, investigate (data error, filing error, or missing factor).</li>
+
+
+
+
+
 </ol>
 
-<h3>Code Snippet: GLM Monotonic Constraints</h3>
+
 <pre><code>import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
@@ -546,32 +546,32 @@ result = mod.fit_constrained({
 })
 </code></pre>
 
-<p>Resource estimate: 1 FTE actuary for 2 weeks. Budget: $5k.</p>
 
-<h2>Step 7: Hybrid Ensemble — The ML Lift Layer</h2>
 
-<h3>Step 7.1: Residual Target</h3>
-<p>Compute residual = actual_loss_ratio - glmm_predicted_loss_ratio.</p>
-<p>Truncate residuals to [-0.2, 0.2] to prevent wild swings in rating.</p>
 
-<h3>Step 7.2: Feature Selection</h3>
-<p>Use SHAP to rank features. Keep only those with SHAP importance >0.01. In practice, this reduces feature count from 45 to 12–15.</p>
 
-<h3>Step 7.3: Model Training</h3>
-<p>Train XGBoost on residuals with:</p>
+
+
+
+
+
+
+
+
+
 <ul>
-<li>Objective: reg:squarederror</li>
-<li>Max depth: 6</li>
-<li>Learning rate: 0.05</li>
-<li>Subsample: 0.8</li>
-<li>Early stopping on validation set (patience=10)</li>
+
+
+
+
+
 </ul>
 
-<h3>Step 7.4: Calibration</h3>
-<p>Scale predictions to match the GLM’s expected loss ratio. Formula:</p>
-<p><code>final_prediction = glmm_prediction * (1 + residual_prediction)</code></p>
 
-<h3>Code Snippet: Hybrid Inference</h3>
+
+
+
+
 <pre><code>import xgboost as xgb
 import joblib
 
@@ -597,21 +597,7 @@ def predict_hybrid(policy_data):
     return final_pred
 </code></pre>
 
-<h2>Step
-            </div>
 
-            
-
-            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
-                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 12, 2026.
-            </div>
-
-            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6">
-                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources.
-            </div>
-
-            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -620,7 +606,7 @@ def predict_hybrid(policy_data):
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

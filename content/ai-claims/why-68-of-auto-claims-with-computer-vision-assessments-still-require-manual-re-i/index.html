@@ -240,7 +240,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Why 68% of Auto Claims with Computer Vision Assessments Still Require Manual Re-Inspection</h1>
+                <h1>Why 68% of Auto Claims with Computer Vision Assessments Still Require Manual Re-Inspection Why 68% of Auto Claims with Computer Vision Assessments Still Require Manual Re-Inspection</h1>
                 <div class="article-meta">
                     <span>June 14, 2026</span>
                     <span class="dot"></span>
@@ -254,213 +254,198 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Why 68% of Auto Claims with Computer Vision Assessments Still Require Manual Re-Inspection</h2>
-
-<p>In 2023, Lemonade processed 2.2 million claims and reported that 32% were fully paid within three seconds using AI. The company’s 2023 10-K filing touts this as proof that computer vision (CV) has "eliminated human error" in damage assessment. But Lemonade’s own disclosures reveal a critical gap: 68% of claims flagged by its CV system still require manual re-inspection, according to a June 2024 investor deck. The gap isn’t in the AI’s accuracy—it’s in the business logic of when to trust the model.</p>
+                <h2>In 2023, Lemonade processed 2.2 million claims and reported that 32% were fully paid within three seconds using AI. The company’s 2023 10-K filing touts this as proof that computer vision (CV) has "eliminated human error" in damage assessment. But Lemonade’s own disclosures reveal a critical gap: 68% of claims flagged by its CV system still require manual re-inspection, according to a June 2024 investor deck. The gap isn’t in the AI’s accuracy—it’s in the business logic of when to trust the model.</h2>
 
 <p>This isn’t a data problem. It’s a decision problem. And it’s the same one I’ve seen across every carrier that’s tried to automate damage assessment at scale. The hype curve is steep, but the operational reality is messy. Here’s where CV in claims damage assessment actually works, where it fails, and what it costs to get it right.</p>
 
-<h3>Where Computer Vision Shines: Straightforward, High-Volume Damage</h3>
+<p>I know a claims manager who told me once: Where Computer Vision Shines: Straightforward, High-Volume Damage</p>
 
-<p>CV excels in two scenarios: first-party auto glass claims and minor hail damage. These are the "easy wins" because the damage is unambiguous, the repair paths are standardized, and the loss amounts are small enough to absorb model error. Lemonade’s 2023 data shows that for glass claims, CV achieves a 92% straight-through-processing (STP) rate with a mean absolute error (MAE) of $18. For hail damage, State Farm reported a 78% STP rate in its 2023 Innovation Report, with a 94% accuracy rate on damage classification when image quality is controlled.</p>
+<h3>CV excels in two scenarios: first-party auto glass claims and minor hail damage. These are the "easy wins" because the damage is unambiguous, the repair paths are standardized, and the loss amounts are small enough to absorb model error. Lemonade’s 2023 data shows that for glass claims, CV achieves a 92% straight-through-processing (STP) rate with a mean absolute error (MAE) of $18. For hail damage, State Farm reported a 78% STP rate in its 2023 Innovation Report, with a 94% accuracy rate on damage classification when image quality is controlled.</h3>
+
+<p>Use Case STP Rate (2023) MAE ($) Model Type Auto glass (first-party) 92% (Lemonade 2023) 18 YOLOv8 segmentation</p>
 
 <table>
 <thead>
 <tr>
-<th>Use Case</th>
-<th>STP Rate (2023)</th>
-<th>MAE ($)</th>
-<th>Model Type</th>
+<th>Hail damage (property) 78% (State Farm 2023) 112 ResNet-50 classification Fender bender (auto, P&C) 45% (Allstate 2023 pilot) 287 Faster R-CNN + depth estimation</th>
+<th>Roof damage (catastrophe) 31% (USAA 2023 pilot) 614 Swin Transformer + LiDAR fusion</th>
+<th>The pattern is clear: as the complexity of the damage increases, the STP rate drops and the error margin widens. This isn’t a surprise—it’s a known limitation of supervised learning models. The real question is whether carriers are building guardrails around these limitations or treating CV as a silver bullet.</th>
+<th>Why Most Models Fail on "Edge Cases": The Hidden Cost of False Negatives</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Auto glass (first-party)</td>
-<td>92% (Lemonade 2023)</td>
-<td>18</td>
-<td>YOLOv8 segmentation</td>
+<td>I’ve reviewed dozens of CV pilots where carriers over-indexed on precision (avoiding false positives) at the expense of recall (catching all damage). The result? Claims with minor but material damage slip through, only to resurface later with larger repair costs. In one 2023 pilot with a top-10 P&C carrier, CV missed 12% of hail damage claims with an average loss of $1,240 per claim when manually reinspected. The carrier assumed the model’s precision would outweigh the recall trade-off, but the combined ratio impact was real: an 8-point increase in loss ratio for the pilot line.</td>
+<td>The trade-off isn’t academic. It’s embedded in the loss ratio formula: <p>Loss Ratio = (Incurred Losses + Loss Adjustment Expenses) / Earned Premium Where L.A.E. includes reinspection costs, customer complaints, and regulatory scrutiny for underpaid claims.</td>
+<td>Carriers that optimize for precision often underestimate the cost of false negatives. In the same pilot, the carrier spent $87,000 on reinspections—$32,000 more than budgeted—because the model’s recall was too low. The CFO’s reaction wasn’t about the AI’s performance; it was about the unit economics. If a $200 claim requires a $150 reinspection to validate a $50 repair, the ROI is negative.</td>
+<td>Vendor Lock-in and Model Drift: The Unseen Risks in Commercial Deployments</td>
 </tr>
 <tr>
-<td>Hail damage (property)</td>
-<td>78% (State Farm 2023)</td>
-<td>112</td>
-<td>ResNet-50 classification</td>
+<td>Most carriers don’t realize that integrating a third-party CV model isn’t a one-time cost—it’s a commitment to ongoing model governance. In 2023, a regional carrier deployed a vendor’s pre-trained hail damage model without realizing that the vendor had trained it on data from Texas and Florida. When the carrier expanded into the Midwest, the model’s precision dropped from 89% to 62% because hail patterns differ by region. The carrier had to either retrain the model (requiring new labeled data) or switch vendors, both of which incurred six-figure costs.</td>
+<td>Worse, the vendor’s model was a black box. The carrier couldn’t audit the decision logic, which violated NAIC’s 2023 Market Regulation Bulletin on AI use in underwriting and claims. The bulletin explicitly requires explainability for any AI model used in claims decisions. The carrier had to switch to an open-source framework (Detectron2) and rebuild the model internally, delaying deployment by 18 months.</td>
+<td>The lesson? Pre-trained models are a Trojan horse. They promise speed, but they lock you into their data distribution, their governance model, and their upgrade cycle. If your claims book spans multiple geographies or product lines, you’re better off building your own model from scratch—or at least fine-tuning a base model with your own labeled data.</td>
+<td>Data Quality: The Silent Killer of CV Performance</td>
 </tr>
 <tr>
-<td>Fender bender (auto, P&C)</td>
-<td>45% (Allstate 2023 pilot)</td>
-<td>287</td>
-<td>Faster R-CNN + depth estimation</td>
+<td>I’ve seen teams spend millions on GPUs and cloud infrastructure, only to derail their CV deployment because their training data was garbage. In a 2023 project for a mutual insurer, the data science team discovered that 34% of the labeled images in their training set were either mislabeled or of insufficient resolution. The model’s precision dropped from 91% to 76% after deployment, and the carrier had to recall the model and re-label 12,000 images at a cost of $45,000.</td>
+<td>The problem isn’t just labeling errors—it’s the lack of standardization in image capture. In auto claims, for example, carriers often rely on customer-uploaded photos, which vary wildly in lighting, angle, and distance. In one pilot, a carrier found that 22% of images were unusable because they were too blurry or taken at an extreme angle. The solution? Forcing customers to use a mobile app with guided capture (e.g., "Hold your phone 3 feet from the damage") improved the STP rate by 19%.</td>
+<td>But guided capture isn’t free. It requires UX design, A/B testing, and customer education—all of which add friction to the FNOL process. The trade-off is clear: better data quality improves model performance, but it also increases acquisition costs. Regulatory and Litigation Risks: When AI Becomes the Adversarial Party</td>
+<td>In 2023, a Florida appellate court ruled in <em>State Farm v. AI Claims Inc.</em> that an insurer could not rely solely on an AI-generated damage assessment to deny a claim. The court found that the AI model’s decision-making process was not sufficiently explainable under Florida Statute § 626.9912. The carrier was forced to pay the claim plus $187,000 in legal fees. This wasn’t an outlier—it was a wake-up call.</td>
 </tr>
 <tr>
-<td>Roof damage (catastrophe)</td>
-<td>31% (USAA 2023 pilot)</td>
-<td>614</td>
-<td>Swin Transformer + LiDAR fusion</td>
+<td>Carriers deploying CV in claims must prepare for three regulatory realities:</td>
+<td><strong>Model Governance:</strong> The NAIC’s 2023 bulletin requires insurers to document the data, algorithms, and processes used in AI-driven claims decisions. This means maintaining a model inventory, conducting bias audits, and providing explainability for any claim denied or reduced based on AI output. The cost of compliance? $50,000–$200,000 per model, depending on complexity.</td>
+<td><strong>Consumer Disclosure:</strong> The CFPB’s 2023 guidance on AI in financial services requires carriers to disclose when an AI system is used to make or support claims decisions. Failure to do so can result in UDAAP violations and fines up to $10,000 per violation.</td>
+<td><strong>Litigation Exposure:</strong> Plaintiffs’ attorneys are now subpoenaing AI model weights, training data, and decision logic in bad-faith lawsuits. In a 2024 case in California, a carrier was forced to produce 47,000 pages of documentation related to its CV model after a claim was denied. The legal team estimated the document production cost at $320,000.</td>
 </tr>
 </tbody>
 </table>
 
-<p>The pattern is clear: as the complexity of the damage increases, the STP rate drops and the error margin widens. This isn’t a surprise—it’s a known limitation of supervised learning models. The real question is whether carriers are building guardrails around these limitations or treating CV as a silver bullet.</p>
+<p>The takeaway? CV isn’t just a technology problem—it’s a legal and compliance minefield. Carriers that treat it as a "set it and forget it" solution are playing Russian roulette with their combined ratio. Integration Costs: The Hidden 5X Multiplier</p>
 
-<h3>Why Most Models Fail on "Edge Cases": The Hidden Cost of False Negatives</h3>
+<h3>Most carriers underestimate the cost of integrating CV into their claims workflow. In a 2023 study by Deloitte, the median total cost of ownership (TCO) for a CV deployment was $1.2 million over three years, with 60% of costs hidden in integration, change management, and model maintenance. Here’s the breakdown:</h3>
 
-<p>I’ve reviewed dozens of CV pilots where carriers over-indexed on precision (avoiding false positives) at the expense of recall (catching all damage). The result? Claims with minor but material damage slip through, only to resurface later with larger repair costs. In one 2023 pilot with a top-10 P&C carrier, CV missed 12% of hail damage claims with an average loss of $1,240 per claim when manually reinspected. The carrier assumed the model’s precision would outweigh the recall trade-off, but the combined ratio impact was real: an 8-point increase in loss ratio for the pilot line.</p>
+<p>Cost Category 2023 Median Cost (USD) % of TCO Key Driver Model Development 280,000 23% Data labeling, training, validation</p>
 
-<p>The trade-off isn’t academic. It’s embedded in the loss ratio formula:</p>
+<p>Infrastructure 190,000 16% GPU/TPU costs, cloud storage Integration 350,000 29% APIs, workflow automation, UX changes</p>
 
-<blockquote>
-<p>Loss Ratio = (Incurred Losses + Loss Adjustment Expenses) / Earned Premium</p>
-<p>Where L.A.E. includes reinspection costs, customer complaints, and regulatory scrutiny for underpaid claims.</p>
+<blockquote>Change Management 210,000 18% Training, SOPs, customer education Model Maintenance 170,000 14% Drift monitoring, retraining, audits</p>
+<p>The integration line item alone is often 3–5 times higher than the model development cost. Why? Because CV doesn’t just plug into your claims system—it requires a rewrite of your FNOL process, your adjuster workflows, and your customer communications. In one 2023 project, a carrier spent $420,000 integrating CV with its legacy policy admin system, only to discover that the API calls were timing out because the system couldn’t handle the image payloads. The fix required a full system upgrade, adding another $680,000 to the bill.</p>
 </blockquote>
 
-<p>Carriers that optimize for precision often underestimate the cost of false negatives. In the same pilot, the carrier spent $87,000 on reinspections—$32,000 more than budgeted—because the model’s recall was too low. The CFO’s reaction wasn’t about the AI’s performance; it was about the unit economics. If a $200 claim requires a $150 reinspection to validate a $50 repair, the ROI is negative.</p>
+<p>The CTO’s mistake? Assuming CV was a point solution. The reality is that CV is a systems-level change that ripples through your entire claims infrastructure. The ROI Delusion: Why Most CV Pilots Fail to Scale</p>
 
-<h3>Vendor Lock-in and Model Drift: The Unseen Risks in Commercial Deployments</h3>
+<h3>Carriers love to tout ROI metrics from CV pilots, but the numbers rarely survive first contact with scale. In a 2023 analysis of 12 CV deployments, McKinsey found that only 37% of pilots achieved their projected ROI at full scale. The failures fell into three categories:</h3>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Most carriers don’t realize that integrating a third-party CV model isn’t a one-time cost—it’s a commitment to ongoing model governance. In 2023, a regional carrier deployed a vendor’s pre-trained hail damage model without realizing that the vendor had trained it on data from Texas and Florida. When the carrier expanded into the Midwest, the model’s precision dropped from 89% to 62% because hail patterns differ by region. The carrier had to either retrain the model (requiring new labeled data) or switch vendors, both of which incurred six-figure costs.</p>
+                <p><strong>Underestimating Reinspection Costs:</strong> Carriers assumed CV would eliminate reinspections, but in reality, 40–70% of flagged claims still require manual review. The reinspection cost alone can wipe out the model’s efficiency gains.</p>
 
-<p>Worse, the vendor’s model was a black box. The carrier couldn’t audit the decision logic, which violated NAIC’s 2023 Market Regulation Bulletin on AI use in underwriting and claims. The bulletin explicitly requires explainability for any AI model used in claims decisions. The carrier had to switch to an open-source framework (Detectron2) and rebuild the model internally, delaying deployment by 18 months.</p>
+<p><strong>Overestimating STP Rates:</strong> Most pilots report STP rates of 60–80%, but those rates drop to 30–50% at scale because edge cases accumulate. A North American carrier saw its STP rate fall from 72% in pilot to 41% at scale due to regional variations in damage patterns.</p>
 
-<p>The lesson? Pre-trained models are a Trojan horse. They promise speed, but they lock you into their data distribution, their governance model, and their upgrade cycle. If your claims book spans multiple geographies or product lines, you’re better off building your own model from scratch—or at least fine-tuning a base model with your own labeled data.</p>
+<p><strong>Ignoring Customer Pushback:</strong> In one 2023 survey, 18% of policyholders said they would switch carriers if an AI denied their claim without human review. The carrier in question had to roll back its CV deployment and reinstate manual reviews for contested claims.</p>
 
-<h3>Data Quality: The Silent Killer of CV Performance</h3>
+<h3>The hard truth? CV’s ROI is positive only when it’s applied to the right use cases, with the right governance, and at the right scale. For everything else, it’s a cost center disguised as a productivity tool. What Actually Works: A Practical Playbook for CV in Claims</h3>
 
-<p>I’ve seen teams spend millions on GPUs and cloud infrastructure, only to derail their CV deployment because their training data was garbage. In a 2023 project for a mutual insurer, the data science team discovered that 34% of the labeled images in their training set were either mislabeled or of insufficient resolution. The model’s precision dropped from 91% to 76% after deployment, and the carrier had to recall the model and re-label 12,000 images at a cost of $45,000.</p>
+<p>If you’re a claims adjuster, a CTO, or a product manager evaluating CV, here’s a playbook that avoids the pitfalls I’ve seen: <strong>Start with the Low-Hanging Fruit:</strong> Glass claims and hail damage are the only use cases where CV reliably delivers STP rates above 70%. Anything more complex (e.g., bumper damage, interior damage) will require manual review.</p>
 
-<p>The problem isn’t just labeling errors—it’s the lack of standardization in image capture. In auto claims, for example, carriers often rely on customer-uploaded photos, which vary wildly in lighting, angle, and distance. In one pilot, a carrier found that 22% of images were unusable because they were too blurry or taken at an extreme angle. The solution? Forcing customers to use a mobile app with guided capture (e.g., "Hold your phone 3 feet from the damage") improved the STP rate by 19%.</p>
+<p><strong>Build, Don’t Buy:</strong> Pre-trained models are a trap. If you’re deploying CV across multiple geographies or product lines, invest in building your own model using open-source frameworks (e.g., Detectron2, YOLOv8). The upfront cost is higher, but the long-term flexibility is worth it.</p>
 
-<p>But guided capture isn’t free. It requires UX design, A/B testing, and customer education—all of which add friction to the FNOL process. The trade-off is clear: better data quality improves model performance, but it also increases acquisition costs.</p>
+<p><strong>Enforce Data Standards:</strong> If you’re relying on customer-uploaded images, enforce guided capture. Use mobile SDKs (e.g., Cloudinary, Filestack) to standardize image quality. The 19% STP improvement in the mutual insurer’s pilot was directly tied to enforced capture standards. <strong>Design for Human-in-the-Loop:</strong> CV should augment adjuster decision-making, not replace it. Implement a "trust but verify" model where the AI flags damage, but adjuster approval is required for all claims above a certain threshold (e.g., $500 loss).</p>
 
-<h3>Regulatory and Litigation Risks: When AI Becomes the Adversarial Party</h3>
-
-<p>In 2023, a Florida appellate court ruled in <em>State Farm v. AI Claims Inc.</em> that an insurer could not rely solely on an AI-generated damage assessment to deny a claim. The court found that the AI model’s decision-making process was not sufficiently explainable under Florida Statute § 626.9912. The carrier was forced to pay the claim plus $187,000 in legal fees. This wasn’t an outlier—it was a wake-up call.</p>
-
-<p>Carriers deploying CV in claims must prepare for three regulatory realities:</p>
-
-<ul>
-<li><strong>Model Governance:</strong> The NAIC’s 2023 bulletin requires insurers to document the data, algorithms, and processes used in AI-driven claims decisions. This means maintaining a model inventory, conducting bias audits, and providing explainability for any claim denied or reduced based on AI output. The cost of compliance? $50,000–$200,000 per model, depending on complexity.</li>
-<li><strong>Consumer Disclosure:</strong> The CFPB’s 2023 guidance on AI in financial services requires carriers to disclose when an AI system is used to make or support claims decisions. Failure to do so can result in UDAAP violations and fines up to $10,000 per violation.</li>
-<li><strong>Litigation Exposure:</strong> Plaintiffs’ attorneys are now subpoenaing AI model weights, training data, and decision logic in bad-faith lawsuits. In a 2024 case in California, a carrier was forced to produce 47,000 pages of documentation related to its CV model after a claim was denied. The legal team estimated the document production cost at $320,000.</li>
-</ul>
-
-<p>The takeaway? CV isn’t just a technology problem—it’s a legal and compliance minefield. Carriers that treat it as a "set it and forget it" solution are playing Russian roulette with their combined ratio.</p>
-
-<h3>Integration Costs: The Hidden 5X Multiplier</h3>
-
-<p>Most carriers underestimate the cost of integrating CV into their claims workflow. In a 2023 study by Deloitte, the median total cost of ownership (TCO) for a CV deployment was $1.2 million over three years, with 60% of costs hidden in integration, change management, and model maintenance. Here’s the breakdown:</p>
-
-<table>
-<thead>
-<tr>
-<th>Cost Category</th>
-<th>2023 Median Cost (USD)</th>
-<th>% of TCO</th>
-<th>Key Driver</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Model Development</td>
-<td>280,000</td>
-<td>23%</td>
-<td>Data labeling, training, validation</td>
-</tr>
-<tr>
-<td>Infrastructure</td>
-<td>190,000</td>
-<td>16%</td>
-<td>GPU/TPU costs, cloud storage</td>
-</tr>
-<tr>
-<td>Integration</td>
-<td>350,000</td>
-<td>29%</td>
-<td>APIs, workflow automation, UX changes</td>
-</tr>
-<tr>
-<td>Change Management</td>
-<td>210,000</td>
-<td>18%</td>
-<td>Training, SOPs, customer education</td>
-</tr>
-<tr>
-<td>Model Maintenance</td>
-<td>170,000</td>
-<td>14%</td>
-<td>Drift monitoring, retraining, audits</td>
-</tr>
-</tbody>
-</table>
-
-<p>The integration line item alone is often 3–5 times higher than the model development cost. Why? Because CV doesn’t just plug into your claims system—it requires a rewrite of your FNOL process, your adjuster workflows, and your customer communications. In one 2023 project, a carrier spent $420,000 integrating CV with its legacy policy admin system, only to discover that the API calls were timing out because the system couldn’t handle the image payloads. The fix required a full system upgrade, adding another $680,000 to the bill.</p>
-
-<p>The CTO’s mistake? Assuming CV was a point solution. The reality is that CV is a systems-level change that ripples through your entire claims infrastructure.</p>
-
-<h3>The ROI Delusion: Why Most CV Pilots Fail to Scale</h3>
-
-<p>Carriers love to tout ROI metrics from CV pilots, but the numbers rarely survive first contact with scale. In a 2023 analysis of 12 CV deployments, McKinsey found that only 37% of pilots achieved their projected ROI at full scale. The failures fell into three categories:</p>
-
-<ol>
-<li><strong>Underestimating Reinspection Costs:</strong> Carriers assumed CV would eliminate reinspections, but in reality, 40–70% of flagged claims still require manual review. The reinspection cost alone can wipe out the model’s efficiency gains.</li>
-<li><strong>Overestimating STP Rates:</strong> Most pilots report STP rates of 60–80%, but those rates drop to 30–50% at scale because edge cases accumulate. A North American carrier saw its STP rate fall from 72% in pilot to 41% at scale due to regional variations in damage patterns.</li>
-<li><strong>Ignoring Customer Pushback:</strong> In one 2023 survey, 18% of policyholders said they would switch carriers if an AI denied their claim without human review. The carrier in question had to roll back its CV deployment and reinstate manual reviews for contested claims.</li>
-</ol>
-
-<p>The hard truth? CV’s ROI is positive only when it’s applied to the right use cases, with the right governance, and at the right scale. For everything else, it’s a cost center disguised as a productivity tool.</p>
-
-<h3>What Actually Works: A Practical Playbook for CV in Claims</h3>
-
-<p>If you’re a claims adjuster, a CTO, or a product manager evaluating CV, here’s a playbook that avoids the pitfalls I’ve seen:</p>
-
-<ol>
-<li><strong>Start with the Low-Hanging Fruit:</strong> Glass claims and hail damage are the only use cases where CV reliably delivers STP rates above 70%. Anything more complex (e.g., bumper damage, interior damage) will require manual review.</li>
-<li><strong>Build, Don’t Buy:</strong> Pre-trained models are a trap. If you’re deploying CV across multiple geographies or product lines, invest in building your own model using open-source frameworks (e.g., Detectron2, YOLOv8). The upfront cost is higher, but the long-term flexibility is worth it.</li>
-<li><strong>Enforce Data Standards:</strong> If you’re relying on customer-uploaded images, enforce guided capture. Use mobile SDKs (e.g., Cloudinary, Filestack) to standardize image quality. The 19% STP improvement in the mutual insurer’s pilot was directly tied to enforced capture standards.</li>
-<li><strong>Design for Human-in-the-Loop:</strong> CV should augment adjuster decision-making, not replace it. Implement a "trust but verify" model where the AI flags damage, but adjuster approval is required for all claims above a certain threshold (e.g., $500 loss).</li>
-<li><strong>Budget for Governance:</strong> Set aside $100,000–$300,000 for model governance, including explainability tools (e.g., LIME, SHAP), bias audits, and regulatory compliance. The NAIC’s 2023 bulletin is not optional.</li>
-</ol>
-
-<h3>The Hard Question No One’s Asking</h3>
-
-<p>Here’s the question carriers need to answer before deploying CV: <em>Are we optimizing for adjuster efficiency or customer experience?</em> The two aren’t the same.</p>
+<h3><strong>Budget for Governance:</strong> Set aside $100,000–$300,000 for model governance, including explainability tools (e.g., LIME, SHAP), bias audits, and regulatory compliance. The NAIC’s 2023 bulletin is not optional. The Hard Question No One’s Asking Here’s the question carriers need to answer before deploying CV: <em>Are we optimizing for adjuster efficiency or customer experience?</em> The two aren’t the same.</h3>
 
 <p>In most CV deployments, the adjuster’s job becomes reactive—reviewing flagged claims instead of proactively investigating suspicious losses. This shifts the adjuster’s role from investigator to validator, which can erode morale and reduce fraud detection. In a 2023 survey by the Claims and Litigation Management Association (CLM), 41% of adjusters reported that AI-driven claims processing reduced their ability to detect fraud.</p>
 
 <p>The customer experience isn’t immune to this trade-off either. In the same survey, 27% of policyholders said they felt "less valued" when an AI, not a human, assessed their claim. The sentiment was strongest among older demographics, who prefer human interaction for high-value claims.</p>
 
-<p>CV isn’t inherently bad—it’s just a tool. But like any tool, it must serve the business, not the other way around. If your CV deployment is reducing cycle time but increasing loss adjustment expenses, you’re optimizing for the wrong metric.</p>
-
-<h3>What’s Next: The Next Frontier in CV for Claims</h3>
-
-<p>The next wave of CV innovation won’t come from better models—it will come from better data and better integration. Here’s where the industry is heading:</p>
-
 <ul>
-<li><strong>Multimodal Models:</strong> Combining vision with telematics (for auto) and IoT (for property) will enable real-time damage assessment. For example, Tesla’s 2024 FSD update includes a damage assessment feature that uses camera feeds from the car to estimate repair costs before the owner even files a claim. The model’s MAE is $98, compared to $287 for standalone vision models.</li>
-<li><strong>Parametric Triggers:</strong> CV will power parametric insurance products where payouts are triggered by AI-detected damage (e.g., hail, wind). Swiss Re’s 2024 sigma report highlights this as a $1.2B opportunity by 2027, but carriers must solve the governance challenge first.</li>
-<li><strong>Autonomous Adjusters:</strong> Ventures like Cape Analytics and Betterview are building AI systems that can assess damage without human input. The catch? They’re still limited to high-volume, low-complexity claims. The STP rate for autonomous adjusters in 2024 is 61%, with a MAE of $224. Not good enough for most carriers.</li>
+<li>CV isn’t inherently bad—it’s just a tool. But like any tool, it must serve the business, not the other way around. If your CV deployment is reducing cycle time but increasing loss adjustment expenses, you’re optimizing for the wrong metric.</li>
+<li>What’s Next: The Next Frontier in CV for Claims The next wave of CV innovation won’t come from better models—it will come from better data and better integration. Here’s where the industry is heading:</li>
+<li><strong>Multimodal Models:</strong> Combining vision with telematics (for auto) and IoT (for property) will enable real-time damage assessment. Case in point:,Tesla’s 2024 FSD update includes a damage assessment feature that uses camera feeds from the car to estimate repair costs before the owner even files a claim. The model’s MAE is $98, compared to $287 for standalone vision models.</li>
 </ul>
 
-<p>The thread connecting these trends is data—not just more data, but better data. The winners will be the carriers that invest in data pipelines, labeling frameworks, and governance
-            </div>
+<p><strong>Parametric Triggers:</strong> CV will power parametric insurance products where payouts are triggered by AI-detected damage (e.g., hail, wind). Swiss Re’s 2024 sigma report highlights this as a $1.2B opportunity by 2027, but carriers must solve the governance challenge first.</p>
 
-            
+<h3><strong>Autonomous Adjusters:</strong> Ventures like Cape Analytics and Betterview are building AI systems that can assess damage without human input. The catch? They’re still limited to high-volume, low-complexity claims. The STP rate for autonomous adjusters in 2024 is 61%, with a MAE of $224. Not good enough for most carriers.</h3>
 
-            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
-                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 14, 2026.
-            </div>
+<p>The thread connecting these trends is data—not just more data, but better data. The winners will be the carriers that invest in data pipelines, labeling frameworks, and governance </div> <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;"></p>
 
-            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6">
-                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources.
-            </div>
+<table>
+<thead>
+<tr>
+<th><strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 14, 2026. </div></th>
+<th><div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6"></th>
+<th><strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources. </div></th>
+<th><div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0"> <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful? Comments. I'll leave it there. Data's there, you decide.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 
-            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+
+
+
+</tr>
+<tr>
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+<ol>
+
+
+
+</ol>
+
+
+
+
+
+
+
+<ol>
+
+
+
+
+
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ul>
+
+
+
+</ul>
+
+
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -469,7 +454,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

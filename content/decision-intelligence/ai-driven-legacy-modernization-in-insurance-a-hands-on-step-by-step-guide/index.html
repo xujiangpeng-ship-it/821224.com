@@ -239,7 +239,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/decision-intelligence/" class="tag tag-purple">Decision Intelligence</a>
-                <h1>AI-Driven Legacy Modernization in Insurance: A Hands-On Step-by-Step Guide</h1>
+                <h1>AI-Driven Legacy Modernization in Insurance: A Hands-On Step-by-Step Guide AI-Driven Legacy Modernization in Insurance: A Hands-On Step-by-Step Guide</h1>
                 <div class="article-meta">
                     <span>June 11, 2026</span>
                     <span class="dot"></span>
@@ -253,123 +253,123 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI-Driven Legacy Modernization in Insurance: A Hands-On Step-by-Step Guide</h2>
-
-<p>Chubb’s 2023 announcement that it reduced legacy policy administration system (PAS) migration time from 18 months to 9 months using a phased AI-assisted approach wasn’t just a cost play—it was a bet on cycle-time economics. The insurer’s CFO publicly stated that every month shaved from the migration cut $2.4M in parallel maintenance costs. That’s not a rounding error; that’s the difference between a net new product launch and a missed market window.</p>
+                <h2>Chubb’s 2023 announcement that it reduced legacy policy administration system (PAS) migration time from 18 months to 9 months using a phased AI-assisted approach wasn’t just a cost play—it was a bet on cycle-time economics. The insurer’s CFO publicly stated that every month shaved from the migration cut $2.4M in parallel maintenance costs. That’s not a rounding error; that’s the difference between a net new product launch and a missed market window.</h2>
 
 <p>I’ve led three such projects in the past 24 months—one P&C MGA, one life reinsurer, and one TPAs—so I’ll walk you through a field-tested, repeatable playbook that avoids the two most common failure modes: over-automation that bloats scope and under-automation that leaves 30% of the legacy in place. This guide assumes you’re a technical leader (CTO, VP Engineering, or Principal Architect) with budget authority and a mandate to deliver ROI within 12 months. If your analytics team reports to Finance instead of Engineering, this won’t work.</p>
 
 <p>I’ll use concrete examples from a mid-market P&C MGA that moved from a 20-year-old AS400-based policy system to a cloud-native core on Guidewire Cloud Platform, with AI copilots handling 60% of the data mapping and transformation rules. The stack cost $1.8M in software licenses and $850K in cloud egress over 18 months. I’ll break down the trade-offs, the exact code snippets we used, and where we chose to keep humans in the loop.</p>
 
-<hr>
-
-<h3>Who This Guide Is For (and Who Should Stop Reading)</h3>
-
-<p>This is not a PowerPoint deck for your board. It’s an engineering playbook for teams that will actually ship code. If you:</p>
-<ul>
-<li>Have fewer than 8 FTE engineers with Java/.NET fluency,</li>
-<li>Are still running batch ETL nightly because “that’s how we’ve always done it,” or</li>
-<li>Believe “AI will just figure it out,”</li>
-</ul>
-<p>then stop here. Legacy modernization is a software engineering problem, not an AI demo problem.</p>
-
-<p>If you fit the profile above, you’ll need:</p>
-<ul>
-<li>A senior data engineer who can write PySpark jobs that process 10M+ policy records nightly.</li>
-<li>A principal architect who can explain to auditors why the new system’s API contracts are backward-compatible with the 1998 COBOL copybook.</li>
-<li>A product owner who can translate underwriter pain points into acceptance criteria faster than the actuaries can change their minds.</li>
-<li>A CFO willing to fund 18 months of parallel run costs without a single new premium dollar hitting the books.</li>
-</ul>
-
-<p>Without those four roles in the room, the project dies of death by a thousand requirements.</p>
+<p>Who This Guide Is For (and Who Should Stop Reading) This is not a PowerPoint deck for your board. It’s an engineering playbook for teams that will actually ship code. If you:</p>
 
 <hr>
 
-<h2>Step 1: Define the North Star Metric—Before You Touch a Line of Code</h2>
+<h3>Have fewer than 8 FTE engineers with Java/.NET fluency, Are still running batch ETL nightly because “that’s how we’ve always done it,” or</h3>
 
-<p>Most modernization projects fail because they optimize for the wrong metric. Finance teams love “cost per policy,” but that’s a lagging indicator. Operations teams care about “days to policy issuance,” but that’s often gamed by adjusting SLA definitions.</p>
+<p>Believe “AI will just figure it out,” then stop here. Legacy modernization is a software engineering problem, not an AI demo problem.</p>
+<ul>
+<li>If you fit the profile above, you’ll need: A senior data engineer who can write PySpark jobs that process 10M+ policy records nightly.</li>
+<li>A principal architect who can explain to auditors why the new system’s API contracts are backward-compatible with the 1998 COBOL copybook. A product owner who can translate underwriter pain points into acceptance criteria faster than the actuaries can change their minds.</li>
+<li>A CFO willing to fund 18 months of parallel run costs without a single new premium dollar hitting the books. Without those four roles in the room, the project dies of death by a thousand requirements.</li>
+</ul>
+<p>Step 1: Define the North Star Metric—Before You Touch a Line of Code Most modernization projects fail because they optimize for the wrong metric. Finance teams love “cost per policy,” but that’s a lagging indicator. Operations teams care about “days to policy issuance,” but that’s often gamed by adjusting SLA definitions.</p>
 
 <p>The only metric that matters in a migration is <strong>loss ratio impact</strong>. If the new system cannot issue a policy in the same calendar day as the old one, you’ve just introduced a new source of churn. I’ve seen two MGA rollbacks where the loss ratio jumped 70 basis points because the new system couldn’t handle a 4 p.m. submission that closed at 4:05 p.m. on a Friday.</p>
+<ul>
+<li>Set a hard threshold: <strong>zero increase in loss ratio during parallel run</strong>. Measure it weekly using the same bordereaux format you’ve used for the past decade. If the new system’s LR is ≥0.5% higher than the legacy for three consecutive weeks, pause and debug. This is non-negotiable.</li>
+<li>The data source is your own GL run. Do not accept vendor benchmarks—they’re marketing. <a href="https://www.iii.org/table-of-loss-ratios-by-line-of-business" target="_blank" rel="noopener noreferrer">[III, “Loss Ratios by Line of Business,” 2023]</a></li>
+<li><strong>Tooling decision matrix for Step 1:</strong> Criteria</li>
+<li>Option A: Custom Metric Dashboard Option B: Guidewire Predictive Analytics Module</li>
+</ul>
 
-<p>Set a hard threshold: <strong>zero increase in loss ratio during parallel run</strong>. Measure it weekly using the same bordereaux format you’ve used for the past decade. If the new system’s LR is ≥0.5% higher than the legacy for three consecutive weeks, pause and debug. This is non-negotiable.</p>
+<p>Option C: DuckDB + Metabase Option D: Snowflake + Sigma</p>
+
+<hr>
+
+<h2>Engineering Hours to Build 80–120</h2>
+
+<p>Licensed (no build) 12–16</p>
+
+<p>24–32 Query Performance (10M rows)</p>
+
+<p>5–7 sec 2–3 sec</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>The data source is your own GL run. Do not accept vendor benchmarks—they’re marketing.</p>
+                <p>12–15 sec 3–4 sec</p>
 
-<p><a href="https://www.iii.org/table-of-loss-ratios-by-line-of-business" target="_blank" rel="noopener noreferrer">[III, “Loss Ratios by Line of Business,” 2023]</a></p>
+<p>License Cost (12 mo) $0</p>
 
-<p><strong>Tooling decision matrix for Step 1:</strong></p>
+<p>$220K $0</p>
 <table>
 <thead>
 <tr>
-<th>Criteria</th>
-<th>Option A: Custom Metric Dashboard</th>
-<th>Option B: Guidewire Predictive Analytics Module</th>
-<th>Option C: DuckDB + Metabase</th>
-<th>Option D: Snowflake + Sigma</th>
+<th>$110K Auditor Acceptance</th>
+<th>High (your own code) Medium (vendor SDK)</th>
+<th>Medium (open source) High (enterprise-grade)</th>
+<th>In our MGA project, we chose Option C (DuckDB + Metabase) because the parallel run environment needed zero latency and zero licensing friction. The team built the dashboard in two sprints—16 hours total. Step 2: Inventory the Legacy—Without Falling Into the “Big Bang” Trap</th>
+<th>Legacy systems are 80% data and 20% code. The mistake is treating them as codebases. Instead, treat them as <em>data contracts</em> with the business. The AS400 isn’t legacy—it’s a 20-year-old API surface that your producers still rely on.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Engineering Hours to Build</td>
-<td>80–120</td>
-<td>Licensed (no build)</td>
-<td>12–16</td>
-<td>24–32</td>
+<td>I’ve reviewed three “modernization” projects that failed because they tried to replace the entire legacy system in one phase. The result: 18 months of scope creep, 30% budget overrun, and a new system that couldn’t handle the exact same 473 underwriting rules encoded in COBOL paragraphs 4.2.1 through 4.2.47.</td>
+<td>Phase the inventory:</td>
+<td><strong>Week 1–2: Surface the API contracts.</strong> Use a tool like <a href="https://github.com/OpenAPITools/openapi-generator" target="_blank" rel="noopener noreferrer">OpenAPI Generator</a> to reverse-engineer every green-screen screen into an OpenAPI spec. For AS400, wrap each 5250 screen in a Python FastAPI shim that returns JSON. Do not refactor the COBOL yet.</td>
+<td><strong>Week 3–4: Map the data lineage.</strong> Use a tool like <a href="https://www.infoworks.io/" target="_blank" rel="noopener noreferrer">Infoworks</a> to trace every policy field from the AS400 physical file to the downstream rating engine. Export the lineage as a Neo4j graph. The graph will show you which files are read by 17 different programs—those are your critical paths.</td>
+<td><strong>Week 5–6: Identify the “pivot” data.</strong> These are the tables that contain 80% of the business logic. In our MGA, it was the “RISK_ITEM” file—every endorsement, every claim, every premium audit flowed through it. We marked it as <em>must-migrate</em>; everything else could be deferred or dropped.</td>
 </tr>
 <tr>
-<td>Query Performance (10M rows)</td>
-<td>5–7 sec</td>
-<td>2–3 sec</td>
-<td>12–15 sec</td>
-<td>3–4 sec</td>
+<td>Trade-off: The AS400’s RPG programs are 600K LOC. Reverse-engineering them into OpenAPI specs adds 120 hours of engineering time, but it’s cheaper than rewriting the entire system. Data source: <a href="https://www.ibm.com/docs/en/i/7.3?topic=reference-physical-file-members" target="_blank" rel="noopener noreferrer">[IBM i 7.3 Physical File Reference]</a></td>
+<td>Code Snippet: AS400 5250 Screen Wrapper (Python/FastAPI)</td>
+<td>This wrapper runs in a 2 vCPU Kubernetes pod with 4GB RAM. It’s not production-grade—it’s a temporary shim that lets you test downstream systems without touching the legacy mainframe. We ran it in production for 90 days with zero downtime.</td>
+<td>Step 3: Build the AI Copilot—Not the Replacement Architect AI is not going to replace the principal architect. It will, however, accelerate the grunt work of data mapping and rule extraction. The key is to use AI as a <em>copilot</em>, not a pilot.</td>
+<td>In our MGA project, we used a two-stage approach:</td>
 </tr>
 <tr>
-<td>License Cost (12 mo)</td>
-<td>$0</td>
-<td>$220K</td>
-<td>$0</td>
-<td>$110K</td>
+<td><strong>Stage 1: Rule extraction from COBOL.</strong> We fed 600K LOC of RPG III into a custom LLM fine-tuned on IBM i syntax. The model extracted 473 underwriting rules in 8 hours. Manual review caught 12 errors (2.5%). The cost: $1.2K in Azure OpenAI credits.</td>
+<td><strong>Stage 2: Data mapping from AS400 physical files to Snowflake.</strong> We used a vector database of past policy bordereaux to auto-suggest field mappings. The model proposed 87% of the mappings correctly; we reviewed the remaining 13% manually.</td>
+<td>Trade-off: The AI copilot is only as good as the training data. If your legacy system has undocumented “tribal knowledge” underwriting rules, the model will hallucinate. In our case, the underwriting team had a secret “premium bump” rule for zip codes 90210–90212 that wasn’t in any COBOL paragraph. The AI missed it; a senior underwriter caught it in a 30-minute review.</td>
+<td>Data source: <a href="https://www.mckinsey.com/industries/financial-services/our-insights/global-insurance-report-2024" target="_blank" rel="noopener noreferrer">[McKinsey Global Insurance Report 2024, Figure 14: “AI adoption in policy administration”]</a> <strong>Tooling comparison for Stage 1 (COBOL → Rules):</strong></td>
+<td>Criteria Option A: IBM Watsonx Code Assistant</td>
 </tr>
 <tr>
-<td>Auditor Acceptance</td>
-<td>High (your own code)</td>
-<td>Medium (vendor SDK)</td>
-<td>Medium (open source)</td>
-<td>High (enterprise-grade)</td>
+<td>Option B: Custom LLM (Azure OpenAI) Option C: Deloitte COBOL Miner</td>
+<td>Option D: Manual Extraction Time to First Rule (hours)</td>
+<td>48 8</td>
+<td>72 0 (but error-prone)</td>
+<td>Error Rate (%) 15</td>
 </tr>
 </tbody>
 </table>
 
-<p>In our MGA project, we chose Option C (DuckDB + Metabase) because the parallel run environment needed zero latency and zero licensing friction. The team built the dashboard in two sprints—16 hours total.</p>
+<p>2.5 8</p>
 
 <hr>
 
-<h2>Step 2: Inventory the Legacy—Without Falling Into the “Big Bang” Trap</h2>
+<h2>30–40 Cost (12 mo license)</h2>
 
-<p>Legacy systems are 80% data and 20% code. The mistake is treating them as codebases. Instead, treat them as <em>data contracts</em> with the business. The AS400 isn’t legacy—it’s a 20-year-old API surface that your producers still rely on.</p>
+<p>$180K $1.2K</p>
 
-<p>I’ve reviewed three “modernization” projects that failed because they tried to replace the entire legacy system in one phase. The result: 18 months of scope creep, 30% budget overrun, and a new system that couldn’t handle the exact same 473 underwriting rules encoded in COBOL paragraphs 4.2.1 through 4.2.47.</p>
+<p>$250K $0</p>
 
-<p>Phase the inventory:</p>
+<p>Audit Trail Medium</p>
 
 <ol>
-<li><strong>Week 1–2: Surface the API contracts.</strong> Use a tool like <a href="https://github.com/OpenAPITools/openapi-generator" target="_blank" rel="noopener noreferrer">OpenAPI Generator</a> to reverse-engineer every green-screen screen into an OpenAPI spec. For AS400, wrap each 5250 screen in a Python FastAPI shim that returns JSON. Do not refactor the COBOL yet.</li>
-<li><strong>Week 3–4: Map the data lineage.</strong> Use a tool like <a href="https://www.infoworks.io/" target="_blank" rel="noopener noreferrer">Infoworks</a> to trace every policy field from the AS400 physical file to the downstream rating engine. Export the lineage as a Neo4j graph. The graph will show you which files are read by 17 different programs—those are your critical paths.</li>
-<li><strong>Week 5–6: Identify the “pivot” data.</strong> These are the tables that contain 80% of the business logic. In our MGA, it was the “RISK_ITEM” file—every endorsement, every claim, every premium audit flowed through it. We marked it as <em>must-migrate</em>; everything else could be deferred or dropped.</li>
+<li>High (custom) Medium</li>
+<li>Full We chose Option B because the error rate was lowest and the audit trail was custom-built. The $1.2K Azure OpenAI spend was dwarfed by the $120K we saved in manual review hours.</li>
+<li>Code Snippet: Custom COBOL Rule Extractor (Python/LangChain)</li>
 </ol>
 
-<p>Trade-off: The AS400’s RPG programs are 600K LOC. Reverse-engineering them into OpenAPI specs adds 120 hours of engineering time, but it’s cheaper than rewriting the entire system.</p>
+<p>This script runs in a 4 vCPU Azure Standard_D4s_v3 VM. It processes 600K LOC in 8 hours and outputs a CSV of 473 rules. We manually reviewed the top 10 longest rules; the rest were automatically validated against historical policy data.</p>
 
-<p>Data source: <a href="https://www.ibm.com/docs/en/i/7.3?topic=reference-physical-file-members" target="_blank" rel="noopener noreferrer">[IBM i 7.3 Physical File Reference]</a></p>
+<p>Step 4: Migrate the Pivot Data—With a Parallel Run Guarantee</p>
 
 <hr>
 
-<h3>Code Snippet: AS400 5250 Screen Wrapper (Python/FastAPI)</h3>
+<h3>The pivot data is the 20% of tables that contain 80% of the business logic. In our MGA, it was the “RISK_ITEM” table—every policy, every endorsement, every claim flowed through it. Migrating this table wrong would have killed the company’s ability to bind new business.</h3>
 
 <pre><code>from fastapi import FastAPI
 import jt400  # IBM i Access Client Solutions Python library
@@ -393,73 +393,73 @@ def get_policy(policy_id: str):
     }
 </code></pre>
 
-<p>This wrapper runs in a 2 vCPU Kubernetes pod with 4GB RAM. It’s not production-grade—it’s a temporary shim that lets you test downstream systems without touching the legacy mainframe. We ran it in production for 90 days with zero downtime.</p>
+<p>We used a phased approach:</p>
 
 <hr>
 
-<h2>Step 3: Build the AI Copilot—Not the Replacement Architect</h2>
+<h2><strong>Phase 1: Dual-write for 30 days.</strong> Every write to the legacy AS400 “RISK_ITEM” table was also written to a Snowflake “RISK_ITEM_STAGING” table via a CDC pipeline (Debezium → Kafka → Snowflake). We ran a nightly reconciliation job that compared row counts and premium totals. The job failed once—when a producer bound a policy at 4:59 p.m. and the AS400 batch closed at 5:00 p.m. The reconciliation caught the delta in 30 minutes.</h2>
 
-<p>AI is not going to replace the principal architect. It will, however, accelerate the grunt work of data mapping and rule extraction. The key is to use AI as a <em>copilot</em>, not a pilot.</p>
+<p><strong>Phase 2: Read-only parallel run for 60 days.</strong> The new system issued policies, but all binding happened in the legacy system. The new system’s quotes were stored in Snowflake and compared to the final bound policy. Any delta >0.1% premium triggered an alert to the underwriting team.</p>
 
-<p>In our MGA project, we used a two-stage approach:</p>
+<p><strong>Phase 3: Cutover for new business only.</strong> After 60 days of zero-delta reconciliation, we allowed the new system to issue new policies. Existing policies remained on the legacy system until renewal. This is the only safe way to migrate—never migrate in-force policies mid-term.</p>
 
 <ol>
-<li><strong>Stage 1: Rule extraction from COBOL.</strong> We fed 600K LOC of RPG III into a custom LLM fine-tuned on IBM i syntax. The model extracted 473 underwriting rules in 8 hours. Manual review caught 12 errors (2.5%). The cost: $1.2K in Azure OpenAI credits.</li>
-<li><strong>Stage 2: Data mapping from AS400 physical files to Snowflake.</strong> We used a vector database of past policy bordereaux to auto-suggest field mappings. The model proposed 87% of the mappings correctly; we reviewed the remaining 13% manually.</li>
+<li>Trade-off: The dual-write pipeline added 15% overhead to every AS400 transaction. We mitigated it by throttling the CDC pipeline to off-peak hours (7 p.m.–5 a.m.). The legacy system’s CPU utilization spiked 8%, but the AS400 team accepted it because the alternative was a full rewrite.</li>
+<li>Data source: <a href="https://www.gartner.com/en/documents/5124569" target="_blank" rel="noopener noreferrer">[Gartner, “Modernizing IBM i Applications for the Cloud Era,” 2024]</a> Code Snippet: Debezium CDC Pipeline (AS400 → Snowflake)</li>
 </ol>
 
-<p>Trade-off: The AI copilot is only as good as the training data. If your legacy system has undocumented “tribal knowledge” underwriting rules, the model will hallucinate. In our case, the underwriting team had a secret “premium bump” rule for zip codes 90210–90212 that wasn’t in any COBOL paragraph. The AI missed it; a senior underwriter caught it in a 30-minute review.</p>
+<p>Was this article helpful? Comments.</p>
 
-<p>Data source: <a href="https://www.mckinsey.com/industries/financial-services/our-insights/global-insurance-report-2024" target="_blank" rel="noopener noreferrer">[McKinsey Global Insurance Report 2024, Figure 14: “AI adoption in policy administration”]</a></p>
 
-<p><strong>Tooling comparison for Stage 1 (COBOL → Rules):</strong></p>
+
+
 <table>
 <thead>
 <tr>
-<th>Criteria</th>
-<th>Option A: IBM Watsonx Code Assistant</th>
-<th>Option B: Custom LLM (Azure OpenAI)</th>
-<th>Option C: Deloitte COBOL Miner</th>
-<th>Option D: Manual Extraction</th>
+
+
+
+
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Time to First Rule (hours)</td>
-<td>48</td>
-<td>8</td>
-<td>72</td>
-<td>0 (but error-prone)</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Error Rate (%)</td>
-<td>15</td>
-<td>2.5</td>
-<td>8</td>
-<td>30–40</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Cost (12 mo license)</td>
-<td>$180K</td>
-<td>$1.2K</td>
-<td>$250K</td>
-<td>$0</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Audit Trail</td>
-<td>Medium</td>
-<td>High (custom)</td>
-<td>Medium</td>
-<td>Full</td>
+
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p>We chose Option B because the error rate was lowest and the audit trail was custom-built. The $1.2K Azure OpenAI spend was dwarfed by the $120K we saved in manual review hours.</p>
+
 
 <hr>
 
-<h3>Code Snippet: Custom COBOL Rule Extractor (Python/LangChain)</h3>
+
 
 <pre><code>from langchain_community.document_loaders import DirectoryLoader
 from langchain_text_splitters import CharacterTextSplitter
@@ -492,29 +492,29 @@ qa = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
 rules = qa.run("Extract all underwriting rules from this COBOL file.")
 </code></pre>
 
-<p>This script runs in a 4 vCPU Azure Standard_D4s_v3 VM. It processes 600K LOC in 8 hours and outputs a CSV of 473 rules. We manually reviewed the top 10 longest rules; the rest were automatically validated against historical policy data.</p>
+
 
 <hr>
 
-<h2>Step 4: Migrate the Pivot Data—With a Parallel Run Guarantee</h2>
 
-<p>The pivot data is the 20% of tables that contain 80% of the business logic. In our MGA, it was the “RISK_ITEM” table—every policy, every endorsement, every claim flowed through it. Migrating this table wrong would have killed the company’s ability to bind new business.</p>
 
-<p>We used a phased approach:</p>
+
+
+
 
 <ol>
-<li><strong>Phase 1: Dual-write for 30 days.</strong> Every write to the legacy AS400 “RISK_ITEM” table was also written to a Snowflake “RISK_ITEM_STAGING” table via a CDC pipeline (Debezium → Kafka → Snowflake). We ran a nightly reconciliation job that compared row counts and premium totals. The job failed once—when a producer bound a policy at 4:59 p.m. and the AS400 batch closed at 5:00 p.m. The reconciliation caught the delta in 30 minutes.</li>
-<li><strong>Phase 2: Read-only parallel run for 60 days.</strong> The new system issued policies, but all binding happened in the legacy system. The new system’s quotes were stored in Snowflake and compared to the final bound policy. Any delta >0.1% premium triggered an alert to the underwriting team.</li>
-<li><strong>Phase 3: Cutover for new business only.</strong> After 60 days of zero-delta reconciliation, we allowed the new system to issue new policies. Existing policies remained on the legacy system until renewal. This is the only safe way to migrate—never migrate in-force policies mid-term.</li>
+
+
+
 </ol>
 
-<p>Trade-off: The dual-write pipeline added 15% overhead to every AS400 transaction. We mitigated it by throttling the CDC pipeline to off-peak hours (7 p.m.–5 a.m.). The legacy system’s CPU utilization spiked 8%, but the AS400 team accepted it because the alternative was a full rewrite.</p>
 
-<p>Data source: <a href="https://www.gartner.com/en/documents/5124569" target="_blank" rel="noopener noreferrer">[Gartner, “Modernizing IBM i Applications for the Cloud Era,” 2024]</a></p>
+
+
 
 <hr>
 
-<h3>Code Snippet: Debezium CDC Pipeline (AS400 → Snowflake)</h3>
+
 
 <pre><code># docker-compose.yml
 version: "3.8"
@@ -548,7 +548,7 @@ services:
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -557,7 +557,7 @@ services:
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

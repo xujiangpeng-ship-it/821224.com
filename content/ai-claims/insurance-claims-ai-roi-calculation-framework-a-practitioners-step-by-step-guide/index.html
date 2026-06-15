@@ -291,7 +291,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Insurance Claims AI ROI Calculation Framework: A Practitioner’s Step-by-Step Guide</h1>
+                <h1>Insurance Claims AI ROI Calculation Framework: A Practitioner’s Step-by-Step Guide Insurance Claims AI ROI Calculation Framework: A Practitioner’s Step-by-Step Guide Why Most Claims AI ROI Models Are Wrong (And How to Fix It)</h1>
                 <div class="article-meta">
                     <span>June 04, 2026</span>
                     <span class="dot"></span>
@@ -305,86 +305,78 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Insurance Claims AI ROI Calculation Framework: A Practitioner’s Step-by-Step Guide</h2>
+                <h2>I’ve reviewed dozens of claims AI ROI models. Most overpromise by 300–500% because they ignore three critical inputs: <strong>claim leakage amortized over the policy lifecycle</strong>, <strong>TPA/MGA fee drag</strong>, and <strong>regulatory friction</strong>. One insurer I worked with plugged in a $12M annual reduction in litigation spend based on AI flagging high-risk claims—but forgot to subtract the $8M they still pay TPA partners for the same cases. Net result: a 2.1x ROI instead of the projected 5.3x.</h2>
 
-<h3>Why Most Claims AI ROI Models Are Wrong (And How to Fix It)</h3>
-<p>I’ve reviewed dozens of claims AI ROI models. Most overpromise by 300–500% because they ignore three critical inputs: <strong>claim leakage amortized over the policy lifecycle</strong>, <strong>TPA/MGA fee drag</strong>, and <strong>regulatory friction</strong>. One insurer I worked with plugged in a $12M annual reduction in litigation spend based on AI flagging high-risk claims—but forgot to subtract the $8M they still pay TPA partners for the same cases. Net result: a 2.1x ROI instead of the projected 5.3x.</p>
-<p>The framework below forces you to face those trade-offs upfront. It’s built for teams deploying computer vision for FNOL triage, NLP for adjuster notes, or ML for subrogation recovery. You’ll get line-item math, not vaporware.</p>
+<h3>The framework below forces you to face those trade-offs upfront. It’s built for teams deploying computer vision for FNOL triage, NLP for adjuster notes, or ML for subrogation recovery. You’ll get line-item math, not vaporware. Step 1: Inventory Your Claims Stack and Data Gravity</h3>
+<p><strong>Goal:</strong> Map every system touching a claim—TPA portals, core admin platforms, legacy imaging stores—to calculate data egress costs. <strong>Action:</strong> <strong>Export bordereaux</strong> from your admin system (Guidewire, Duck Creek, etc.) for the last 24 months. Filter for <code>ClaimStatus = "Closed"</code>. You’ll need raw JSON or CSV, not summaries. <strong>Tag each source</strong> with:</p>
+<p><ul> <li><strong>Data Gravity</strong> = annual GB/day generated (e.g., 120 GB/day from drone imagery for CAT events). <strong>API Latency</strong> = time to pull a full claim record (e.g., 4.2s via SOAP vs. 800ms via GraphQL). <strong>Storage Cost</strong> = $/GB/month (e.g., AWS S3 IA = $0.0125/GB). <strong>Add TPA/MGA fee layers</strong>:</p>
 
 ---
 
-<h3>Step 1: Inventory Your Claims Stack and Data Gravity</h3>
-<p><strong>Goal:</strong> Map every system touching a claim—TPA portals, core admin platforms, legacy imaging stores—to calculate data egress costs.</p>
-<p><strong>Action:</strong></p>
+<h3><ul></h3>
+<p><li>Rule of thumb: <strong>0.7–1.2% of written premium</strong> for mid-market carriers. For a $500M P&C; book, that’s $3.5–6M/year. Check contracts for <strong>data escrow clauses</strong>. One insurer I audited paid $220K/year to export claims data from a TPA—until they renegotiated to a flat $50K API fee.</p>
+<p><strong>Calculate your current <em>data tax</em></strong>: <table> <thead> <tr></p>
 <ol>
-  <li><strong>Export bordereaux</strong> from your admin system (Guidewire, Duck Creek, etc.) for the last 24 months. Filter for <code>ClaimStatus = "Closed"</code>. You’ll need raw JSON or CSV, not summaries.</li>
-  <li><strong>Tag each source</strong> with:
-     <ul>
-        <li><strong>Data Gravity</strong> = annual GB/day generated (e.g., 120 GB/day from drone imagery for CAT events).</li>
-        <li><strong>API Latency</strong> = time to pull a full claim record (e.g., 4.2s via SOAP vs. 800ms via GraphQL).</li>
-        <li><strong>Storage Cost</strong> = $/GB/month (e.g., AWS S3 IA = $0.0125/GB).</li>
+  <li><th>Source Annual GB Storage Cost ($) Egress Cost ($) TPA Fee ($) Total Data Tax ($) Legacy Imaging 9,600</li>
+  <li>115,200 42,000 — 157,200 TPA Portal 14,400 — —</li>
+        <li>3,200,000 3,200,000 <strong>Grand Total</strong> <strong>24,000</strong> <strong>115,200</strong> <strong>42,000</strong> <strong>3,200,000</strong> <strong>3,357,200</strong></li>
+        <li><strong>Trade-off:</strong> Consolidating data sources reduces egress costs but increases vendor lock-in risk. One carrier spent $1.8M migrating from TPA portals to a unified GraphQL layer—only to realize their NLP model needed 6 weeks of retraining due to schema changes. Step 2: Define the AI Use Case and Build the Cost Stack</li>
      </ul>
   </li>
-  <li><strong>Add TPA/MGA fee layers</strong>:
-     <ul>
-        <li>Rule of thumb: <strong>0.7–1.2% of written premium</strong> for mid-market carriers. For a $500M P&C; book, that’s $3.5–6M/year.</li>
-        <li>Check contracts for <strong>data escrow clauses</strong>. One insurer I audited paid $220K/year to export claims data from a TPA—until they renegotiated to a flat $50K API fee.</li>
+  <li><strong>Goal:</strong> Pick one use case (e.g., subrogation triage, reserve accuracy) and model its cost stack from data ingestion to model inference. <strong>Use Case Selection Criteria:</strong></li>
+        <li><strong>ROI ceiling</strong>: Subrogation recovery has a hard cap at <strong>5–8% of paid losses</strong> (per Swiss Re). Fraud detection tops out at 3%. <strong>Data readiness</strong>: You need 18–24 months of labeled data. If you can’t get 5,000+ closed claims with adjuster notes and photos, skip NLP for now.</li>
      </ul>
   </li>
-  <li><strong>Calculate your current <em>data tax</em></strong>:
-     <table>
-        <thead>
-          <tr>
-            <th>Source</th>
-            <th>Annual GB</th>
-            <th>Storage Cost ($)</th>
-            <th>Egress Cost ($)</th>
-            <th>TPA Fee ($)</th>
-            <li>Total Data Tax ($)</li>
+  <li><strong>Regulatory clarity</strong>: Parametric triggers for CAT events face fewer hurdles than AI-driven bodily injury reserves in California (see SB 1127). <strong>Example: Subrogation Triage AI</strong> <strong>Data Ingestion Cost</strong>: <ul> <li>OCR for police reports: $0.04/page (e.g., 500,000 pages/year = $20,000). Computer vision for damage photos: $0.12/image (e.g., 1.2M images/year = $144,000).</th>
+            <th><strong>Net:</strong> $164,000/year. <strong>Model Training Cost</strong>: <ul> <li>GPU hours: 800 hours/year @ $1.20/hour = $960. Human-in-the-loop labeling: $180,000 (outsourced to a vendor like Scale AI). <strong>Inference Cost</strong>:</th>
+            <th><ul> <li>API calls: $0.0001/claim @ 2.1M claims/year = $210. Edge deployment (if using drones): $0.008/claim for on-device processing = $16,800. <strong>Integration Cost</strong>: <ul></th>
+            <th><li>SAP/Guidewire middleware: $350,000 (one-time). Adjuster portal updates: $85,000. <strong>Total Cost Stack</strong>: <table> <thead></th>
+            <th><tr> <th>Category Annual Cost ($) One-Time Cost ($) Data Ingestion 164,000</th>
+            <li>— Model Training 180,960 — Inference 16,800 — Integration</li>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Legacy Imaging</td>
-            <td>9,600</td>
-            <td>115,200</td>
-            <td>42,000</td>
-            <td>—</td>
-            <td>157,200</td>
+            <td>— 435,000 <strong>Total</strong> <strong>361,760</strong></td>
+            <td><strong>435,000</strong> <strong>Trade-off:</strong> Cheaper inference (e.g., serverless Lambda) adds latency. One insurer’s subrogation model took 12s to flag a claim—long enough for the at-fault party to settle first, killing recovery potential. Step 3: Quantify the Uplift (Not Just the Downside) <strong>Goal:</strong> Replace anecdotal "AI saves 30% of adjuster time" with hard numbers tied to your book.</td>
+            <td><strong>Method: Controlled A/B Test</strong> <strong>Pick a cohort</strong>: Randomly select 10% of claims entering subrogation. Route 5% to AI triage (treatment) and 5% to manual review (control). <strong>Measure uplift variables</strong>: <ul> <li><strong>Recovery rate</strong>: % of paid losses recovered. Target: +1.8% absolute lift (per Verisk data). <strong>Cycle time</strong>: Days from claim open to recovery initiation. Target: -3.2 days.</td>
+            <td><strong>False positives</strong>: Claims routed to litigation but later dropped. Cap: <5%. <strong>Run for 6 months</strong>. One insurer I advised saw a +2.3% recovery lift but also a 7% false-positive rate—canceling out gains when litigation costs were factored in. <strong>Extrapolate to Book</strong> Assume 2.1M claims/year, $1.2B paid losses.</td>
+            <td>Current recovery rate: 5.2%. AI uplift: +1.8% → 7.0% recovery rate. Incremental recovery: $1.2B × 0.018 = $21.6M. <strong>Trade-off:</strong> Recovery rate uplift decays over time. In the Verisk study, the effect halved after 18 months due to adversarial training by at-fault parties. Plan for quarterly model refreshes.</td>
+            <td>Step 4: Model the Regulatory and Operational Friction <strong>Goal:</strong> Stress-test ROI for hidden friction: audits, explainability demands, and model drift. <strong>Regulatory Friction</strong> <strong>Explainability</strong>: <ul> <li>NYDFS Part 500 requires model lineage for all underwriting/claims decisions. Cost: $150K/year for a tool like Fiddler AI.</td>
           </tr>
           <tr>
-            <td>TPA Portal</td>
-            <td>14,400</td>
-            <td>—</td>
-            <td>—</td>
-            <td>3,200,000</td>
-            <td>3,200,000</td>
+            <td>EU AI Act (2025) classifies subrogation triage as "high-risk." Adds 6–9 months to deployment for conformity assessments. <strong>Audits</strong>: <ul> <li>State DOI exams trigger 100% sample reviews for claims flagged by AI. For a $2B book, expect 30–40 claims @ $5K/claim audit cost = $150K–$200K. <strong>Data sovereignty</strong>:</td>
+            <td><ul> <li>GDPR/CCPA requires opt-out mechanisms for claimants. Adds 0.4s/claim processing time → $18,000/year in idle CPU cycles. <strong>Operational Friction</strong></td>
+            <td><strong>Adjuster pushback</strong>: A 2023 Conning survey found 42% of adjusters distrust AI triage without "human override" buttons. Budget $50K for change management (training, intranet FAQs). <strong>Model decay</strong>: Bodily injury reserve models degrade at 8–12% annually (per Milliman). Plan for $75K/year in retraining data and compute.</td>
+            <td><strong>Vendor lock-in</strong>: One insurer’s GraphQL middleware vendor raised prices 200% after 3 years. Renegotiation cost $450K in legal fees. <strong>Trade-off:</strong> The cheaper the AI (e.g., open-source models), the higher the explainability burden. Hugging Face’s DistilBERT for adjuster notes cuts inference costs by 60% but requires 3x more documentation for audits.</td>
+            <td>Step 5: Calculate the ROI (And Where It Breaks) <strong>Formula:</strong> ROI = (Incremental Recovery + (Adjuster Time Savings × Hourly Cost) – AI Cost Stack – Regulatory Friction) / (AI Cost Stack + Regulatory Friction) <strong>Plug in the Numbers</strong> Line Item Value ($) Notes Incremental Recovery</td>
+            <td>21,600,000 +1.8% on $1.2B paid losses Adjuster Time Savings 3,800,000 500 hours/year × $185/hour × 41 adjusters AI Cost Stack (361,760) Annual; excludes one-time integration</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td><strong>Grand Total</strong></td>
-            <td><strong>24,000</strong></td>
-            <td><strong>115,200</strong></td>
-            <td><strong>42,000</strong></td>
-            <td><strong>3,200,000</strong></td>
-            <td><strong>3,357,200</strong></td>
+            <td>Regulatory Friction (350,000) $150K explainability + $200K audit exposure Net Benefit 24,688,240 Before one-time costs One-Time Integration (435,000)</td>
+            <td>GraphQL middleware + portal updates <strong>Net ROI (Year 1)</strong> <strong>67.8x</strong> (24,688,240 – 435,000) / (361,760 + 435,000) <strong>Net ROI (Year 2)</strong> <strong>68.3x</strong> Excludes one-time costs <strong>Where It Breaks</strong></td>
+            <td><strong>If recovery uplift < 1.2%</strong>: ROI drops to 35x. At 0.9%, it’s 22x—barely worth the regulatory friction. <strong>If adjuster cost < $150/hour</strong>: Savings vanish. A midsize carrier with $120/hour adjusters saw ROI collapse to 18x. <strong>If regulatory friction > $500K</strong>: ROI turns negative. A coastal insurer hit by a DOI audit added $620K in explainability costs, wiping out gains. Step 6: Build the Sensitivity Dashboard</td>
+            <td><strong>Goal:</strong> Let stakeholders stress-test assumptions without Excel hell. <strong>Tech Stack</strong> <strong>Data Layer</strong>: Snowflake (claims data) + PostgreSQL (model metrics). <strong>Frontend</strong>: Streamlit or Dash for the dashboard. <strong>Logic Layer</strong>: Python (Pandas, NumPy) for calculations. <strong>Key Variables to Expose</strong> <strong>Recovery Uplift Range</strong>: 0.5% to 2.5% (slider). <strong>Adjuster Cost Range</strong>: $100 to $250</td>
+            <td>Was this article helpful? Comments.</td>
+            
           </tr>
         </tfoot>
      </table>
   </li>
 </ol>
-<p><strong>Trade-off:</strong> Consolidating data sources reduces egress costs but increases vendor lock-in risk. One carrier spent $1.8M migrating from TPA portals to a unified GraphQL layer—only to realize their NLP model needed 6 weeks of retraining due to schema changes.</p>
+
 
 ---
 
-<h3>Step 2: Define the AI Use Case and Build the Cost Stack</h3>
-<p><strong>Goal:</strong> Pick one use case (e.g., subrogation triage, reserve accuracy) and model its cost stack from data ingestion to model inference.</p>
-<p><strong>Use Case Selection Criteria:</strong></p>
+
+
+
 <ul>
-  <li><strong>ROI ceiling</strong>: Subrogation recovery has a hard cap at <strong>5–8% of paid losses</strong> (per Swiss Re). Fraud detection tops out at 3%.</li>
-  <li><strong>Data readiness</strong>: You need 18–24 months of labeled data. If you can’t get 5,000+ closed claims with adjuster notes and photos, skip NLP for now.</li>
-  <li><strong>Regulatory clarity</strong>: Parametric triggers for CAT events face fewer hurdles than AI-driven bodily injury reserves in California (see SB 1127).</li>
+  
+  
+  
 </ul>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
@@ -392,209 +384,187 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p><strong>Example: Subrogation Triage AI</strong></p>
+                
 <ol>
-  <li><strong>Data Ingestion Cost</strong>:
-     <ul>
-        <li>OCR for police reports: $0.04/page (e.g., 500,000 pages/year = $20,000).</li>
-        <li>Computer vision for damage photos: $0.12/image (e.g., 1.2M images/year = $144,000).</li>
-        <li><strong>Net:</strong> $164,000/year.</li>
+  
+        
+        
      </ul>
   </li>
-  <li><strong>Model Training Cost</strong>:
-     <ul>
-        <li>GPU hours: 800 hours/year @ $1.20/hour = $960.</li>
-        <li>Human-in-the-loop labeling: $180,000 (outsourced to a vendor like Scale AI).</li>
+  
+        
      </ul>
   </li>
-  <li><strong>Inference Cost</strong>:
-     <ul>
-        <li>API calls: $0.0001/claim @ 2.1M claims/year = $210.</li>
-        <li>Edge deployment (if using drones): $0.008/claim for on-device processing = $16,800.</li>
+  
+        
      </ul>
   </li>
-  <li><strong>Integration Cost</strong>:
-     <ul>
-        <li>SAP/Guidewire middleware: $350,000 (one-time).</li>
-        <li>Adjuster portal updates: $85,000.</li>
+  
+        
      </ul>
   </li>
-  <li><strong>Total Cost Stack</strong>:
-     <table>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Annual Cost ($)</th>
-            <th>One-Time Cost ($)</th>
+  
+            
+            
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Data Ingestion</td>
-            <td>164,000</td>
-            <td>—</td>
+            
+            
+            
           </tr>
           <tr>
-            <td>Model Training</td>
-            <td>180,960</td>
-            <td>—</td>
+            
+            
+            
           </tr>
           <tr>
-            <td>Inference</td>
-            <td>16,800</td>
-            <td>—</td>
+            
+            
+            
           </tr>
           <tr>
-            <td>Integration</td>
-            <td>—</td>
-            <td>435,000</td>
+            
+            
+            
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td><strong>Total</strong></td>
-            <td><strong>361,760</strong></td>
-            <td><strong>435,000</strong></td>
+            
+            
+            
           </tr>
         </tfoot>
      </table>
   </li>
 </ol>
-<p><strong>Trade-off:</strong> Cheaper inference (e.g., serverless Lambda) adds latency. One insurer’s subrogation model took 12s to flag a claim—long enough for the at-fault party to settle first, killing recovery potential.</p>
+
 
 ---
 
-<h3>Step 3: Quantify the Uplift (Not Just the Downside)</h3>
-<p><strong>Goal:</strong> Replace anecdotal "AI saves 30% of adjuster time" with hard numbers tied to your book.</p>
-<p><strong>Method: Controlled A/B Test</strong></p>
+
+
+
 <ol>
-  <li><strong>Pick a cohort</strong>: Randomly select 10% of claims entering subrogation. Route 5% to AI triage (treatment) and 5% to manual review (control).</li>
-  <li><strong>Measure uplift variables</strong>:
-     <ul>
-        <li><strong>Recovery rate</strong>: % of paid losses recovered. Target: +1.8% absolute lift (per Verisk data).</li>
-        <li><strong>Cycle time</strong>: Days from claim open to recovery initiation. Target: -3.2 days.</li>
-        <li><strong>False positives</strong>: Claims routed to litigation but later dropped. Cap: <5%.</li>
+  
+  
+        
+        
      </ul>
   </li>
-  <li><strong>Run for 6 months</strong>. One insurer I advised saw a +2.3% recovery lift but also a 7% false-positive rate—canceling out gains when litigation costs were factored in.</li>
+  
 </ol>
-<p><strong>Extrapolate to Book</strong></p>
+
 <ul>
-  <li>Assume 2.1M claims/year, $1.2B paid losses.</li>
-  <li>Current recovery rate: 5.2%.</li>
-  <li>AI uplift: +1.8% → 7.0% recovery rate.</li>
-  <li>Incremental recovery: $1.2B × 0.018 = $21.6M.</li>
+  
+  
+  
+  
 </ul>
-<p><strong>Trade-off:</strong> Recovery rate uplift decays over time. In the Verisk study, the effect halved after 18 months due to adversarial training by at-fault parties. Plan for quarterly model refreshes.</p>
+
 
 ---
-<h3>Step 4: Model the Regulatory and Operational Friction</h3>
-<p><strong>Goal:</strong> Stress-test ROI for hidden friction: audits, explainability demands, and model drift.</p>
-<p><strong>Regulatory Friction</strong></p>
+
+
+
 <ol>
-  <li><strong>Explainability</strong>:
-     <ul>
-        <li>NYDFS Part 500 requires model lineage for all underwriting/claims decisions. Cost: $150K/year for a tool like Fiddler AI.</li>
-        <li>EU AI Act (2025) classifies subrogation triage as "high-risk." Adds 6–9 months to deployment for conformity assessments.</li>
+  
+        
      </ul>
   </li>
-  <li><strong>Audits</strong>:
-     <ul>
-        <li>State DOI exams trigger 100% sample reviews for claims flagged by AI. For a $2B book, expect 30–40 claims @ $5K/claim audit cost = $150K–$200K.</li>
+  
      </ul>
   </li>
-  <li><strong>Data sovereignty</strong>:
-     <ul>
-        <li>GDPR/CCPA requires opt-out mechanisms for claimants. Adds 0.4s/claim processing time → $18,000/year in idle CPU cycles.</li>
+  
      </ul>
   </li>
 </ol>
-<p><strong>Operational Friction</strong></p>
+
 <ul>
-  <li><strong>Adjuster pushback</strong>: A 2023 Conning survey found 42% of adjusters distrust AI triage without "human override" buttons. Budget $50K for change management (training, intranet FAQs).</li>
-  <li><strong>Model decay</strong>: Bodily injury reserve models degrade at 8–12% annually (per Milliman). Plan for $75K/year in retraining data and compute.</li>
-  <li><strong>Vendor lock-in</strong>: One insurer’s GraphQL middleware vendor raised prices 200% after 3 years. Renegotiation cost $450K in legal fees.</li>
+  
+  
+  
 </ul>
-<p><strong>Trade-off:</strong> The cheaper the AI (e.g., open-source models), the higher the explainability burden. Hugging Face’s DistilBERT for adjuster notes cuts inference costs by 60% but requires 3x more documentation for audits.</p>
+
 
 ---
-<h3>Step 5: Calculate the ROI (And Where It Breaks)</h3>
-<p><strong>Formula:</strong></p>
-<blockquote>
-  ROI = (Incremental Recovery + (Adjuster Time Savings × Hourly Cost) – AI Cost Stack – Regulatory Friction) / (AI Cost Stack + Regulatory Friction)
-</blockquote>
-<p><strong>Plug in the Numbers</strong></p>
+
+
+
+
 <table>
   <thead>
     <tr>
-      <th>Line Item</th>
-      <th>Value ($)</th>
-      <th>Notes</th>
+      
+      
+      
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Incremental Recovery</td>
-      <td>21,600,000</td>
-      <td>+1.8% on $1.2B paid losses</td>
+      
+      
+      
     </tr>
     <tr>
-      <td>Adjuster Time Savings</td>
-      <td>3,800,000</td>
-      <td>500 hours/year × $185/hour × 41 adjusters</td>
+      
+      
+      
     </tr>
     <tr>
-      <td>AI Cost Stack</td>
-      <td>(361,760)</td>
-      <td>Annual; excludes one-time integration</td>
+      
+      
+      
     </tr>
     <tr>
-      <td>Regulatory Friction</td>
-      <td>(350,000)</td>
-      <td>$150K explainability + $200K audit exposure</td>
+      
+      
+      
     </tr>
     <tr>
-      <td>Net Benefit</td>
-      <td>24,688,240</td>
-      <td>Before one-time costs</td>
+      
+      
+      
     </tr>
     <tr>
-      <td>One-Time Integration</td>
-      <td>(435,000)</td>
-      <td>GraphQL middleware + portal updates</td>
+      
+      
+      
     </tr>
     <tr>
-      <td><strong>Net ROI (Year 1)</strong></td>
-      <td><strong>67.8x</strong></td>
-      <td>(24,688,240 – 435,000) / (361,760 + 435,000)</td>
+      
+      
+      
     </tr>
     <tr>
-      <td><strong>Net ROI (Year 2)</strong></td>
-      <td><strong>68.3x</strong></td>
-      <td>Excludes one-time costs</td>
+      
+      
+      
     </tr>
   </tbody>
 </table>
-<p><strong>Where It Breaks</strong></p>
+
 <ul>
-  <li><strong>If recovery uplift < 1.2%</strong>: ROI drops to 35x. At 0.9%, it’s 22x—barely worth the regulatory friction.</li>
-  <li><strong>If adjuster cost < $150/hour</strong>: Savings vanish. A midsize carrier with $120/hour adjusters saw ROI collapse to 18x.</li>
-  <li><strong>If regulatory friction > $500K</strong>: ROI turns negative. A coastal insurer hit by a DOI audit added $620K in explainability costs, wiping out gains.</li>
+  
+  
+  
 </ul>
 
 ---
-<h3>Step 6: Build the Sensitivity Dashboard</h3>
-<p><strong>Goal:</strong> Let stakeholders stress-test assumptions without Excel hell.</p>
-<p><strong>Tech Stack</strong></p>
+
+
+
 <ul>
-  <li><strong>Data Layer</strong>: Snowflake (claims data) + PostgreSQL (model metrics).</li>
-  <li><strong>Frontend</strong>: Streamlit or Dash for the dashboard.</li>
-  <li><strong>Logic Layer</strong>: Python (Pandas, NumPy) for calculations.</li>
+  
+  
+  
 </ul>
-<p><strong>Key Variables to Expose</strong></p>
+
 <ol>
-  <li><strong>Recovery Uplift Range</strong>: 0.5% to 2.5% (slider).</li>
-  <li><strong>Adjuster Cost Range</strong>: $100 to $250</li></ol>
+  
+  </ol>
 </div>
 
             
@@ -608,7 +578,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -617,7 +587,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

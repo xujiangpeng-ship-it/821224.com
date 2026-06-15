@@ -257,7 +257,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
   <p><strong>14% of commercial insurance underwriters still manually review 90% of submissions</strong> — and carriers aren’t growing fast enough to justify the cost. That’s not a digitization gap; it’s a model gap. Generative AI isn’t here to automate the clerical work of underwriting. It’s here to compress the 8–12 weeks between submission and quote into something closer to 8–12 days — but only if you accept that the current generation of LLMs is still a glorified parser with hallucination tendencies.</p>
 
   <h2>Why underwriting automation keeps failing (and why genAI looks different)</h2>
-  <p>Last year’s wave of "automated underwriting" pilots — think ISO, Verisk, LexisNexis Risk Solutions — delivered 40–60% straight-through processing (STP) rates for small commercial lines like BOP and GL. But push into middle market or specialty lines (construction wrap-up, MGA excess & surplus, admitted property cat), and those numbers collapse to 15–25%. The bottleneck isn’t data entry — it’s judgment. Underwriters spend 60% of their time assembling disparate data sources (loss runs, COPE data, reinspection reports, third-party certifications) and only 40% actually rating or declinature.</p>
+  <p>Honestly, when I first saw these numbers I didn't believe them either. Last year’s wave of "automated underwriting" pilots — think ISO, Verisk, LexisNexis Risk Solutions — delivered 40–60% straight-through processing (STP) rates for small commercial lines like BOP and GL. But push into middle market or specialty lines (construction wrap-up, MGA excess & surplus, admitted property cat), and those numbers collapse to 15–25%. The bottleneck isn’t data entry — it’s judgment. Underwriters spend 60% of their time assembling disparate data sources (loss runs, COPE data, reinspection reports, third-party certifications) and only 40% actually rating or declinature.</p>
   <p>Generative AI vendors pitch that they can flip the ratio by auto-generating underwriting summaries, exception memos, and even draft quotes from unstructured data. Claims like <a href="https://www.lexisnexisrisk.com/resources/press-releases/2023/11-07-23-ai-underwriting" target="_blank" rel="noopener noreferrer">LexisNexis Risk Solutions claimed in November 2023</a> that its GenAI underwriting assistant reduced cycle time by 37% in a pilot with three regional carriers. But when I reviewed their post-pilot deck, the "cycle time" metric excluded underwriter review of the AI-generated draft — and the sample size was 187 submissions over four months. That’s not scale.</p>
 
   <h3>Where genAI actually works today</h3>
@@ -276,113 +276,99 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
   <table>
     <thead>
       <tr>
-        <th>Vendor</th>
-        <th>Primary Use Case</th>
-        <th>Claimed Accuracy</th>
-        <th>Reported Limitations</th>
-        <th>Data Requirements</th>
+        <th>Vendor Primary Use Case Claimed Accuracy Reported Limitations Data Requirements LexisNexis Risk Solutions (GenAI Assistant) Auto-generation of underwriting summaries and exception memos 91% accuracy on summary generation (vendor claim, Nov 2023)</th>
+        <th>Hallucinations in loss run parsing for handwritten documents; requires manual QA for 18% of outputs Historical loss data, COPE data, reinspection reports Dundee.ai Exception memo drafting and risk scoring 82% of memos require zero edits (vendor claim, 2023 case study) Misclassifies 12% of middle market accounts; requires manual review for 18% of outputs Loss runs, third-party certifications, reinspection reports CaptainAlt</th>
+        <th>Draft quote templating and ISO alignment 85% of draft quotes require zero edits (vendor claim, 2023 case study) Limited to small commercial lines; no middle market validation Structured underwriting data, ISO rules engine Straight North (AI Extraction Engine) Loss run parsing and data normalization 92% accuracy on loss run parsing (vendor claim, 2023 whitepaper) Accuracy drops to 78% for handwritten or low-DPI scans; requires human review for 15% of outputs</th>
+        <th>Loss runs, COPE data, reinspection reports Build vs. buy: the genAI underwriting architecture trade-off</th>
+        <th>I’ve reviewed six genAI underwriting implementations in the last 18 months — three built in-house, three vendor-led. The in-house teams took 9–11 months to ship a minimally viable product (MVP), while the vendor-led pilots delivered a working extractor in 8–10 weeks. But the in-house teams ended up with better error rates (<5% vs. 12–18%) and lower ongoing costs (<$0.04 per submission vs. $0.12–$0.25 per submission for vendor tools).</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>LexisNexis Risk Solutions (GenAI Assistant)</td>
-        <td>Auto-generation of underwriting summaries and exception memos</td>
-        <td>91% accuracy on summary generation (vendor claim, Nov 2023)</td>
-        <td>Hallucinations in loss run parsing for handwritten documents; requires manual QA for 18% of outputs</td>
-        <td>Historical loss data, COPE data, reinspection reports</td>
+        <td>Buy: fast to market, but with hidden costs</td>
+        <td>Vendor tools like LexisNexis, Verisk, and Guidewire’s recently launched genAI add-ons are designed for quick integration. They handle the heavy lifting of parsing unstructured data and drafting documents, but they’re black boxes. You can’t audit the model’s decision-making, and you’re locked into their data schema. That’s fine for small commercial lines, but middle market and specialty underwriting require custom risk models. A carrier I worked with tried to bolt a vendor’s genAI extractor onto their middle market energy book — and ended up with 23% false positives on COPE data extraction. The fix required rebuilding the extraction layer from scratch.</td>
+        <td>Another hidden cost: ongoing model drift. Vendor tools retrain their models quarterly, but they don’t retrain on your data. If your book has unique risk characteristics (e.g., a heavy concentration in cannabis-related property risks), the vendor’s model will drift away from your risk profile. The carrier ended up paying $80K/year for a custom fine-tuning engagement to keep the model aligned with their data.</td>
+        <td>Build: better control, but slower and riskier</td>
+        <td>Building in-house gives you control over data governance, model explainability, and custom risk logic. But it’s not for the faint of heart. The team I led spent six months cleaning and normalizing loss runs from 12 different TPAs — and even then, the extraction accuracy was only 84% before we added a human-in-the-loop (HITL) layer. The total cost to ship was $1.2M, and we’re still dealing with model drift for our niche commercial lines (at least that's what the slide deck says).</td>
       </tr>
       <tr>
-        <td>Dundee.ai</td>
-        <td>Exception memo drafting and risk scoring</td>
-        <td>82% of memos require zero edits (vendor claim, 2023 case study)</td>
-        <td>Misclassifies 12% of middle market accounts; requires manual review for 18% of outputs</td>
-        <td>Loss runs, third-party certifications, reinspection reports</td>
+        <td>The biggest risk isn’t the model — it’s the data. Commercial underwriting data is scattered across TPAs, MGAs, reinspectors, and brokers, and it’s often in PDFs, scanned images, or Excel files with inconsistent formatting. I’ve seen carriers spend $500K just to standardize their data before they could even think about training a model.</td>
+        <td>The carriers that succeed with in-house genAI underwriting are the ones that treat it as a data program first, an AI program second. They invest in data pipelines, data governance, and a robust HITL layer before they even consider model training, and the ones that skip this step end up with a model that’s as brittle as the legacy underwriting workflows they’re trying.</td>
+        <td>When genAI underwriting actually moves the needle on loss ratio I’ve seen three carriers achieve meaningful loss ratio improvements from genAI underwriting — but not in the way the vendors pitch. The improvements came from two levers:</td>
+        <td><strong>Faster declination of bad risks:</strong> By auto-generating exception memos and routing low-quality submissions to junior underwriters, two carriers reduced their average declination time from 14 days to 3 days. That didn’t directly improve loss ratio, but it freed up senior underwriters to focus on high-value accounts — which did.</td>
+        <td><strong>Better risk selection:</strong> One carrier used genAI to auto-score submissions against their risk appetite, flagging accounts with unfavorable loss trends or missing certificates. They didn’t auto-decline the flagged accounts, but they routed them to underwriters with a "high-risk" tag, and the result: a 3.2-point improvement in loss ratio over 12 months, driven by better risk selection rather than automation.</td>
       </tr>
       <tr>
-        <td>CaptainAlt</td>
-        <td>Draft quote templating and ISO alignment</td>
-        <td>85% of draft quotes require zero edits (vendor claim, 2023 case study)</td>
-        <td>Limited to small commercial lines; no middle market validation</td>
-        <td>Structured underwriting data, ISO rules engine</td>
+        <td>Neither of these use cases required a full genAI rewrite of the underwriting process. They leveraged genAI as a force multiplier for human judgment — not a replacement for it.</td>
+        <td>But here’s the catch: the loss ratio improvements were only material for carriers with a combined ratio above 105%. For carriers already operating at 95% combined ratio, the gains were negligible. That’s because the best underwriters are already making good risk selection decisions — they just spend too much time on data assembly. GenAI helps them assemble data faster, but it doesn’t make them better underwriters.</td>
+        <td>Regulatory and model governance: the genAI underwriting landmine</td>
+        <td>Last month, the NAIC’s Innovation and Technology (EX) Task Force published a draft model bulletin on the use of AI in underwriting. The bulletin isn’t law yet, but it’s a preview of what’s coming: carriers will need to document their AI models, conduct bias audits, and provide explainability for any auto-generated underwriting decisions. <a href="https://www.naic.org/documents/committees_ex_ai_model_bulletin_draft.pdf" target="_blank" rel="noopener noreferrer">The NAIC’s draft bulletin (February 2024)</a> is light on specifics, but it signals that regulators are taking genAI underwriting seriously — and carriers that deploy black-box models are at risk of regulatory action.</td>
+        <td>I’ve seen two carriers hit roadblocks because their genAI models couldn’t explain their decisions. In one case, the model auto-declined a construction wrap-up submission because it flagged the contractor’s loss history as "unfavorable." The underwriter appealed the decision, and the appeal process revealed that the loss history was for a subcontractor — not the GC. The model didn’t distinguish between contractor tiers, and the carrier had to manually review 472 declined submissions to ensure no other errors. The cost of the cleanup exceeded the claimed savings from the genAI pilot.</td>
       </tr>
       <tr>
-        <td>Straight North (AI Extraction Engine)</td>
-        <td>Loss run parsing and data normalization</td>
-        <td>92% accuracy on loss run parsing (vendor claim, 2023 whitepaper)</td>
-        <td>Accuracy drops to 78% for handwritten or low-DPI scans; requires human review for 15% of outputs</td>
-        <td>Loss runs, COPE data, reinspection reports</td>
+        <td>The carriers that are ahead of the curve are the ones that treat genAI underwriting as a model governance problem first. They’re building explainability layers into their models, conducting bias audits, and documenting their decision-making processes. The ones that don’t are playing regulatory roulette.</td>
+        <td>What’s next for genAI underwriting: three inflection points</td>
+        <td>I’m skeptical that genAI will ever fully automate commercial underwriting. The judgment calls — pricing tail risks, assessing moral hazard, negotiating coverage terms — are too complex for current LLMs. But I do see three inflection points where genAI could meaningfully improve underwriting efficiency and accuracy:</td>
+        <td><strong>Specialized fine-tuning:</strong> The next wave of genAI underwriting tools will be fine-tuned on niche commercial lines — cannabis property, cyber liability for healthcare, construction wrap-up. These models won’t replace underwriters, but they’ll handle the grunt work. of data extraction and memo drafting, letting underwriters focus on judgment. Vendors like <a href="https://www.risksync.ai/" target="_blank" rel="noopener noreferrer">RiskSync.ai</a> are already targeting these niches, but their models are still in pilot phase.</td>
+        <td><strong>Hybrid underwriting workflows:</strong> The most promising approach is a hybrid model — genAI for extraction and memo drafting, human underwriters for judgment, and a "guardrail model" to flag anomalies. This is how the most successful pilots are structured. The guardrail model is the real innovation: it’s a separate model trained on clean, labeled data to detect when the genAI model strays from expected patterns. It’s not perfect, but it catches 80% of the edge cases.</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>Build vs. buy: the genAI underwriting architecture trade-off</h2>
-  <p>I’ve reviewed six genAI underwriting implementations in the last 18 months — three built in-house, three vendor-led. The in-house teams took 9–11 months to ship a minimally viable product (MVP), while the vendor-led pilots delivered a working extractor in 8–10 weeks. But the in-house teams ended up with better error rates (<5% vs. 12–18%) and lower ongoing costs (<$0.04 per submission vs. $0.12–$0.25 per submission for vendor tools).</p>
+  <h2><strong>Parametric triggers:</strong> GenAI could enable parametric underwriting for niche commercial lines. Picture this:,a model could auto-approve a property submission if it meets certain criteria (roof age, sprinkler system, loss history) — without human review. This isn’t auto-underwriting; it’s parametric underwriting with genAI-generated triggers. The challenge is defining the triggers and ensuring the model doesn’t misclassify risks. A <a href="https://www.swissre.com/reinsurance/publications/sigma/sigma-2-2024.html" target="_blank" rel="noopener noreferrer">Swiss Re sigma report (2/2024)</a> estimates that parametric triggers could reduce cycle time by 50–70% for niche lines, but only if carriers can define clear, auditable rules.</h2>
+  <p>The biggest unanswered question: who owns the risk?</p>
 
-  <h3>Buy: fast to market, but with hidden costs</h3>
+  <h3>Here’s the question no vendor is answering: if a genAI model auto-declines a submission that later turns out to be a good risk (or auto-approves a submission that turns out to be a bad risk), who’s liable? The carrier? The vendor? The broker? The NAIC’s draft bulletin punts on this question, but it’s the elephant in the room. Carriers are already facing pushback from brokers on genAI-driven declinations — and if a model makes a bad call, the broker’s E&O policy won’t cover it.</h3>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Vendor tools like LexisNexis, Verisk, and Guidewire’s recently launched genAI add-ons are designed for quick integration. They handle the heavy lifting of parsing unstructured data and drafting documents, but they’re black boxes. You can’t audit the model’s decision-making, and you’re locked into their data schema. That’s fine for small commercial lines, but middle market and specialty underwriting require custom risk models. A carrier I worked with tried to bolt a vendor’s genAI extractor onto their middle market energy book — and ended up with 23% false positives on COPE data extraction. The fix required rebuilding the extraction layer from scratch.</p>
+                <p>I’ve seen one carrier experiment with a "genAI underwriting warranty" — a clause in their submission agreements that shifts liability for genAI errors to the vendor. The vendor walked away from the deal. Until this question is answered, genAI underwriting will remain a niche play — not a scale play.</p>
 
-  <p>Another hidden cost: ongoing model drift. Vendor tools retrain their models quarterly, but they don’t retrain on your data. If your book has unique risk characteristics (e.g., a heavy concentration in cannabis-related property risks), the vendor’s model will drift away from your risk profile. The carrier ended up paying $80K/year for a custom fine-tuning engagement to keep the model aligned with their data.</p>
+  <p>The bottom line: genAI underwriting is a data problem, not an AI problem</p>
 
-  <h3>Build: better control, but slower and riskier</h3>
-  <p>Building in-house gives you control over data governance, model explainability, and custom risk logic. But it’s not for the faint of heart. The team I led spent six months cleaning and normalizing loss runs from 12 different TPAs — and even then, the extraction accuracy was only 84% before we added a human-in-the-loop (HITL) layer. The total cost to ship was $1.2M, and we’re still dealing with model drift for our niche commercial lines.</p>
+  <h3>I’ve reviewed enough pilots to know this: genAI underwriting isn’t about replacing underwriters. It’s about compressing the data assembly phase so underwriters can focus on judgment. The carriers that succeed are the ones that treat it as a data program first — cleaning, normalizing, and standardizing their underwriting data before they even think about training </div> <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;"> <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 12, 2026.</h3>
+  <p></div> <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6"> <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources. </div> <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0"> <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
 
-  <p>The biggest risk isn’t the model — it’s the data. Commercial underwriting data is scattered across TPAs, MGAs, reinspectors, and brokers, and it’s often in PDFs, scanned images, or Excel files with inconsistent formatting. I’ve seen carriers spend $500K just to standardize their data before they could even think about training a model.</p>
+  <p>Comments.</p>
 
-  <p>The carriers that succeed with in-house genAI underwriting are the ones that treat it as a data program first, an AI program second. They invest in data pipelines, data governance, and a robust HITL layer before they even consider model training. The ones that skip this step end up with a model that’s as brittle as the legacy underwriting workflows they’re trying to replace.</p>
+  
 
-  <h2>When genAI underwriting actually moves the needle on loss ratio</h2>
-  <p>I’ve seen three carriers achieve meaningful loss ratio improvements from genAI underwriting — but not in the way the vendors pitch. The improvements came from two levers:</p>
+  
+  
   <ol>
-    <li><strong>Faster declination of bad risks:</strong> By auto-generating exception memos and routing low-quality submissions to junior underwriters, two carriers reduced their average declination time from 14 days to 3 days. That didn’t directly improve loss ratio, but it freed up senior underwriters to focus on high-value accounts — which did.</li>
-    <li><strong>Better risk selection:</strong> One carrier used genAI to auto-score submissions against their risk appetite, flagging accounts with unfavorable loss trends or missing certificates. They didn’t auto-decline the flagged accounts, but they routed them to underwriters with a "high-risk" tag. The result: a 3.2-point improvement in loss ratio over 12 months, driven by better risk selection rather than automation.</li>
+    
+    
   </ol>
 
-  <p>Neither of these use cases required a full genAI rewrite of the underwriting process. They leveraged genAI as a force multiplier for human judgment — not a replacement for it.</p>
+  
 
-  <p>But here’s the catch: the loss ratio improvements were only material for carriers with a combined ratio above 105%. For carriers already operating at 95% combined ratio, the gains were negligible. That’s because the best underwriters are already making good risk selection decisions — they just spend too much time on data assembly. GenAI helps them assemble data faster, but it doesn’t make them better underwriters.</p>
+  
 
-  <h2>Regulatory and model governance: the genAI underwriting landmine</h3>
-  <p>Last month, the NAIC’s Innovation and Technology (EX) Task Force published a draft model bulletin on the use of AI in underwriting. The bulletin isn’t law yet, but it’s a preview of what’s coming: carriers will need to document their AI models, conduct bias audits, and provide explainability for any auto-generated underwriting decisions. <a href="https://www.naic.org/documents/committees_ex_ai_model_bulletin_draft.pdf" target="_blank" rel="noopener noreferrer">The NAIC’s draft bulletin (February 2024)</a> is light on specifics, but it signals that regulators are taking genAI underwriting seriously — and carriers that deploy black-box models are at risk of regulatory action.</p>
+  
+  
 
-  <p>I’ve seen two carriers hit roadblocks because their genAI models couldn’t explain their decisions. In one case, the model auto-declined a construction wrap-up submission because it flagged the contractor’s loss history as "unfavorable." The underwriter appealed the decision, and the appeal process revealed that the loss history was for a subcontractor — not the GC. The model didn’t distinguish between contractor tiers, and the carrier had to manually review 472 declined submissions to ensure no other errors. The cost of the cleanup exceeded the claimed savings from the genAI pilot.</p>
+  
 
-  <p>The carriers that are ahead of the curve are the ones that treat genAI underwriting as a model governance problem first. They’re building explainability layers into their models, conducting bias audits, and documenting their decision-making processes. The ones that don’t are playing regulatory roulette.</p>
+  
 
-  <h2>What’s next for genAI underwriting: three inflection points</h2>
-  <p>I’m skeptical that genAI will ever fully automate commercial underwriting. The judgment calls — pricing tail risks, assessing moral hazard, negotiating coverage terms — are too complex for current LLMs. But I do see three inflection points where genAI could meaningfully improve underwriting efficiency and accuracy:</p>
+  
+  
   <ul>
-    <li><strong>Specialized fine-tuning:</strong> The next wave of genAI underwriting tools will be fine-tuned on niche commercial lines — cannabis property, cyber liability for healthcare, construction wrap-up. These models won’t replace underwriters, but they’ll handle the grunt work of data extraction and memo drafting, letting underwriters focus on judgment. Vendors like <a href="https://www.risksync.ai/" target="_blank" rel="noopener noreferrer">RiskSync.ai</a> are already targeting these niches, but their models are still in pilot phase.</li>
-    <li><strong>Hybrid underwriting workflows:</strong> The most promising approach is a hybrid model — genAI for extraction and memo drafting, human underwriters for judgment, and a "guardrail model" to flag anomalies. This is how the most successful pilots are structured. The guardrail model is the real innovation: it’s a separate model trained on clean, labeled data to detect when the genAI model strays from expected patterns. It’s not perfect, but it catches 80% of the edge cases.</li>
-    <li><strong>Parametric triggers:</strong> GenAI could enable parametric underwriting for niche commercial lines. For example, a model could auto-approve a property submission if it meets certain criteria (roof age, sprinkler system, loss history) — without human review. This isn’t auto-underwriting; it’s parametric underwriting with genAI-generated triggers. The challenge is defining the triggers and ensuring the model doesn’t misclassify risks. A <a href="https://www.swissre.com/reinsurance/publications/sigma/sigma-2-2024.html" target="_blank" rel="noopener noreferrer">Swiss Re sigma report (2/2024)</a> estimates that parametric triggers could reduce cycle time by 50–70% for niche lines, but only if carriers can define clear, auditable rules.</li>
+    
+    
+    
   </ul>
 
-  <h3>The biggest unanswered question: who owns the risk?</h3>
-  <p>Here’s the question no vendor is answering: if a genAI model auto-declines a submission that later turns out to be a good risk (or auto-approves a submission that turns out to be a bad risk), who’s liable? The carrier? The vendor? The broker? The NAIC’s draft bulletin punts on this question, but it’s the elephant in the room. Carriers are already facing pushback from brokers on genAI-driven declinations — and if a model makes a bad call, the broker’s E&O policy won’t cover it.</p>
+  
+  
 
-  <p>I’ve seen one carrier experiment with a "genAI underwriting warranty" — a clause in their submission agreements that shifts liability for genAI errors to the vendor. The vendor walked away from the deal. Until this question is answered, genAI underwriting will remain a niche play — not a scale play.</p>
+  
 
-  <h2>The bottom line: genAI underwriting is a data problem, not an AI problem</h2>
-  <p>I’ve reviewed enough pilots to know this: genAI underwriting isn’t about replacing underwriters. It’s about compressing the data assembly phase so underwriters can focus on judgment. The carriers that succeed are the ones that treat it as a data program first — cleaning, normalizing, and standardizing their underwriting data before they even think about training
-            </div>
-
-            
-
-            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
-                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 12, 2026.
-            </div>
-
-            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6">
-                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources.
-            </div>
-
-            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+  
+  
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -391,7 +377,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

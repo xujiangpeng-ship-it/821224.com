@@ -279,7 +279,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Predictive Analytics in Insurance Claims Settlement Optimization: A Practitioner’s Build Guide</h1>
+                <h1>Predictive Analytics in Insurance Claims Settlement Optimization: A Practitioner’s Build Guide Predictive Analytics in Insurance Claims Settlement Optimization: A Practitioner’s Build Guide</h1>
                 <div class="article-meta">
                     <span>June 01, 2026</span>
                     <span class="dot"></span>
@@ -293,70 +293,70 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Predictive Analytics in Insurance Claims Settlement Optimization: A Practitioner’s Build Guide</h2>
+                <h2>I’ve seen claims teams drown in unstructured data—adjuster notes in PDFs, handwritten estimates, phone recordings—while trying to settle claims faster. Predictive analytics isn’t magic. It’s a repeatable process of turning raw data into actionable loss ratio improvements. This guide walks you through building a production-grade claims optimization system from data ingestion to model deployment. I’ll focus on practical steps, not theory, with cost and performance trade-offs at each stage.</h2>
 
-<p>I’ve seen claims teams drown in unstructured data—adjuster notes in PDFs, handwritten estimates, phone recordings—while trying to settle claims faster. Predictive analytics isn’t magic. It’s a repeatable process of turning raw data into actionable loss ratio improvements. This guide walks you through building a production-grade claims optimization system from data ingestion to model deployment. I’ll focus on practical steps, not theory, with cost and performance trade-offs at each stage.</p>
+<p>This implementation targets P&C; lines with structured claims data (auto, home, workers’ comp) using Python-based open source tooling. You’ll need: A claims dataset (at least 50k closed claims with settlement amounts, adjuster notes, repair estimates) 3–6 months of engineering time (assuming one full-time data engineer and one part-time actuary) AWS/GCP credits (~$5k initial spend for sandbox, $2k/mo production)</p>
 
-<p>This implementation targets P&C; lines with structured claims data (auto, home, workers’ comp) using Python-based open source tooling. You’ll need:</p>
-
-<ul>
-<li>A claims dataset (at least 50k closed claims with settlement amounts, adjuster notes, repair estimates)</li>
-<li>3–6 months of engineering time (assuming one full-time data engineer and one part-time actuary)</li>
-<li>AWS/GCP credits (~$5k initial spend for sandbox, $2k/mo production)</li>
-</ul>
-
-<h3>1. Define the Optimization Objective</h3>
-
-<p>Before touching data, quantify what “optimization” means. In claims, it’s usually:</p>
+<p>1. Define the Optimization Objective Before touching data, quantify what “optimization” means. In claims, it’s usually: Reduce cycle time (days from FNOL to closure) Lower leakage (overpayments due to fraud or adjuster error) Improve loss ratio (paid losses / earned premiums) <strong>Trade-off:</strong> Faster settlements increase leakage risk. Target a 5% reduction in cycle time while capping leakage growth at 2%.</p>
 
 <ul>
-<li>Reduce cycle time (days from FNOL to closure)</li>
-<li>Lower leakage (overpayments due to fraud or adjuster error)</li>
-<li>Improve loss ratio (paid losses / earned premiums)</li>
+<li><strong>Metric:</strong> Build a <em>target variable</em> called <code>optimal_settlement</code> using a 3-year rolling window of closed claims. For each claim, compute the 75th percentile of settlement amounts for claims with similar severity (repair cost + injury cost). Flag claims where actual paid > optimal_settlement as “overpaid.”</li>
+<li>Example: 2. Assemble the Feature Pipeline Claims data is messy. You’ll need to join at least six sources: FNOL (First Notice of Loss) – structured fields like accident date, policy number, loss type</li>
+<li>Adjuster notes – unstructured text from phone calls, emails, field inspections Repair estimates – PDFs or structured XML from collision repair shops Medical bills – itemized bills from healthcare providers (for bodily injury claims) Fraud investigations – SIU (Special Investigations Unit) flag history</li>
+</ul>
+
+<h3>Policy data – coverage limits, deductibles, prior loss history <strong>Trade-off:</strong> Joining unstructured sources (like adjuster notes) increases model accuracy but adds 30–40% to ETL complexity. <strong>Step-by-step:</strong> <strong>Ingest FNOL:</strong> Pull from core admin system (Guidewire, Duck Creek) via REST API or batch CSV. Avoid real-time unless you need sub-second latency.</h3>
+
+<p><strong>Parse PDFs:</strong> Use <code>pdfminer.six</code> for text extraction. For repair estimates, extract line items like “Labor: 2.5 hrs @ $120/hr” and standardize to a <code>repair_cost</code> field.</p>
+
+<ul>
+<li><strong>NLP on adjuster notes:</strong> Use spaCy for entity recognition (claimant name, location, injury type) and sentiment scoring. Avoid deep learning here—few insurers have enough labeled data for fine-tuning. A simple rule-based system with spaCy’s <code>en_core_web_lg</code> model gives 85% accuracy on entity extraction for 1/10th the cost of BERT.</li>
+<li><strong>Join policy data:</strong> Use a surrogate key like <code>policy_id + effective_date</code>. Handle versioning—policy changes mid-claim affect coverage. <strong>Fraud flags:</strong> Merge SIU investigation outcomes. Use binary flags like <code>previous_fraud_indicator</code> or <code>injury_discrepancy</code>. <strong>Resource estimate:</strong> 6 weeks for ETL, 2 FTE (data engineer + business analyst). Use <code>pandas</code> for prototyping, then refactor to <code>PySpark</code> for scale (>1M claims). Example config for PySpark ETL:</li>
+<li>3. Build the Feature Store Claims features degrade fast. A 6-month-old fraud flag is useless. You need a feature store with TTL (time-to-live) policies. <strong>Options:</strong> <strong>Open source:</strong> Feast (CNCF) or Hopsworks. Both support TTL and online/offline serving. <strong>Managed:</strong> Tecton or Databricks Feature Store. Cost: ~$5k/mo for 100 features. <strong>Trade-off:</strong> Open source saves cost but requires 3–4 FTEs to maintain. Managed reduces ops burden but locks you into a vendor. <strong>Implementation:</strong> <strong>Define entities:</strong> <code>claim_id</code>, <code>policy_id</code>, <code>injured_person_id</code>.</li>
 
 </ul>
 
-<p><strong>Trade-off:</strong> Faster settlements increase leakage risk. Target a 5% reduction in cycle time while capping leakage growth at 2%.</p>
+<p><strong>Add temporal features:</strong> <ul> <li><code>prior_claims_count</code> (last 3 years) <code>avg_settlement_prior_3mo</code> (for adjuster) <code>days_since_last_fraud_investigation</code> <strong>Text embeddings:</strong> Use spaCy to generate embeddings for adjuster notes. Store as <code>note_embedding</code> feature (dimension=300).</p>
 
-<p><strong>Metric:</strong> Build a <em>target variable</em> called <code>optimal_settlement</code> using a 3-year rolling window of closed claims. For each claim, compute the 75th percentile of settlement amounts for claims with similar severity (repair cost + injury cost). Flag claims where actual paid > optimal_settlement as “overpaid.”</p>
+<p><strong>Write to store:</strong> Use batch push (daily) for historical features, online store for real-time adjuster scoring. Feast config example: <strong>Cost:</strong> ~$1k/mo for DynamoDB online store (10M features, 1KB each). 4. Train the Settlement Model</p>
 
-<p>Example:</p>
+<p>Target: Predict <code>leakage_flag</code> (binary) and <code>optimal_settlement</code> (continuous). I recommend a two-stage model: <strong>Stage 1:</strong> Binary classifier (XGBoost or LightGBM) for <code>leakage_flag</code>. AUC > 0.85. <strong>Stage 2:</strong> Quantile regression (XGBoost) for <code>optimal_settlement</code> at 75th percentile. <strong>Why not end-to-end:</strong> Quantile regression handles right-skewed settlement data better than MSE loss. XGBoost handles mixed feature types (numeric, categorical, embeddings) without scaling.</p>
 <pre><code># Using Pandas
 claims['optimal_settlement'] = claims.groupby(['severity_bin', 'injury_flag'])['paid_amount'].transform('quantile', 0.75)
 claims['leakage_flag'] = (claims['paid_amount'] > claims['optimal_settlement']).astype(int)</code></pre>
 
-<h3>2. Assemble the Feature Pipeline</h3>
+<h3><strong>Hyperparameter tuning:</strong> Use Optuna. Focus on <code>max_depth</code> (3–6), <code>learning_rate</code> (0.01–0.1), and <code>lambda</code> (L2 regularization). <strong>Trade-off:</strong> Quantile regression increases MAE by 8% compared to mean regression but reduces overpayment by 12% (tested on 5k claims). Training pipeline (local first, then refactor to Spark): <strong>Validation:</strong> Use 3-fold time-based CV (split by claim close date). Target AUC > 0.82, MAE < $1,200 for settlement amount.</h3>
 
-<p>Claims data is messy. You’ll need to join at least six sources:</p>
+<p><strong>Resource estimate:</strong> 4 weeks for training, 1 FTE (actuary + data scientist). Run on AWS SageMaker with ml.m5.2xlarge (8 vCPU, 32GB RAM). Cost: ~$500 for full training run. 5. Deploy Real-Time Scoring Adjuster needs predictions at point of contact. Build a REST API with latency < 200ms. <strong>Options:</strong></p>
 
 <ul>
-<li>FNOL (First Notice of Loss) – structured fields like accident date, policy number, loss type</li>
-<li>Adjuster notes – unstructured text from phone calls, emails, field inspections</li>
-<li>Repair estimates – PDFs or structured XML from collision repair shops</li>
-<li>Medical bills – itemized bills from healthcare providers (for bodily injury claims)</li>
-<li>Fraud investigations – SIU (Special Investigations Unit) flag history</li>
-<li>Policy data – coverage limits, deductibles, prior loss history</li>
+<li><strong>Low-code:</strong> AWS SageMaker Endpoints (~$1.50 per 1M invocations) <strong>Custom:</strong> FastAPI + Ray Serve (cheaper at scale, ~$300/mo for 10k QPS) <strong>Trade-off:</strong> SageMaker is easier but 3x more expensive than custom at scale. For 50k adjuster logins/day, FastAPI + Ray Serve costs ~$800/mo vs SageMaker at $2.4k/mo. <strong>Implementation:</strong></li>
+<li><strong>Containerize:</strong> Docker image with FastAPI, XGBoost runtime, Feast client. Size: 800MB. <strong>API contract:</strong> <pre><code>POST /predict { "claim_id": "CLAIM123",</li>
+<li>"adjuster_id": "ADJ456", "timestamp": "2024-05-20T14:30:00Z" }</code></pre> <strong>Response:</strong></li>
+<li><pre><code>{ "leakage_probability": 0.72, "optimal_settlement": 8450.23, "risk_factors": ["prior_fraud_indicator", "injury_discrepancy"],</li>
+<li>"recommendation": "Schedule SIU review" }</code></pre> <strong>Caching:</strong> Cache predictions for 24h per claim_id to avoid recomputation.</li>
+<li><strong>Monitoring:</strong> Log prediction drift using Evidently AI. Alert if KL divergence > 0.1 between current and training data distributions. <strong>Rollout plan:</strong> Pilot with 20 adjusters for 2 weeks. Measure impact: 15% reduction in overpayments, 8% increase in cycle time (due to reviews).</li>
 </ul>
 
-<p><strong>Trade-off:</strong> Joining unstructured sources (like adjuster notes) increases model accuracy but adds 30–40% to ETL complexity.</p>
+<p>Expand to all adjusters if leakage reduction > 10%. 6. Integrate with Workflow Systems Predictions are useless without action. Integrate with core claims system (Guidewire, Duck Creek) via REST hooks or event bus. <strong>Patterns:</strong></p>
 
-<p><strong>Step-by-step:</strong></p>
+<p><strong>API trigger:</strong> When adjuster opens claim in UI, call /predict. Show risk factors in sidebar. <strong>Batch scoring:</strong> Nightly job scores all open claims. Flag high-risk claims for review. <strong>Parametric trigger:</strong> For auto claims with repair cost < $5k, auto-approve if leakage_prob < 0.1. Save 40% adjuster time. <strong>Trade-off:</strong> Auto-approval increases leakage risk by 3% (measured in pilot). Cap at 10% of claims.</p>
 
 <ol>
-<li><strong>Ingest FNOL:</strong> Pull from core admin system (Guidewire, Duck Creek) via REST API or batch CSV. Avoid real-time unless you need sub-second latency.</li>
+<li><strong>Example integration with Guidewire ClaimCenter:</strong> <strong>Resource estimate:</strong> 2 weeks for integration, 0.5 FTE (integration engineer). 7. Measure Business Impact Track these KPIs for 6 months: Metric Baseline Target After 6 Months</li>
 
-<li><strong>Parse PDFs:</strong> Use <code>pdfminer.six</code> for text extraction. For repair estimates, extract line items like “Labor: 2.5 hrs @ $120/hr” and standardize to a <code>repair_cost</code> field.</li>
+<li>Leakage rate 8.2% 7.5% 7.1% Cycle time (days) 18.3 17.2 19.1</li>
 
-<li><strong>NLP on adjuster notes:</strong> Use spaCy for entity recognition (claimant name, location, injury type) and sentiment scoring. Avoid deep learning here—few insurers have enough labeled data for fine-tuning. A simple rule-based system with spaCy’s <code>en_core_web_lg</code> model gives 85% accuracy on entity extraction for 1/10th the cost of BERT.</li>
+<li>Adjuster productivity (claims/day) 4.2 4.5 4.7 SIU utilization 120 cases/mo 90 cases/mo 85 cases/mo</li>
 
-<li><strong>Join policy data:</strong> Use a surrogate key like <code>policy_id + effective_date</code>. Handle versioning—policy changes mid-claim affect coverage.</li>
+<li><strong>Cost savings:</strong> 1.1% leakage reduction on $500M premium book = $5.5M saved annually. Model cost: $12k/mo (Feast + API). Net ROI: 36x in first year. <strong>Trade-off:</strong> The 0.8-day increase in cycle time is due to additional reviews. But it’s offset by 20% fewer SIU cases.</li>
 
-<li><strong>Fraud flags:</strong> Merge SIU investigation outcomes. Use binary flags like <code>previous_fraud_indicator</code> or <code>injury_discrepancy</code>.</li>
+<li>8. Maintain and Iterate Claims patterns drift. Plan for monthly retraining. <strong>Retraining pipeline:</strong> Data quality checks: Null rate on <code>repair_cost</code> must be < 5%.</li>
 </ol>
 
-<p><strong>Resource estimate:</strong> 6 weeks for ETL, 2 FTE (data engineer + business analyst). Use <code>pandas</code> for prototyping, then refactor to <code>PySpark</code> for scale (>1M claims).</p>
+<p>Feature drift: Calculate PSI (Population Stability Index) on key features. Retrain if PSI > 0.2. Model performance: AUC must stay > 0.80. If not, increase training data or adjust hyperparameters. Deploy: Use blue-green deployments with SageMaker or Kubernetes. <strong>Cost:</strong> $2k/mo for automated retraining (SageMaker Pipelines + S3).</p>
 
-<p>Example config for PySpark ETL:</p>
+<p><strong>Example drift detection:</strong> 9. Extend to Other Lines This model works for auto/home, but workers’ comp requires different features: Medical bill frequency (ICD-10 codes) Claimant employment tenure Vocational rehab history <strong>Trade-off:</strong> Adding ICD-10 codes increases model complexity but improves MAE by 15%. <strong>Approach:</strong> Build a separate model for comp. Use the same Feast feature store but with comp-specific features. Reuse the settlement pipeline.</p>
 <pre><code>from pyspark.sql import functions as F
 
 # Read FNOL
@@ -371,35 +371,33 @@ pdf_text = pdf_text.withColumn(
     F.regexp_extract(F.col("value"), r"Total Repair Cost:\s*[$](\d+)", 1)
 )</code></pre>
 
-<h3>3. Build the Feature Store</h3>
+<h3><strong>Example ICD-10 feature:</strong> <pre><code>injury_features = spark.read.parquet("s3://claims/icd10/") \ .groupBy("claim_id") \ .agg(</h3>
 
-<p>Claims features degrade fast. A 6-month-old fraud flag is useless. You need a feature store with TTL (time-to-live) policies.</p>
+<p>F.sum("treatment_cost").alias("medical_cost"), F.countDistinct("diagnosis_code</code></pre> Was this article helpful? Comments. So, yeah.</p>
 
-<p><strong>Options:</strong></p>
+
 
 <ul>
-<li><strong>Open source:</strong> Feast (CNCF) or Hopsworks. Both support TTL and online/offline serving.</li>
-<li><strong>Managed:</strong> Tecton or Databricks Feature Store. Cost: ~$5k/mo for 100 features.</li>
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> Open source saves cost but requires 3–4 FTEs to maintain. Managed reduces ops burden but locks you into a vendor.</p>
 
-<p><strong>Implementation:</strong></p>
+
+
 
 <ol>
-<li><strong>Define entities:</strong> <code>claim_id</code>, <code>policy_id</code>, <code>injured_person_id</code>.</li>
 
-<li><strong>Add temporal features:</strong>
-<ul>
-<li><code>prior_claims_count</code> (last 3 years)</li>
-<li><code>avg_settlement_prior_3mo</code> (for adjuster)</li>
-<li><code>days_since_last_fraud_investigation</code></li>
+
+
+
+
 </ul>
 </li>
 
-<li><strong>Text embeddings:</strong> Use spaCy to generate embeddings for adjuster notes. Store as <code>note_embedding</code> feature (dimension=300).</li>
 
-<li><strong>Write to store:</strong> Use batch push (daily) for historical features, online store for real-time adjuster scoring.</li>
+
+
 </ol>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
@@ -407,7 +405,7 @@ pdf_text = pdf_text.withColumn(
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Feast config example:</p>
+                
 <pre><code># feature_store.yaml
 project: claims_optimization
 provider: aws
@@ -417,24 +415,24 @@ online_store:
 registry: s3://claims/features/registry.db
 </code></pre>
 
-<p><strong>Cost:</strong> ~$1k/mo for DynamoDB online store (10M features, 1KB each).</p>
 
-<h3>4. Train the Settlement Model</h3>
 
-<p>Target: Predict <code>leakage_flag</code> (binary) and <code>optimal_settlement</code> (continuous). I recommend a two-stage model:</p>
+
+
+
 
 <ol>
-<li><strong>Stage 1:</strong> Binary classifier (XGBoost or LightGBM) for <code>leakage_flag</code>. AUC > 0.85.</li>
-<li><strong>Stage 2:</strong> Quantile regression (XGBoost) for <code>optimal_settlement</code> at 75th percentile.</li>
+
+
 </ol>
 
-<p><strong>Why not end-to-end:</strong> Quantile regression handles right-skewed settlement data better than MSE loss. XGBoost handles mixed feature types (numeric, categorical, embeddings) without scaling.</p>
 
-<p><strong>Hyperparameter tuning:</strong> Use Optuna. Focus on <code>max_depth</code> (3–6), <code>learning_rate</code> (0.01–0.1), and <code>lambda</code> (L2 regularization).</p>
 
-<p><strong>Trade-off:</strong> Quantile regression increases MAE by 8% compared to mean regression but reduces overpayment by 12% (tested on 5k claims).</p>
 
-<p>Training pipeline (local first, then refactor to Spark):</p>
+
+
+
+
 <pre><code>import xgboost as xgb
 from sklearn.model_selection import train_test_split
 
@@ -462,74 +460,60 @@ quantile_model = xgb.XGBRegressor(
 )
 quantile_model.fit(X_train, y_train)</code></pre>
 
-<p><strong>Validation:</strong> Use 3-fold time-based CV (split by claim close date). Target AUC > 0.82, MAE < $1,200 for settlement amount.</p>
 
-<p><strong>Resource estimate:</strong> 4 weeks for training, 1 FTE (actuary + data scientist). Run on AWS SageMaker with ml.m5.2xlarge (8 vCPU, 32GB RAM). Cost: ~$500 for full training run.</p>
 
-<h3>5. Deploy Real-Time Scoring</h3>
 
-<p>Adjuster needs predictions at point of contact. Build a REST API with latency < 200ms.</p>
 
-<p><strong>Options:</strong></p>
+
+
+
+
+
 
 <ul>
-<li><strong>Low-code:</strong> AWS SageMaker Endpoints (~$1.50 per 1M invocations)</li>
-<li><strong>Custom:</strong> FastAPI + Ray Serve (cheaper at scale, ~$300/mo for 10k QPS)</li>
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> SageMaker is easier but 3x more expensive than custom at scale. For 50k adjuster logins/day, FastAPI + Ray Serve costs ~$800/mo vs SageMaker at $2.4k/mo.</p>
 
-<p><strong>Implementation:</strong></p>
+
+
 
 <ol>
-<li><strong>Containerize:</strong> Docker image with FastAPI, XGBoost runtime, Feast client. Size: 800MB.</li>
 
-<li><strong>API contract:</strong>
-<pre><code>POST /predict
-{
-  "claim_id": "CLAIM123",
-  "adjuster_id": "ADJ456",
-  "timestamp": "2024-05-20T14:30:00Z"
-}</code></pre>
-</li>
 
-<li><strong>Response:</strong>
-<pre><code>{
-  "leakage_probability": 0.72,
-  "optimal_settlement": 8450.23,
-  "risk_factors": ["prior_fraud_indicator", "injury_discrepancy"],
-  "recommendation": "Schedule SIU review"
-}</code></pre>
-</li>
 
-<li><strong>Caching:</strong> Cache predictions for 24h per claim_id to avoid recomputation.</li>
+
+
+
+
 </ol>
 
-<p><strong>Monitoring:</strong> Log prediction drift using Evidently AI. Alert if KL divergence > 0.1 between current and training data distributions.</p>
 
-<p><strong>Rollout plan:</strong></p>
 
-<ul>
-<li>Pilot with 20 adjusters for 2 weeks.</li>
-<li>Measure impact: 15% reduction in overpayments, 8% increase in cycle time (due to reviews).</li>
-<li>Expand to all adjusters if leakage reduction > 10%.</li>
-</ul>
 
-<h3>6. Integrate with Workflow Systems</h3>
-
-<p>Predictions are useless without action. Integrate with core claims system (Guidewire, Duck Creek) via REST hooks or event bus.</p>
-
-<p><strong>Patterns:</strong></p>
 
 <ul>
-<li><strong>API trigger:</strong> When adjuster opens claim in UI, call /predict. Show risk factors in sidebar.</li>
-<li><strong>Batch scoring:</strong> Nightly job scores all open claims. Flag high-risk claims for review.</li>
-<li><strong>Parametric trigger:</strong> For auto claims with repair cost < $5k, auto-approve if leakage_prob < 0.1. Save 40% adjuster time.</li>
+
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> Auto-approval increases leakage risk by 3% (measured in pilot). Cap at 10% of claims.</p>
 
-<p><strong>Example integration with Guidewire ClaimCenter:</strong></p>
+
+
+
+
+
+<ul>
+
+
+
+</ul>
+
+
+
+
 <pre><code># Guidewire Business Rules (Java)
 if (claim.getEstimatedRepairCost() < 5000 &&
     leakageModel.getProbability(claim.getId()) < 0.1) {
@@ -537,69 +521,69 @@ if (claim.getEstimatedRepairCost() < 5000 &&
     claim.addNote("Predictive model auto-approved");
 }</code></pre>
 
-<p><strong>Resource estimate:</strong> 2 weeks for integration, 0.5 FTE (integration engineer).</p>
 
-<h3>7. Measure Business Impact</h3>
 
-<p>Track these KPIs for 6 months:</p>
+
+
+
 
 <table>
 <thead>
 <tr>
-<th>Metric</th>
-<th>Baseline</th>
-<th>Target</th>
-<th>After 6 Months</th>
+
+
+
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Leakage rate</td>
-<td>8.2%</td>
-<td>7.5%</td>
-<td>7.1%</td>
+
+
+
+
 </tr>
 <tr>
-<td>Cycle time (days)</td>
-<td>18.3</td>
-<td>17.2</td>
-<td>19.1</td>
+
+
+
+
 </tr>
 <tr>
-<td>Adjuster productivity (claims/day)</td>
-<td>4.2</td>
-<td>4.5</td>
-<td>4.7</td>
+
+
+
+
 </tr>
 <tr>
-<td>SIU utilization</td>
-<td>120 cases/mo</td>
-<td>90 cases/mo</td>
-<td>85 cases/mo</td>
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p><strong>Cost savings:</strong> 1.1% leakage reduction on $500M premium book = $5.5M saved annually. Model cost: $12k/mo (Feast + API). Net ROI: 36x in first year.</p>
 
-<p><strong>Trade-off:</strong> The 0.8-day increase in cycle time is due to additional reviews. But it’s offset by 20% fewer SIU cases.</p>
 
-<h3>8. Maintain and Iterate</h3>
 
-<p>Claims patterns drift. Plan for monthly retraining.</p>
 
-<p><strong>Retraining pipeline:</strong></p>
+
+
+
+
+
 
 <ol>
-<li>Data quality checks: Null rate on <code>repair_cost</code> must be < 5%.</li>
-<li>Feature drift: Calculate PSI (Population Stability Index) on key features. Retrain if PSI > 0.2.</li>
-<li>Model performance: AUC must stay > 0.80. If not, increase training data or adjust hyperparameters.</li>
-<li>Deploy: Use blue-green deployments with SageMaker or Kubernetes.</li>
+
+
+
+
 </ol>
 
-<p><strong>Cost:</strong> $2k/mo for automated retraining (SageMaker Pipelines + S3).</p>
 
-<p><strong>Example drift detection:</strong></p>
+
+
 <pre><code>from evidently.report import Report
 from evidently.metrics import DataDriftTable
 
@@ -612,26 +596,21 @@ drift = report.as_dict()['metrics'][0]['result']['drift_detected']
 if drift:
     trigger_retraining()</code></pre>
 
-<h3>9. Extend to Other Lines</h3>
 
-<p>This model works for auto/home, but workers’ comp requires different features:</p>
+
+
 
 <ul>
-<li>Medical bill frequency (ICD-10 codes)</li>
-<li>Claimant employment tenure</li>
-<li>Vocational rehab history</li>
+
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> Adding ICD-10 codes increases model complexity but improves MAE by 15%.</p>
 
-<p><strong>Approach:</strong> Build a separate model for comp. Use the same Feast feature store but with comp-specific features. Reuse the settlement pipeline.</p>
 
-<p><strong>Example ICD-10 feature:</strong>
-<pre><code>injury_features = spark.read.parquet("s3://claims/icd10/") \
-    .groupBy("claim_id") \
-    .agg(
-        F.sum("treatment_cost").alias("medical_cost"),
-        F.countDistinct("diagnosis_code</code></pre></p>
+
+
+
 </div>
 
             
@@ -645,7 +624,7 @@ if drift:
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -654,7 +633,7 @@ if drift:
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

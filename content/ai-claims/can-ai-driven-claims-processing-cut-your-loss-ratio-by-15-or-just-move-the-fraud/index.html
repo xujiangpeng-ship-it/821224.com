@@ -255,7 +255,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Can AI-driven claims processing cut your loss ratio by 15% or just move the fraud?</h1>
+                <h1>Can AI-driven claims processing cut your loss ratio by 15% or just move the fraud? Can AI-driven claims processing cut your loss ratio by 15% or just move the fraud?</h1>
                 <div class="article-meta">
                     <span>May 10, 2026</span>
                     <span class="dot"></span>
@@ -269,70 +269,70 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Can AI-driven claims processing cut your loss ratio by 15% or just move the fraud?</h2>
-<p>Insurers that have pushed AI automation past the POC stage are cutting paid loss ratios by 12–18% and slashing cycle times from weeks to sub-24 hours on simple claims. Lemonade’s 2023 annual report shows straight-through-processing (STP) rates above 40% on property claims and a combined ratio that dipped below 80% for the first time in its history. Yet the same report flags rising <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/Archives/edgar/data/1703557/000170355723000053/lmnd-20231231.htm">claims repudiation rates</a>—customers who walked away because the AI denied a claim too quickly. The trade-off isn’t between speed and accuracy; it’s between speed and <em>explainability</em>.</p>
+                <h2>Insurers that have pushed AI automation past the POC stage are cutting paid loss ratios by 12–18% and slashing cycle times from weeks to sub-24 hours on simple claims. Lemonade’s 2023 annual report shows straight-through-processing (STP) rates above 40% on property claims and a combined ratio that dipped below 80% for the first time in its history. Yet the same report flags rising <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/Archives/edgar/data/1703557/000170355723000053/lmnd-20231231.htm">claims repudiation rates</a>—customers who walked away because the AI denied a claim too quickly. The trade-off isn’t between speed and accuracy; it’s between speed and <em>explainability</em>.</h2>
+<p>Below is how incumbents and insurgents are weaponizing AI claims processing—with the real dollar impact, the hidden gotchas, and the one metric every CFO should watch before signing off on the next AI build. AI Claims Approach Primary Impact Typical Time to Value</p>
 
-<p>Below is how incumbents and insurgents are weaponizing AI claims processing—with the real dollar impact, the hidden gotchas, and the one metric every CFO should watch before signing off on the next AI build.</p>
+<p>Key Risk Best Fit LLM-based FNOL extraction Cycle time: -40% 3-6 months Adjuster cognitive bias baked into training data High-volume auto/property Computer vision (roof/auto)</p>
 
 <table border="1" cellpadding="4" cellspacing="0">
 <thead>
 <tr>
-<th>AI Claims Approach</th>
-<th>Primary Impact</th>
-<th>Typical Time to Value</th>
-<th>Key Risk</th>
-<th>Best Fit</th>
+<th>Estimate accuracy: ±3.2% 4-8 months + calibration Wear-and-tear misclassification on <20% damage claims Hail/wind-heavy property books Predictive severity triage Payout reduction: 12-18% on triaged cohort 6-12 months Model drift on newer policy vintages</th>
+<th>Multi-line carriers with 50k+ claims/yr Graph neural network fraud Fraud detection AUC: 0.91 (rings) 6-9 months Poor lone-wolf fraud detection (AUC 0.63) Carriers with organized fraud exposure Automated subrogation (Zest AI) Recovery: +12%</th>
+<th>3-4 months Litigation spend increase when probability overestimated Auto physical damage books Parametric triggers Loss ratio: -13 pts on triggered events 1-2 months Basis risk -- payout without actual damage Crop, weather, event-based lines</th>
+<th>GenAI adjuster assist (Dundee.ai) Appeal rate: -19% 2-4 months EU AI Act compliance costs (40% of savings)</th>
+<th>Litigation-heavy liability lines 1. The data pipeline: from unstructured adjuster notes to structured loss triangles Most carriers still treat claims adjuster notes as dark text. A single FNOL (first notice of loss) can contain 50+ free-form fields: sms: “car hit pole, airbag deployed, no injuries reported”</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>LLM-based FNOL extraction</td>
-<td>Cycle time: -40%</td>
-<td>3-6 months</td>
-<td>Adjuster cognitive bias baked into training data</td>
-<td>High-volume auto/property</td>
+<td>call-center log: “policyholder stated ‘it felt like a truck hit me from behind’” adjuster note: “vehicle 1 appears to have rear-end damage; insured alleges other party ran red light; photos inconclusive” Fine-tuning proprietary LLMs on this corpus (e.g., <a target="_blank" rel="noopener noreferrer" href="https://www.wefox.com">WeFox</a> trained on 2.4 million German claims) turns unstructured text into structured JSON that feeds: fraud scoring models (Shift Technology records 18% lift in true positive rate)</td>
+<td>bodily injury reserve predictors (Lemonade’s model forecasts IBNR with ±7% MAPE) automatic bordereaux generation for reinsurers via STP</td>
+<td><strong>Limitation:</strong> Fine-tuning on adjuster notes embeds their cognitive biases—e.g., a bias toward “low impact” on claims from affluent ZIP codes. A 2023 Oliver Wyman audit found that carriers using adjuster-trained LLMs over-reserve soft tissue injury claims by 11% in affluent areas and under-reserve by 9% in lower-income areas.</td>
+<td>2. Computer vision: from roof hail damage to subrogation opportunity</td>
+<td>Roofing estimates are the single largest line item in a property claim. SkyWatch.ai ingests satellite and drone imagery, runs a YOLO-v8 damage classifier, and outputs a 6-figure estimate in <45 seconds. On a $50,000 hail claim, the model’s estimate deviates from the human adjuster by ±3.2%—but it does so consistently, removing the 12–15% “padding” that adjusters historically add to hedge against reinspection.</td>
 </tr>
 <tr>
-<td>Computer vision (roof/auto)</td>
-<td>Estimate accuracy: ±3.2%</td>
-<td>4-8 months + calibration</td>
-<td>Wear-and-tear misclassification on <20% damage claims</td>
-<td>Hail/wind-heavy property books</td>
+<td>Yet the same computer vision that slashes leakage can create new leakage. A 2024 Verisk study showed that when carriers rely solely on CV estimates without mandatory human spot-checks, hail claims with <20% damage are overpaid by 7–9% because the model misclassifies wear-and-tear as hail pitting.</td>
+<td>3. Predictive triage: routing claims by expected severity, not just geography</td>
+<td>Traditional TPAs segment claims by peril (fire vs. flood) and geography (flood zone A vs. zone X). AI triage layers on <em>predicted severity</em> using a gradient-boosted model trained on 120k closed claims. The model’s top decile of “high severity” claims gets routed to an in-house senior adjuster; the bottom decile goes to an AI adjuster with STP.</td>
+<td>Result: Carriers like <a target="_blank" rel="noopener noreferrer" href="https://www.hiscox.com">Hiscox</a> report a 17% reduction in average claims payout on the triaged cohort, while the top 10% of claims see no change in severity—meaning the model isn’t cherry-picking easy wins.</td>
+<td><strong>Real gotcha:</strong> The model learns from historical payouts, not true risk. If your underwriting book has aged (e.g., you stopped writing new homeowners policies in 2020), the triage model will underestimate severity on newer, riskier properties because it has no recent data. Hiscox’s 2023 ORSA filing shows a 40-basis-point increase in severity on 2021+ vintage policies that were triaged by an older model.</td>
 </tr>
 <tr>
-<td>Predictive severity triage</td>
-<td>Payout reduction: 12-18% on triaged cohort</td>
-<td>6-12 months</td>
-<td>Model drift on newer policy vintages</td>
-<td>Multi-line carriers with 50k+ claims/yr</td>
+<td>4. Fraud detection: from rules engines to graph neural networks</td>
+<td>Shift Technology’s fraud model (graph neural network + tabular data) has a 0.91 AUC on first-party auto fraud, beating traditional rules engines (0.78 AUC). But the model’s lift is concentrated on “organized rings” with >5 claims per policy. On lone-wolf opportunistic fraud (e.g., a single exaggerated soft-tissue claim), the model’s AUC drops to 0.63—worse than random chance.</td>
+<td>Trade-off: Flagging too aggressively increases customer friction. Lemonade’s 2023 10-K shows a 3.2% increase in “claims repudiation” (customers who walked away) after rolling out the Shift model. The carrier now runs an A/B test: group A sees AI denial letters, group B sees human-denial letters with an AI-generated explanation. Repudiation rate in group A is 4.1%; in group B it’s 2.8%.</td>
+<td>5. Automated subrogation: from bordereaux to instant demand letters</td>
+<td>Subrogation leakage is the largest unmanaged line item in auto physical damage. <a target="_blank" rel="noopener noreferrer" href="https://www.zest.ai">Zest AI</a> runs a two-stage model: stage 1 predicts the probability of subrogation success based on police report text; stage 2 calculates the optimal demand amount using a reinforcement-learning policy that maximizes net recovery. On a $15,000 auto damage claim, the model recovers $2,100 more than the human adjuster in 68% of cases.</td>
 </tr>
 <tr>
-<td>Graph neural network fraud</td>
-<td>Fraud detection AUC: 0.91 (rings)</td>
-<td>6-9 months</td>
-<td>Poor lone-wolf fraud detection (AUC 0.63)</td>
-<td>Carriers with organized fraud exposure</td>
+<td>Yet the model assumes the at-fault party is always identifiable. In hit-and-run claims (≈18% of bodily injury auto claims), the model’s recovery drops to $0 because there’s no target to demand against. Carriers using Zest report a 12% increase in subrogation recovery overall, but a 3% increase in litigation spend on claims where the model overestimated subrogation probability by >20%.</td>
+<td>6. Parametric triggers: when the claim pays itself</td>
+<td><a target="_blank" rel="noopener noreferrer" href="https://www.hippo.com">Hippo</a> and <a target="_blank" rel="noopener noreferrer" href="https://www.coverai.io">CoverAI</a> now embed parametric triggers in homeowners policies: if a NOAA wind speed sensor hits 75 mph within 5 miles of the insured address, the claim is auto-paid up to the sublimit (typically $25k). No adjuster, no photos, no fraud review.</td>
+<td>Benefit: claims paid in 15 minutes. Loss ratio on triggered events drops from 95% to 82% because carriers are no longer paying for wear-and-tear disguised as wind damage.</td>
+<td><strong>Risk:</strong> Basis risk. In 2023, a derecho in Iowa triggered claims on 1,200 policies, but only 780 properties actually had roof damage. Hippo’s net loss ratio on the event was 112%. The carrier now layers a post-trigger drone inspection for claims >$10k, adding 48 hours to payout time.</td>
 </tr>
 <tr>
-<td>Automated subrogation (Zest AI)</td>
-<td>Recovery: +12%</td>
-<td>3-4 months</td>
-<td>Litigation spend increase when probability overestimated</td>
-<td>Auto physical damage books</td>
+<td>7. Generative AI for adjuster assist: drafting denial letters that don’t get reversed</td>
+<td>Generative AI drafts denial letters, but the real win is in <em>reversal rate reduction</em>. <a target="_blank" rel="noopener noreferrer" href="https://www.dundee.ai">Dundee.ai</a> trains an LLM on 50k prior appeals and their outcomes. The model suggests denial language that reduces the appeal rate by 19% because it anticipates the customer’s next argument (e.g., “adjuster didn’t consider my pre-existing condition” → “We reviewed your 2022 MRI and confirmed no exacerbation”).</td>
+<td><strong>Limitation:</strong> Regulatory opacity. In the EU, the AI Act’s “high-risk” classification for insurance claims tools means carriers must publish full model documentation and allow human oversight. Dundee’s clients in Germany now spend €120k/year on regulatory compliance—eating 40% of the model’s cost savings.</td>
+<td>8. The CFO’s KPI: AI-driven claims leakage vs. combined ratio Every AI claims project should target one metric: <strong>AI-driven leakage reduction as % of incurred loss and LAE</strong>.</td>
+<td>Example: A $1B personal auto writer with a 65% loss & LAE ratio runs a triage + CV + subrogation AI stack. After 12 months, leakage drops from 5.2% to 3.1% of incurred loss. That’s a $21M improvement—enough to move the combined ratio from 98% to 96%.</td>
 </tr>
 <tr>
-<td>Parametric triggers</td>
-<td>Loss ratio: -13 pts on triggered events</td>
-<td>1-2 months</td>
-<td>Basis risk -- payout without actual damage</td>
-<td>Crop, weather, event-based lines</td>
+<td>Yet the same stack adds $3.5M/year in compute, vendor licenses, and human oversight (model monitoring, appeal handling). Net leakage reduction: $17.5M, or 1.75% of premium. For a carrier at 98% combined ratio, that’s the difference between breaking even and booking a 2% underwriting profit.</td>
+<td>What to do Monday morning</td>
+<td><strong>1. Audit your dark text.</strong> Run a one-week pilot: feed 1,000 adjuster notes into an open-source LLM (e.g., <a target="_blank" rel="noopener noreferrer" href="https://huggingface.co/mistralai/Mistral-7B-v0.1">Mistral-7B</a>) and extract structured fields. Compare the output to your bordereaux. If the model misses >15% of key data points, your adjuster notes are too noisy for AI.</td>
+<td><strong>2. Stress-test your fraud model.</strong> Pull a 24-month sample of closed claims with 0 fraud flags. Run your AI fraud score. If >30% of these “clean” claims score in the top 10% risk tier, your model is overfitting to historical fraud patterns and will trigger false positives on new cohorts.</td>
+<td><strong>3. Cap your parametric exposure.</strong> If >5% of your premium comes from parametric triggers, layer a human-in-the-loop review for claims >$25k. Basis risk will eat your margin otherwise. <strong>4. Publish an AI claims playbook.</strong> Regulators in 10 states now require carriers to disclose how AI decisions are made. A one-page playbook (data sources, model version, human override process) keeps you compliant and reduces appeal costs.</td>
 </tr>
 <tr>
-<td>GenAI adjuster assist (Dundee.ai)</td>
-<td>Appeal rate: -19%</td>
-<td>2-4 months</td>
-<td>EU AI Act compliance costs (40% of savings)</td>
-<td>Litigation-heavy liability lines</td>
+<td>Was this article helpful? Comments.</td>
+
+
+
+
 </tr>
 </tbody>
 </table>
@@ -341,90 +341,89 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 ---
 
-<h3>1. The data pipeline: from unstructured adjuster notes to structured loss triangles</h3>
-<p>Most carriers still treat claims adjuster notes as dark text. A single FNOL (first notice of loss) can contain 50+ free-form fields:</p>
+
+
 <ul>
-<li>sms: “car hit pole, airbag deployed, no injuries reported”</li>
-<li>call-center log: “policyholder stated ‘it felt like a truck hit me from behind’”</li>
-<li>adjuster note: “vehicle 1 appears to have rear-end damage; insured alleges other party ran red light; photos inconclusive”</li>
+
+
+
 </ul>
 
-<p>Fine-tuning proprietary LLMs on this corpus (e.g., <a target="_blank" rel="noopener noreferrer" href="https://www.wefox.com">WeFox</a> trained on 2.4 million German claims) turns unstructured text into structured JSON that feeds:</p>
+
 <ul>
-<li>fraud scoring models (Shift Technology records 18% lift in true positive rate)</li>
-<li>bodily injury reserve predictors (Lemonade’s model forecasts IBNR with ±7% MAPE)</li>
-<li>automatic bordereaux generation for reinsurers via STP</li>
+
+
+
 </ul>
 
-<p><strong>Limitation:</strong> Fine-tuning on adjuster notes embeds their cognitive biases—e.g., a bias toward “low impact” on claims from affluent ZIP codes. A 2023 Oliver Wyman audit found that carriers using adjuster-trained LLMs over-reserve soft tissue injury claims by 11% in affluent areas and under-reserve by 9% in lower-income areas.</p>
 
-<h3>2. Computer vision: from roof hail damage to subrogation opportunity</h3>
-<p>Roofing estimates are the single largest line item in a property claim. SkyWatch.ai ingests satellite and drone imagery, runs a YOLO-v8 damage classifier, and outputs a 6-figure estimate in <45 seconds. On a $50,000 hail claim, the model’s estimate deviates from the human adjuster by ±3.2%—but it does so consistently, removing the 12–15% “padding” that adjusters historically add to hedge against reinspection.</p>
 
-<p>Yet the same computer vision that slashes leakage can create new leakage. A 2024 Verisk study showed that when carriers rely solely on CV estimates without mandatory human spot-checks, hail claims with <20% damage are overpaid by 7–9% because the model misclassifies wear-and-tear as hail pitting.</p>
+
+
+
+
 
 ---
 
-<h3>3. Predictive triage: routing claims by expected severity, not just geography</h3>
-<p>Traditional TPAs segment claims by peril (fire vs. flood) and geography (flood zone A vs. zone X). AI triage layers on <em>predicted severity</em> using a gradient-boosted model trained on 120k closed claims. The model’s top decile of “high severity” claims gets routed to an in-house senior adjuster; the bottom decile goes to an AI adjuster with STP.</p>
+
+
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Result: Carriers like <a target="_blank" rel="noopener noreferrer" href="https://www.hiscox.com">Hiscox</a> report a 17% reduction in average claims payout on the triaged cohort, while the top 10% of claims see no change in severity—meaning the model isn’t cherry-picking easy wins.</p>
+                
 
-<p><strong>Real gotcha:</strong> The model learns from historical payouts, not true risk. If your underwriting book has aged (e.g., you stopped writing new homeowners policies in 2020), the triage model will underestimate severity on newer, riskier properties because it has no recent data. Hiscox’s 2023 ORSA filing shows a 40-basis-point increase in severity on 2021+ vintage policies that were triaged by an older model.</p>
 
----
-
-<h3>4. Fraud detection: from rules engines to graph neural networks</h3>
-<p>Shift Technology’s fraud model (graph neural network + tabular data) has a 0.91 AUC on first-party auto fraud, beating traditional rules engines (0.78 AUC). But the model’s lift is concentrated on “organized rings” with >5 claims per policy. On lone-wolf opportunistic fraud (e.g., a single exaggerated soft-tissue claim), the model’s AUC drops to 0.63—worse than random chance.</p>
-
-<p>Trade-off: Flagging too aggressively increases customer friction. Lemonade’s 2023 10-K shows a 3.2% increase in “claims repudiation” (customers who walked away) after rolling out the Shift model. The carrier now runs an A/B test: group A sees AI denial letters, group B sees human-denial letters with an AI-generated explanation. Repudiation rate in group A is 4.1%; in group B it’s 2.8%.</p>
 
 ---
 
-<h3>5. Automated subrogation: from bordereaux to instant demand letters</h3>
-<p>Subrogation leakage is the largest unmanaged line item in auto physical damage. <a target="_blank" rel="noopener noreferrer" href="https://www.zest.ai">Zest AI</a> runs a two-stage model: stage 1 predicts the probability of subrogation success based on police report text; stage 2 calculates the optimal demand amount using a reinforcement-learning policy that maximizes net recovery. On a $15,000 auto damage claim, the model recovers $2,100 more than the human adjuster in 68% of cases.</p>
 
-<p>Yet the model assumes the at-fault party is always identifiable. In hit-and-run claims (≈18% of bodily injury auto claims), the model’s recovery drops to $0 because there’s no target to demand against. Carriers using Zest report a 12% increase in subrogation recovery overall, but a 3% increase in litigation spend on claims where the model overestimated subrogation probability by >20%.</p>
 
----
 
-<h3>6. Parametric triggers: when the claim pays itself</h3>
-<p><a target="_blank" rel="noopener noreferrer" href="https://www.hippo.com">Hippo</a> and <a target="_blank" rel="noopener noreferrer" href="https://www.coverai.io">CoverAI</a> now embed parametric triggers in homeowners policies: if a NOAA wind speed sensor hits 75 mph within 5 miles of the insured address, the claim is auto-paid up to the sublimit (typically $25k). No adjuster, no photos, no fraud review.</p>
 
-<p>Benefit: claims paid in 15 minutes. Loss ratio on triggered events drops from 95% to 82% because carriers are no longer paying for wear-and-tear disguised as wind damage.</p>
-
-<p><strong>Risk:</strong> Basis risk. In 2023, a derecho in Iowa triggered claims on 1,200 policies, but only 780 properties actually had roof damage. Hippo’s net loss ratio on the event was 112%. The carrier now layers a post-trigger drone inspection for claims >$10k, adding 48 hours to payout time.</p>
 
 ---
 
-<h3>7. Generative AI for adjuster assist: drafting denial letters that don’t get reversed</h3>
-<p>Generative AI drafts denial letters, but the real win is in <em>reversal rate reduction</em>. <a target="_blank" rel="noopener noreferrer" href="https://www.dundee.ai">Dundee.ai</a> trains an LLM on 50k prior appeals and their outcomes. The model suggests denial language that reduces the appeal rate by 19% because it anticipates the customer’s next argument (e.g., “adjuster didn’t consider my pre-existing condition” → “We reviewed your 2022 MRI and confirmed no exacerbation”).
-</p>
-<p><strong>Limitation:</strong> Regulatory opacity. In the EU, the AI Act’s “high-risk” classification for insurance claims tools means carriers must publish full model documentation and allow human oversight. Dundee’s clients in Germany now spend €120k/year on regulatory compliance—eating 40% of the model’s cost savings.</p>
+
+
+
+
 
 ---
 
-<h3>8. The CFO’s KPI: AI-driven claims leakage vs. combined ratio</h3>
-<p>Every AI claims project should target one metric: <strong>AI-driven leakage reduction as % of incurred loss and LAE</strong>.</p>
-<p>Example: A $1B personal auto writer with a 65% loss & LAE ratio runs a triage + CV + subrogation AI stack. After 12 months, leakage drops from 5.2% to 3.1% of incurred loss. That’s a $21M improvement—enough to move the combined ratio from 98% to 96%.</p>
 
-<p>Yet the same stack adds $3.5M/year in compute, vendor licenses, and human oversight (model monitoring, appeal handling). Net leakage reduction: $17.5M, or 1.75% of premium. For a carrier at 98% combined ratio, that’s the difference between breaking even and booking a 2% underwriting profit.</p>
+
+
+
+
+
 
 ---
 
-<h3>What to do Monday morning</h3>
-<p><strong>1. Audit your dark text.</strong> Run a one-week pilot: feed 1,000 adjuster notes into an open-source LLM (e.g., <a target="_blank" rel="noopener noreferrer" href="https://huggingface.co/mistralai/Mistral-7B-v0.1">Mistral-7B</a>) and extract structured fields. Compare the output to your bordereaux. If the model misses >15% of key data points, your adjuster notes are too noisy for AI.</p>
 
-<p><strong>2. Stress-test your fraud model.</strong> Pull a 24-month sample of closed claims with 0 fraud flags. Run your AI fraud score. If >30% of these “clean” claims score in the top 10% risk tier, your model is overfitting to historical fraud patterns and will trigger false positives on new cohorts.</p>
 
-<p><strong>3. Cap your parametric exposure.</strong> If >5% of your premium comes from parametric triggers, layer a human-in-the-loop review for claims >$25k. Basis risk will eat your margin otherwise.</p>
 
-<p><strong>4. Publish an AI claims playbook.</strong> Regulators in 10 states now require carriers to disclose how AI decisions are made. A one-page playbook (data sources, model version, human override process) keeps you compliant and reduces appeal costs.</p>
+
+---
+
+
+
+
+
+
+
+---
+
+
+
+
+
+
+
+
+
 </div>
 
             
@@ -438,7 +437,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -447,7 +446,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

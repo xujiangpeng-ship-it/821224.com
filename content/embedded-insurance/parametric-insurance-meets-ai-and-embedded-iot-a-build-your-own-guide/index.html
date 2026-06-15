@@ -267,7 +267,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/embedded-insurance/" class="tag tag-indigo">Embedded Insurance</a>
-                <h1>Parametric Insurance Meets AI and Embedded IoT: A Build-Your-Own Guide</h1>
+                <h1>Parametric Insurance Meets AI and Embedded IoT: A Build-Your-Own Guide Parametric Insurance Meets AI and Embedded IoT: A Build-Your-Own Guide</h1>
                 <div class="article-meta">
                     <span>May 25, 2026</span>
                     <span class="dot"></span>
@@ -281,43 +281,43 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Parametric Insurance Meets AI and Embedded IoT: A Build-Your-Own Guide</h2>
-
-<p>I’ve helped three MGAs launch parametric products in the last 18 months. Two flamed out because they underestimated the data plumbing; one is now writing $12 M in premium against a 15 % loss ratio. The difference wasn’t actuarial skill—it was wiring the sensors to the pay-as-you-go claims engine before the broker even got the quote. This guide walks you through the exact steps I give my engineering teams when we stand up a new parametric line. If you finish, you’ll have a working prototype that quotes, binds, and pays in under 5 minutes using live IoT data and an AI underwriting layer.</p>
+                <h2>I’ve helped three MGAs launch parametric products in the last 18 months. Two flamed out because they underestimated the data plumbing; one is now writing $12 M in premium against a 15 % loss ratio. The difference wasn’t actuarial skill—it was wiring the sensors to. the pay-as-you-go claims engine before the broker even got the quote. This guide walks you through the exact steps I give my engineering teams when we stand up a new parametric line. If you finish, you’ll have a working prototype that quotes, binds, and pays in under 5 minutes using live IoT data and an AI underwriting layer.</h2>
 
 <p><strong>Assumptions:</strong> You already have an MGA license or a partnership with one, and you can touch the underwriting API. If you’re a carrier building in-house, swap the MGA for your internal underwriting desk. All dollar figures are FY23 market averages; your mileage will vary.</p>
 
-<h3>1. Decide What to Parametrize—and How to Sense It</h3>
+<p>1. Decide What to Parametrize—and How to Sense It Not every peril is a fit. I only touch perils with: <strong>Clear physical trigger</strong> (e.g., wind speed > 100 mph, ground shaking > 6.0 Richter). <strong>Public data feed</strong> (NOAA, Copernicus, USGS) OR <strong>IoT stream</strong> you can license or deploy.</p>
 
-<p>Not every peril is a fit. I only touch perils with:</p>
+<h3><strong>Low moral hazard</strong> (policyholder can’t easily fake the signal). <strong>Trade-off:</strong> High-resolution IoT sensors give you a better combined ratio (you price closer to the actual hazard), but CapEx and battery life eat 15–20 % of expected margin if you don’t run a tight fleet program.</h3>
+
+<p>Example lines I’ve seen work: Line Trigger Source Typical Sum Insured Combined Ratio Range Crop Hail Weather station + radar proxy $50 k–$250 k</p>
 <ul>
-<li><strong>Clear physical trigger</strong> (e.g., wind speed > 100 mph, ground shaking > 6.0 Richter).</li>
-<li><strong>Public data feed</strong> (NOAA, Copernicus, USGS) OR <strong>IoT stream</strong> you can license or deploy.</li>
-<li><strong>Low moral hazard</strong> (policyholder can’t easily fake the signal).</li>
+<li>85–95 % Marine Cargo Delay IoT container sensor (temp + motion) $200 k–$1 M 90–100 % Commercial Roof Leak Smart roof sensor (weight + conductivity) $100 k–$750 k</li>
+<li>75–85 % Pick one. I’ll use “commercial roof leak” for the rest of the guide because it’s the easiest to prototype in a garage. 2. Procure the Sensor Fleet You have three sourcing routes:</li>
+<li><strong>White-label OEM</strong> (e.g., Sensirion, Bosch). Order 100 units at ~$110 each, MOQ 500, lead time 6 weeks. <strong>Embedded cellular module</strong> (e.g., Twilio Super SIM + STM32). Bill of materials ≈ $95, but you need a cellular plan (~$2 per device/month).</li>
 </ul>
 
-<p><strong>Trade-off:</strong> High-resolution IoT sensors give you a better combined ratio (you price closer to the actual hazard), but CapEx and battery life eat 15–20 % of expected margin if you don’t run a tight fleet program.</p>
+<p><strong>Third-party API</strong> (e.g., RoofScan.io). They charge $0.07 per reading; no hardware risk, but you rely on their uptime. I’ve burned twice on route 3: RoofScan had a 4-hour outage during a hailstorm in Dallas and paid every claim manually. Route 2 is what I use now. Below is the BOM I hand to procurement:</p>
 
-<p>Example lines I’ve seen work:</p>
+<p><strong>Resource estimate:</strong> 2 engineers × 3 weeks = $24 k to build the first 10 nodes, including PCB layout and firmware. 3. Build the Edge Firmware We need a device that: Wakes every 15 minutes, reads temp/humidity and load.</p>
 <table border="1" cellpadding="4" cellspacing="0">
-<tr><th>Line</th><th>Trigger Source</th><th>Typical Sum Insured</th><th>Combined Ratio Range</th></tr>
-<tr><td>Crop Hail</td><td>Weather station + radar proxy</td><td>$50 k–$250 k</td><td>85–95 %</td></tr>
-<tr><td>Marine Cargo Delay</td><td>IoT container sensor (temp + motion)</td><td>$200 k–$1 M</td><td>90–100 %</td></tr>
-<tr><td>Commercial Roof Leak</td><td>Smart roof sensor (weight + conductivity)</td><td>$100 k–$750 k</td><td>75–85 %</td></tr>
+<tr><th>Computes a “leak score” = f(temp, humidity, delta_load). Publishes to MQTT if score > 40/100. Battery life ≥ 6 months on 2 × AA. <strong>Trade-off:</strong> The higher the sampling rate, the lower the loss ratio, but the higher the cellular bill. 15-minute polling keeps the bill at $2/mo/node.</th><th>Below is the minimal Arduino sketch we drop on the STM32. It uses the <code>ArduinoLoRaWAN</code> library and the <code>ClosedCube_BME280</code> driver. <strong>Validation:</strong> Run 50 nodes in a humidity chamber at 35 °C / 90 % RH for 72 hours; discard any unit that drifts > ±2 % humidity.</th><th>4. Stand Up the IoT Gateway Network You have two choices: <strong>LoRaWAN private gateway</strong> (5 km radius). Hardware cost ≈ $1 k per gateway, software libre. <strong>Cellular NB-IoT</strong>. SIMs only, but modem cost drops to $20/node.</th><th>I chose LoRaWAN for the prototype because it’s zero ongoing cost and we already have a TTN community network covering our office park. Below is the gateway configuration we push to a <code>Dragino LPS8</code> via SSH: <strong>Resource estimate:</strong> 1 gateway × $1 k + 2 engineer-days for TTN console setup.</th></tr>
+<tr><td>5. Design the AI Underwriting Model We don’t use a black-box neural net. We use a <strong>Gradient Boosting Machine</strong> on four inputs: historical roof age (from carrier underwriting file) leakScore (edge device)</td><td>local 30-year average rainfall (NOAA API) roof slope (LiDAR from carrier survey) The model outputs a <strong>loss probability</strong> in the range [0, 1]. We then price: <strong>Trade-off:</strong> Adding more features improves loss ratio but increases latency; with four features we hit < 200 ms inference on a t3.medium.</td><td>Below is the model training script (Python 3.10, scikit-learn 1.2). We assume you have 10 k historical roofs with binary “leak occurred in next 90 days” label. <strong>Validation:</strong> On a held-out test set, AUC-ROC = 0.89. If you drop leakScore, AUC drops to 0.61—so the IoT sensor is material.</td><td>6. Expose an Underwriting API We wrap the model in a <strong>FastAPI</strong> service that the MGA’s rating engine can call. The endpoint expects: <code>POST /quote</code> Body: <code>{"age": 12, "rainfall": 980, "slope": 30}</code></td></tr>
+<tr><td>Returns: <code>{"premium": 1250, "loss_prob": 0.074, "expires": "2024-06-01T14:30:00Z"}</code> <strong>Trade-off:</strong> Adding real-time leakScore from the edge device adds 180 ms latency; the MGA’s front-end times out at 250 ms, so we do it async and callback. Below is the minimal FastAPI app (<code>app.py</code>): <strong>Resource estimate:</strong> 2 engineers × 1 week = $12 k to stand up the API on AWS t3.medium ($36/mo).</td><td>7. Build the Bordereaux & Claims Engine Parametric claims should be <strong>STP</strong>—no adjuster touch. We do it in three steps:</td><td><strong>Trigger validation.</strong> When a leakScore ≥ 40 hits the MQTT broker, we immediately create a claim record in DynamoDB with <code>{roof_id, timestamp, score}</code>. <strong>Payout logic.</strong> If score ≥ 70, pay 50 % of limit; 85, pay 100 %. We hard-code the payout schedule in the claims Lambda to avoid model drift.</td><td><strong>Banking integration.</strong> We push a Stripe PaymentIntent to the policyholder’s email within 60 seconds of trigger validation. <strong>Trade-off:</strong> Paying 100 % on score ≥ 85 gives a better customer NPS, but the combined ratio jumps from 82 % to 93 %. We compromise at 50/100.</td></tr>
+<tr><td>Below is the claims Lambda (Python 3.9) that runs on every MQTT message: <strong>Resource estimate:</strong> 2 engineers × 1.5 weeks = $15 k for Lambda + Dynamo + Stripe plumbing. 8. Integrate with the MGA Backend Most MGAs run on Guidewire or Duck Creek. We expose a <strong>REST hook</strong> that fires when a policy is bound:</td><td><code>POST /policy_created</code> Body: <code>{"policy_id": "P-12345", "roof_id": "R-67890", "limit": 100000}</code> Action: The MGA subscribes to our MQTT topic <code>roof/R-67890</code> for the next 90 days. <strong>Trade-off:</strong> If the MGA’s API is SOAP-only, you burn an extra week writing a SOAP-to-REST shim.</td><td>Below is the minimal Node.js webhook that the MGA registers in their portal: 9. Run a Controlled Pilot We picked 200 roofs in a single ZIP code with high hail frequency. Engineering ran the fleet; actuarial ran the model; marketing ran the broker portal. Pilot results (90 days):</td><td>Was this article helpful? Comments.</td></tr>
 </table>
 
-<p>Pick one. I’ll use “commercial roof leak” for the rest of the guide because it’s the easiest to prototype in a garage.</p>
 
-<h3>2. Procure the Sensor Fleet</h3>
 
-<p>You have three sourcing routes:</p>
+
+
+
 <ol>
-<li><strong>White-label OEM</strong> (e.g., Sensirion, Bosch). Order 100 units at ~$110 each, MOQ 500, lead time 6 weeks.</li>
-<li><strong>Embedded cellular module</strong> (e.g., Twilio Super SIM + STM32). Bill of materials ≈ $95, but you need a cellular plan (~$2 per device/month).</li>
-<li><strong>Third-party API</strong> (e.g., RoofScan.io). They charge $0.07 per reading; no hardware risk, but you rely on their uptime.</li>
+
+
+
 </ol>
 
-<p>I’ve burned twice on route 3: RoofScan had a 4-hour outage during a hailstorm in Dallas and paid every claim manually. Route 2 is what I use now. Below is the BOM I hand to procurement:</p>
+
 
 <pre><code>Part                Vendor      Unit Cost  Qty  Lead
 STM32L476RG         ST          $8.20      100  2 wks
@@ -329,26 +329,26 @@ Enclosure IP67      Hammond     $4.10      100  2 wks
 --------------------------------------------------------
 Total per node: $48.10 + $2/mo cellular</code></pre>
 
-<p><strong>Resource estimate:</strong> 2 engineers × 3 weeks = $24 k to build the first 10 nodes, including PCB layout and firmware.</p>
 
-<h3>3. Build the Edge Firmware</h3>
 
-<p>We need a device that:</p>
+
+
+
 <ul>
-<li>Wakes every 15 minutes, reads temp/humidity and load.</li>
-<li>Computes a “leak score” = f(temp, humidity, delta_load).</li>
-<li>Publishes to MQTT if score > 40/100.</li>
-<li>Battery life ≥ 6 months on 2 × AA.</li>
+
+
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> The higher the sampling rate, the lower the loss ratio, but the higher the cellular bill. 15-minute polling keeps the bill at $2/mo/node.</p>
+
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Below is the minimal Arduino sketch we drop on the STM32. It uses the <code>ArduinoLoRaWAN</code> library and the <code>ClosedCube_BME280</code> driver.</p>
+                
 
 <pre><code>#include &lt;ArduinoLoRaWAN.h&gt;
 #include &lt;ClosedCube_BME280.h&gt;
@@ -382,17 +382,17 @@ void setup() {
 
 void loop() {} // never reached</code></pre>
 
-<p><strong>Validation:</strong> Run 50 nodes in a humidity chamber at 35 °C / 90 % RH for 72 hours; discard any unit that drifts > ±2 % humidity.</p>
 
-<h3>4. Stand Up the IoT Gateway Network</h3>
 
-<p>You have two choices:</p>
+
+
+
 <ol>
-<li><strong>LoRaWAN private gateway</strong> (5 km radius). Hardware cost ≈ $1 k per gateway, software libre.</li>
-<li><strong>Cellular NB-IoT</strong>. SIMs only, but modem cost drops to $20/node.</li>
+
+
 </ol>
 
-<p>I chose LoRaWAN for the prototype because it’s zero ongoing cost and we already have a TTN community network covering our office park. Below is the gateway configuration we push to a <code>Dragino LPS8</code> via SSH:</p>
+
 
 <pre><code># /etc/config/gateway
 config gateway
@@ -402,24 +402,24 @@ config gateway
     option freq 'EU868'
     option email 'ops@mga.com'</code></pre>
 
-<p><strong>Resource estimate:</strong> 1 gateway × $1 k + 2 engineer-days for TTN console setup.</p>
 
-<h3>5. Design the AI Underwriting Model</h3>
 
-<p>We don’t use a black-box neural net. We use a <strong>Gradient Boosting Machine</strong> on four inputs:</p>
+
+
+
 <ul>
-<li>historical roof age (from carrier underwriting file)</li>
-<li>leakScore (edge device)</li>
-<li>local 30-year average rainfall (NOAA API)</li>
-<li>roof slope (LiDAR from carrier survey)</li>
+
+
+
+
 </ul>
 
-<p>The model outputs a <strong>loss probability</strong> in the range [0, 1]. We then price:</p>
+
 <pre><code>Premium = (Limit) × (LossProb) × (ExpenseLoad 1.25) + (CatLoad 1.12)</code></pre>
 
-<p><strong>Trade-off:</strong> Adding more features improves loss ratio but increases latency; with four features we hit < 200 ms inference on a t3.medium.</p>
 
-<p>Below is the model training script (Python 3.10, scikit-learn 1.2). We assume you have 10 k historical roofs with binary “leak occurred in next 90 days” label.</p>
+
+
 
 <pre><code>import pandas as pd, xgboost as xgb, joblib, boto3
 from sklearn.model_selection import train_test_split
@@ -443,20 +443,20 @@ joblib.dump(model, 'leak_model.joblib')
 s3 = boto3.client('s3')
 s3.upload_file('leak_model.joblib', 'mga-models', 'leak_model.joblib')</code></pre>
 
-<p><strong>Validation:</strong> On a held-out test set, AUC-ROC = 0.89. If you drop leakScore, AUC drops to 0.61—so the IoT sensor is material.</p>
 
-<h3>6. Expose an Underwriting API</h3>
 
-<p>We wrap the model in a <strong>FastAPI</strong> service that the MGA’s rating engine can call. The endpoint expects:</p>
+
+
+
 <ul>
-<li><code>POST /quote</code></li>
-<li>Body: <code>{"age": 12, "rainfall": 980, "slope": 30}</code></li>
-<li>Returns: <code>{"premium": 1250, "loss_prob": 0.074, "expires": "2024-06-01T14:30:00Z"}</code></li>
+
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> Adding real-time leakScore from the edge device adds 180 ms latency; the MGA’s front-end times out at 250 ms, so we do it async and callback.</p>
 
-<p>Below is the minimal FastAPI app (<code>app.py</code>):</p>
+
+
 
 <pre><code>from fastapi import FastAPI
 from pydantic import BaseModel
@@ -485,21 +485,21 @@ async def quote_with_sensor(payload: QuoteIn):
     prob = model.predict_proba([[payload.age, leak_score, payload.rainfall, payload.slope]])[0][1]
     return {"premium": round(100000 * prob * 1.25 * 1.12, 2), "loss_prob": round(prob, 4)}</code></pre>
 
-<p><strong>Resource estimate:</strong> 2 engineers × 1 week = $12 k to stand up the API on AWS t3.medium ($36/mo).</p>
 
-<h3>7. Build the Bordereaux & Claims Engine</h3>
 
-<p>Parametric claims should be <strong>STP</strong>—no adjuster touch. We do it in three steps:</p>
+
+
+
 
 <ol>
-<li><strong>Trigger validation.</strong> When a leakScore ≥ 40 hits the MQTT broker, we immediately create a claim record in DynamoDB with <code>{roof_id, timestamp, score}</code>.</li>
-<li><strong>Payout logic.</strong> If score ≥ 70, pay 50 % of limit; 85, pay 100 %. We hard-code the payout schedule in the claims Lambda to avoid model drift.</li>
-<li><strong>Banking integration.</strong> We push a Stripe PaymentIntent to the policyholder’s email within 60 seconds of trigger validation.</li>
+
+
+
 </ol>
 
-<p><strong>Trade-off:</strong> Paying 100 % on score ≥ 85 gives a better customer NPS, but the combined ratio jumps from 82 % to 93 %. We compromise at 50/100.</p>
 
-<p>Below is the claims Lambda (Python 3.9) that runs on every MQTT message:</p>
+
+
 
 <pre><code>import json, boto3, stripe
 
@@ -537,20 +537,20 @@ def lambda_handler(event, context):
         )
     return {"status": "paid"}</code></pre>
 
-<p><strong>Resource estimate:</strong> 2 engineers × 1.5 weeks = $15 k for Lambda + Dynamo + Stripe plumbing.</p>
 
-<h3>8. Integrate with the MGA Backend</h3>
 
-<p>Most MGAs run on Guidewire or Duck Creek. We expose a <strong>REST hook</strong> that fires when a policy is bound:</p>
+
+
+
 <ul>
-<li><code>POST /policy_created</code></li>
-<li>Body: <code>{"policy_id": "P-12345", "roof_id": "R-67890", "limit": 100000}</code></li>
-<li>Action: The MGA subscribes to our MQTT topic <code>roof/R-67890</code> for the next 90 days.</li>
+
+
+
 </ul>
 
-<p><strong>Trade-off:</strong> If the MGA’s API is SOAP-only, you burn an extra week writing a SOAP-to-REST shim.</p>
 
-<p>Below is the minimal Node.js webhook that the MGA registers in their portal:</p>
+
+
 
 <pre><code>const express = require('express');
 const axios   = require('axios');
@@ -568,11 +568,11 @@ app.post('/policy_created', async (req, res) => {
 
 app.listen(3000);</code></pre>
 
-<h3>9. Run a Controlled Pilot</h3>
 
-<p>We picked 200 roofs in a single ZIP code with high hail frequency. Engineering ran the fleet; actuarial ran the model; marketing ran the broker portal.</p>
 
-<p>Pilot results (90 days):</p>
+
+
+
 <ul>
 </ul>
 </div>
@@ -588,7 +588,7 @@ app.listen(3000);</code></pre>
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -597,7 +597,7 @@ app.listen(3000);</code></pre>
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

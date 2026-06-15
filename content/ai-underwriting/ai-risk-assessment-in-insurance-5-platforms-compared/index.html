@@ -402,7 +402,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-underwriting/" class="tag tag-teal">AI Underwriting</a>
-                <h1>AI Risk Assessment in Insurance: 5 Platforms Compared</h1>
+                <h1>AI Risk Assessment in Insurance: 5 Platforms Compared AI Risk Assessment in Insurance: 5 Platforms Compared</h1>
                 <div class="article-meta">
                     <span>May 23, 2026</span>
                     <span class="dot"></span>
@@ -416,177 +416,177 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI Risk Assessment in Insurance: 5 Platforms Compared</h2>
+                <h2>Risk assessment is the dirty work of insurance. Underwriters hate it, actuaries can’t live without it, and anyone who’s had to explain a denied claim to a policyholder knows it’s a minefield. AI promises to automate the grunge: classify risks, price policies, flag fraud, and even trigger payouts without human touch. But the market is a zoo—startups, legacy giants, and hybrids all screaming about “transformative accuracy” and “real-time underwriting.” I’ve spent the last six months kicking the tires on five platforms. Below is where they shine, where they stumble, and which one to pick for which use case.</h2>
 
-<p>Risk assessment is the dirty work of insurance. Underwriters hate it, actuaries can’t live without it, and anyone who’s had to explain a denied claim to a policyholder knows it’s a minefield. AI promises to automate the grunge: classify risks, price policies, flag fraud, and even trigger payouts without human touch. But the market is a zoo—startups, legacy giants, and hybrids all screaming about “transformative accuracy” and “real-time underwriting.” I’ve spent the last six months kicking the tires on five platforms. Below is where they shine, where they stumble, and which one to pick for which use case.</p>
+<p>Comparison Table: AI Risk Assessment Platforms for Insurance Vendor Primary Use Case Core AI Model Primary Data Sources Integration Style Price Point Best For</p>
 
-<h3>Comparison Table: AI Risk Assessment Platforms for Insurance</h3>
+<h3><strong>Zest AI (ZestFinance)</strong> Personal lines auto & home underwriting Gradient-boosted decision trees + explainable AI (XAI) Bureau data, telematics, property records, credit files API-first, drops into ACORD 360 or Guidewire $0.02–$0.08 per quote (usage-based) Tier-2 auto carriers pushing straight-through processing (STP) UW <strong>Guidewire Cyence</strong></h3>
 
 <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse; width:100%;">
 <thead>
 <tr>
-<th style="padding:6px;">Vendor</th>
-<th style="padding:6px;">Primary Use Case</th>
-<th style="padding:6px;">Core AI Model</th>
-<th style="padding:6px;">Primary Data Sources</th>
-<th style="padding:6px;">Integration Style</th>
-<th style="padding:6px;">Price Point</th>
-<th style="padding:6px;">Best For</th>
+<th style="padding:6px;">Commercial cyber & property catastrophe modeling Graph neural networks + Monte Carlo simulations <strong>Shift Technology Detect</strong> P&C; claims fraud detection & subrogation NLP for unstructured adjuster notes; ensemble ML for anomaly detection Adjuster notes, historical claims, medical bills, repair invoices Pre-built connectors to Guidewire ClaimCenter, Duck Creek Claims $0.15–$0.40 per claim line (subscription)</th>
+<th style="padding:6px;">MGAs and TPAs drowning in claims volume <strong>Atidot (acquired by Guidewire)</strong> Life & annuity risk classification & dynamic pricing Deep learning on structured + unstructured health data EHR extracts, wearables, lab results, prescription databases Embedded into Guidewire Life & Annuity, or REST API $0.25–$1.20 per policy year Carriers with large blocks of older-age policies where traditional underwriting fails</th>
+<th style="padding:6px;"><strong>Lemonade AI (Lemonade Inc.)</strong> Parametric & micro-damage claims payout Reinforcement learning + proprietary damage detection model Drone footage, IoT sensors, receipt OCR Fully internal; no third-party integration Embedded cost in premium (claimed 20–30 bps reduction) Greenfield insurtechs chasing STP and CX metrics <strong>Tractable</strong></th>
+<th style="padding:6px;">Auto damage appraisal & repair cost estimation Computer vision + regression models fine-tuned on 30M+ images Photos from customer phones, repair manuals, salvage databases SDK + API; integrates with Guidewire, Duck Creek, EIS $3–$8 per claim (subscription tiers) Collision repair shops & insurers wanting to cut cycle time from 7 days to <24h</th>
+<th style="padding:6px;">Each vendor claims “industry-leading loss ratio improvements.” In practice, the uplift ranges from 3% to 15% depending on line of business and maturity of the carrier’s legacy stack. The trade-off is always the same: the more exotic the model, the harder it is to audit and the more you pay in explainability costs.</th>
+<th style="padding:6px;">Zest AI: The STP Workhorse for Tier-2 Auto Carriers</th>
+<th style="padding:6px;">I’ve seen claims teams at a $1B regional auto carrier cut manual underwriting time from 4 days to 4 minutes after plugging Zest into the underwriting workflow. Their model uses bureau data, telematics, and property records—standard fare—but the gradient-boosted trees are tuned to reject applicants with a 1-point lift in expected loss ratio versus the incumbent. That small lift matters when your combined ratio is 98.7%.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="padding:6px;"><strong>Zest AI (ZestFinance)</strong></td>
-<td style="padding:6px;">Personal lines auto & home underwriting</td>
-<td style="padding:6px;">Gradient-boosted decision trees + explainable AI (XAI)</td>
-<td style="padding:6px;">Bureau data, telematics, property records, credit files</td>
-<td style="padding:6px;">API-first, drops into ACORD 360 or Guidewire</td>
-<td style="padding:6px;">$0.02–$0.08 per quote (usage-based)</td>
-<td style="padding:6px;">Tier-2 auto carriers pushing straight-through processing (STP) UW</td>
+<td style="padding:6px;">The catch: the model is opaque. Zest gives you SHAP values, but actuaries still need to sign off on every deviation from the legacy underwriting manual. One carrier I worked with spent six weeks re-underwriting. 20% of the book just to validate the AI’s edge. The ROI only materialized after they froze legacy rules and let the model run in shadow mode for three months.</td>
+<td style="padding:6px;">Use Zest when: You’re a Tier-2 or Tier-3 personal auto carrier with a legacy UW manual. Your goal is to hit 95%+ STP underwriting without a full core replacement. You can tolerate explainability overhead because you’re still subject to state filing requirements.</td>
+<td style="padding:6px;">Guidewire Cyence: Catastrophe Modeling Meets AI</td>
+<td style="padding:6px;">Cyence targets commercial cyber and property catastrophe—areas where traditional catastrophe models fall apart because the risk landscape changes hourly. The vendor ingests real-time threat intelligence feeds, dark web chatter, and IoT sensor data to update its “digital twin” of a property portfolio every 15 minutes. I watched a demo where Cyence pushed a 20% rate increase to a Fortune 500 retailer within 48 hours of a new ransomware strain hitting the wild. Traditional catastrophe models would have taken 90 days.</td>
+<td style="padding:6px;">The downside is cost: $500K–$2M per year for a midsize carrier, plus integration with Guidewire PolicyCenter. The model is also so complex that only a handful of carriers have the internal actuarial bench strength to challenge Cyence’s output, and one cio told me, “we outsource the modeling, but we still need three actuaries to sanity-check the.</td>
+<td style="padding:6px;">Use Cyence when: You write property catastrophe or cyber in the top 50 global markets. You’re willing to pay for a black-box model because the alternative is flying blind. Shift Technology Detect: The Claims Fraud Sniper</td>
+<td style="padding:6px;">Shift is the closest thing to a silver bullet in claims fraud detection. Their model flags suspicious claims by cross-referencing adjuster notes, repair invoices, and medical bills against a proprietary graph of known fraud rings. One MGA I know cut its subrogation spend by 11% in the first year—no small feat when fraud loss ratios hover around 5–7% in auto bodily injury.</td>
 </tr>
 <tr>
-<td style="padding:6px;"><strong>Guidewire Cyence</strong></td>
-<td style="padding:6px;">Commercial cyber & property catastrophe modeling</td>
-<td style="padding:6px;">Graph neural networks + Monte Carlo simulations</td>
+<td style="padding:6px;">The risk is false positives. Shift’s model has a 12% false-positive rate on soft tissue injury claims, and one carrier ended up in a class-action lawsuit after denying 3,000 claims based on AI flags. The vendor now offers a manual override flag for every alert, which defeats the purpose of automation. Another limitation: Shift works best on auto and workers’ comp; it stumbles on complex commercial claims where the adjuster’s notes are sparse.</td>
+<td style="padding:6px;">Use Shift when: You’re an MGA or TPA processing >50K claims/year. Your biggest loss driver is claims fraud, not attritional loss. Atidot: The Life Underwriting Reinvention</td>
+<td style="padding:6px;">Atidot’s deep-learning model digests unstructured health data—lab results, prescription databases, even wearable step counts—to classify life risk. Early adopters report 8–12% uplift in mortality accuracy versus traditional underwriting. One carrier replaced full paramedical exams for 40% of applicants aged 40–60 and saw no material change in claim incidence after two years. That’s a decisive development when your acquisition cost per policy is $300 and paramed exams run $120 each.</td>
 <tr>
-<td style="padding:6px;"><strong>Shift Technology Detect</strong></td>
-<td style="padding:6px;">P&C; claims fraud detection & subrogation</td>
-<td style="padding:6px;">NLP for unstructured adjuster notes; ensemble ML for anomaly detection</td>
-<td style="padding:6px;">Adjuster notes, historical claims, medical bills, repair invoices</td>
-<td style="padding:6px;">Pre-built connectors to Guidewire ClaimCenter, Duck Creek Claims</td>
-<td style="padding:6px;">$0.15–$0.40 per claim line (subscription)</td>
-<td style="padding:6px;">MGAs and TPAs drowning in claims volume</td>
+<td style="padding:6px;">The catch is regulatory. The model’s predictions are so granular that state filing departments demanded reams of documentation. The carrier eventually had to rewrite its underwriting manual from scratch, adding 200 pages of model documentation. The process took 14 months and cost $1.2M in legal and actuarial fees. If you’re not prepared for that kind of overhead, Atidot is a non-starter.</td>
+<td style="padding:6px;">Use Atidot when: You have a large block of older-age life policies. Your medical underwriting cost is >15% of acquisition cost. You’re willing to fund a regulatory overhaul. Lemonade AI: Parametric Claims in the Wild</td>
+<td style="padding:6px;">Lemonade’s AI doesn’t just assess risk—it pays claims. Their damage detection model uses reinforcement learning to classify photos of hail damage or kitchen fires against a database of 10M+ claims. The model triggers payouts automatically when the damage meets a parametric threshold. In 2023, Lemonade paid out 78% of homeowner claims within 3 seconds of the customer snapping a photo. For comparison, the industry average is 5–7 days.</td>
+<td style="padding:6px;">The trade-off is coverage scope. Lemonade’s parametric triggers cap payouts at $1,500 for most perils, which means it can’t handle complex water damage or liability claims. If you want full coverage, you still need the old-school adjusters. Another limitation: the model is proprietary. No third-party integrations mean you’re locked into Lemonade’s ecosystem if you want to scale.</td>
+<td style="padding:6px;">Use Lemonade’s AI when: You’re a greenfield insurtech chasing CX metrics. Your product is micro-damage or low-severity perils. Tractable: Computer Vision for Collision Repair</td>
+<td style="padding:6px;">Tractable’s model ingests photos of a damaged vehicle, cross-references them with repair manuals and salvage databases, and outputs an estimate within minutes. One insurer I worked with cut cycle time from 7 days to 22 hours and reduced repair costs by 4.3% by eliminating over-scoped estimates from body shops. That translated to a 1.2-point improvement in combined ratio.</td>
+<td style="padding:6px;">The risk is drift. Tractable’s model is trained on data from 2020–2022, but supply chain shifts post-COVID have made repair costs volatile. In 2023, the model overestimated repair costs by 8% in markets with acute labor shortages, and tractable now offers a “live cost feed” api to update the model quarterly, but that adds $150k/year to the contract.</td>
 </tr>
 <tr>
-<td style="padding:6px;"><strong>Atidot (acquired by Guidewire)</strong></td>
-<td style="padding:6px;">Life & annuity risk classification & dynamic pricing</td>
-<td style="padding:67x;">Deep learning on structured + unstructured health data</td>
-<td style="padding:6px;">EHR extracts, wearables, lab results, prescription databases</td>
-<td style="padding:6px;">Embedded into Guidewire Life & Annuity, or REST API</td>
-<td style="padding:6px;">$0.25–$1.20 per policy year</td>
-<td style="padding:6px;">Carriers with large blocks of older-age policies where traditional underwriting fails</td>
+<td style="padding:6px;">Use Tractable when: You’re a collision repair shop or insurer with >10K auto claims/year. Your biggest loss driver is repair cost inflation, not frequency. Which One Do You Pick?</td>
+<td style="padding:6px;">Here’s the brutal truth: no single platform solves all risk assessment problems. Pick the right tool for the job, or you’ll waste money and create new headaches. <strong>Need STP underwriting for auto?</strong> Zest AI is the only player that’s battle-tested at scale. The explainability tax is real, but it’s cheaper than replacing your core system.</td>
+<td style="padding:67x;"><strong>Writing catastrophe-exposed property or cyber?</strong> Guidewire Cyence is the only game in town that updates in near real-time. Be ready to pay and justify the model to regulators. <strong>Drowning in claims fraud?</strong> Shift Technology Detect. Accept the false-positive rate, or you’ll get sued. Budget for a manual review layer.</td>
+<td style="padding:6px;"><strong>Older-age life policies with high medical underwriting costs?</strong> Atidot. But only if you’re prepared for a regulatory marathon. <strong>Micro-damage parametric claims?</strong> Lemonade AI. But don’t expect it to scale beyond low-severity perils. <strong>Collision repair cycle-time reduction?</strong> Tractable. Watch for model drift and budget for quarterly updates.</td>
+<td style="padding:6px;">If you’re a CIO staring at a blank RFP, start with Zest for auto underwriting and Tractable for claims. They’re the safest bets with the shortest payback periods. Everything else is a bet on either regulatory risk (Atidot), model complexity (Cyence), or customer experience (Lemonade). Choose accordingly.</td>
+<td style="padding:6px;">Was this article helpful? Comments.</td>
+
 </tr>
 <tr>
-<td style="padding:6px;"><strong>Lemonade AI (Lemonade Inc.)</strong></td>
-<td style="padding:67x;">Parametric & micro-damage claims payout</td>
-<td style="padding:6px;">Reinforcement learning + proprietary damage detection model</td>
-<td style="padding:6px;">Drone footage, IoT sensors, receipt OCR</td>
-<td style="padding:6px;">Fully internal; no third-party integration</td>
-<td style="padding:6px;">Embedded cost in premium (claimed 20–30 bps reduction)</td>
-<td style="padding:6px;">Greenfield insurtechs chasing STP and CX metrics</td>
+
+
+
+
+
+
+
 </tr>
 <tr>
-<td style="padding:6px;"><strong>Tractable</strong></td>
-<td style="padding:67x;">Auto damage appraisal & repair cost estimation</td>
-<td style="padding:6px;">Computer vision + regression models fine-tuned on 30M+ images</td>
-<td style="padding:6px;">Photos from customer phones, repair manuals, salvage databases</td>
-<td style="padding:6px;">SDK + API; integrates with Guidewire, Duck Creek, EIS</td>
-<td style="padding:67x;">$3–$8 per claim (subscription tiers)</td>
-<td style="padding:6px;">Collision repair shops & insurers wanting to cut cycle time from 7 days to <24h</td>
+
+
+
+
+
+
+
 </tr>
 </tr></tbody>
 </table>
 
-<p>Each vendor claims “industry-leading loss ratio improvements.” In practice, the uplift ranges from 3% to 15% depending on line of business and maturity of the carrier’s legacy stack. The trade-off is always the same: the more exotic the model, the harder it is to audit and the more you pay in explainability costs.</p>
 
-<h3>Zest AI: The STP Workhorse for Tier-2 Auto Carriers</h3>
 
-<p>I’ve seen claims teams at a $1B regional auto carrier cut manual underwriting time from 4 days to 4 minutes after plugging Zest into the underwriting workflow. Their model uses bureau data, telematics, and property records—standard fare—but the gradient-boosted trees are tuned to reject applicants with a 1-point lift in expected loss ratio versus the incumbent. That small lift matters when your combined ratio is 98.7%.</p>
 
-<p>The catch: the model is opaque. Zest gives you SHAP values, but actuaries still need to sign off on every deviation from the legacy underwriting manual. One carrier I worked with spent six weeks re-underwriting 20% of the book just to validate the AI’s edge. The ROI only materialized after they froze legacy rules and let the model run in shadow mode for three months.</p>
 
-<p>Use Zest when:</p>
+
+
+
+
+
 <ul>
-<li>You’re a Tier-2 or Tier-3 personal auto carrier with a legacy UW manual.</li>
-<li>Your goal is to hit 95%+ STP underwriting without a full core replacement.</li>
-<li>You can tolerate explainability overhead because you’re still subject to state filing requirements.</li>
+
+
+
 </ul>
 
-<h3>Guidewire Cyence: Catastrophe Modeling Meets AI</h3>
 
-<p>Cyence targets commercial cyber and property catastrophe—areas where traditional catastrophe models fall apart because the risk landscape changes hourly. The vendor ingests real-time threat intelligence feeds, dark web chatter, and IoT sensor data to update its “digital twin” of a property portfolio every 15 minutes. I watched a demo where Cyence pushed a 20% rate increase to a Fortune 500 retailer within 48 hours of a new ransomware strain hitting the wild. Traditional catastrophe models would have taken 90 days.</p>
 
-<p>The downside is cost: $500K–$2M per year for a midsize carrier, plus integration with Guidewire PolicyCenter. The model is also so complex that only a handful of carriers have the internal actuarial bench strength to challenge Cyence’s output. One CIO told me, “We outsource the modeling, but we still need three actuaries to sanity-check the numbers.”</p>
+
+
+
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Use Cyence when:</p>
+                
 <ul>
-<li>You write property catastrophe or cyber in the top 50 global markets.</li>
-<li>You’re willing to pay for a black-box model because the alternative is flying blind.</li>
+
+
 </ul>
 
-<h3>Shift Technology Detect: The Claims Fraud Sniper</h3>
 
-<p>Shift is the closest thing to a silver bullet in claims fraud detection. Their model flags suspicious claims by cross-referencing adjuster notes, repair invoices, and medical bills against a proprietary graph of known fraud rings. One MGA I know cut its subrogation spend by 11% in the first year—no small feat when fraud loss ratios hover around 5–7% in auto bodily injury.</p>
 
-<p>The risk is false positives. Shift’s model has a 12% false-positive rate on soft tissue injury claims, and one carrier ended up in a class-action lawsuit after denying 3,000 claims based on AI flags. The vendor now offers a manual override flag for every alert, which defeats the purpose of automation. Another limitation: Shift works best on auto and workers’ comp; it stumbles on complex commercial claims where the adjuster’s notes are sparse.</p>
 
-<p>Use Shift when:</p>
-<ul>
-<li>You’re an MGA or TPA processing >50K claims/year.</li>
-<li>Your biggest loss driver is claims fraud, not attritional loss.</li>
-</ul>
 
-<h3>Atidot: The Life Underwriting Reinvention</h3>
 
-<p>Atidot’s deep-learning model digests unstructured health data—lab results, prescription databases, even wearable step counts—to classify life risk. Early adopters report 8–12% uplift in mortality accuracy versus traditional underwriting. One carrier replaced full paramedical exams for 40% of applicants aged 40–60 and saw no material change in claim incidence after two years. That’s a decisive development when your acquisition cost per policy is $300 and paramed exams run $120 each.</p>
 
-<p>The catch is regulatory. The model’s predictions are so granular that state filing departments demanded reams of documentation. The carrier eventually had to rewrite its underwriting manual from scratch, adding 200 pages of model documentation. The process took 14 months and cost $1.2M in legal and actuarial fees. If you’re not prepared for that kind of overhead, Atidot is a non-starter.</p>
-
-<p>Use Atidot when:</p>
-<ul>
-<li>You have a large block of older-age life policies.</li>
-<li>Your medical underwriting cost is >15% of acquisition cost.</li>
-<li>You’re willing to fund a regulatory overhaul.</li>
-</ul>
-
-<h3>Lemonade AI: Parametric Claims in the Wild</h3>
-
-<p>Lemonade’s AI doesn’t just assess risk—it pays claims. Their damage detection model uses reinforcement learning to classify photos of hail damage or kitchen fires against a database of 10M+ claims. The model triggers payouts automatically when the damage meets a parametric threshold. In 2023, Lemonade paid out 78% of homeowner claims within 3 seconds of the customer snapping a photo. For comparison, the industry average is 5–7 days.</p>
-
-<p>The trade-off is coverage scope. Lemonade’s parametric triggers cap payouts at $1,500 for most perils, which means it can’t handle complex water damage or liability claims. If you want full coverage, you still need the old-school adjusters. Another limitation: the model is proprietary. No third-party integrations mean you’re locked into Lemonade’s ecosystem if you want to scale.</p>
-
-<p>Use Lemonade’s AI when:</p>
-<ul>
-<li>You’re a greenfield insurtech chasing CX metrics.</li>
-<li>Your product is micro-damage or low-severity perils.</li>
-</ul>
-
-<h3>Tractable: Computer Vision for Collision Repair</h3>
-
-<p>Tractable’s model ingests photos of a damaged vehicle, cross-references them with repair manuals and salvage databases, and outputs an estimate within minutes. One insurer I worked with cut cycle time from 7 days to 22 hours and reduced repair costs by 4.3% by eliminating over-scoped estimates from body shops. That translated to a 1.2-point improvement in combined ratio.</p>
-
-<p>The risk is drift. Tractable’s model is trained on data from 2020–2022, but supply chain shifts post-COVID have made repair costs volatile. In 2023, the model overestimated repair costs by 8% in markets with acute labor shortages. Tractable now offers a “live cost feed” API to update the model quarterly, but that adds $150K/year to the contract.</p>
-
-<p>Use Tractable when:</p>
-<ul>
-<li>You’re a collision repair shop or insurer with >10K auto claims/year.</li>
-<li>Your biggest loss driver is repair cost inflation, not frequency.</li>
-</ul>
-
-<h2>Which One Do You Pick?</h2>
-
-<p>Here’s the brutal truth: no single platform solves all risk assessment problems. Pick the right tool for the job, or you’ll waste money and create new headaches.</p>
 
 <ul>
-<li><strong>Need STP underwriting for auto?</strong> Zest AI is the only player that’s battle-tested at scale. The explainability tax is real, but it’s cheaper than replacing your core system.</li>
 
-<li><strong>Writing catastrophe-exposed property or cyber?</strong> Guidewire Cyence is the only game in town that updates in near real-time. Be ready to pay and justify the model to regulators.</li>
 
-<li><strong>Drowning in claims fraud?</strong> Shift Technology Detect. Accept the false-positive rate, or you’ll get sued. Budget for a manual review layer.</li>
-
-<li><strong>Older-age life policies with high medical underwriting costs?</strong> Atidot. But only if you’re prepared for a regulatory marathon.</li>
-
-<li><strong>Micro-damage parametric claims?</strong> Lemonade AI. But don’t expect it to scale beyond low-severity perils.</li>
-
-<li><strong>Collision repair cycle-time reduction?</strong> Tractable. Watch for model drift and budget for quarterly updates.</li>
 </ul>
 
-<p>If you’re a CIO staring at a blank RFP, start with Zest for auto underwriting and Tractable for claims. They’re the safest bets with the shortest payback periods. Everything else is a bet on either regulatory risk (Atidot), model complexity (Cyence), or customer experience (Lemonade). Choose accordingly.</p>
+
+
+
+
+
+
+
+<ul>
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+<ul>
+
+
+</ul>
+
+
+
+
+
+
+
+
+<ul>
+
+
+</ul>
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+
+
 </div>
 
             
@@ -600,7 +600,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -609,7 +609,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

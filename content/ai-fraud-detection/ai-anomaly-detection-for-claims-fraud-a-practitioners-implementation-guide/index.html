@@ -179,7 +179,7 @@
 
             <header class="article-header">
                 <a href="/ai-fraud-detection/" class="tag tag-amber">AI Fraud Detection</a>
-                <h1>AI Anomaly Detection for Claims Fraud: A Practitioner’s Implementation Guide</h1>
+                <h1>AI Anomaly Detection for Claims Fraud: A Practitioner’s Implementation Guide AI Anomaly Detection for Claims Fraud: A Practitioner’s Implementation Guide</h1>
                 <div class="article-meta">
                     <span>May 31, 2026</span>
                     <span class="dot"></span>
@@ -191,29 +191,29 @@
 
             <div class="article-content">
                 
-                <h2>AI Anomaly Detection for Claims Fraud: A Practitioner’s Implementation Guide</h2>
-
-<p>I’ve seen claims teams burn 15–20% of their bandwidth chasing false positives from rule-based fraud engines. That’s not a knock on rules—it’s the ceiling of static logic. Anomaly detection flips the model: it finds what doesn’t belong instead of what does. In production systems I’ve built, shifting from rules to unsupervised anomaly scoring cut false positives by 42% while preserving 87% of confirmed fraud cases. That’s the tangible delta you can hit with today’s tooling.</p>
+                <h2>I’ve seen claims teams burn 15–20% of their bandwidth chasing false positives from rule-based fraud engines. That’s not a knock on rules—it’s the ceiling of static logic. Anomaly detection flips the model: it finds what doesn’t belong instead of what does. In production systems I’ve built, shifting from rules to unsupervised anomaly scoring cut false positives by 42% while preserving 87% of confirmed fraud cases. That’s the tangible delta you can hit with today’s tooling.</h2>
 
 <p>This guide walks you from raw data to a deployable anomaly pipeline. We’ll use Python-first stacks (PyTorch for embeddings, scikit-learn for classic models, DuckDB for analytics), but the patterns map to Spark/Delta or Databricks if you’re enterprise-scale. I’ll call out the trade-offs at each layer so you don’t over-engineer.</p>
 
+<p>1. Data Ingestion: Getting Clean Bordereaux Fraud lives in the edges of your bordereaux—duplicate VINs, same adjuster on 20 claims in a week, claim amounts just under your auto-approve threshold. The first step is collecting those edges at scale.</p>
+
 <hr>
 
-<h3>1. Data Ingestion: Getting Clean Bordereaux</h3>
+<h3>Pipeline Skeleton <strong>Source</strong>: Claims admin feeds (CSV, JSON, or EDI 837). TPAs and MGAs often land flat files nightly.</h3>
 
-<p>Fraud lives in the edges of your bordereaux—duplicate VINs, same adjuster on 20 claims in a week, claim amounts just under your auto-approve threshold. The first step is collecting those edges at scale.</p>
+<p><strong>Volume</strong>: Assume 50k claims/day for a midsize P&C carrier. <strong>Latency</strong>: Near-real-time (SLA <30 min) is table stakes; batch is a band-aid.</p>
 
-<h4>Pipeline Skeleton</h4>
+<h4>Code: Minimal Ingest with DuckDB DuckDB’s zero-config columnar engine is perfect for local dev and small clusters. A 50k-row CSV loads in ~1.2 s on a laptop.</h4>
 
 <ul>
-<li><strong>Source</strong>: Claims admin feeds (CSV, JSON, or EDI 837). TPAs and MGAs often land flat files nightly.</li>
-<li><strong>Volume</strong>: Assume 50k claims/day for a midsize P&C carrier.</li>
-<li><strong>Latency</strong>: Near-real-time (SLA <30 min) is table stakes; batch is a band-aid.</li>
+<li><strong>Trade-off</strong>: DuckDB isn’t a durable warehouse. For prod, push to Delta Lake (via <code>COPY INTO</code> in Databricks) or Iceberg. You’ll pay ~0.15$/GB/month for Delta+S3 but gain ACID and time travel. Schema Sanity Checks</li>
+<li><code>CLAIM_AMOUNT > 0</code> catches negative fraud. <code>LOSS_DATE <= REPORTED_DATE</code> catches backdated claims.</li>
+<li><code>adjuster_id IS NULL</code> flags unassigned claims—often a fraud red flag. 2. Feature Engineering: Turning Bordereaux into Signals</li>
 </ul>
 
-<h4>Code: Minimal Ingest with DuckDB</h4>
+<h4>Anomaly detection is only as good as the signals you feed it. You’re not modeling fraud directly; you’re modeling “normal claim behavior” so that anything far from normal pops. Signal Categories</h4>
 
-<p>DuckDB’s zero-config columnar engine is perfect for local dev and small clusters. A 50k-row CSV loads in ~1.2 s on a laptop.</p>
+<p>Category Signal</p>
 
 <pre><code>-- ingest.sql
 CREATE OR REPLACE TABLE raw_claims AS
@@ -233,43 +233,43 @@ SELECT
 FROM read_csv_auto('/mnt/claims/2024-05-*.csv', ignore_errors=true);
 </code></pre>
 
-<p><strong>Trade-off</strong>: DuckDB isn’t a durable warehouse. For prod, push to Delta Lake (via <code>COPY INTO</code> in Databricks) or Iceberg. You’ll pay ~0.15$/GB/month for Delta+S3 but gain ACID and time travel.</p>
+<p>Weight Source</p>
 
-<h4>Schema Sanity Checks</h4>
+<h4>Temporal Days to Report (loss_date → reported_date)</h4>
 <ul>
-<li><code>CLAIM_AMOUNT > 0</code> catches negative fraud.</li>
-<li><code>LOSS_DATE <= REPORTED_DATE</code> catches backdated claims.</li>
-<li><code>adjuster_id IS NULL</code> flags unassigned claims—often a fraud red flag.</li>
+<li>0.15 Raw</li>
+<li>Temporal Weekend Loss Flag</li>
+<li>0.10 Derived</li>
 </ul>
 
 <hr>
 
-<h3>2. Feature Engineering: Turning Bordereaux into Signals</h3>
+<h3>Geospatial Location Anomaly Score (Isolation Forest on geohash)</h3>
 
-<p>Anomaly detection is only as good as the signals you feed it. You’re not modeling fraud directly; you’re modeling “normal claim behavior” so that anything far from normal pops.</p>
+<p>0.18 Embedding + IF</p>
 
-<h4>Signal Categories</h4>
+<h4>Entity Adjuster Claim Velocity (claims in 7 days)</h4>
 
 <table>
 <thead>
-<tr><th>Category</th><th>Signal</th><th>Weight</th><th>Source</th></tr>
+<tr><th>0.20 Rolling window</th><th>Entity Repair Shop Velocity (claims in 30 days)</th><th>0.12 Rolling window</th><th>Financial Claim Amount Z-Score (per policy class)</th></tr>
 </thead>
 <tbody>
-<tr><td>Temporal</td><td>Days to Report (loss_date → reported_date)</td><td>0.15</td><td>Raw</td></tr>
-<tr><td>Temporal</td><td>Weekend Loss Flag</td><td>0.10</td><td>Derived</td></tr>
-<tr><td>Geospatial</td><td>Location Anomaly Score (Isolation Forest on geohash)</td><td>0.18</td><td>Embedding + IF</td></tr>
-<tr><td>Entity</td><td>Adjuster Claim Velocity (claims in 7 days)</td><td>0.20</td><td>Rolling window</td></tr>
-<tr><td>Entity</td><td>Repair Shop Velocity (claims in 30 days)</td><td>0.12</td><td>Rolling window</td></tr>
-<tr><td>Financial</td><td>Claim Amount Z-Score (per policy class)</td><td>0.15</td><td>Aggregation</td></tr>
-<tr><td>Financial</td><td>Deductible Ratio (deductible/claim_amount)</td><td>0.10</td><td>Raw</td></tr>
+<tr><td>0.15 Aggregation</td><td>Financial Deductible Ratio (deductible/claim_amount)</td><td>0.10 Raw</td><td><strong>Rule of thumb</strong>: Keep the feature space under 50 dimensions. Beyond that, embeddings collapse signal-to-noise. Rolling Aggregations</td></tr>
+<tr><td>Velocity features need rolling windows. A 7-day adjuster window can be computed in DuckDB with a window function: <strong>Limitation</strong>: Rolling windows become stale if you batch daily. For true streaming, use Flink or Spark Structured Streaming with watermarks.</td><td>Embeddings for Categorical Drift The adjuster_id column is high-cardinality (5k+ unique values). One-hot encoding explodes dimensions. Instead, train a shallow embedding in PyTorch:</td><td>Use the embedding as a feature column in your anomaly pipeline. The embeddings will cluster similar adjusters, surfacing “outlier adjusters” automatically. 3. Model Selection: Unsupervised vs Hybrid</td><td>I’ve seen teams default to Isolation Forest because it’s simple. That’s a mistake when fraud patterns drift monthly. The best production pipelines I’ve shipped use a two-stage hybrid: <strong>Embedding Stage</strong>: Auto-encode claims into 16-dim vectors using a variational autoencoder (VAE).</td></tr>
+<tr><td><strong>Anomaly Stage</strong>: Score the embeddings with a Mahalanobis distance layer that adapts to policy class drift. Why this combo?</td><td>VAEs compress sparse bordereaux into dense vectors that preserve semantic similarity (e.g., two “rear-end collision” claims cluster together). Mahalanobis distance normalizes for policy class variance (a $5k claim is an outlier for a $1k deductible policy but normal for a $500 deductible).</td><td>VAE Implementation (PyTorch) Assume your engineered table (claim_features) has 32 columns: 16 numerical, 16 categorical embeddings.</td><td><strong>Trade-off</strong>: VAEs are slow to train (hours on CPU, minutes on GPU). Freeze the encoder weights after training; only the Mahalanobis layer retrains weekly to adapt to new policy classes. Mahalanobis Scoring Layer</td></tr>
+<tr><td>After encoding claims into 16-dim vectors, compute per-policy-class covariance matrices. Score each claim vector with: <strong>Limitation</strong>: Covariance matrices invert poorly when feature dimensions >50 or sample size <1k. Cap class groups to >2k claims.</td><td>4. Threshold Tuning: From Scores to Alerts A detection system without a threshold is a noise machine. You need to map anomaly scores to a binary alert with a clear business impact.</td><td>Quantile-Based Thresholding Use the 99th percentile of historical scores per policy class as the initial threshold. Example from a real carrier:</td><td>Policy class “Auto Liability” 99th percentile score = 3.8 Policy class “Personal Property” 99th percentile score = 2.1</td></tr>
+<tr><td>Apply a dynamic multiplier based on recent loss ratio: <strong>Trade-off</strong>: Quantile thresholds drift with seasonality (Q4 auto claims spike). Retrain thresholds monthly or after major events (hurricane season).</td><td>Business Rules Layer After scoring, apply hard filters to reduce false positives:</td><td><code>IF anomaly_score > threshold AND claim_amount > 10k THEN alert</code> <code>IF anomaly_score > threshold AND adjuster_velocity_7d > 5 THEN alert</code></td><td><code>ELSE drop</code> <strong>Limitation</strong>: Hard rules harden the system. If a fraud ring learns the threshold, they’ll game it. Rotate rules monthly.</td></tr>
+<tr><td>5. Deployment Patterns: From Lab to Production You can’t run a VAE in a stored procedure. Here’s how to package the model so claims adjusters actually see it.</td><td>Option A: Real-Time API (Fastest to Value) <strong>Tech</strong>: FastAPI + ONNX runtime</td><td><strong>Latency</strong>: <100 ms per claim <strong>Cost</td><td><strong>Scale</strong>: 50k claims/day = 0.58 claims/sec → easily handled by two endpoints Convert the VAE to ONNX:</td></tr>
+<tr><td>Deploy with FastAPI: <strong>Trade-off</strong>: ONNX runtime adds ~5 ms latency. If you need <10 ms, use PyTorch C++ via LibTorch and embed the model in the adjuster portal.</td><td>Option B: Batch Scoring (Lower Cost, Higher Latency) <strong>Tech</strong>: Spark + Pandas UDF</td><td><strong>Latency</strong>: 15 minutes for 50k claims <strong>Cost</td><td><strong>Use Case Spark UDF:</td></tr>
 </tbody>
 </table>
 
-<p><strong>Rule of thumb</strong>: Keep the feature space under 50 dimensions. Beyond that, embeddings collapse signal-to-noise.</p>
+<p><strong>Limitation</strong>: Batch scoring stales thresholds. If fraud patterns shift mid-week, batch won’t catch it until next run. 6. Feedback Loop: Closing the Loop Without Poisoning</p>
 
-<h4>Rolling Aggregations</h4>
+<h4>A fraud model decays the moment it’s deployed. The key is collecting ground truth without contaminating the training set. Truth Sources</h4>
 
-<p>Velocity features need rolling windows. A 7-day adjuster window can be computed in DuckDB with a window function:</p>
+<p><strong>SIU Referrals</strong>: SIU teams flag confirmed fraud cases. These are the gold standard. <strong>Closed-Without-Payment</strong>: Claims closed $0 often indicate fraud (but include denials for legit reasons).</p>
 
 <pre><code>-- rolling_velocity.sql
 CREATE TABLE adjuster_velocity_7d AS
@@ -285,11 +285,11 @@ SELECT
 FROM raw_claims;
 </code></pre>
 
-<p><strong>Limitation</strong>: Rolling windows become stale if you batch daily. For true streaming, use Flink or Spark Structured Streaming with watermarks.</p>
+<p><strong>Adjuster Overrides Safe Labeling Pipeline</p>
 
-<h4>Embeddings for Categorical Drift</h4>
+<h4>Use a two-tier system: <strong>Tier 1: Automated</strong>:</h4>
 
-<p>The adjuster_id column is high-cardinality (5k+ unique values). One-hot encoding explodes dimensions. Instead, train a shallow embedding in PyTorch:</p>
+<p>   <ul></p>
 
 <pre><code>import torch
 import torch.nn as nn
@@ -307,7 +307,7 @@ encoder = AdjusterEncoder(n_ids=5120, dim=8)
 torch.save(encoder.state_dict(), "adjuster_encoder.pt")
 </code></pre>
 
-<p>Use the embedding as a feature column in your anomaly pipeline. The embeddings will cluster similar adjusters, surfacing “outlier adjusters” automatically.</p>
+<p>   <li>If a claim is referred to SIU and later confirmed fraudulent, label it retroactively.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -316,24 +316,24 @@ torch.save(encoder.state_dict(), "adjuster_encoder.pt")
                 </div>
 <hr>
 
-<h3>3. Model Selection: Unsupervised vs Hybrid</h3>
+<h3>Only label claims older than 90 days to avoid label leakage. <strong>Tier 2: Human-in-the-Loop</strong>:</h3>
 
-<p>I’ve seen teams default to Isolation Forest because it’s simple. That’s a mistake when fraud patterns drift monthly. The best production pipelines I’ve shipped use a two-stage hybrid:</p>
+<p>   <ul></p>
 
 <ol>
-<li><strong>Embedding Stage</strong>: Auto-encode claims into 16-dim vectors using a variational autoencoder (VAE).</li>
-<li><strong>Anomaly Stage</strong>: Score the embeddings with a Mahalanobis distance layer that adapts to policy class drift.</li>
+<li>   <li>Push top 5% anomaly-scored claims to a weekly triage queue.</li>
+<li>Adjusters label “fraud”, “suspicious”, or “legit”.</li>
 </ol>
 
-<p>Why this combo?</p>
+
 <ul>
-<li>VAEs compress sparse bordereaux into dense vectors that preserve semantic similarity (e.g., two “rear-end collision” claims cluster together).</li>
-<li>Mahalanobis distance normalizes for policy class variance (a $5k claim is an outlier for a $1k deductible policy but normal for a $500 deductible).</li>
+
+
 </ul>
 
-<h4>VAE Implementation (PyTorch)</h4>
 
-<p>Assume your engineered table (claim_features) has 32 columns: 16 numerical, 16 categorical embeddings.</p>
+
+
 
 <pre><code>import torch
 import torch.nn as nn
@@ -382,11 +382,11 @@ for epoch in range(50):
         loss.backward(); optimizer.step()
 </code></pre>
 
-<p><strong>Trade-off</strong>: VAEs are slow to train (hours on CPU, minutes on GPU). Freeze the encoder weights after training; only the Mahalanobis layer retrains weekly to adapt to new policy classes.</p>
 
-<h4>Mahalanobis Scoring Layer</h4>
 
-<p>After encoding claims into 16-dim vectors, compute per-policy-class covariance matrices. Score each claim vector with:</p>
+
+
+
 
 <pre><code>from scipy.spatial.distance import mahalanobis
 import numpy as np
@@ -405,24 +405,24 @@ class_cov = np.load("policy_class_covariance.npy")  # shape (16,16)
 anomaly_score = score_claim(claim_vec, class_cov)
 </code></pre>
 
-<p><strong>Limitation</strong>: Covariance matrices invert poorly when feature dimensions >50 or sample size <1k. Cap class groups to >2k claims.</p>
+
 
 <hr>
 
-<h3>4. Threshold Tuning: From Scores to Alerts</h3>
 
-<p>A detection system without a threshold is a noise machine. You need to map anomaly scores to a binary alert with a clear business impact.</p>
 
-<h4>Quantile-Based Thresholding</h4>
 
-<p>Use the 99th percentile of historical scores per policy class as the initial threshold. Example from a real carrier:</p>
+
+
+
+
 
 <ul>
-<li>Policy class “Auto Liability” 99th percentile score = 3.8</li>
-<li>Policy class “Personal Property” 99th percentile score = 2.1</li>
+
+
 </ul>
 
-<p>Apply a dynamic multiplier based on recent loss ratio:</p>
+
 
 <pre><code># Pseudocode
 if current_loss_ratio > 1.05:
@@ -431,36 +431,36 @@ else:
     threshold = 99th_percentile * 1.0   # baseline
 </code></pre>
 
-<p><strong>Trade-off</strong>: Quantile thresholds drift with seasonality (Q4 auto claims spike). Retrain thresholds monthly or after major events (hurricane season).</p>
 
-<h4>Business Rules Layer</h4>
 
-<p>After scoring, apply hard filters to reduce false positives:</p>
+
+
+
 
 <ul>
-<li><code>IF anomaly_score > threshold AND claim_amount > 10k THEN alert</code></li>
-<li><code>IF anomaly_score > threshold AND adjuster_velocity_7d > 5 THEN alert</code></li>
-<li><code>ELSE drop</code></li>
+
+
+
 </ul>
 
-<p><strong>Limitation</strong>: Hard rules harden the system. If a fraud ring learns the threshold, they’ll game it. Rotate rules monthly.</p>
+
 
 <hr>
 
-<h3>5. Deployment Patterns: From Lab to Production</h3>
 
-<p>You can’t run a VAE in a stored procedure. Here’s how to package the model so claims adjusters actually see it.</p>
 
-<h4>Option A: Real-Time API (Fastest to Value)</h4>
+
+
+
 
 <ul>
-<li><strong>Tech</strong>: FastAPI + ONNX runtime</li>
-<li><strong>Latency</strong>: <100 ms per claim</li>
-<li><strong>Cost</li>:</strong> ~$120/month for 2 vCPUs + GPU on AWS SageMaker Endpoints</li>
-<li><strong>Scale</strong>: 50k claims/day = 0.58 claims/sec → easily handled by two endpoints</li>
+
+
+:</strong> ~$120/month for 2 vCPUs + GPU on AWS SageMaker Endpoints</li>
+
 </ul>
 
-<p>Convert the VAE to ONNX:</p>
+
 
 <pre><code># Export VAE to ONNX
 dummy_input = torch.randn(1, 32)
@@ -474,7 +474,7 @@ torch.onnx.export(
 )
 </code></pre>
 
-<p>Deploy with FastAPI:</p>
+
 
 <pre><code>from fastapi import FastAPI
 import onnxruntime as ort
@@ -491,18 +491,18 @@ def score_claim(features: list[float]):
     return {"anomaly_score": float(score)}
 </code></pre>
 
-<p><strong>Trade-off</strong>: ONNX runtime adds ~5 ms latency. If you need <10 ms, use PyTorch C++ via LibTorch and embed the model in the adjuster portal.</p>
 
-<h4>Option B: Batch Scoring (Lower Cost, Higher Latency)</h4>
+
+
 
 <ul>
-<li><strong>Tech</strong>: Spark + Pandas UDF</li>
-<li><strong>Latency</strong>: 15 minutes for 50k claims</li>
-<li><strong>Cost</li>:</strong> ~$40/month for Glue/EMR Spot clusters</li>
-<li><strong>Use Case</li>:</strong> If you don’t have real-time adjuster portals, batch scoring feeds a weekly fraud report.</li>
+
+
+:</strong> ~$40/month for Glue/EMR Spot clusters</li>
+:</strong> If you don’t have real-time adjuster portals, batch scoring feeds a weekly fraud report.</li>
 </ul>
 
-<p>Spark UDF:</p>
+
 
 <pre><code>from pyspark.sql.functions import pandas_udf, PandasUDFType
 import pandas as pd
@@ -520,37 +520,33 @@ def vae_score_udf(features_iter):
             yield pd.Series([score])
 </code></pre>
 
-<p><strong>Limitation</strong>: Batch scoring stales thresholds. If fraud patterns shift mid-week, batch won’t catch it until next run.</p>
+
 
 <hr>
 
-<h3>6. Feedback Loop: Closing the Loop Without Poisoning</h3>
 
-<p>A fraud model decays the moment it’s deployed. The key is collecting ground truth without contaminating the training set.</p>
 
-<h4>Truth Sources</h4>
+
+
+
 
 <ul>
-<li><strong>SIU Referrals</strong>: SIU teams flag confirmed fraud cases. These are the gold standard.</li>
-<li><strong>Closed-Without-Payment</strong>: Claims closed $0 often indicate fraud (but include denials for legit reasons).</li>
-<li><strong>Adjuster Overrides</li>:</strong> Adjusters manually flag claims as suspicious. Treat as noisy labels.</li>
+
+
+:</strong> Adjusters manually flag claims as suspicious. Treat as noisy labels.</li>
 </ul>
 
-<h4>Safe Labeling Pipeline</h4>
 
-<p>Use a two-tier system:</p>
+
+
 
 <ol>
-<li><strong>Tier 1: Automated</strong>:
-   <ul>
-   <li>If a claim is referred to SIU and later confirmed fraudulent, label it retroactively.</li>
-   <li>Only label claims older than 90 days to avoid label leakage.</li>
+
+   
    </ul>
 </li>
-<li><strong>Tier 2: Human-in-the-Loop</strong>:
-   <ul>
-   <li>Push top 5% anomaly-scored claims to a weekly triage queue.</li>
-   <li>Adjusters label “fraud”, “suspicious”, or “legit”.</li>
+
+   
    <li>Only use Tier 2 labels for model
             </div>
 

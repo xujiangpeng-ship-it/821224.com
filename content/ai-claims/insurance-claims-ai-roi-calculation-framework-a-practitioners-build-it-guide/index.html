@@ -240,7 +240,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Insurance Claims AI ROI Calculation Framework: A Practitioner’s Build-It Guide</h1>
+                <h1>Insurance Claims AI ROI Calculation Framework: A Practitioner’s Build-It Guide Insurance Claims AI ROI Calculation Framework: A Practitioner’s Build-It Guide</h1>
                 <div class="article-meta">
                     <span>June 14, 2026</span>
                     <span class="dot"></span>
@@ -254,121 +254,121 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Insurance Claims AI ROI Calculation Framework: A Practitioner’s Build-It Guide</h2>
+                <h2>In 2023, Lemonade’s AI-powered FNOL bot processed 36% of homeowners claims without human touch—yet the company’s loss ratio rose to 76.1%, up from 71.9% in 2022. <a href="https://investors.lemonade.com/news-releases/news-release-details/lemonade-reports-fourth-quarter-and-full-year-2023-results-0" target="_blank" rel="noopener noreferrer">[Lemonade Q4 2023 Earnings Release]</a> That delta didn’t come from fraud; it came from AI-driven payout acceleration on legitimate claims. If you’re a CFO or Head of FP&A greenlighting a claims automation initiative, you need a framework that answers one question before the board does: <em>Will this AI actually raise the combined ratio or lower it?</em></h2>
 
-<p>In 2023, Lemonade’s AI-powered FNOL bot processed 36% of homeowners claims without human touch—yet the company’s loss ratio rose to 76.1%, up from 71.9% in 2022. <a href="https://investors.lemonade.com/news-releases/news-release-details/lemonade-reports-fourth-quarter-and-full-year-2023-results-0" target="_blank" rel="noopener noreferrer">[Lemonade Q4 2023 Earnings Release]</a> That delta didn’t come from fraud; it came from AI-driven payout acceleration on legitimate claims. If you’re a CFO or Head of FP&A greenlighting a claims automation initiative, you need a framework that answers one question before the board does: <em>Will this AI actually raise the combined ratio or lower it?</em></p>
+<p>I’ve reviewed two dozen AI claims pilots in 2024, and the ones that survived CFO scrutiny shared a repeatable ROI model. It’s not a black box: it’s a nine-step framework. that ties model performance to underwriting and reserving mechanics. Below is the exact playbook I use when vetting or building an AI claims ROI model, and i’ll walk through each step with code snippets, resource estimates, and the trade-offs the board never hears about.</p>
 
-<p>I’ve reviewed two dozen AI claims pilots in 2024, and the ones that survived CFO scrutiny shared a repeatable ROI model. It’s not a black box: it’s a nine-step framework that ties model performance to underwriting and reserving mechanics. Below is the exact playbook I use when vetting or building an AI claims ROI model. I’ll walk through each step with code snippets, resource estimates, and the trade-offs the board never hears about.</p>
+<p>1. Define the ROI Boundary: What Counts as “Claim”?</p>
 
 ---
 
-<h3>1. Define the ROI Boundary: What Counts as “Claim”?</h3>
+<h3>Most pilots fail because the ROI boundary is arbitrary. A vendor’s slide deck might claim “30% cycle-time reduction,” but if the model only handles 5% of your claim volume, the net effect on loss ratio is a rounding error. Start with the FNOL volume that actually hits your adjuster queue.</h3>
 
-<p>Most pilots fail because the ROI boundary is arbitrary. A vendor’s slide deck might claim “30% cycle-time reduction,” but if the model only handles 5% of your claim volume, the net effect on loss ratio is a rounding error. Start with the FNOL volume that actually hits your adjuster queue.</p>
+<p>For a mid-tier P&C carrier, first-notice-of-loss (FNOL) funnel typically breaks down like this: <strong>Automotive</strong>: Bodily injury (BI) vs. property damage (PD) split. BI claims require medical records and often bodily injury adjusters—AI struggles here. PD claims (glass, hail, fender benders) are the sweet spot.</p>
 
-<p>For a mid-tier P&C carrier, first-notice-of-loss (FNOL) funnel typically breaks down like this:</p>
+<p><strong>Property</strong>: Catastrophe vs. non-cat. Parametric triggers work for wind/hail, but adjusters still walk every roof after a CAT 3+. AI ROI for CAT claims is usually negative. <strong>Liability</strong>: Slip-and-fall, dog bites. These claims have high fraud risk and low average severity; AI pre-screening rarely pays off.</p>
 
 <ul>
-<li><strong>Automotive</strong>: Bodily injury (BI) vs. property damage (PD) split. BI claims require medical records and often bodily injury adjusters—AI struggles here. PD claims (glass, hail, fender benders) are the sweet spot.</li>
-<li><strong>Property</strong>: Catastrophe vs. non-cat. Parametric triggers work for wind/hail, but adjusters still walk every roof after a CAT 3+. AI ROI for CAT claims is usually negative.</li>
-<li><strong>Liability</strong>: Slip-and-fall, dog bites. These claims have high fraud risk and low average severity; AI pre-screening rarely pays off.</li>
+<li>Actionable rule: Exclude BI, CAT, and liability from your AI ROI model unless you have a proven fraud detection model trained on your book. Only include PD auto and small commercial property claims. 2. Build the Baseline: Pre-AI Claims Economics</li>
+<li>You need two baselines: <strong>claims payout velocity</strong> and <strong>adjuster cost per claim</strong>.</li>
+<li>Model 1: Payout velocity. Pull three years of paid claims data and calculate the time-to-pay distribution by line of business. This isn’t just an average—you need the 50th, 75th, and 95th percentiles. Why? Because AI vendors often quote cycle-time reduction on the mean, masking the tail risk of delayed payouts that trigger regulatory complaints.</li>
 </ul>
-
-<p>Actionable rule: Exclude BI, CAT, and liability from your AI ROI model unless you have a proven fraud detection model trained on your book. Only include PD auto and small commercial property claims.</p>
-
----
-
-<h3>2. Build the Baseline: Pre-AI Claims Economics</h3>
-
-<p>You need two baselines: <strong>claims payout velocity</strong> and <strong>adjuster cost per claim</strong>.</p>
-
-<p>Model 1: Payout velocity. Pull three years of paid claims data and calculate the time-to-pay distribution by line of business. This isn’t just an average—you need the 50th, 75th, and 95th percentiles. Why? Because AI vendors often quote cycle-time reduction on the mean, masking the tail risk of delayed payouts that trigger regulatory complaints.</p>
 
 <p>Model 2: Adjuster cost per claim. For each closed claim, divide fully-loaded adjuster hours by total claims count. Include: salary, benefits, desk time, travel, and supervision overhead. A 2023 Conning & Co. analysis of 12 regional carriers found the average auto adjuster cost was $187 per claim, but small commercial property adjusters averaged $243 due to site visits.<a href="https://www.conning.com/insight/2023-property-casualty-insurance-market-outlook/" target="_blank" rel="noopener noreferrer">[Conning & Co., Property-Casualty Insurance Market Outlook 2023]</a></p>
 
-<p>Resource estimate for Step 2:</p>
+---
+
+<h3>Resource estimate for Step 2: 1–2 actuaries, 2 weeks, SQL + Python pandas Data sources: Core policy admin system (PAS), claims management system (CMS), HR payroll extract 3. Map AI Use Cases to Claims Stages</h3>
+
+<p>Not all AI use cases are equal. Below is the use-case matrix I apply before any model training. I score each use case 1–5 on two axes: <strong>technical feasibility</strong> and <strong>ROI velocity</strong> (how fast the benefit hits the loss ratio). Anything scoring <3 on either axis gets deferred.</p>
+
+<p>Use Case Technical Feasibility ROI Velocity (months) Data Prerequisite Adjuster Pushback Risk Auto PD damage severity estimation (AI triage) 4 3–6</p>
+
+<p>10K+ labeled images + repair cost history Low (reduces desk reviews) Auto glass claim first notice auto-accept 5 1–3 Regional repair network pricing Medium (vendors sell direct to policyholders) Property hail claim roof damage pre-screening</p>
+
+<p>3 9–12 Drone imagery + historical roof age High (adjuster distrust of AI roof diagnostics) Bodily injury fraud indicator flagging 2 12+ Medical billing and social media graphs</p>
 <ul>
-<li>1–2 actuaries, 2 weeks, SQL + Python pandas</li>
-<li>Data sources: Core policy admin system (PAS), claims management system (CMS), HR payroll extract</li>
+<li>Very High (BI adjusters resist black-box flags) Subrogation opportunity detection 4 6–9 Police report NLP + insurer subrogation history Low (adjuster bonus tied to recoveries)</li>
+<li>Trade-off: The highest ROI velocity use cases (auto glass auto-accept) often cannibalize broker or TPA revenue streams. I’ve seen two pilots killed because the MGA partner’s commission model wasn’t adjusted for AI auto-accepts. 4. Build the ROI Engine: Five Inputs</li>
 </ul>
 
 ---
 
-<h3>3. Map AI Use Cases to Claims Stages</h3>
+<h3>I model ROI as a five-variable equation. Skip any variable and the model becomes noise. <strong>Adoption rate</strong> (α): Percentage of eligible claims routed to AI. Upper bound is the technical feasibility score from Table 1.</h3>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Not all AI use cases are equal. Below is the use-case matrix I apply before any model training. I score each use case 1–5 on two axes: <strong>technical feasibility</strong> and <strong>ROI velocity</strong> (how fast the benefit hits the loss ratio). Anything scoring <3 on either axis gets deferred.</p>
+                <p><strong>Cycle-time reduction</strong> (ΔT): Days saved per claim. Must be derived from a controlled A/B test, not vendor benchmarks. <strong>Payout acceleration cost</strong> (C_acc): The interest cost of paying claims faster. Use your investment portfolio’s weighted average cost of capital (WACC). For most carriers, this is 4–5% annually.</p>
 
 <table>
 <thead>
 <tr>
-<th>Use Case</th>
-<th>Technical Feasibility</th>
-<th>ROI Velocity (months)</th>
-<th>Data Prerequisite</th>
-<th>Adjuster Pushback Risk</th>
+<th><strong>Adjuster cost saved</strong> (C_adj): Fully loaded adjuster hours avoided. Include desk time, not just site visits. <strong>Model uplift</strong> (ΔLR): Change in loss ratio due to AI decisions (auto-accept, fraud flags, subrogation). This is the hardest variable to isolate.</th>
+<th>I embed this in a Python class. Below is a minimal working example you can drop into a Jupyter notebook. It uses 2023 industry averages from <a href="https://www.iii.org/insurance-topics/auto-insurance" target="_blank" rel="noopener noreferrer">[III Auto Insurance Facts & Statistics 2023]</a> and adjusts for line of business.</th>
+<th>Trade-off: The model assumes linearity. It ignores claim severity skew—AI might accelerate $200 glass claims but delay high-severity hail claims due to model uncertainty. I’ve seen carriers overestimate ROI by 25% by ignoring this skew. 5. Validate Model Uplift with Causal Inference</th>
+<th>Vendors will hand you an A/B test with “15% cycle-time reduction.” That’s not enough. You need the loss ratio delta_ΔLR, and you need it causal, not correlational.</th>
+<th>I use a <strong>difference-in-differences (DiD)</strong> design on a 12-month panel. The treated group is claims routed to AI; the control group is similar claims in the same geography and line of business that weren’t routed. I control for policyholder characteristics, weather events, and adjuster caseload.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Auto PD damage severity estimation (AI triage)</td>
-<td>4</td>
-<td>3–6</td>
-<td>10K+ labeled images + repair cost history</td>
-<td>Low (reduces desk reviews)</td>
+<td>Python snippet using <code>statsmodels</code>: I look for:</td>
+<td><strong>Parallel trends</strong>: Pre-period trends between treated and control must be parallel. I reject any design where the pre-period gap exceeds 2 days. <strong>Effect stability</strong>: Run the regression on rolling 6-month windows. If the coefficient flips sign, the model isn’t robust.</td>
+<td><strong>Heterogeneity</strong>: Segment by agent, state, and claim type. A model might work in Texas but fail in New York due to different repair networks.</td>
+<td>Data source: NAIC 2023 Market Conduct Annual Statement (MCAS) includes claim payout dates by insurer and state. Pull your book and the top 3 competitors in each state to build a synthetic control if your volume is low.<a href="https://www.naic.org/prod_serv_mcas_home.htm" target="_blank" rel="noopener noreferrer">[NAIC Market Conduct Annual Statement 2023]</a></td>
+<td>Trade-off: DiD requires 12 months of post-period data. If your claims cycle is 6 months, you’re flying blind. I’ve rejected pilots where the vendor promised “we’ll get you data in 6 months”—that’s a red flag. 6. Stress-Test the Model with Scenario Analysis</td>
 </tr>
 <tr>
-<td>Auto glass claim first notice auto-accept</td>
-<td>5</td>
-<td>1–3</td>
-<td>Regional repair network pricing</td>
-<td>Medium (vendors sell direct to policyholders)</td>
+<td>I run three scenarios: best case, base case, and downside. The downside scenario must include the regulatory penalty risk of delayed payouts. Use the table below as a template. Fill in your own numbers from Step 2. Scenario Adoption Rate</td>
+<td>Cycle-Time Reduction (days) Loss Ratio Impact Regulatory Penalty Risk Adjuster Cost Saved Net ROI (USD) Best Case 60% 18</td>
+<td>-3% Low $512K $1.42M Base Case 40% 12 -2%</td>
+<td>Medium $341K $910K Downside 25% 8 -1% High</td>
+<td>$213K $380K</td>
 </tr>
 <tr>
-<td>Property hail claim roof damage pre-screening</td>
-<td>3</td>
-<td>9–12</td>
-<td>Drone imagery + historical roof age</td>
-<td>High (adjuster distrust of AI roof diagnostics)</td>
+<td>Regulatory penalty risk: In 2023, state insurance departments levied $24.7M in fines for claims handling delays, up 18% from 2022.<a href="https://www.naic.org/documents/committees_c_claims_handling_practices_annual_report_2023.pdf" target="_blank" rel="noopener noreferrer">[NAIC Claims Handling Practices Annual Report 2023]</a> I model a 0.5% probability of a $100K fine in the downside scenario. Adjust for your state’s enforcement history.</td>
+<td>Trade-off: I’ve seen carriers underestimate adjuster morale risk. If AI auto-accepts 40% of claims, adjusters get bored and attrit. Model the cost of retraining and turnover—it can wipe out 15% of the projected ROI. 7. Integrate with Reserving and Pricing Models</td>
+<td>ROI isn’t just a CFO spreadsheet; it’s a reserving input. If AI accelerates payouts, your IBNR must drop—but only if the AI isn’t masking hidden claim severity. I adjust the loss development factors (LDFs) in our triangle using the uplift coefficient from the DiD model. Below is a simplified example in R:</td>
+<td>Trade-off: If the AI model flags fraud but the claim later pays out, you’ve over-reserved and hurt your combined ratio. I’ve seen carriers over-reserve by 8% in the first year due to false positives in fraud models. 8. Build the Deployment Cost Model</td>
+<td>ROI isn’t just revenue; it’s net of implementation. Below is a cost breakdown for a 12-month pilot on 12,000 auto PD claims. Cost Category Internal FTE Cost Vendor Cost Infrastructure Timeline Data labeling (10K images) $45K (2 FTEs, 3 months)</td>
 </tr>
 <tr>
-<td>Bodily injury fraud indicator flagging</td>
-<td>2</td>
-<td>12+</td>
-<td>Medical billing and social media graphs</td>
-<td>Very High (BI adjusters resist black-box flags)</td>
+<td>$22K (crowd labeling) NA 3 months Was this article helpful? Comments. That's the picture right now.</td>
+
+
+
+
 </tr>
 <tr>
-<td>Subrogation opportunity detection</td>
-<td>4</td>
-<td>6–9</td>
-<td>Police report NLP + insurer subrogation history</td>
-<td>Low (adjuster bonus tied to recoveries)</td>
+
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p>Trade-off: The highest ROI velocity use cases (auto glass auto-accept) often cannibalize broker or TPA revenue streams. I’ve seen two pilots killed because the MGA partner’s commission model wasn’t adjusted for AI auto-accepts.</p>
+
 
 ---
 
-<h3>4. Build the ROI Engine: Five Inputs</h3>
 
-<p>I model ROI as a five-variable equation. Skip any variable and the model becomes noise.</p>
+
+
 
 <ol>
-<li><strong>Adoption rate</strong> (α): Percentage of eligible claims routed to AI. Upper bound is the technical feasibility score from Table 1.</li>
-<li><strong>Cycle-time reduction</strong> (ΔT): Days saved per claim. Must be derived from a controlled A/B test, not vendor benchmarks.</li>
-<li><strong>Payout acceleration cost</strong> (C_acc): The interest cost of paying claims faster. Use your investment portfolio’s weighted average cost of capital (WACC). For most carriers, this is 4–5% annually.</li>
-<li><strong>Adjuster cost saved</strong> (C_adj): Fully loaded adjuster hours avoided. Include desk time, not just site visits.</li>
-<li><strong>Model uplift</strong> (ΔLR): Change in loss ratio due to AI decisions (auto-accept, fraud flags, subrogation). This is the hardest variable to isolate.</li>
+
+
+
+
+
 </ol>
 
-<p>I embed this in a Python class. Below is a minimal working example you can drop into a Jupyter notebook. It uses 2023 industry averages from <a href="https://www.iii.org/insurance-topics/auto-insurance" target="_blank" rel="noopener noreferrer">[III Auto Insurance Facts & Statistics 2023]</a> and adjusts for line of business.</p>
+
 
 <pre><code>import pandas as pd
 import numpy as np
@@ -420,17 +420,17 @@ pilot_results = roi_engine.calculate_roi(alpha=0.40, delta_T=12, delta_LR=-0.02,
 print(f"Total annual ROI: ${pilot_results['total_annual_roi_usd']:,.0f}")
 </code></pre>
 
-<p>Trade-off: The model assumes linearity. It ignores claim severity skew—AI might accelerate $200 glass claims but delay high-severity hail claims due to model uncertainty. I’ve seen carriers overestimate ROI by 25% by ignoring this skew.</p>
+
 
 ---
 
-<h3>5. Validate Model Uplift with Causal Inference</h3>
 
-<p>Vendors will hand you an A/B test with “15% cycle-time reduction.” That’s not enough. You need the loss ratio delta_ΔLR, and you need it causal, not correlational.</p>
 
-<p>I use a <strong>difference-in-differences (DiD)</strong> design on a 12-month panel. The treated group is claims routed to AI; the control group is similar claims in the same geography and line of business that weren’t routed. I control for policyholder characteristics, weather events, and adjuster caseload.</p>
 
-<p>Python snippet using <code>statsmodels</code>:</p>
+
+
+
+
 
 <pre><code>import statsmodels.api as sm
 import statsmodels.formula.api as smf
@@ -447,79 +447,79 @@ did_model = smf.ols(
 print(did_model.summary())
 </code></pre>
 
-<p>I look for:</p>
+
 <ul>
-<li><strong>Parallel trends</strong>: Pre-period trends between treated and control must be parallel. I reject any design where the pre-period gap exceeds 2 days.</li>
-<li><strong>Effect stability</strong>: Run the regression on rolling 6-month windows. If the coefficient flips sign, the model isn’t robust.</li>
-<li><strong>Heterogeneity</strong>: Segment by agent, state, and claim type. A model might work in Texas but fail in New York due to different repair networks.</li>
+
+
+
 </ul>
 
-<p>Data source: NAIC 2023 Market Conduct Annual Statement (MCAS) includes claim payout dates by insurer and state. Pull your book and the top 3 competitors in each state to build a synthetic control if your volume is low.<a href="https://www.naic.org/prod_serv_mcas_home.htm" target="_blank" rel="noopener noreferrer">[NAIC Market Conduct Annual Statement 2023]</a></p>
 
-<p>Trade-off: DiD requires 12 months of post-period data. If your claims cycle is 6 months, you’re flying blind. I’ve rejected pilots where the vendor promised “we’ll get you data in 6 months”—that’s a red flag.</p>
+
+
 
 ---
 
-<h3>6. Stress-Test the Model with Scenario Analysis</h3>
 
-<p>I run three scenarios: best case, base case, and downside. The downside scenario must include the regulatory penalty risk of delayed payouts.</p>
 
-<p>Use the table below as a template. Fill in your own numbers from Step 2.</p>
+
+
+
 
 <table>
 <thead>
 <tr>
-<th>Scenario</th>
-<th>Adoption Rate</th>
-<th>Cycle-Time Reduction (days)</th>
-<th>Loss Ratio Impact</th>
-<th>Regulatory Penalty Risk</th>
-<th>Adjuster Cost Saved</th>
-<th>Net ROI (USD)</th>
+
+
+
+
+
+
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Best Case</td>
-<td>60%</td>
-<td>18</td>
-<td>-3%</td>
-<td>Low</td>
-<td>$512K</td>
-<td>$1.42M</td>
+
+
+
+
+
+
+
 </tr>
 <tr>
-<td>Base Case</td>
-<td>40%</td>
-<td>12</td>
-<td>-2%</td>
-<td>Medium</td>
-<td>$341K</td>
-<td>$910K</td>
+
+
+
+
+
+
+
 </tr>
 <tr>
-<td>Downside</td>
-<td>25%</td>
-<td>8</td>
-<td>-1%</td>
-<td>High</td>
-<td>$213K</td>
-<td>$380K</td>
+
+
+
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p>Regulatory penalty risk: In 2023, state insurance departments levied $24.7M in fines for claims handling delays, up 18% from 2022.<a href="https://www.naic.org/documents/committees_c_claims_handling_practices_annual_report_2023.pdf" target="_blank" rel="noopener noreferrer">[NAIC Claims Handling Practices Annual Report 2023]</a> I model a 0.5% probability of a $100K fine in the downside scenario. Adjust for your state’s enforcement history.</p>
 
-<p>Trade-off: I’ve seen carriers underestimate adjuster morale risk. If AI auto-accepts 40% of claims, adjusters get bored and attrit. Model the cost of retraining and turnover—it can wipe out 15% of the projected ROI.</p>
+
+
 
 ---
 
-<h3>7. Integrate with Reserving and Pricing Models</h3>
 
-<p>ROI isn’t just a CFO spreadsheet; it’s a reserving input. If AI accelerates payouts, your IBNR must drop—but only if the AI isn’t masking hidden claim severity.</p>
 
-<p>I adjust the loss development factors (LDFs) in our triangle using the uplift coefficient from the DiD model. Below is a simplified example in R:</p>
+
+
+
 
 <pre><code>library(ChainLadder)
 
@@ -546,31 +546,31 @@ ibnr_saved <- ibnr_orig - ibnr_adj
 print(paste("IBNR saved:", ibnr_saved, "USD"))
 </code></pre>
 
-<p>Trade-off: If the AI model flags fraud but the claim later pays out, you’ve over-reserved and hurt your combined ratio. I’ve seen carriers over-reserve by 8% in the first year due to false positives in fraud models.</p>
+
 
 ---
 
-<h3>8. Build the Deployment Cost Model</h3>
 
-<p>ROI isn’t just revenue; it’s net of implementation. Below is a cost breakdown for a 12-month pilot on 12,000 auto PD claims.</p>
+
+
 
 <table>
 <thead>
 <tr>
-<th>Cost Category</th>
-<th>Internal FTE Cost</th>
-<th>Vendor Cost</th>
-<th>Infrastructure</th>
-<th>Timeline</th>
+
+
+
+
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Data labeling (10K images)</td>
-<td>$45K (2 FTEs, 3 months)</td>
-<td>$22K (crowd labeling)</td>
-<td>NA</td>
-<td>3 months</td>
+
+
+
+
+
 </tr
             </div>
 
@@ -585,7 +585,7 @@ print(paste("IBNR saved:", ibnr_saved, "USD"))
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -594,7 +594,7 @@ print(paste("IBNR saved:", ibnr_saved, "USD"))
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

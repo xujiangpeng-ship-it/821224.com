@@ -240,7 +240,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-fraud-detection/" class="tag tag-amber">AI Fraud Detection</a>
-                <h1>Allstate’s AI Fraud Detection Rollout Cut Suspected Claims by $105M in 2023 — The Data Behind the Numbers</h1>
+                <h1>Allstate’s AI Fraud Detection Rollout Cut Suspected Claims by $105M in 2023 — The Data Behind the Numbers Allstate’s AI Fraud Detection Rollout Cut Suspected Claims by $105M in 2023 — The Data Behind the Numbers</h1>
                 <div class="article-meta">
                     <span>June 12, 2026</span>
                     <span class="dot"></span>
@@ -254,161 +254,147 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Allstate’s AI Fraud Detection Rollout Cut Suspected Claims by $105M in 2023 — The Data Behind the Numbers</h2>
-
-<p>In February 2023, Allstate reported a 4.1-point improvement in its 2022 combined ratio, citing AI-driven fraud detection as a key driver. The publicly stated impact was $105 million in reduced suspected claims payments, not including operational savings. That figure—reported in Allstate’s <a href="https://investors.allstate.com/news-releases/news-release-details/allstate-reports-fourth-quarter-and-full-year-2022-results" target="_blank" rel="noopener noreferrer">Q4 2022 earnings release</a>—is one of the few concrete, audited results in insurance AI fraud detection. Most vendors tout “up to 30% fraud reduction” without disclosing whether that refers to referral rate, payment denial, or gross savings. Allstate’s number, however, is tied to actual claims not paid, making it unusually transparent for the industry.</p>
+                <h2>In February 2023, Allstate reported a 4.1-point improvement in its 2022 combined ratio, citing AI-driven fraud detection as a key driver. The publicly stated impact was $105 million in reduced suspected claims payments, not including operational savings, and that figure—reported in allstate’s <a href="https://investors.allstate.com/news-releases/news-release-details/allstate-reports-fourth-quarter-and-full-year-2022-results" target="_blank" rel="noopener noreferrer">q4 2022 earnings release</a>—is one of the few concrete, audited results in insurance ai fraud. Most vendors tout “up to 30% fraud reduction” without disclosing whether that refers to referral rate, payment denial, or gross savings, and allstate’s number, however, is tied to actual claims not paid, making it unusually transparent for the industry.</h2>
 
 <p>As the Head of Fraud Analytics at a Top-25 P&C carrier, I’ve reviewed dozens of vendor demos where models claim “90% precision at 20% recall.” The gap between demo performance and live production ROI is often a chasm. Allstate’s program is a rare exception where the numbers are traceable and the trade-offs are acknowledged. Here’s how they did it—and what it means for the rest of us trying to build or buy similar capabilities.</p>
 
-<h3>Background: Why Allstate Bet on AI for Fraud Detection</h3>
+<p>Background: Why Allstate Bet on AI for Fraud Detection</p>
 
-<p>By 2019, Allstate’s Special Investigative Unit (SIU) was processing over 100,000 claims annually with suspected fraud. Manual review was expensive—estimated at $15–$20 per claim for triage, with a 12–15% false positive rate. The company had used rule-based systems for years, but false positives inflated costs and eroded customer trust. A 2021 NAIC market conduct examination found that 38% of auto injury claims flagged for fraud in some states were later confirmed as legitimate, costing the industry an estimated $4 billion annually in unnecessary investigations and delays. Allstate needed a model that could reduce false positives while maintaining high recall on true fraud cases.</p>
+<h3>By 2019, Allstate’s Special Investigative Unit (SIU) was processing over 100,000 claims annually with suspected fraud. Manual review was expensive—estimated at $15–$20 per claim for triage, with a 12–15% false positive rate, and the company had used rule-based systems for years, but false positives inflated costs and eroded customer trust. A 2021 NAIC market conduct examination found that 38% of auto injury claims flagged for fraud in some states were later confirmed as legitimate, costing the industry an estimated $4 billion annually in unnecessary investigations and delays. Allstate needed a model that could reduce false positives while maintaining high recall on true fraud cases.</h3>
 
-<p>They chose to build internally rather than license a third-party system. According to Allstate’s <a href="https://www.actuarialreview.org/content/2023/07/the-rise-of-ai-in-insurance-fraud-detection/" target="_blank" rel="noopener noreferrer">Actuarial Review (July 2023)</a>, the internal build was justified by the need to integrate directly with Guidewire ClaimCenter and Allstate’s proprietary claim scoring system. External models often come with black-box scoring and limited explainability, which can trigger regulatory scrutiny under model governance rules.</p>
+<p>They chose to build internally rather than license a third-party system. As  Allstate’s <a href="https://www.actuarialreview.org/content/2023/07/the-rise-of-ai-in-insurance-fraud-detection/" target="_blank" rel="noopener noreferrer">Actuarial Review (July 2023)</a>, the internal build was justified by the need to integrate directly with Guidewire ClaimCenter and Allstate’s proprietary claim scoring system. External models often come with black-box scoring and limited explainability, which can trigger regulatory scrutiny under model governance rules.</p>
 
-<h3>Challenge: Balancing Recall and False Positives in a High-Volume Claims Environment</h3>
+<p>Challenge: Balancing Recall and False Positives in a High-Volume Claims Environment</p>
 
-<p>The core tension in fraud detection is simple: catching more fraud means accepting more false positives, which increases operational cost and customer friction. Allstate’s team had to optimize for precision-first. They defined “true fraud” as claims that, upon SIU investigation, resulted in a denial or significant reduction in payment. Their baseline model achieved 78% recall on true fraud cases with a 15% false positive rate. That meant 15 out of every 100 claims flagged for fraud were actually legitimate—a non-starter for customer experience and regulatory compliance.</p>
+<h3>The core tension in fraud detection is simple: catching more fraud means accepting more false positives, which increases operational cost and customer friction. Allstate’s team had to optimize for precision-first. They defined “true fraud” as claims that, upon SIU investigation, resulted in a denial or significant reduction in payment. Their baseline model achieved 78% recall on true. fraud cases with a 15% false positive rate. That meant 15 out of every 100 claims flagged for fraud were actually legitimate—a non-starter for customer experience and regulatory compliance.</h3>
 
-<p>A 2022 study by the Coalition Against Insurance Fraud found that 62% of consumers would switch insurers after a fraud investigation, even if exonerated. Allstate couldn’t afford a model that flagged too aggressively. Their internal team, led by Chief Data Scientist Dr. Puneet Singhal, chose a two-tier approach: a high-recall screening model feeding a lower-volume, high-precision investigative model. The first model used XGBoost with 127 features—including repair estimates, medical billing patterns, and social media signals—to triage claims. The second used a random forest classifier to rank flagged claims by probability density, enabling SIU to prioritize the top 5% highest-risk cases.</p>
+<p>A 2022 study by the Coalition Against Insurance Fraud found that 62% of consumers would switch insurers after a fraud investigation, even if exonerated. Allstate couldn’t afford a model that flagged too aggressively. Their internal team, led by Chief Data Scientist Dr. Puneet Singhal, chose a two-tier approach: a high-recall screening model feeding a lower-volume, high-precision investigative model. The first model used XGBoost with 127 features—including repair. estimates, medical billing patterns, and social media signals—to triage claims. The second used a random forest classifier to rank flagged claims by probability density, enabling SIU to prioritize the top 5% highest-risk cases.</p>
 
 <p>The trade-off was speed: the triage model added 4.2 seconds per claim to the FNOL process, increasing average claim intake time from 3.8 to 8.0 seconds. That delay was acceptable for auto claims but would be problematic for catastrophe or high-volume property claims. Allstate mitigated this by limiting the triage model to bodily injury and PIP claims—lines with higher fraud prevalence and longer investigation windows.</p>
 
-<h3>Solution: A Dual-Model Architecture with Explainable AI and Human-in-the-Loop</h3>
+<p>Solution: A Dual-Model Architecture with Explainable AI and Human-in-the-Loop Allstate’s system, dubbed “FraudNet,” went live in Q3 2021. The architecture had three components:</p>
 
-<p>Allstate’s system, dubbed “FraudNet,” went live in Q3 2021. The architecture had three components:</p>
+<h3><strong>Triage Model (XGBoost)</strong>: 127 features including claim characteristics, repair estimates, medical billing codes, and third-party data signals (e.g., LexisNexis CLUE reports, social media activity). <strong>Investigative Model (Random Forest)</strong>: Applied only to claims flagged by the triage model, with 23 features focused on high-risk indicators like stage-of-healing inconsistencies, prior claim history, and injury narratives.</h3>
+
+<p><strong>Explainability Layer</strong>: SHAP values and LIME explanations were generated for each flagged claim, enabling SIU analysts to override model decisions when necessary. The output was integrated directly into the Guidewire ClaimCenter UI, reducing cognitive load.</p>
 
 <ul>
-<li><strong>Triage Model (XGBoost)</strong>: 127 features including claim characteristics, repair estimates, medical billing codes, and third-party data signals (e.g., LexisNexis CLUE reports, social media activity).</li>
-<li><strong>Investigative Model (Random Forest)</strong>: Applied only to claims flagged by the triage model, with 23 features focused on high-risk indicators like stage-of-healing inconsistencies, prior claim history, and injury narratives.</li>
-<li><strong>Explainability Layer</strong>: SHAP values and LIME explanations were generated for each flagged claim, enabling SIU analysts to override model decisions when necessary. The output was integrated directly into the Guidewire ClaimCenter UI, reducing cognitive load.</li>
+<li>The team faced a critical decision: whether to auto-deny claims with high fraud probability. Legal and compliance teams vetoed this, citing regulatory guidance from the NAIC’s 2023 <a href="https://www.naic.org/documents/committees_b_regulatory_framework_tf_20230621.pdf" target="_blank" rel="noopener noreferrer">Regulatory Framework Task Force report</a>, which states that AI-driven claim denials must be reviewable by humans and include clear rationale. Allstate chose to auto-refer only the top 5% highest-risk claims to SIU, with the remaining flagged claims receiving manual review.</li>
+<li>They also implemented a feedback loop: every SIU investigation result was fed back into the model as a ground-truth label. This continuous learning approach reduced model drift. puts it,  Allstate’s 2023 10-K filing, the false positive rate on the triage model dropped from 15% in 2021 to 8% in 2023.</li>
+<li>Results: $105M in Suspected Claims Not Paid, With Measurable ROI By the end of 2023, Allstate’s FraudNet system had processed over 2.1 million claims with suspected fraud. The results, as reported in the <a href="https://investors.allstate.com/news-releases/news-release-details/allstate-reports-full-year-and-fourth-quarter-2023-results" target="_blank" rel="noopener noreferrer">Q4 2023 earnings release</a>, were stark:</li>
 </ul>
 
-<p>The team faced a critical decision: whether to auto-deny claims with high fraud probability. Legal and compliance teams vetoed this, citing regulatory guidance from the NAIC’s 2023 <a href="https://www.naic.org/documents/committees_b_regulatory_framework_tf_20230621.pdf" target="_blank" rel="noopener noreferrer">Regulatory Framework Task Force report</a>, which states that AI-driven claim denials must be reviewable by humans and include clear rationale. Allstate chose to auto-refer only the top 5% highest-risk claims to SIU, with the remaining flagged claims receiving manual review.</p>
+<p><strong>Suspected claims not paid</strong>: $105 million (down from $128 million in 2022, reflecting both model improvements and volume changes). <strong>SIU investigation rate</strong>: Reduced by 42%—from 10.2% of flagged claims to 5.9%.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>They also implemented a feedback loop: every SIU investigation result was fed back into the model as a ground-truth label. This continuous learning approach reduced model drift. According to Allstate’s 2023 10-K filing, the false positive rate on the triage model dropped from 15% in 2021 to 8% in 2023.</p>
+                <p><strong>False positive rate</strong>: Declined from 15% to 8% on the triage model. <strong>Investigation cycle time</strong>: SIU average days to closure dropped from 45 to 28 days for flagged claims.</p>
 
-<h3>Results: $105M in Suspected Claims Not Paid, With Measurable ROI</h3>
+<h3>The ROI calculation is revealing. The program cost $4.2 million annually in model maintenance, data licensing, and compute. The $105 million in avoided payments yielded a gross ROI of 24:1. But the real value was operational: SIU teams, now focused on the highest-risk cases, closed 32% more investigations per analyst per month. That’s a 1.3x productivity gain—a metric most vendors ignore.</h3>
 
-<p>By the end of 2023, Allstate’s FraudNet system had processed over 2.1 million claims with suspected fraud. The results, as reported in the <a href="https://investors.allstate.com/news-releases/news-release-details/allstate-reports-full-year-and-fourth-quarter-2023-results" target="_blank" rel="noopener noreferrer">Q4 2023 earnings release</a>, were stark:</p>
+<p>Flip side:,there’s a catch. Allstate’s results skew heavily toward auto and PIP claims. In property claims—where fraud is rarer but dollar amounts are higher—the model’s precision drops to 64%. Allstate has not disclosed fraud savings for property lines, but a 2023 Verisk study found that AI fraud detection in property claims yields only a 12% reduction in suspicious claims payments, versus 28% in auto. That’s a critical limitation for carriers with large homeowner books.</p>
 
 <ul>
-<li><strong>Suspected claims not paid</strong>: $105 million (down from $128 million in 2022, reflecting both model improvements and volume changes).</li>
-<li><strong>SIU investigation rate</strong>: Reduced by 42%—from 10.2% of flagged claims to 5.9%.</li>
-<li><strong>False positive rate</strong>: Declined from 15% to 8% on the triage model.</li>
-<li><strong>Investigation cycle time</strong>: SIU average days to closure dropped from 45 to 28 days for flagged claims.</li>
+<li>Lessons Learned: What Other Carriers Can (and Can’t) Replicate Allstate’s success wasn’t just about the model. It was about the data, the process, and the organizational discipline. Here’s what worked—and what didn’t.</li>
+<li>What Worked</li>
+<li><strong>Data Integration Was the Differentiator</strong>. Allstate’s model leveraged internal data that most carriers don’t have: repair estimate datasets from Carfax, telematics from Drivewise, and medical billing data from its PIP partnerships. A 2023 <a href="https://www.iii.org/insurance-topics/auto-insurance/fraud" target="_blank" rel="noopener noreferrer">III fraud report</a> found that carriers with integrated telematics data reduce fraud-related bodily injury claims by 18% on average. But most insurers lack the scale or partnerships to access this data cheaply.</li>
+<li><strong>Explainability Avoided Regulatory Headaches</strong>. The SHAP/LIME layer wasn’t just for transparency—it was a compliance shield. When a regulator questioned a denied claim in 2022, Allstate could point to the model’s output in real time. Without explainability, that claim would have faced prolonged litigation, increasing legal costs. A 2023 <a href="https://www.naic.org/prod_serv_reg_fr.html" target="_blank" rel="noopener noreferrer">NAIC regulatory framework document</a> now explicitly requires insurers to document AI decision rationale for claims denials.</li>
 </ul>
-
-<p>The ROI calculation is revealing. The program cost $4.2 million annually in model maintenance, data licensing, and compute. The $105 million in avoided payments yielded a gross ROI of 24:1. But the real value was operational: SIU teams, now focused on the highest-risk cases, closed 32% more investigations per analyst per month. That’s a 1.3x productivity gain—a metric most vendors ignore.</p>
-
-<p>However, there’s a catch. Allstate’s results skew heavily toward auto and PIP claims. In property claims—where fraud is rarer but dollar amounts are higher—the model’s precision drops to 64%. Allstate has not disclosed fraud savings for property lines, but a 2023 Verisk study found that AI fraud detection in property claims yields only a 12% reduction in suspicious claims payments, versus 28% in auto. That’s a critical limitation for carriers with large homeowner books.</p>
-
-<h3>Lessons Learned: What Other Carriers Can (and Can’t) Replicate</h3>
-
-<p>Allstate’s success wasn’t just about the model. It was about the data, the process, and the organizational discipline. Here’s what worked—and what didn’t.</p>
-
-<h4>What Worked</h4>
-
-<p><strong>Data Integration Was the Differentiator</strong>. Allstate’s model leveraged internal data that most carriers don’t have: repair estimate datasets from Carfax, telematics from Drivewise, and medical billing data from its PIP partnerships. A 2023 <a href="https://www.iii.org/insurance-topics/auto-insurance/fraud" target="_blank" rel="noopener noreferrer">III fraud report</a> found that carriers with integrated telematics data reduce fraud-related bodily injury claims by 18% on average. But most insurers lack the scale or partnerships to access this data cheaply.</p>
-
-<p><strong>Explainability Avoided Regulatory Headaches</strong>. The SHAP/LIME layer wasn’t just for transparency—it was a compliance shield. When a regulator questioned a denied claim in 2022, Allstate could point to the model’s output in real time. Without explainability, that claim would have faced prolonged litigation, increasing legal costs. A 2023 <a href="https://www.naic.org/prod_serv_reg_fr.html" target="_blank" rel="noopener noreferrer">NAIC regulatory framework document</a> now explicitly requires insurers to document AI decision rationale for claims denials.</p>
 
 <p><strong>Continuous Feedback Loops Mattered More Than Model Choice</strong>. Allstate’s model improved not because they swapped algorithms, but because they fed investigation results back into training. A 2024 <a href="https://www.mckinsey.com/industries/financial-services/our-insights/ai-in-insurance-beyond-the-hype" target="_blank" rel="noopener noreferrer">McKinsey AI in Insurance report</a> found that insurers with closed-loop feedback systems see a 22% higher fraud detection rate over 18 months than those without.</p>
 
-<h4>Where It Fell Short</h4>
+<p>Where It Fell Short</p>
 
-<p><strong>Property Claims Remain a Weak Spot</strong>. Allstate’s model isn’t applied to property claims due to low signal density. That’s not unique: a 2023 <a href="https://www.verisk.com/insurance/insights/verisk-fraud-index-2023/" target="_blank" rel="noopener noreferrer">Verisk Fraud Index</a> shows that AI fraud detection in property claims has a 68% false positive rate versus 18% in auto. The solution isn’t better models—it’s better data. Property insurers need to integrate smart home data, IoT sensor feeds, and contractor networks to improve signal quality.</p>
+<h3><strong>Property Claims Remain a Weak Spot</strong>. Allstate’s model isn’t applied to property claims due to low signal density. That’s not unique: a 2023 <a href="https://www.verisk.com/insurance/insights/verisk-fraud-index-2023/" target="_blank" rel="noopener noreferrer">Verisk Fraud Index</a> shows that AI fraud detection in property claims has a 68% false positive rate versus 18% in auto. The solution isn’t better models—it’s better data. Property insurers need to integrate smart home data, IoT sensor feeds, and contractor networks to improve signal quality.</h3>
 
-<p><strong>Vendor Lock-in Risk Was Real</strong>. Because Allstate built internally, they avoided licensing fees and black-box scoring. But they also shouldered the full cost of model maintenance, data pipelines, and regulatory compliance. A 2023 <a href="https://www.oliverwyman.com/our-expertise/insights/2023/jan/ai-in-insurance-where-value-meets-risk.html" target="_blank" rel="noopener noreferrer">Oliver Wyman report</a> estimates that insurers spend 3x more on AI maintenance than on initial deployment. For smaller carriers, licensing a third-party system like Shift Technology or SAS Fraud Management may be more cost-effective.</p>
+<p><strong>Vendor Lock-in Risk Was Real</strong>. Because Allstate built internally, they avoided licensing fees and black-box scoring. But they also shouldered the full cost of model maintenance, data pipelines, and regulatory compliance. A 2023 <a href="https://www.oliverwyman.com/our-expertise/insights/2023/jan/ai-in-insurance-where-value-meets-risk.html" target="_blank" rel="noopener noreferrer">Oliver Wyman report</a> estimates that insurers spend 3x more on AI maintenance than on initial deployment, and for smaller carriers, licensing a third-party system like shift technology or sas fraud management may be more.</p>
 
-<p><strong>The Catastrophe Problem Is Unresolved</strong>. During a 2022 hail storm in Texas, Allstate’s FraudNet triage model was disabled to avoid slowing down FNOL. Claims volume spiked, and fraud detection reverted to rule-based systems. The result: a 12% increase in suspicious claims payments during the event. Most AI fraud systems are designed for steady-state operations, not CAT events. The industry hasn’t solved this yet.</p>
+<h4><strong>The Catastrophe Problem Is Unresolved</strong>. During a 2022 hail storm in Texas, Allstate’s FraudNet triage model was disabled to avoid slowing down FNOL. Claims volume spiked, and fraud detection reverted to rule-based systems. The result: a 12% increase in suspicious claims payments during the event. Most AI fraud systems are designed for steady-state operations, not CAT events. The industry hasn’t solved this yet.</h4>
 
-<h3>For Practitioners: How to Approach AI Fraud Detection Without Overpromising</h3>
+<p>For Practitioners: How to Approach AI Fraud Detection Without Overpromising</p>
 
 <p>If you’re a Claims Adjuster, your first question should be: “What’s the false positive rate on my line of business?” Allstate’s 8% false positive rate is excellent for auto, but it’s not universal. A 2024 <a href="https://www.iii.org/sites/default/files/2024-01/III_Fraud_Report_2024.pdf" target="_blank" rel="noopener noreferrer">III fraud report</a> shows that for workers’ comp claims, the false positive rate for AI models averages 22%. That means one in five flagged claims is actually legitimate—a non-starter for customer retention.</p>
 
 <p>If you’re a CTO, the lesson is clear: integration is everything. Allstate’s model works because it pulls from Guidewire, LexisNexis, and internal telematics data. If your core system doesn’t support real-time API calls, AI fraud detection will add latency without ROI. A 2023 <a href="https://www.guidewire.com/resources/ai-driven-fraud-detection-in-insurance/" target="_blank" rel="noopener noreferrer">Guidewire white paper</a> found that carriers with real-time data integration see a 31% higher fraud detection rate than those with batch processing.</p>
 
-<p>If you’re a CFO, the math is simple: $105 million saved sounds great, but it’s gross savings. The net impact depends on SIU costs, model maintenance, and customer churn risk. Allstate’s net ROI is closer to 12:1 after accounting for those factors. A 2023 <a href="https://www.pwc.com/us/en/industries/financial-services/library/ai-in-insurance-fraud-detection.html" target="_blank" rel="noopener noreferrer">PwC analysis</a> found that the average insurer sees a net ROI of 8:1 for AI fraud detection, with the top quartile reaching 15:1. If your vendor promises 20:1, ask for the breakdown.</p>
+<h4>If you’re a CFO, the math is simple: $105 million saved sounds great, but it’s gross savings. The net impact depends on SIU costs, model maintenance, and customer churn risk. Allstate’s net ROI is closer to 12:1 after accounting for those factors. A 2023 <a href="https://www.pwc.com/us/en/industries/financial-services/library/ai-in-insurance-fraud-detection.html" target="_blank" rel="noopener noreferrer">PwC analysis</a> found that the average insurer sees a net ROI of 8:1 for AI fraud detection, with the top quartile reaching 15:1. If your vendor promises 20:1, ask for the breakdown.</h4>
 
-<h3>The Hard Question: Can You Really Afford to Build This?</h3>
+<p>The Hard Question: Can You Really Afford to Build This?</p>
 
 <p>Allstate’s program is a best-case scenario: deep data integration, a mature SIU team, and a willingness to invest in explainability. For the rest of us, the question isn’t “Can we build a fraud model?” but “Can we afford the trade-offs?”</p>
 
 <p>The table below compares Allstate’s internal build against three leading third-party solutions. The data is drawn from vendor documentation, public filings, and third-party analyses. I’ve included the false positive rate, integration complexity, and total cost of ownership (TCO) over three years.</p>
 
+<h3>Vendor/Carrier Model Type</h3>
+
+<p>False Positive Rate Integration Complexity</p>
+
+<p>3-Year TCO Allstate (Internal)</p>
+
+<p>XGBoost + Random Forest 8%</p>
+
+<h3>High (Guidewire API, telematics, medical billing) $12.8M</h3>
+
+<p>Shift Technology Graph Neural Network + Rules</p>
+
+<p>12% Medium (REST API, no telematics)</p>
+
 <table>
 <thead>
 <tr>
-<th>Vendor/Carrier</th>
-<th>Model Type</th>
-<th>False Positive Rate</th>
-<th>Integration Complexity</th>
-<th>3-Year TCO</th>
+<th>$8.4M SAS Fraud Management</th>
+<th>Hybrid (Rules + ML) 15%</th>
+<th>Low (Pre-built connectors) $7.2M</th>
+<th>FRISS Deep Learning + Explainability</th>
+<th>10% Medium (Partial Guidewire support)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Allstate (Internal)</td>
-<td>XGBoost + Random Forest</td>
-<td>8%</td>
-<td>High (Guidewire API, telematics, medical billing)</td>
-<td>$12.8M</td>
+<td>Key takeaways from the table: <strong>False positive rates correlate with integration complexity</strong>. Allstate’s 8% FPR comes at the cost of high integration effort. FRISS, with a 10% FPR, is easier to deploy but requires manual tuning.</td>
+<td><strong>TCO isn’t just licensing fees</strong>. Allstate’s internal model has the highest TCO because of data engineering and maintenance costs. But it also has the lowest per-claim cost at scale—$0.003 per claim versus $0.014 for Shift. <strong>Third-party models can be faster to deploy but lack customization</strong>. SAS Fraud Management, for example, has pre-built rules for workers’ comp fraud but struggles with auto PIP fraud patterns unique to Allstate’s book.</td>
+<td>Where to Go From Here</td>
+<td>If you’re evaluating AI fraud detection, start with a pilot on a single line of business. Focus on reducing false positives first—customer experience and regulatory risk outweigh marginal gains in recall. Allstate’s 8% false positive rate should be the benchmark, not the exception.</td>
+<td>But don’t assume that AI fraud detection will solve your problem. The real value comes from the data you feed into the model. If you can’t integrate telematics, smart home data, and repair estimates, your model’s precision will cap out at</td>
 </tr>
 <tr>
-<td>Shift Technology</td>
-<td>Graph Neural Network + Rules</td>
-<td>12%</td>
-<td>Medium (REST API, no telematics)</td>
-<td>$8.4M</td>
+<td>            </div></td>
+<td></td>
+<td>            </td>
+<td></td>
+<td>            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;"></td>
 </tr>
 <tr>
-<td>SAS Fraud Management</td>
-<td>Hybrid (Rules + ML)</td>
-<td>15%</td>
-<td>Low (Pre-built connectors)</td>
-<td>$7.2M</td>
+<td>                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 12, 2026. </div></td>
+<td></td>
+<td>            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6"></td>
+<td>                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources. </div></td>
+<td></td>
 </tr>
 <tr>
-<td>FRISS</td>
-<td>Deep Learning + Explainability</td>
-<td>10%</td>
-<td>Medium (Partial Guidewire support)</td>
+<td>            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0"></td>
+<td>                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</td>
+<td>Comments.</td>
+
 </tr>
 </tbody>
 </table>
 
-<p>Key takeaways from the table:</p>
+
 <ul>
-<li><strong>False positive rates correlate with integration complexity</strong>. Allstate’s 8% FPR comes at the cost of high integration effort. FRISS, with a 10% FPR, is easier to deploy but requires manual tuning.</li>
-<li><strong>TCO isn’t just licensing fees</strong>. Allstate’s internal model has the highest TCO because of data engineering and maintenance costs. But it also has the lowest per-claim cost at scale—$0.003 per claim versus $0.014 for Shift.</li>
-<li><strong>Third-party models can be faster to deploy but lack customization</strong>. SAS Fraud Management, for example, has pre-built rules for workers’ comp fraud but struggles with auto PIP fraud patterns unique to Allstate’s book.</li>
+
+
+
 </ul>
 
-<h3>Where to Go From Here</h3>
 
-<p>If you’re evaluating AI fraud detection, start with a pilot on a single line of business. Focus on reducing false positives first—customer experience and regulatory risk outweigh marginal gains in recall. Allstate’s 8% false positive rate should be the benchmark, not the exception.</p>
 
-<p>But don’t assume that AI fraud detection will solve your problem. The real value comes from the data you feed into the model. If you can’t integrate telematics, smart home data, and repair estimates, your model’s precision will cap out at
-            </div>
 
-            
 
-            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
-                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 12, 2026.
-            </div>
 
-            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6">
-                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources.
-            </div>
-
-            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -417,7 +403,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

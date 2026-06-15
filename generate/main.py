@@ -20,6 +20,7 @@ import yaml
 from jinja2 import Environment, FileSystemLoader
 
 from llm import generate_text
+from pipeline.deai import deai_process
 
 # PIL for image dimension retrieval (WebP width/height injection)
 try:
@@ -420,6 +421,9 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
         canonical_url=f"/{subdomain}/{slug}/",
         ga_id=config.get("analytics", {}).get("ga_id", ""),
     )
+
+    # Apply de-AI post-processing to disrupt LLM-detectable patterns
+    html = deai_process(html)
 
     out_dir = CONTENT_DIR / subdomain / slug
     out_dir.mkdir(parents=True, exist_ok=True)

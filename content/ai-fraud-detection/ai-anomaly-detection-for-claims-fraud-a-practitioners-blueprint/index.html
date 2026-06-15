@@ -240,7 +240,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-fraud-detection/" class="tag tag-amber">AI Fraud Detection</a>
-                <h1>AI Anomaly Detection for Claims Fraud: A Practitioner’s Blueprint</h1>
+                <h1>AI Anomaly Detection for Claims Fraud: A Practitioner’s Blueprint AI Anomaly Detection for Claims Fraud: A Practitioner’s Blueprint</h1>
                 <div class="article-meta">
                     <span>June 05, 2026</span>
                     <span class="dot"></span>
@@ -254,33 +254,33 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI Anomaly Detection for Claims Fraud: A Practitioner’s Blueprint</h2>
-
-<p>Fraud costs U.S. property and casualty insurers roughly $34 billion annually—about 10% of all claims payments—per the FBI and Coalition Against Insurance Fraud. Yet many carriers still rely on rule-based red flags or manual review. That’s where anomaly detection shines. Not as a silver bullet, but as a force-multiplier: it flags <em>patterns</em>, not just <em>rules</em>, cutting false positives from 40% to under 10% in some deployments.</p>
+                <h2>Fraud costs U.S. property and casualty insurers roughly $34 billion annually—about 10% of all claims payments—per the FBI and Coalition Against Insurance Fraud. Yet many carriers still rely on rule-based red flags or manual review. That’s where anomaly detection shines. Not as a silver bullet, but as a force-multiplier: it flags <em>patterns</em>, not just <em>rules</em>, cutting false positives from 40% to under 10% in some deployments.</h2>
 
 <p>I’ve seen claims teams at regional MGAs cut SIU referral time by 55% using unsupervised models, and a Top 20 carrier drop questionable payouts by $12 million in the first 12 months. But the real value isn’t detection—it’s integration. Fraud scores must feed straight into adjuster queues, bordereaux systems, and TPAs without manual re-entry. Anything else is just a sandbox experiment.</p>
 
-<p>Below is a battle-tested playbook I’ve used to deploy AI anomaly detection across lines like auto, workers’ comp, and marine cargo. It’s opinionated: you’ll use PyOD for modeling, FastAPI for inference, and S3 + PostgreSQL for storage. No “choose your own adventure.”</p>
+<p>I know a claims manager who told me once: Below is a battle-tested playbook I’ve used to deploy AI anomaly detection across lines like auto, workers’ comp, and marine cargo. It’s opinionated: you’ll use PyOD for modeling, FastAPI for inference, and S3 + PostgreSQL for storage. No “choose your own adventure.”</p>
+
+<p>Phase 1: Data Foundation—Garbage In, Alerts Out Anomaly detection is only as good as the data it trains on. Skip this phase and your model will learn to hate its life. Step 1: Ingest Raw Claims & Transactions Pull structured and semi-structured data. Minimum schema:</p>
 
 ---
 
-<h3>Phase 1: Data Foundation—Garbage In, Alerts Out</h3>
+<h3><strong>claims</strong>: claim_id, policy_id, line_of_business, reported_date, injury_date, loss_date, total_incurred, indemnity, expense, status <strong>claims_parts</strong>: claim_part_id, claim_id, part_type (vehicle, injury, property), amount, quantity, provider_id <strong>transactions</strong>: tx_id, claim_id, payment_date, amount, payment_type (indemnity, expense), check_number <strong>provider_fees</strong>: provider_id, specialty, avg_fee, fee_schedule Use S3 event triggers (or Kafka) to land CSV/JSON into raw zone. Expect 1–3 GB/day for a $1B premium carrier. Step 2: Feature Engineering Pipeline Build a daily batch job. Pseudocode: Critical features:</h3>
 
-<p>Anomaly detection is only as good as the data it trains on. Skip this phase and your model will learn to hate its life.</p>
+<p><strong>Temporal outliers</strong>: days_to_report > 99th percentile per LOB <strong>Spend velocity</strong>: weekly incurred > 3x rolling 4-week median <strong>Fee deviation</strong>: fee_anomaly > 2.5 (provider-specific) <strong>Network density</strong>: provider involved in > N claims in region (adjust N per LOB)</p>
 
-<h4>Step 1: Ingest Raw Claims & Transactions</h4>
-<p>Pull structured and semi-structured data. Minimum schema:</p>
+<h4><strong>Trade-off</strong>: Including too many provider flags increases false positives in low-claim regions. Cap at 5 network-based features. Step 3: Label Generation (Optional but Useful) If you have historical SIU cases, label them 1. For unlabeled data, use a weak signal: “closed_without_payment” = 0, “litigated” = 1, “SIU_referral” = 1. This gives you a noisy but usable training set. Resource estimate for Phase 1:</h4>
+<p>Task Tech Runtime Cost Raw ingestion Glue / Airflow 30 min/day $120/month</p>
 <ul>
-<li><strong>claims</strong>: claim_id, policy_id, line_of_business, reported_date, injury_date, loss_date, total_incurred, indemnity, expense, status</li>
-<li><strong>claims_parts</strong>: claim_part_id, claim_id, part_type (vehicle, injury, property), amount, quantity, provider_id</li>
-<li><strong>transactions</strong>: tx_id, claim_id, payment_date, amount, payment_type (indemnity, expense), check_number</li>
-<li><strong>provider_fees</strong>: provider_id, specialty, avg_fee, fee_schedule</li>
+<li>Feature pipeline EMR Serverless + Spark 45 min/day $280/month Storage S3 + Parquet - $45/month</li>
+<li>Phase 2: Model Selection—Not All Anomalies Are Equal Choose the wrong model and you’ll drown in false alerts. Choose wisely and you’ll catch padded invoices before they hit the check printer. Step 4: Start with Isolation Forest (Unsupervised) Why Isolation Forest? It’s fast, handles mixed numeric/categorical data poorly, and scales to 1M+ claims. Use scikit-learn:</li>
+<li>Tune <code>contamination</code> to 1–5% per LOB. Higher values = more false positives. Step 5: Add Isolation Forest + Autoencoder (Ensemble)</li>
+<li>Combine unsupervised outputs using a simple weighted average. This catches both point anomalies (e.g., single padded invoice) and contextual anomalies (e.g., cluster of claims with same provider + high fee deviation). <strong>Limitation</strong>: Autoencoders need >10k claims to stabilize. Don’t use on small MGAs.</li>
 </ul>
 
-<p>Use S3 event triggers (or Kafka) to land CSV/JSON into raw zone. Expect 1–3 GB/day for a $1B premium carrier.</p>
+<p>Step 6: Parametric Trigger for Cat Claims For catastrophe claims, use a parametric trigger instead of ML. Example: if wind_speed > 70 mph AND distance_to_coast < 50 miles, score = 0.9. Feed this into the same scoring pipeline. Phase 3: Scoring & Threshold Tuning—From Lab to Prod Scores alone mean nothing. You need thresholds that align with adjuster capacity and SIU bandwidth.</p>
 
-<h4>Step 2: Feature Engineering Pipeline</h4>
-<p>Build a daily batch job. Pseudocode:</p>
+<h4>Step 7: Generate Daily Anomaly Scores Wrap the model in a FastAPI service: Deploy to EC2 (t3.medium) or ECS Fargate. Expect 500–1,000 claims/day → 1 req/sec → negligible cost. Step 8: Tune Thresholds per LOB Use historical SIU cases to set initial thresholds. Example: LOB Initial Threshold False Positive Rate</h4>
+<p>SIU Catch Rate Workers’ Comp 0.85 8% 62% Auto PIP 0.92 12%</p>
 <pre>
 # feature_pipeline.py
 def build_daily_features(date):
@@ -292,37 +292,37 @@ def build_daily_features(date):
     return df
 </pre>
 
-<p>Critical features:</p>
+<p>78% Marine Cargo 0.78 5%</p>
 <ul>
-<li><strong>Temporal outliers</strong>: days_to_report > 99th percentile per LOB</li>
-<li><strong>Spend velocity</strong>: weekly incurred > 3x rolling 4-week median</li>
-<li><strong>Fee deviation</strong>: fee_anomaly > 2.5 (provider-specific)</li>
-<li><strong>Network density</strong>: provider involved in > N claims in region (adjust N per LOB)</li>
+<li>45% Adjust weekly based on adjuster feedback. Use a simple feedback loop: if adjuster marks a claim as “fraudulent,” increment true positive count; if they reject, increment false positive. <strong>Trade-off</strong>: Lowering thresholds increases SIU workload. Raising them risks missing sophisticated rings. Phase 4: Integration—Closing the Loop</li>
+<li>An anomaly score sitting in a database is useless. It must trigger actions in the claims system. Step 9: Push Scores to Adjuster Queues Use a lightweight ETL job to write scores to PostgreSQL: Create a view in the adjuster portal:</li>
+<li>Add a “Fraud Alert” badge in the UI. Include a one-click SIU referral button. Step 10: Automate Bordereaux & TPA Feeds Send bordereaux to TPAs with a fraud flag: Use SFTP or API (if TPA supports it). Expect 15–30 minutes extra per monthly bordereaux prep.</li>
+<li>Step 11: Real-Time Alerts for High-Risk Payments For auto lines, trigger a webhook when a payment > $5k hits the queue and has an anomaly score > 0.9. Example: Phase 5: Monitoring & Governance—Keeping It Alive Models degrade. Fraudsters adapt. Without monitoring, your $12M savings become a $2M headache.</li>
 </ul>
 
-<p><strong>Trade-off</strong>: Including too many provider flags increases false positives in low-claim regions. Cap at 5 network-based features.</p>
+<p>Step 12: Track Model Drift Run daily Kolmogorov-Smirnov tests on feature distributions. Flag if p-value < 0.01 for any feature. Use Evidently or custom scripts. Step 13: Monitor Business Impact Track these KPIs weekly: False positive rate (adjuster feedback) SIU referral rate (should increase slightly) Loss ratio improvement (target: 0.5–1.5 point reduction) Combined ratio delta (if integrated with UW)</p>
 
-<h4>Step 3: Label Generation (Optional but Useful)</h4>
-<p>If you have historical SIU cases, label them 1. For unlabeled data, use a weak signal: “closed_without_payment” = 0, “litigated” = 1, “SIU_referral” = 1. This gives you a noisy but usable training set.</p>
+<h4>Example dashboard: Step 14: Retrain Quarterly or on Drift</h4>
+<p>Use Airflow to trigger retraining when drift detected. Keep last 3 model versions in S3. Use a canary deployment: roll out to 10% of claims, monitor for 7 days, then full rollout. <strong>Risk</strong>: Retraining without guardrails can introduce new biases. Always validate on holdout set.</p>
 
-<p>Resource estimate for Phase 1:</p>
+<p>Phase 6: Advanced Tactics—When Basics Aren’t Enough If your baseline catches 60% of fraud but misses rings, it’s time to go deeper. Graph-Based Anomaly Detection Use Neo4j or Amazon Neptune to model: Nodes: Claim, Provider, Policyholder, Location Edges: Submitted_by, Treated_by, Lives_at Anomalies: Claims with high betweenness centrality in provider subgraphs Example query:</p>
 <table>
-<thead><tr><th>Task</th><th>Tech</th><th>Runtime</th><th>Cost</th></tr></thead>
+<thead><tr><th>Resource cost: ~$500/month for a small graph cluster. Worth it for auto or workers’ comp rings. NLP for Narratives Use spaCy or Hugging Face to extract entities from adjuster notes: Temporal inconsistencies (“reported injury 3 days after accident but notes say same day”)</th><th>Provider duplication (“same chiropractor listed on 12 claims in 2 weeks”) Combine NLP score with anomaly score. Example: <strong>Limitation</strong>: NLP adds 2–3 seconds per claim. Use only for high-score claims. Cost & ROI Reality Check Here’s what it actually costs to run this at scale: Component Monthly Cost (USD) Notes</th><th>Data pipeline (EMR + Glue) $400 Scales with claims volume Model serving (EC2 t3.medium) $50 Can use Lambda for low volume Graph DB (Neo4j Aura) $500</th><th>Optional for rings Storage (S3 + PostgreSQL) $120 Parquet + RDS Monitoring (Evidently + CloudWatch) $80 Open-source mostly <strong>Total</strong></th></tr></thead>
 <tbody>
-<tr><td>Raw ingestion</td><td>Glue / Airflow</td><td>30 min/day</td><td>$120/month</td></tr>
-<tr><td>Feature pipeline</td><td>EMR Serverless + Spark</td><td>45 min/day</td><td>$280/month</td></tr>
-<tr><td>Storage</td><td>S3 + Parquet</td><td>-</td><td>$45/month</td></tr>
+<tr><td><strong>$1,150</strong> <strong>Break-even at ~$1.2M saved fraud per year</strong></td><td>ROI math: If your baseline fraud loss is $20M/year and you catch 30% with this system, you save $6M. Minus $13.8k/year in costs → net $5.8M. That’s a 419x ROI. But it assumes 30% catch rate—many carriers only get 15–20%.</td><td><strong>Hard truth</strong>: If your SIU team is understaffed or your data quality is poor, this will fail. Fix those first. Common Pitfalls & How to Avoid Them I’ve seen teams waste six months on models that never shipped. Avoid these: <strong>Over-engineering</strong>: Don’t build a real-time streaming pipeline for a 500-claims/day book. Start with daily batch.</td><td><strong>Ignoring adjuster workflow</strong>: If your fraud score isn’t visible in Was this article helpful? Comments. That's the picture right now.</td></tr>
+<tr></tr>
+<tr></tr>
 </tbody>
 </table>
 
 ---
 
-<h3>Phase 2: Model Selection—Not All Anomalies Are Equal</h3>
 
-<p>Choose the wrong model and you’ll drown in false alerts. Choose wisely and you’ll catch padded invoices before they hit the check printer.</p>
 
-<h4>Step 4: Start with Isolation Forest (Unsupervised)</h4>
-<p>Why Isolation Forest? It’s fast, handles mixed numeric/categorical data poorly, and scales to 1M+ claims. Use scikit-learn:</p>
+
+
+
+
 <pre>
 from pyod.models.iforest import IForest
 from sklearn.preprocessing import RobustScaler
@@ -337,10 +337,10 @@ clf = IForest(contamination=0.05, random_state=42)
 clf.fit(X_scaled)
 </pre>
 
-<p>Tune <code>contamination</code> to 1–5% per LOB. Higher values = more false positives.</p>
 
-<h4>Step 5: Add Isolation Forest + Autoencoder (Ensemble)</h4>
-<p>Combine unsupervised outputs using a simple weighted average. This catches both point anomalies (e.g., single padded invoice) and contextual anomalies (e.g., cluster of claims with same provider + high fee deviation).</p>
+
+
+
 <pre>
 from pyod.models.auto_encoder import AutoEncoder
 
@@ -356,19 +356,19 @@ combined_score = 0.6 * clf.decision_scores_ + 0.4 * ae.decision_scores_
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p><strong>Limitation</strong>: Autoencoders need >10k claims to stabilize. Don’t use on small MGAs.</p>
+                
 
-<h4>Step 6: Parametric Trigger for Cat Claims</h4>
-<p>For catastrophe claims, use a parametric trigger instead of ML. Example: if wind_speed > 70 mph AND distance_to_coast < 50 miles, score = 0.9. Feed this into the same scoring pipeline.</p>
+
+
 
 ---
 
-<h3>Phase 3: Scoring & Threshold Tuning—From Lab to Prod</h3>
 
-<p>Scores alone mean nothing. You need thresholds that align with adjuster capacity and SIU bandwidth.</p>
 
-<h4>Step 7: Generate Daily Anomaly Scores</h4>
-<p>Wrap the model in a FastAPI service:</p>
+
+
+
+
 <pre>
 # app.py
 from fastapi import FastAPI
@@ -394,31 +394,31 @@ def score(claim: Claim):
     return {"claim_id": claim.claim_id, "anomaly_score": float(score)}
 </pre>
 
-<p>Deploy to EC2 (t3.medium) or ECS Fargate. Expect 500–1,000 claims/day → 1 req/sec → negligible cost.</p>
 
-<h4>Step 8: Tune Thresholds per LOB</h4>
-<p>Use historical SIU cases to set initial thresholds. Example:</p>
+
+
+
 <table>
-<thead><tr><th>LOB</th><th>Initial Threshold</th><th>False Positive Rate</th><th>SIU Catch Rate</th></tr></thead>
+<thead><tr></tr></thead>
 <tbody>
-<tr><td>Workers’ Comp</td><td>0.85</td><td>8%</td><td>62%</td></tr>
-<tr><td>Auto PIP</td><td>0.92</td><td>12%</td><td>78%</td></tr>
-<tr><td>Marine Cargo</td><td>0.78</td><td>5%</td><td>45%</td></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
 </tbody>
 </table>
 
-<p>Adjust weekly based on adjuster feedback. Use a simple feedback loop: if adjuster marks a claim as “fraudulent,” increment true positive count; if they reject, increment false positive.</p>
 
-<p><strong>Trade-off</strong>: Lowering thresholds increases SIU workload. Raising them risks missing sophisticated rings.</p>
+
+
 
 ---
 
-<h3>Phase 4: Integration—Closing the Loop</h3>
 
-<p>An anomaly score sitting in a database is useless. It must trigger actions in the claims system.</p>
 
-<h4>Step 9: Push Scores to Adjuster Queues</h4>
-<p>Use a lightweight ETL job to write scores to PostgreSQL:</p>
+
+
+
+
 <pre>
 # write_scores.py
 df = pd.read_csv("daily_scores.csv")
@@ -430,7 +430,7 @@ df.to_sql(
 )
 </pre>
 
-<p>Create a view in the adjuster portal:</p>
+
 <pre>
 CREATE VIEW high_risk_claims AS
 SELECT c.*, a.anomaly_score
@@ -440,20 +440,20 @@ WHERE a.anomaly_score > 0.85
 ORDER BY a.anomaly_score DESC;
 </pre>
 
-<p>Add a “Fraud Alert” badge in the UI. Include a one-click SIU referral button.</p>
 
-<h4>Step 10: Automate Bordereaux & TPA Feeds</h4>
-<p>Send bordereaux to TPAs with a fraud flag:</p>
+
+
+
 <pre>
 # bordereaux.py
 df["fraud_flag"] = df["anomaly_score"].apply(lambda x: "Y" if x > 0.85 else "N")
 df.to_csv("tpa_bordereaux_20240101.csv")
 </pre>
 
-<p>Use SFTP or API (if TPA supports it). Expect 15–30 minutes extra per monthly bordereaux prep.</p>
 
-<h4>Step 11: Real-Time Alerts for High-Risk Payments</h4>
-<p>For auto lines, trigger a webhook when a payment > $5k hits the queue and has an anomaly score > 0.9. Example:</p>
+
+
+
 <pre>
 # webhook_lambda.py
 import boto3
@@ -468,23 +468,23 @@ def lambda_handler(event, context):
 
 ---
 
-<h3>Phase 5: Monitoring & Governance—Keeping It Alive</h3>
 
-<p>Models degrade. Fraudsters adapt. Without monitoring, your $12M savings become a $2M headache.</p>
 
-<h4>Step 12: Track Model Drift</h4>
-<p>Run daily Kolmogorov-Smirnov tests on feature distributions. Flag if p-value < 0.01 for any feature. Use Evidently or custom scripts.</p>
 
-<h4>Step 13: Monitor Business Impact</h4>
-<p>Track these KPIs weekly:</p>
+
+
+
+
+
+
 <ul>
-<li>False positive rate (adjuster feedback)</li>
-<li>SIU referral rate (should increase slightly)</li>
-<li>Loss ratio improvement (target: 0.5–1.5 point reduction)</li>
-<li>Combined ratio delta (if integrated with UW)</li>
+
+
+
+
 </ul>
 
-<p>Example dashboard:</p>
+
 <pre>
 # metrics.py
 import pandas as pd
@@ -494,26 +494,26 @@ fp_rate = (df["adjuster_marked_fp"] / df["total_flagged"]).mean()
 siu_rate = (df["siu_referral"] / df["total_flagged"]).mean()
 </pre>
 
-<h4>Step 14: Retrain Quarterly or on Drift</h4>
-<p>Use Airflow to trigger retraining when drift detected. Keep last 3 model versions in S3. Use a canary deployment: roll out to 10% of claims, monitor for 7 days, then full rollout.</p>
 
-<p><strong>Risk</strong>: Retraining without guardrails can introduce new biases. Always validate on holdout set.</p>
+
+
+
 
 ---
 
-<h3>Phase 6: Advanced Tactics—When Basics Aren’t Enough</h3>
 
-<p>If your baseline catches 60% of fraud but misses rings, it’s time to go deeper.</p>
 
-<h4>Graph-Based Anomaly Detection</h4>
-<p>Use Neo4j or Amazon Neptune to model:</p>
+
+
+
+
 <ul>
-<li>Nodes: Claim, Provider, Policyholder, Location</li>
-<li>Edges: Submitted_by, Treated_by, Lives_at</li>
-<li>Anomalies: Claims with high betweenness centrality in provider subgraphs</li>
+
+
+
 </ul>
 
-<p>Example query:</p>
+
 <pre>
 MATCH (p:Provider)-[:TREATED]->(c:Claim)
 WHERE c.anomaly_score > 0.8
@@ -522,16 +522,16 @@ ORDER BY claim_count DESC
 LIMIT 20;
 </pre>
 
-<p>Resource cost: ~$500/month for a small graph cluster. Worth it for auto or workers’ comp rings.</p>
 
-<h4>NLP for Narratives</h4>
-<p>Use spaCy or Hugging Face to extract entities from adjuster notes:</p>
+
+
+
 <ul>
-<li>Temporal inconsistencies (“reported injury 3 days after accident but notes say same day”)</li>
-<li>Provider duplication (“same chiropractor listed on 12 claims in 2 weeks”)</li>
+
+
 </ul>
 
-<p>Combine NLP score with anomaly score. Example:</p>
+
 <pre>
 from transformers import pipeline
 
@@ -541,39 +541,39 @@ entities = classifier(text)
 nlp_score = 1.0 if "prior claim" in text else 0.0
 </pre>
 
-<p><strong>Limitation</strong>: NLP adds 2–3 seconds per claim. Use only for high-score claims.</p>
+
 
 ---
 
-<h3>Cost & ROI Reality Check</h3>
 
-<p>Here’s what it actually costs to run this at scale:</p>
+
+
 
 <table>
-<thead><tr><th>Component</th><th>Monthly Cost (USD)</th><th>Notes</th></tr></thead>
+<thead><tr></tr></thead>
 <tbody>
-<tr><td>Data pipeline (EMR + Glue)</td><td>$400</td><td>Scales with claims volume</td></tr>
-<tr><td>Model serving (EC2 t3.medium)</td><td>$50</td><td>Can use Lambda for low volume</td></tr>
-<tr><td>Graph DB (Neo4j Aura)</td><td>$500</td><td>Optional for rings</td></tr>
-<tr><td>Storage (S3 + PostgreSQL)</td><td>$120</td><td>Parquet + RDS</td></tr>
-<tr><td>Monitoring (Evidently + CloudWatch)</td><td>$80</td><td>Open-source mostly</td></tr>
-<tr><tr><td><strong>Total</strong></td><td><strong>$1,150</strong></td><td><strong>Break-even at ~$1.2M saved fraud per year</strong></td></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr><tr></tr>
 </tr></tbody>
 </table>
 
-<p>ROI math: If your baseline fraud loss is $20M/year and you catch 30% with this system, you save $6M. Minus $13.8k/year in costs → net $5.8M. That’s a 419x ROI. But it assumes 30% catch rate—many carriers only get 15–20%.</p>
 
-<p><strong>Hard truth</strong>: If your SIU team is understaffed or your data quality is poor, this will fail. Fix those first.</p>
+
+
 
 ---
 
-<h3>Common Pitfalls & How to Avoid Them</h3>
 
-<p>I’ve seen teams waste six months on models that never shipped. Avoid these:</p>
+
+
 
 <ul>
-<li><strong>Over-engineering</strong>: Don’t build a real-time streaming pipeline for a 500-claims/day book. Start with daily batch.</li>
-<li><strong>Ignoring adjuster workflow</strong>: If your fraud score isn’t visible in</li></ul>
+
+</ul>
 </div>
 
             
@@ -587,7 +587,7 @@ nlp_score = 1.0 if "prior claim" in text else 0.0
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -596,7 +596,7 @@ nlp_score = 1.0 if "prior claim" in text else 0.0
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

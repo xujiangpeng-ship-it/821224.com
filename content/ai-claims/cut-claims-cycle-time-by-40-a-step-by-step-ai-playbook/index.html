@@ -291,7 +291,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Cut Claims Cycle Time by 40%: A Step-by-Step AI Playbook</h1>
+                <h1>Cut Claims Cycle Time by 40%: A Step-by-Step AI Playbook Cut Claims Cycle Time by 40%: A Step-by-Step AI Playbook</h1>
                 <div class="article-meta">
                     <span>May 16, 2026</span>
                     <span class="dot"></span>
@@ -305,57 +305,57 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Cut Claims Cycle Time by 40%: A Step-by-Step AI Playbook</h2>
+                <h2>Most insurers still treat claims as an afterthought—until the quarterly loss ratio screams red. A typical P/C carrier with $500M premium might run 18,000 open claims at any moment, each averaging 32 days to closure. A 40 % reduction (from 32 to 19 days) frees $15M in paid losses and $11M in float interest, boosting combined ratio by 2.7 points. This playbook shows exactly how to hit that target with AI in 12 weeks.</h2>
 
-<p>Most insurers still treat claims as an afterthought—until the quarterly loss ratio screams red. A typical P/C carrier with $500M premium might run 18,000 open claims at any moment, each averaging 32 days to closure. A 40 % reduction (from 32 to 19 days) frees $15M in paid losses and $11M in float interest, boosting combined ratio by 2.7 points. This playbook shows exactly how to hit that target with AI in 12 weeks.</p>
+<p>I’ve seen claims teams shave 12–15 days off cycle time by focusing on four bottlenecks: FNOL triage and assignment (days 0–3) Document extraction and validation (days 3–10) Coverage verification and subrogation flagging (days 5–15) Payment release and closure (days 12–20) Step 1: Instrument the Friction Log (Week 0)</p>
 
-<p>I’ve seen claims teams shave 12–15 days off cycle time by focusing on four bottlenecks:</p>
-<ul>
-<li>FNOL triage and assignment (days 0–3)</li>
-<li>Document extraction and validation (days 3–10)</li>
-<li>Coverage verification and subrogation flagging (days 5–15)</li>
-<li>Payment release and closure (days 12–20)</li>
-</ul>
-
-<h3>Step 1: Instrument the Friction Log (Week 0)</h3>
 <p>Before touching AI, map every human touch. I’ve run this exercise with two regional carriers and one MGA; the average claim had 14 handoffs across 4 departments. The biggest surprise: adjuster rework on re-submitted photos added 3.2 days per claim. Build a simple event log in your core admin system (Guidewire, Duck Creek, or custom) that tags:</p>
 <ul>
-<li>Timestamp of every status change</li>
-<li>User ID, role, and department</li>
-<li>Document type uploaded (estimate, police report, photo)</li>
+<li>Timestamp of every status change User ID, role, and department Document type uploaded (estimate, police report, photo) Export one month of data (≈5,000 claims) and run an 80/20 Pareto chart. Invariably two issues dominate: <strong>duplicate uploads</strong> and <strong>missing loss details</strong>. Fix these two first; the rest can wait.</li>
+<li>Step 2: Deploy a Tiered FNOL Widget (Week 1–2) Start with the first 15 minutes. Every second counts because 60 % of. cycle time lies in the first 72 hours. <strong>Action</strong>: Replace the static FNOL form with a conversational IVR or web chatbot that: Asks 5–7 questions that disambiguate peril and coverage</li>
+<li>Runs a quick fraud score (see vendor list below) Assigns to the right handler queue (auto, L1, L2, STP) before the call ends <strong>Tool stack</strong>: <strong>NLP layer</strong>: Google Contact Center AI or Nuance Mix (≈$0.02 per call) <strong>Fraud score</strong>: Shift Technology’s Spotlight (0.85 precision at 0.1 recall, $0.07 per claim) <strong>Auto-assign</strong>: Custom Python rule engine or Tray.io workflow <strong>ROI</strong>: In a $200M auto book, this cut triage time from 4.1 days to 1.8 days—saving $800K annually.</li>
+<li><strong>Pitfall</strong>: Don’t let the bot ask for the same data twice. I once saw a carrier’s chatbot request driver license twice because the NLP entity extraction failed on the first pass. Measure “data re-entry rate” weekly; anything above 8 % means the model needs retraining.</li>
 </ul>
-<p>Export one month of data (≈5,000 claims) and run an 80/20 Pareto chart. Invariably two issues dominate: <strong>duplicate uploads</strong> and <strong>missing loss details</strong>. Fix these two first; the rest can wait.</p>
 
-<h3>Step 2: Deploy a Tiered FNOL Widget (Week 1–2)</h3>
-<p>Start with the first 15 minutes. Every second counts because 60 % of cycle time lies in the first 72 hours.</p>
-<p><strong>Action</strong>: Replace the static FNOL form with a conversational IVR or web chatbot that:</p>
+<h3>Step 3: OCR + NLP Pipeline in the Cloud (Week 2–4) Next, automate the document avalanche. A mid-size carrier receives 2.3M documents a year—photos, estimates, police reports, medical bills. Humans spend 6 days per 1,000 claims just sorting PDFs. <strong>Action</strong>: Build a serverless pipeline: <strong>Rules</strong>:</h3>
+<p>Textract for structured tables (estimate lines) Doc AI for unstructured text (accident narrative) Custom regex to pull loss date, location, injury flag BERT-based classifier to tag form type with 92 % accuracy <strong>Vendor math</strong>: <strong>Textract</strong>: $0.0015 per page → $3,450/month at 2.3M pages <strong>Doc AI</strong>: $0.005 per page → $11,500/month <strong>Custom parser dev</strong>: 6 weeks, 3 FTEs</p>
 <ul>
-<li>Asks 5–7 questions that disambiguate peril and coverage</li>
-<li>Runs a quick fraud score (see vendor list below)</li>
-<li>Assigns to the right handler queue (auto, L1, L2, STP) before the call ends</li>
+<li><strong>Trade-off</strong>: The accuracy ceiling is ~94 %. Anything above that requires human-in-the-loop at 15 % of documents. Don’t chase 99 %; the marginal cost outweighs the benefit. <strong>Shortcut</strong>: If your volume is <$50M premium, skip the custom parser. Use Duck Creek’s built-in OCR or Duck Creek Lens; you’ll still cut 2.3 days per claim at 1/10 the cost.</li>
+<li>Step 4: Real-Time Coverage Verification (Week 3–5) Coverage delays add 5–7 days to cycle time. The root cause isn’t the underwriter; it’s the 48-hour wait for ACORD forms and prior carrier loss runs. <strong>Action</strong>: Build a microservice that queries: <strong>LexisNexis Risk Solutions</strong> (CLUE, MVR)</li>
+<li><strong>Verisk A-PLUS</strong> (prior losses) <strong>Internal policy admin</strong> (active endorsements)</li>
 </ul>
-<p><strong>Tool stack</strong>:</p>
+<p>The service returns a “coverage score” from 0–100 within 3 seconds. If score < 60, route to underwriter queue; else auto-approve for STP. <strong>ROI</strong>: In a homeowners book, coverage verification dropped from 6.2 days to 0.8 days, freeing $2.1M in float.</p>
+
+<h3><strong>Risk</strong>: Third-party data APIs can throttle during catastrophes. Cache the last 30 days of loss runs locally; fall back to cached data if API returns 503. Step 5: Subrogation Flagging at First Notice (Week 4–6)</h3>
+<p>Subrogation identification is the highest-leverage AI use case I’ve seen. A single missed subrogation on a $120K collision claim costs $110K in paid losses. Most carriers flag subro manually at closure, when the evidence is cold. <strong>Action</strong>: Run the FNOL narrative through a BERT model fine-tuned on 50K anonymized claims. The model flags “likely subrogation” if:</p>
+<p>Peril = collision Fault wording includes “other driver,” “at fault,” “liable” Estimated damage > $10K Flagged claims auto-trigger a subrogation adjuster assignment and a PDF “subro packet” assembled in <2 minutes via AWS Step Functions.</p>
 <ul>
-<li><strong>NLP layer</strong>: Google Contact Center AI or Nuance Mix (≈$0.02 per call)</li>
-<li><strong>Fraud score</strong>: Shift Technology’s Spotlight (0.85 precision at 0.1 recall, $0.07 per claim)</li>
-<li><strong>Auto-assign</strong>: Custom Python rule engine or Tray.io workflow</li>
+<li><strong>Vendor</strong>: Boost Labs’ SubroAI or internal fine-tuning on claim notes from the last 2 years. <strong>ROI</strong>: One midsize carrier recovered $4.3M in 12 months with 0.3 FTE increase. <strong>Limitation</strong>: The model’s precision is 87 %. False positives add 0.4 days per claim to adjuster review. Accept the noise; the recoveries outweigh the rework. Step 6: Dynamic Payment Approval & Closure (Week 5–8)</li>
+<li>Closure drags because every payment over $5K needs two signatures. In a $250M book, 18 % of claims trigger this rule. <strong>Action</strong>: Replace static dollar limits with a reinforcement-learning model that learns from historical approval times and loss ratios. Inputs: Claim characteristics (peril, location, deductible)</li>
+<li>Handler speed and past error rate Fraud score Portfolio loss ratio on similar claims Output: “auto-approve,” “manager review,” or “senior review.” The model starts with a 5 % override rate; after 3 months it drops to 1 %.</li>
 </ul>
-<p><strong>ROI</strong>: In a $200M auto book, this cut triage time from 4.1 days to 1.8 days—saving $800K annually.</p>
+<p><strong>ROI</strong>: A $250M book cut approval time from 2.4 days to 0.3 days, saving $1.8M annually in salary and interest. <strong>Trade-off</strong>: The model needs 500–1,000 adjudicated claims to stabilize. If you lack volume, use a simple rule: auto-approve if loss ratio on peril < 60 %. It’s 70 % as effective and costs nothing.</p>
+<ul>
+<li>Step 7: Continuous Feedback Loop (Week 6–12) AI models decay at 1 % accuracy per month. Set up a lightweight feedback pipeline: Every closed claim → flag if any human touch occurred after day 10 Feed the event log into a lightweight LSTM that predicts cycle time per claim</li>
+<li>Retrain models weekly with data from the last 90 days <strong>Tool</strong>: AWS SageMaker Pipelines or Azure ML. Cost: $400/month for a 3-node cluster. <strong>Risk</strong>: Shadow IT drift. Claims managers sometimes tweak rules in Excel and bypass the pipeline. Lock the rule set in a Git repo; require pull requests reviewed by the data science team. Metrics Dashboard (What to Track Weekly)</li>
+<li>Metric Baseline Target Data Source Mean cycle time 32 days 19 days Admin system</li>
+</ul>
+<p>FNOL-to-assignment 2.1 days <1 day Event log Document extraction errors 12 % <5 % OCR pipeline</p>
 
-<p><strong>Pitfall</strong>: Don’t let the bot ask for the same data twice. I once saw a carrier’s chatbot request driver license twice because the NLP entity extraction failed on the first pass. Measure “data re-entry rate” weekly; anything above 8 % means the model needs retraining.</p>
+<p>False subro positives 0 <15 % SubroAI Payment approval override 18 % <5 % Payment microservice</p>
 
-<h3>Step 3: OCR + NLP Pipeline in the Cloud (Week 2–4)</h3>
-<p>Next, automate the document avalanche. A mid-size carrier receives 2.3M documents a year—photos, estimates, police reports, medical bills. Humans spend 6 days per 1,000 claims just sorting PDFs.</p>
-<p><strong>Action</strong>: Build a serverless pipeline:</p>
+<h3>Adjuster rework rate 8 % <3 % QA tickets</h3>
+<p>Common Pitfalls & Quick Fixes <strong>Pitfall</strong>: Over-customizing the FNOL bot for every state. I’ve seen carriers spend $250K on state-specific NLP models that never shipped. <strong>Fix</strong>: Use a generic model fine-tuned on a 10-state corpus; add state-specific keywords via a lookup table.</p>
+<p><strong>Pitfall</strong>: Ignoring TPAs. If 40 % of your book is TPA-handled, their OCR pipeline will corrupt your data. <strong>Fix</strong>: Require TPAs to push native PDFs to your S3 bucket; run a second OCR pass on ingestion. <strong>Pitfall</strong>: Chasing 100 % accuracy on subrogation. One carrier spent 6 months tuning a model to 95 % precision; the ROI never materialized. <strong>Fix</strong>: Stop at 85 %; the missed recoveries are cheaper than the false positives.</p>
 <pre>
 S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 </pre>
-<p><strong>Rules</strong>:</p>
+<p>Vendor Shortlist (No Affiliation) <strong>FNOL & Fraud</strong>: Shift Technology, Sprout AI, Five Sigma <strong>OCR & NLP</strong>: Amazon Textract, Google Document AI, Rossum <strong>Coverage Lookups</strong>: LexisNexis, Verisk, Guidewire DataHub <strong>Subrogation</strong>: Boost Labs SubroAI, Claimatic, Claim Genius <strong>Payment Automation</strong>: Earnix, Earnix Retina, Earnix Claim 12-Week Timeline (Gantt) Budget Snapshot</p>
 <ul>
-<li>Textract for structured tables (estimate lines)</li>
-<li>Doc AI for unstructured text (accident narrative)</li>
-<li>Custom regex to pull loss date, location, injury flag</li>
-<li>BERT-based classifier to tag form type with 92 % accuracy</li>
+<li>Category Cost (12 weeks) Run Rate (post-launch) Cloud OCR & NLP $22,000 $15,000/month Third-party data APIs $8,500</li>
+<li>$5,500/month Data science FTEs (3) $105,000 $35,000/month Engineering FTEs (4) $140,000 $46,000/month Change management & training</li>
+<li>$25,000 $2,000/month <strong>$300,500</strong> <strong>$103,500/month</strong></li>
+<li>The payback period is 6.2 months at a 40 % cycle-time reduction. If you hit only 25 %, the ROI still pencils at 18 months. The key is not the tech—it’s the discipline to ship an 80 % solution in 12 weeks, then iterate.</li>
 </ul>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
@@ -363,101 +363,101 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p><strong>Vendor math</strong>:</p>
+                <p>Was this article helpful? Comments.</p>
 <ul>
-<li><strong>Textract</strong>: $0.0015 per page → $3,450/month at 2.3M pages</li>
-<li><strong>Doc AI</strong>: $0.005 per page → $11,500/month</li>
-<li><strong>Custom parser dev</strong>: 6 weeks, 3 FTEs</li>
+
+
+
 </ul>
-<p><strong>Trade-off</strong>: The accuracy ceiling is ~94 %. Anything above that requires human-in-the-loop at 15 % of documents. Don’t chase 99 %; the marginal cost outweighs the benefit.</p>
 
-<p><strong>Shortcut</strong>: If your volume is <$50M premium, skip the custom parser. Use Duck Creek’s built-in OCR or Duck Creek Lens; you’ll still cut 2.3 days per claim at 1/10 the cost.</p>
 
-<h3>Step 4: Real-Time Coverage Verification (Week 3–5)</h3>
-<p>Coverage delays add 5–7 days to cycle time. The root cause isn’t the underwriter; it’s the 48-hour wait for ACORD forms and prior carrier loss runs.</p>
-<p><strong>Action</strong>: Build a microservice that queries:</p>
+
+
+
+
+
 <ul>
-<li><strong>LexisNexis Risk Solutions</strong> (CLUE, MVR)</li>
-<li><strong>Verisk A-PLUS</strong> (prior losses)</li>
-<li><strong>Internal policy admin</strong> (active endorsements)</li>
+
+
+
 </ul>
-<p>The service returns a “coverage score” from 0–100 within 3 seconds. If score < 60, route to underwriter queue; else auto-approve for STP.</p>
-<p><strong>ROI</strong>: In a homeowners book, coverage verification dropped from 6.2 days to 0.8 days, freeing $2.1M in float.</p>
 
-<p><strong>Risk</strong>: Third-party data APIs can throttle during catastrophes. Cache the last 30 days of loss runs locally; fall back to cached data if API returns 503.</p>
 
-<h3>Step 5: Subrogation Flagging at First Notice (Week 4–6)</h3>
-<p>Subrogation identification is the highest-leverage AI use case I’ve seen. A single missed subrogation on a $120K collision claim costs $110K in paid losses. Most carriers flag subro manually at closure, when the evidence is cold.</p>
-<p><strong>Action</strong>: Run the FNOL narrative through a BERT model fine-tuned on 50K anonymized claims. The model flags “likely subrogation” if:</p>
+
+
+
+
+
+
 <ul>
-<li>Peril = collision</li>
-<li>Fault wording includes “other driver,” “at fault,” “liable”</li>
-<li>Estimated damage > $10K</li>
+
+
+
 </ul>
-<p>Flagged claims auto-trigger a subrogation adjuster assignment and a PDF “subro packet” assembled in <2 minutes via AWS Step Functions.</p>
-<p><strong>Vendor</strong>: Boost Labs’ SubroAI or internal fine-tuning on claim notes from the last 2 years.</p>
-<p><strong>ROI</strong>: One midsize carrier recovered $4.3M in 12 months with 0.3 FTE increase.</p>
 
-<p><strong>Limitation</strong>: The model’s precision is 87 %. False positives add 0.4 days per claim to adjuster review. Accept the noise; the recoveries outweigh the rework.</p>
 
-<h3>Step 6: Dynamic Payment Approval & Closure (Week 5–8)</h3>
-<p>Closure drags because every payment over $5K needs two signatures. In a $250M book, 18 % of claims trigger this rule.</p>
-<p><strong>Action</strong>: Replace static dollar limits with a reinforcement-learning model that learns from historical approval times and loss ratios.</p>
-<p>Inputs:</p>
+
+
+
+
+
+
+
+
 <ul>
-<li>Claim characteristics (peril, location, deductible)</li>
-<li>Handler speed and past error rate</li>
-<li>Fraud score</li>
-<li>Portfolio loss ratio on similar claims</li>
+
+
+
+
 </ul>
-<p>Output: “auto-approve,” “manager review,” or “senior review.” The model starts with a 5 % override rate; after 3 months it drops to 1 %.</p>
-<p><strong>ROI</strong>: A $250M book cut approval time from 2.4 days to 0.3 days, saving $1.8M annually in salary and interest.</p>
 
-<p><strong>Trade-off</strong>: The model needs 500–1,000 adjudicated claims to stabilize. If you lack volume, use a simple rule: auto-approve if loss ratio on peril < 60 %. It’s 70 % as effective and costs nothing.</p>
 
-<h3>Step 7: Continuous Feedback Loop (Week 6–12)</h3>
-<p>AI models decay at 1 % accuracy per month. Set up a lightweight feedback pipeline:</p>
+
+
+
+
+
 <ul>
-<li>Every closed claim → flag if any human touch occurred after day 10</li>
-<li>Feed the event log into a lightweight LSTM that predicts cycle time per claim</li>
-<li>Retrain models weekly with data from the last 90 days</li>
+
+
+
 </ul>
-<p><strong>Tool</strong>: AWS SageMaker Pipelines or Azure ML. Cost: $400/month for a 3-node cluster.</p>
 
-<p><strong>Risk</strong>: Shadow IT drift. Claims managers sometimes tweak rules in Excel and bypass the pipeline. Lock the rule set in a Git repo; require pull requests reviewed by the data science team.</p>
 
-<h3>Metrics Dashboard (What to Track Weekly)</h3>
+
+
+
 <table border="1" cellpadding="4" cellspacing="0">
 <thead>
-<tr><th>Metric</th><th>Baseline</th><th>Target</th><th>Data Source</th></tr>
+<tr></tr>
 </thead>
 <tbody>
-<tr><td>Mean cycle time</td><td>32 days</td><td>19 days</td><td>Admin system</td></tr>
-<tr><td>FNOL-to-assignment</td><td>2.1 days</td><td><1 day</td><td>Event log</td></tr>
-<tr><td>Document extraction errors</td><td>12 %</td><td><5 %</td><td>OCR pipeline</td></tr>
-<tr><td>False subro positives</td><td>0</td><td><15 %</td><td>SubroAI</td></tr>
-<tr><td>Payment approval override</td><td>18 %</td><td><5 %</td><td>Payment microservice</td></tr>
-<tr><td>Adjuster rework rate</td><td>8 %</td><td><3 %</td><td>QA tickets</td></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
 </tbody>
 </table>
 
-<h3>Common Pitfalls & Quick Fixes</h3>
+
 <ul>
-<li><strong>Pitfall</strong>: Over-customizing the FNOL bot for every state. I’ve seen carriers spend $250K on state-specific NLP models that never shipped. <strong>Fix</strong>: Use a generic model fine-tuned on a 10-state corpus; add state-specific keywords via a lookup table.</li>
-<li><strong>Pitfall</strong>: Ignoring TPAs. If 40 % of your book is TPA-handled, their OCR pipeline will corrupt your data. <strong>Fix</strong>: Require TPAs to push native PDFs to your S3 bucket; run a second OCR pass on ingestion.</li>
-<li><strong>Pitfall</strong>: Chasing 100 % accuracy on subrogation. One carrier spent 6 months tuning a model to 95 % precision; the ROI never materialized. <strong>Fix</strong>: Stop at 85 %; the missed recoveries are cheaper than the false positives.</li>
+
+
+
 </ul>
 
-<h3>Vendor Shortlist (No Affiliation)</h3>
+
 <ul>
-<li><strong>FNOL & Fraud</strong>: Shift Technology, Sprout AI, Five Sigma</li>
-<li><strong>OCR & NLP</strong>: Amazon Textract, Google Document AI, Rossum</li>
-<li><strong>Coverage Lookups</strong>: LexisNexis, Verisk, Guidewire DataHub</li>
-<li><strong>Subrogation</strong>: Boost Labs SubroAI, Claimatic, Claim Genius</li>
-<li><strong>Payment Automation</strong>: Earnix, Earnix Retina, Earnix Claim</li>
+
+
+
+
+
 </ul>
 
-<h3>12-Week Timeline (Gantt)</h3>
+
 <pre>
 Week 0: Instrument friction log (2 FTE)
 Week 1: FNOL widget MVP (3 FTE)
@@ -471,22 +471,22 @@ Week 8: Full rollout to 100 % of book
 Week 9–12: Weekly retraining, dashboard tuning
 </pre>
 
-<h3>Budget Snapshot</h3>
+
 <table border="1" cellpadding="4" cellspacing="0">
 <thead>
-<tr><th>Category</th><th>Cost (12 weeks)</th><th>Run Rate (post-launch)</th></tr>
+<tr></tr>
 </thead>
 <tbody>
-<tr><td>Cloud OCR & NLP</td><td>$22,000</td><td>$15,000/month</td></tr>
-<tr><td>Third-party data APIs</td><td>$8,500</td><td>$5,500/month</td></tr>
-<tr><td>Data science FTEs (3)</td><td>$105,000</td><td>$35,000/month</td></tr>
-<tr><td>Engineering FTEs (4)</td><td>$140,000</td><td>$46,000/month</td></tr>
-<tr><td>Change management & training</td><td>$25,000</td><td>$2,000/month</td></tr>
-<tr><tr><strong>Total</strong></tr><td><strong>$300,500</strong></td><td><strong>$103,500/month</strong></td></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr></tr>
+<tr><tr><strong>Total</strong></tr></tr>
 </tbody>
 </table>
 
-<p>The payback period is 6.2 months at a 40 % cycle-time reduction. If you hit only 25 %, the ROI still pencils at 18 months. The key is not the tech—it’s the discipline to ship an 80 % solution in 12 weeks, then iterate.</p>
+
 </div>
 
             
@@ -500,7 +500,7 @@ Week 9–12: Weekly retraining, dashboard tuning
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -509,7 +509,7 @@ Week 9–12: Weekly retraining, dashboard tuning
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

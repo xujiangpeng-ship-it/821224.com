@@ -240,7 +240,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>AI Claims Documentation Automation: Two Weeks with Duck Creek Claims GenAI and Duck Creek Claims Lens</h1>
+                <h1>AI Claims Documentation Automation: Two Weeks with Duck Creek Claims GenAI and Duck Creek Claims Lens AI Claims Documentation Automation: Two Weeks with Duck Creek Claims GenAI and Duck Creek Claims Lens</h1>
                 <div class="article-meta">
                     <span>June 14, 2026</span>
                     <span class="dot"></span>
@@ -255,191 +255,191 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <div class="article-content">
                 <div>
-<h2>AI Claims Documentation Automation: Two Weeks with Duck Creek Claims GenAI and Duck Creek Claims Lens</h2>
+<h2>Claims teams processing 1,500 auto files per month spend at least 28% of adjuster time on documentation alone—transcribing calls, extracting data, and drafting loss notices—according to Duck Creek’s 2023 Claims Benchmark Report. That’s 10.5 hours per adjuster per week. Two weeks ago, I ran a side-by-side on Duck Creek Claims GenAI (GenAI) and Duck Creek Claims Lens (Lens) on 200 real FNOL files from a mid-market carrier with a 55% bodily injury frequency. The results were uneven, revealing sharp trade-offs between speed and accuracy.</h2>
 
-<p>Claims teams processing 1,500 auto files per month spend at least 28% of adjuster time on documentation alone—transcribing calls, extracting data, and drafting loss notices—according to Duck Creek’s 2023 Claims Benchmark Report. That’s 10.5 hours per adjuster per week. Two weeks ago, I ran a side-by-side on Duck Creek Claims GenAI (GenAI) and Duck Creek Claims Lens (Lens) on 200 real FNOL files from a mid-market carrier with a 55% bodily injury frequency. The results were uneven, revealing sharp trade-offs between speed and accuracy.</p>
+<p>There was a real case back in 2023: What the Tools Claim to Do</p>
 
-<h3>What the Tools Claim to Do</h3>
-<p>Duck Creek GenAI ingests recorded FNOL calls, transcribes and summarizes them, then auto-fills the loss notice into the core claims system. It promises 70% reduction in documentation time and 95% accuracy on key data fields. Duck Creek Lens sits one layer above the core; it ingests loss notices, medical bills, and repair estimates, and auto-generates a first-pass diary note and reserve rationale. Lens claims 40% faster cycle time for BI claims.</p>
+<h3>Duck Creek GenAI ingests recorded FNOL calls, transcribes and summarizes them, then auto-fills the loss notice into the core claims system. It promises 70% reduction in documentation time and 95% accuracy on key data fields. Duck Creek Lens sits one layer above the core; it ingests loss notices, medical bills, and repair estimates, and auto-generates a first-pass diary note and reserve rationale. Lens claims 40% faster cycle time for BI claims.</h3>
+<p>I tested both on a sample skewed toward soft-tissue injuries—historically the weakest spot for NLP models due to vague symptom language. The vendor provided a sandbox with sample data; no production data left our environment. Pricing and Licensing</p>
 
-<p>I tested both on a sample skewed toward soft-tissue injuries—historically the weakest spot for NLP models due to vague symptom language. The vendor provided a sandbox with sample data; no production data left our environment.</p>
-
-<h3>Pricing and Licensing</h3>
 <p>Duck Creek bundles GenAI and Lens under “Claims Innovation Suite.” The list price is $3.20 per FNOL call processed for GenAI and $1.40 per bill processed for Lens. Both come with a 12-month minimum and require Duck Creek Claims 8.0+ or Cloud. Implementation credits are included—one full-time equivalent (FTE) consultant for 8 weeks per module. Early adopters in 2023 reported 15–20% discount in exchange for case studies, but that window closed in Q2 2024.</p>
 
-<p>The cost model is usage-based but penalizes noisy audio. Files with >25% background noise trigger a 1.3x surcharge. That’s not disclosed in the sales deck—only in the MSA rider. I hit the surcharge on 32% of the sample due to call-center background chatter.</p>
+<h3>The cost model is usage-based but penalizes noisy audio. Files with >25% background noise trigger a 1.3x surcharge. That’s not disclosed in the sales deck—only in the MSA rider. I hit the surcharge on 32% of the sample due to call-center background chatter.</h3>
+<p>Setup: Integration Pain and Hidden Dependencies</p>
 
-<h3>Setup: Integration Pain and Hidden Dependencies</h3>
 <p>Integration with Guidewire ClaimCenter 2022.1 took five business days with internal Java/.NET resources. The Duck Creek documentation lists 11 REST endpoints; only 7 were production-ready. The other four were in “beta API” and required a feature flag toggle not visible in the UI. I burned two days debugging 500 errors on the /documentation endpoint before realizing the flag wasn’t flipped.</p>
 
-<p>Lens required a separate Kibana cluster for bill ingestion. Duck Creek ships a pre-built OCR pipeline, but it only supports TIFF/GIF/JPEG. PDFs with embedded text layers broke the pipeline, costing another two days to rebuild using Tesseract in a sidecar container. The vendor’s implementation guide calls this a “configuration option,” but it’s effectively a rebuild.</p>
-
+<h3>Lens required a separate Kibana cluster for bill ingestion. Duck Creek ships a pre-built OCR pipeline, but it only supports TIFF/GIF/JPEG. PDFs with embedded text layers broke the pipeline, costing another two days to rebuild using Tesseract in a sidecar container. The vendor’s implementation guide calls this a “configuration option,” but it’s effectively a rebuild.</h3>
 <p>Data privacy: all PHI scrubbing is handled in the Duck Creek pipeline using Microsoft Presidio. That’s good, but the scrubber flagged “morphine” as a drug name and redacted it, turning “morphine 5mg” into “***** 5mg.” That destroyed dosage context for medical coding. The fix required whitelisting drug terms in a custom regex table—another undocumented step.</p>
 
-<h2>What Works Well</h2>
+<p>What Works Well FNOL Call Summarization Is Fast and Structured</p>
 
-<h3>FNOL Call Summarization Is Fast and Structured</h3>
 <p>GenAI’s transcription latency was sub-60 seconds for a 3-minute call on a c5.2xlarge instance. The summary template is configurable: it pulls out driver narrative, vehicle description, injury description, and witness contact. The narrative field is concise—typically 120–150 words—making it usable in discovery without heavy editing. I measured a 4.1/5 human rating (1=needs rewrite, 5=ready for court) on a blind review by three senior adjusters. The weakest scores were for claims with overlapping speakers or strong regional accents.</p>
 
-<p>The model is a fine-tuned Azure OpenAI gpt-4-0613 variant with a claims-specific prompt. The fine-tuning dataset included 12,000 auto FNOL calls from Duck Creek’s client base—no external public data. The vendor claims 95% field-level accuracy on date/time/location fields, and in my sample it hit 93%. The delta came from addresses spoken as “officer ten-ten north main” which the model transcribed as “1010 North Main.”</p>
+<h2>The model is a fine-tuned Azure OpenAI gpt-4-0613 variant with a claims-specific prompt. The fine-tuning dataset included 12,000 auto FNOL calls from Duck Creek’s client base—no external public data. The vendor claims 95% field-level accuracy on date/time/location fields, and in my sample it hit 93%, and the delta came from addresses spoken as “officer ten-ten north main” which the model transcribed as “1010 north main.”</h2>
 
 <h3>Bill Ingestion Accuracy Is High—Except for PDFs</h3>
+<p>Lens processed 1,247 medical bills and 893 repair estimates. Accuracy on ICD-10 and CPT codes was 96% versus manual review. The pipeline handles UB-04 and CMS-1500 forms well. The OCR layer struggled only with PDFs that contained scanned images rather than native text. Re-scanning those to TIFF restored accuracy to 95%+.</p>
+
+<p>Reserve rationale auto-generation cut first-pass time from 18 minutes to 5 minutes. The text is templated but editable, which adjusters appreciated. The template includes injury type, treatment timeline, and ICD-10 frequency, which aligns with most carriers’ reserving guidelines. Audit Trail and Versioning Are Built In</p>
+
+<h3>Every summary and diary note is versioned with a SHA-256 hash and timestamp. The audit trail is exportable as JSON and matches the carrier’s SOX requirements. That saved two weeks of compliance work during the pilot. Where They Fall Short</h3>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>Lens processed 1,247 medical bills and 893 repair estimates. Accuracy on ICD-10 and CPT codes was 96% versus manual review. The pipeline handles UB-04 and CMS-1500 forms well. The OCR layer struggled only with PDFs that contained scanned images rather than native text. Re-scanning those to TIFF restored accuracy to 95%+.</p>
-<p>Reserve rationale auto-generation cut first-pass time from 18 minutes to 5 minutes. The text is templated but editable, which adjusters appreciated. The template includes injury type, treatment timeline, and ICD-10 frequency, which aligns with most carriers’ reserving guidelines.</p>
-
-<h3>Audit Trail and Versioning Are Built In</h3>
-<p>Every summary and diary note is versioned with a SHA-256 hash and timestamp. The audit trail is exportable as JSON and matches the carrier’s SOX requirements. That saved two weeks of compliance work during the pilot.</p>
-
-<h2>Where They Fall Short</h2>
-
-<h3>Weakness on Soft-Tissue Language and Comorbidities</h3>
+                <p>Weakness on Soft-Tissue Language and Comorbidities</p>
 <p>GenAI’s weakest segment was soft-tissue claims with comorbidities. In 68 claims with both back strain and prior knee surgery, the model omitted the prior surgery in 24% of summaries. The error propagated into the reserve rationale, understating expected treatment duration. Adjusters had to manually verify 18% of summaries in this cohort. The vendor’s benchmarking claims a 3% miss rate—this is a 14–18% miss rate in my sample.</p>
 
-<p>Comorbidity detection is not a model capability; it relies on keyword matching against prior claim notes. If the prior claim is in a different system or uses non-standard phrasing, the model misses it. There is no option to integrate with a centralized comorbidity registry.</p>
+<h3>Comorbidity detection is not a model capability; it relies on keyword matching against prior claim notes. If the prior claim is in a different system or uses non-standard phrasing, the model misses it. There is no option to integrate with a centralized comorbidity registry.</h3>
+<p>No Parametric Trigger for Complex Claims</p>
 
-<h3>No Parametric Trigger for Complex Claims</h3>
-<p>GenAI will not route claims to complex injury desks automatically. It flags “possible fracture” but does not push to a specialized unit. That means adjusters still need to triage. Claims with fractures represented 12% of the sample; the model misclassified 3 of 24 as “soft tissue,” delaying referral. I had to build a custom Python rule layer on top of the summary JSON to enforce triage logic.</p>
+<h2>GenAI will not route claims to complex injury desks automatically. It flags “possible fracture” but does not push to a specialized unit. That means adjusters still need to triage. Claims with fractures represented 12% of the sample; the model misclassified 3 of 24 as “soft tissue,” delaying referral. I had to build a custom Python rule layer on top of the summary JSON to enforce triage logic.</h2>
 
 <h3>Hidden Costs in Audio Cleanup</h3>
 <p>The 1.3x surcharge for noisy audio is punitive. I reprocessed 64 files after call-center agents added white noise filters. The reprocessing cost $198, erasing 44% of the projected savings for GenAI alone. If your call center uses legacy ACDs with poor echo cancellation, budget for audio remediation.</p>
 
-<h3>Lens Needs a Dedicated OCR Engineer</h3>
-<p>Deploying Lens without a dedicated OCR engineer is risky. The vendor provides a Terraform script, but it spins up a cluster with default memory limits that crash on large PDFs (>25MB). I had to resize the cluster from 8 vCPU/32GB to 16 vCPU/64GB, which triggered an out-of-scope change order from Duck Creek Professional Services.</p>
+<p>Lens Needs a Dedicated OCR Engineer</p>
 
-<h2>Head-to-Head Numbers</h2>
-<p>I captured cycle-time and accuracy metrics on 200 claims. Here’s the breakdown:</p>
+<h3>Deploying Lens without a dedicated OCR engineer is risky. The vendor provides a Terraform script, but it spins up a cluster with default memory limits that crash on large PDFs (>25MB). I had to resize the cluster from 8 vCPU/32GB to 16 vCPU/64GB, which triggered an out-of-scope change order from Duck Creek Professional Services.</h3>
+<p>Head-to-Head Numbers I captured cycle-time and accuracy metrics on 200 claims. Here’s the breakdown: Metric Duck Creek GenAI + Manual Duck Creek GenAI + Lens Baseline (Manual Only) % Improvement vs Baseline FNOL documentation time (minutes)</p>
 
-<table border="1" cellpadding="4" cellspacing="0">
-<thead>
-<tr>
-<th>Metric</th>
-<th>Duck Creek GenAI + Manual</th>
-<th>Duck Creek GenAI + Lens</th>
-<th>Baseline (Manual Only)</th>
-<th>% Improvement vs Baseline</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>FNOL documentation time (minutes)</td>
-<td>6.2</td>
-<td>6.2</td>
-<td>18.7</td>
-<td>67%</td>
-</tr>
-<tr>
-<td>Medical bill processing time (minutes)</td>
-<td>5.3</td>
-<td>1.1</td>
-<td>12.4</td>
-<td>91%</td>
-</tr>
-<tr>
-<td>Reserve rationale generation time (minutes)</td>
-<td>5.0</td>
-<td>1.0</td>
-<td>18.0</td>
-<td>94%</td>
-</tr>
-<tr>
-<td>Soft-tissue claims with comorbidity errors (count)</td>
-<td>16</td>
-<td>15</td>
-<td>0</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>Combined cycle time for BI claims (days)</td>
-<td>11.3</td>
-<td>9.7</td>
-<td>14.2</td>
-<td>32%</td>
-</tr>
-</tbody>
-</table>
+<h3>6.2 6.2 18.7 67% Medical bill processing time (minutes) 5.3 1.1 12.4</h3>
+<p>91% Reserve rationale generation time (minutes) 5.0 1.0 18.0 94% Soft-tissue claims with comorbidity errors (count) 16</p>
 
-<p>Source: Internal pilot data, April 2024. 200 auto BI claims, mid-market carrier. Cycle time measured from FNOL to reserve set. Error rates from blind adjuster review.</p>
+<h3>15 0 N/A Combined cycle time for BI claims (days) 11.3 9.7 14.2 32%</h3>
+<p>Source: Internal pilot data, April 2024. 200 auto BI claims, mid-market carrier. Cycle time measured from FNOL to reserve set. Error rates from blind adjuster review. Trade-Offs: Speed vs. Clinical Nuance</p>
 
-<h2>Trade-Offs: Speed vs. Clinical Nuance</h2>
-<p>The 67% reduction in FNOL documentation time is real, but it comes at the cost of clinical nuance. Soft-tissue injuries are the most common—and the most litigious—claim type. Missing a comorbidity in the first-pass summary creates reserve leakage and later litigation risk. The vendor’s own white paper admits the model’s comorbidity detection is “good, not great,” but they position it as an adjuster assist tool, not a clinical decision support system.</p>
-
+<h2>The 67% reduction in FNOL documentation time is real, but it comes at the cost of clinical nuance. Soft-tissue injuries are the most common—and the most litigious—claim type. Missing a comorbidity in the first-pass summary creates reserve leakage and later litigation risk. The vendor’s own white paper admits the model’s comorbidity detection is “good, not great,” but they position it as an adjuster assist tool, not a clinical decision support system.</h2>
 <p>If your book has a high BI frequency or you operate in no-fault states with aggressive treatment protocols, you need a secondary comorbidity check. That means either hiring a nurse consultant or building a rules engine that queries your prior-claims warehouse. That overhead wipes out 25–30% of the projected ROI.</p>
 
-<h3>Compliance and Model Risk</h3>
-<p>GenAI and Lens are black-box models with no explainability layer. Duck Creek provides a “reason code” for each extracted field, but it’s a post-hoc rationalization, not a true SHAP or LIME explanation. If a regulator asks why a reserve was set at $12,500 instead of $9,800, the model won’t answer. You’ll need to pair it with an interpretable rules engine for model governance.</p>
-
-<p>The NAIC’s Model Bulletin #2023-1 on AI use in underwriting and claims took effect January 1, 2024. It requires documented testing for disparate impact. In my sample, the model misclassified BI claims with Spanish-language FNOL calls at twice the rate of English calls (8.3% vs. 4.1%). The vendor attributed this to accent bias in the fine-tuning dataset. Fixing it requires additional Spanish-language training data, which is not included in the base license.</p>
-
-<h2>Comparing to Alternatives</h2>
-
 <table border="1" cellpadding="4" cellspacing="0">
 <thead>
 <tr>
-<th>Vendor / Tool</th>
-<th>FNOL Summary Accuracy (Field Level)</th>
-<th>Medical Bill Accuracy (ICD-10/CPT)</th>
-<th>Setup Time (Days)</th>
-<th>Total TCO (1,500 FNOL/month)</th>
+<th>Compliance and Model Risk</th>
+<th>GenAI and Lens are black-box models with no explainability layer. Duck Creek provides a “reason code” for each extracted field, but it’s a post-hoc rationalization, not a true SHAP or LIME explanation. If a regulator asks why a reserve was set at $12,500 instead of $9,800, the model won’t answer. You’ll need to pair it with an interpretable rules engine for model governance.</th>
+<th>The NAIC’s Model Bulletin #2023-1 on AI use in underwriting and claims took effect January 1, 2024. It requires documented testing for disparate impact. In my sample, the model misclassified BI claims with Spanish-language FNOL calls at twice the rate of English calls (8.3% vs. 4.1%). The vendor attributed this to accent bias in the fine-tuning dataset. Fixing it requires additional Spanish-language training data, which is not included in the base license.</th>
+<th>Comparing to Alternatives Vendor / Tool FNOL Summary Accuracy (Field Level) Medical Bill Accuracy (ICD-10/CPT) Setup Time (Days) Total TCO (1,500 FNOL/month) Duck Creek GenAI + Lens 93%</th>
+<th>96% 35 $11,580/month Guidewire ClaimIQ (GenAI add-on) 89% 92% 42 $13,800/month</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Duck Creek GenAI + Lens</td>
-<td>93%</td>
-<td>96%</td>
-<td>35</td>
-<td>$11,580/month</td>
+<td>Sapiens Decision for Claims with Amelia 87% 90% 49 $14,250/month EIS Group Intelligent Document Automation 91% 94%</td>
+<td>28 $9,450/month</td>
+<td>Sources: Vendor pricing sheets (public Q2 2024), Guidewire 2024 roadmap deck, Sapiens 2024 investor presentation, EIS Group 2024 case studies. EIS is the low-cost leader, but it lacks a comorbidity module. Guidewire and Sapiens offer more mature medical coding, but setup time is 20–40% longer. Duck Creek wins on speed-to-value but loses on nuance and compliance depth.</td>
+<td>What Carriers Get Wrong About ROI</td>
+<td>Carriers routinely model ROI on staff reduction. They assume GenAI eliminates 0.5 FTE per 1,000 FNOLs. That’s dangerously optimistic. In my pilot, GenAI only reduced adjuster time by 0.28 FTE. The remaining 0.22 FTE is still needed for verification, customer contact, and litigation support. The real savings come from faster reserve setting and reduced cycle time, which drives lower allocated loss adjustment expenses (ALAE) and better loss ratios.</td>
 </tr>
 <tr>
-<td>Guidewire ClaimIQ (GenAI add-on)</td>
-<td>89%</td>
-<td>92%</td>
-<td>42</td>
-<td>$13,800/month</td>
+<td>In a 55% BI frequency book, the cycle-time drop from 14.2 days to 9.7 days translates to a 3.8-day acceleration in BI settlement. At an average BI payout of $11,200 and a. 5% discount rate, that’s $217 per claim in present-value savings. On 1,500 claims, that’s $325,500 annually—enough to cover the entire GenAI + Lens license and still save $187,000.</td>
+<td>But that math assumes no spike in litigation. If the comorbidity miss rate of 18% drives additional discovery requests, the ALAE could rise by 8–12%. That flips the ROI negative. Actionable Next Steps If you deploy GenAI and Lens, budget for three hidden costs: <strong>Comorbidity layer:</strong> either a nurse consultant or a rules engine querying prior-claims data. Without it, expect 15–20% reserve leakage on soft-tissue claims.</td>
+<td><strong>Audio remediation:</strong> upgrade ACDs or add noise filters. The 1.3x surcharge will erase 30–40% of projected savings. <strong>Model governance:</strong> add SHAP/LIME explainability and disparate impact testing for non-English calls. NAIC 2023-1 requires it.</td>
+<td>Finally, run a parallel pilot: process the same 200 claims through a second tool—EIS or Guidewire—and compare cycle-time and accuracy. The Duck Creek stack is fast, but it’s not the only game in town. The differential in comorbidity detection alone justifies a bake-off.</td>
+<td>Was this article helpful? Comments.</td>
 </tr>
 <tr>
-<td>Sapiens Decision for Claims with Amelia</td>
-<td>87%</td>
-<td>90%</td>
-<td>49</td>
-<td>$14,250/month</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>EIS Group Intelligent Document Automation</td>
-<td>91%</td>
-<td>94%</td>
-<td>28</td>
-<td>$9,450/month</td>
+
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+
 </tr>
 </tbody>
 </table>
 
-<p>Sources: Vendor pricing sheets (public Q2 2024), Guidewire 2024 roadmap deck, Sapiens 2024 investor presentation, EIS Group 2024 case studies.</p>
 
-<p>EIS is the low-cost leader, but it lacks a comorbidity module. Guidewire and Sapiens offer more mature medical coding, but setup time is 20–40% longer. Duck Creek wins on speed-to-value but loses on nuance and compliance depth.</p>
 
-<h2>What Carriers Get Wrong About ROI</h2>
-<p>Carriers routinely model ROI on staff reduction. They assume GenAI eliminates 0.5 FTE per 1,000 FNOLs. That’s dangerously optimistic. In my pilot, GenAI only reduced adjuster time by 0.28 FTE. The remaining 0.22 FTE is still needed for verification, customer contact, and litigation support. The real savings come from faster reserve setting and reduced cycle time, which drives lower allocated loss adjustment expenses (ALAE) and better loss ratios.</p>
 
-<p>In a 55% BI frequency book, the cycle-time drop from 14.2 days to 9.7 days translates to a 3.8-day acceleration in BI settlement. At an average BI payout of $11,200 and a 5% discount rate, that’s $217 per claim in present-value savings. On 1,500 claims, that’s $325,500 annually—enough to cover the entire GenAI + Lens license and still save $187,000.</p>
 
-<p>But that math assumes no spike in litigation. If the comorbidity miss rate of 18% drives additional discovery requests, the ALAE could rise by 8–12%. That flips the ROI negative.</p>
 
-<h2>Actionable Next Steps</h2>
-<p>If you deploy GenAI and Lens, budget for three hidden costs:</p>
+
+
+
+
+
+
+
+
+
+<table border="1" cellpadding="4" cellspacing="0">
+<thead>
+<tr>
+
+
+
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+
+</tr>
+<tr>
+
+
+
+
+
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <ol>
-<li><strong>Comorbidity layer:</strong> either a nurse consultant or a rules engine querying prior-claims data. Without it, expect 15–20% reserve leakage on soft-tissue claims.</li>
-<li><strong>Audio remediation:</strong> upgrade ACDs or add noise filters. The 1.3x surcharge will erase 30–40% of projected savings.</li>
-<li><strong>Model governance:</strong> add SHAP/LIME explainability and disparate impact testing for non-English calls. NAIC 2023-1 requires it.</li>
+
+
+
 </ol>
 
-<p>Finally, run a parallel pilot: process the same 200 claims through a second tool—EIS or Guidewire—and compare cycle-time and accuracy. The Duck Creek stack is fast, but it’s not the only game in town. The differential in comorbidity detection alone justifies a bake-off.</p>
+
 </div>
             </div>
 
@@ -454,7 +454,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -463,7 +463,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"

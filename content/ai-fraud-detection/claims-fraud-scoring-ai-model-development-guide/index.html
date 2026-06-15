@@ -267,7 +267,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/ai-fraud-detection/" class="tag tag-amber">AI Fraud Detection</a>
-                <h1>Claims Fraud Scoring AI Model Development Guide</h1>
+                <h1>Claims Fraud Scoring AI Model Development Guide Claims Fraud Scoring AI Model Development Guide</h1>
                 <div class="article-meta">
                     <span>May 19, 2026</span>
                     <span class="dot"></span>
@@ -281,44 +281,44 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Claims Fraud Scoring AI Model Development Guide</h2>
-
-<p>I’ve seen claims teams waste months on fraud models that never get past POC. Most failures come from one of three places: bad data assumptions, over-engineering the model, or ignoring the operational friction of deploying it. This guide cuts through the noise. It’s a field manual for building a claims fraud scoring model that actuaries trust, adjusters use, and fraudsters fear. You’ll get the exact steps we used to reduce our loss ratio by 1.8 points at a mid-size P&C; carrier, with code snippets and resource estimates you can copy-paste into your own stack.</p>
+                <h2>I’ve seen claims teams waste months on fraud models that never get past POC. Most failures come from one of three places: bad data assumptions, over-engineering the model, or ignoring the operational friction of deploying it. This guide cuts through the noise. It’s a field manual for building a claims fraud scoring model that actuaries trust, adjusters use, and fraudsters fear. You’ll get the exact steps we used to reduce our loss ratio by 1.8 points at a mid-size P&C; carrier, with code snippets and resource estimates you can copy-paste into your own stack.</h2>
 
 <p>Target: a model that scores every new claim in under 300ms, flags the top 5% most suspicious cases for review, and reduces paid fraudulent claims by at least 25%. We’ll hit that with a hybrid approach: supervised learning for labeled fraud cases, unsupervised anomaly detection for emerging fraud patterns, and a rules engine for known red flags. The model will integrate with Guidewire ClaimCenter, Duck Creek Claims, or any core via REST API.</p>
 
 <p>Trade-off to accept upfront: precision is more important than recall in this phase. We’re optimizing for <strong>high-precision low-recall</strong>—catching the obvious fraudsters without drowning adjusters in false positives. We’ll tune the threshold later; first, we need a model that’s reliable enough to deploy.</p>
 
+<p>Step 0: Prerequisites and Resource Plan You need: A labeled dataset of at least 5,000 closed claims with known fraud outcomes (internal or from industry consortia like ISO ClaimSearch or NICB). At least 18 months of historical claim data to capture seasonality and emerging fraud patterns.</p>
+
 ---
 
-<h3>Step 0: Prerequisites and Resource Plan</h3>
+<h3>Access to a data warehouse (Snowflake, BigQuery, Redshift) and a feature store (Feast, Tecton, or open-source). A Python environment with scikit-learn, XGBoost, LightGBM, PyOD, and SHAP installed. A fraud analyst or SIU (Special Investigations Unit) team willing to label 200–300 claims per month for active learning. Budget: $25K–$50K for cloud compute (GCP/AWS), feature engineering, and model monitoring. This excludes core system integration costs.</h3>
 
-<p>You need:</p>
+<p>Timeline: 8–12 weeks for MVP, 4–6 weeks for A/B testing in production. Step 1: Data Acquisition and Governance Start with raw claims data. You’ll need three sources: <strong>Claim Header Data:</strong> policy number, claim number, date of loss, reported date, close date, line of business (auto, home, WC), state, deductible, coverage type.</p>
 
 <ul>
-<li>A labeled dataset of at least 5,000 closed claims with known fraud outcomes (internal or from industry consortia like ISO ClaimSearch or NICB).</li>
-<li>At least 18 months of historical claim data to capture seasonality and emerging fraud patterns.</li>
-<li>Access to a data warehouse (Snowflake, BigQuery, Redshift) and a feature store (Feast, Tecton, or open-source).</li>
-<li>A Python environment with scikit-learn, XGBoost, LightGBM, PyOD, and SHAP installed.</li>
-<li>A fraud analyst or SIU (Special Investigations Unit) team willing to label 200–300 claims per month for active learning.</li>
-<li>Budget: $25K–$50K for cloud compute (GCP/AWS), feature engineering, and model monitoring. This excludes core system integration costs.</li>
+<li><strong>Claim Transaction Data:</strong> payments, reserves, adjusters assigned, repair estimates, medical bills, salvage values, subrogation recoveries. <strong>External Data:</strong> ISO ClaimSearch reports, NICB alerts, MVR (motor vehicle records), PII validation (LexisNexis, Accurint), weather APIs (for hail/flood claims). Example schema in Snowflake:</li>
+<li>Real trade-off: <strong>External data is expensive and slow to ingest.</strong> We dropped NICB feeds after realizing they only flagged 0.3% of our claims as suspicious—too low to justify the $0.12 per claim cost. Instead, we used ISO ClaimSearch reports, which cost $0.04 per claim but provided richer signals like prior losses and injury patterns.</li>
+<li>Step 2: Feature Engineering Pipeline Fraud signals live in behavior, not static fields. We engineered 120+ features across three categories: Behavioral Features (Time-Based) <strong>Claim Velocity:</strong> Number of claims per policy in the last 12 months. High velocity = red flag.</li>
+<li><strong>Adjuster Hops:</strong> Number of adjusters assigned to a claim. >3 hops usually indicates confusion or fraud. <strong>Payment Lag:</strong> Days between reported date and first payment. >45 days = suspicious. Example feature calculation in Python: Network Features (Graph-Based)</li>
+<li><strong>Repair Shop Connections:</strong> Count unique repair shops per claim. >2 shops = possible kickback scheme. <strong>Medical Provider Connections:</strong> Count unique medical providers per bodily injury claim. >3 providers = likely fraud ring. We used Neo4j for graph features. Example query: External Risk Features</li>
+<li><strong>MVR Risk Score:</strong> 0–100 score from LexisNexis. >75 = high risk. <strong>PII Mismatch Score:</strong> 0–100 score from Accurint. >80 = synthetic identity risk. <strong>Weather Anomaly Score:</strong> Deviation from historical hail/flood frequency in the ZIP code.</li>
 </ul>
 
-<p>Timeline: 8–12 weeks for MVP, 4–6 weeks for A/B testing in production.</p>
+<p>Real trade-off: <strong>Feature explosion increases model latency.</strong> We started with 200 features, but our REST API response time jumped from 200ms to 800ms. We pruned to 120 features using SHAP importance and a 100ms latency budget. The top 20 features drove 85% of the model’s predictive power.</p>
 
 ---
 
-<h3>Step 1: Data Acquisition and Governance</h3>
+<h3>Feature Category Top Signal SHAP Importance Data Source Risk Direction Behavioral Claim velocity (12-month claims per policy) 0.184</h3>
 
-<p>Start with raw claims data. You’ll need three sources:</p>
+<p>Internal claims warehouse >5 claims = high fraud risk Behavioral Payment lag (days reported to first payment) 0.142 Payment ledger >45 days = elevated risk Behavioral</p>
 
 <ol>
-<li><strong>Claim Header Data:</strong> policy number, claim number, date of loss, reported date, close date, line of business (auto, home, WC), state, deductible, coverage type.</li>
-<li><strong>Claim Transaction Data:</strong> payments, reserves, adjusters assigned, repair estimates, medical bills, salvage values, subrogation recoveries.</li>
-<li><strong>External Data:</strong> ISO ClaimSearch reports, NICB alerts, MVR (motor vehicle records), PII validation (LexisNexis, Accurint), weather APIs (for hail/flood claims).</li>
+<li>Adjuster hops (count per claim) 0.098 Claims assignment log >3 = suspicious Network Repair shop connections per claim 0.133 Neo4j graph DB</li>
+<li>>2 shops = potential kickback External MVR risk score (LexisNexis) 0.121 LexisNexis API >75 = high risk External PII mismatch score (Accurint)</li>
+<li>0.107 Accurint API >80 = synthetic identity risk Network Medical provider count per BI claim 0.089 Neo4j graph DB >3 = fraud ring signal</li>
 </ol>
 
-<p>Example schema in Snowflake:</p>
+<p>External Weather anomaly score (ZIP-level) 0.061 NOAA weather API</p>
 
 <pre><code>CREATE OR REPLACE TABLE claims_raw (
   claim_number VARCHAR PRIMARY KEY,
@@ -337,22 +337,22 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
   -- Add 50+ more fields
 );</code></pre>
 
-<p>Real trade-off: <strong>External data is expensive and slow to ingest.</strong> We dropped NICB feeds after realizing they only flagged 0.3% of our claims as suspicious—too low to justify the $0.12 per claim cost. Instead, we used ISO ClaimSearch reports, which cost $0.04 per claim but provided richer signals like prior losses and injury patterns.</p>
+<p>>2 std dev = suspicious Step 3: Labeling Strategy and Active Learning Labeled fraud data is scarce and noisy. We used a three-tier labeling approach: <strong>Confirmed Fraud:</strong> Claims with SIU findings, court convictions, or confirmed via subrogation recoveries. These are gold-standard labels.</p>
 
 ---
 
-<h3>Step 2: Feature Engineering Pipeline</h3>
+<h3><strong>Suspected Fraud:</strong> Claims flagged by adjusters or TPAs but not yet investigated. We treated these as weak labels with a 0.3 probability of being fraud. <strong>Negative Labels:</strong> All other closed claims. We assumed these were clean unless proven otherwise.</h3>
 
-<p>Fraud signals live in behavior, not static fields. We engineered 120+ features across three categories:</p>
+<p>For active learning, we prioritized labeling claims the model scored in the 80th–95th percentile. This gave us the most bang for our labeling buck. Example query to identify candidates: We hired a retired adjuster to label 200 claims per month. Cost: $5K/month. ROI: we reduced false positives by 12% in the first quarter.</p>
 
-<h4>Behavioral Features (Time-Based)</h4>
+<h4>Real trade-off: <strong>Label noise hurts model performance.</strong> We initially treated all suspected fraud labels as positives, but our precision dropped from 0.82 to 0.65. We switched to probabilistic labeling (0.7 weight for suspected fraud) and retrained weekly. Precision rebounded to 0.85.</h4>
 <ul>
-<li><strong>Claim Velocity:</strong> Number of claims per policy in the last 12 months. High velocity = red flag.</li>
-<li><strong>Adjuster Hops:</strong> Number of adjusters assigned to a claim. >3 hops usually indicates confusion or fraud.</li>
-<li><strong>Payment Lag:</strong> Days between reported date and first payment. >45 days = suspicious.</li>
+<li>Step 4: Model Selection and Training We tested seven models: XGBoost (baseline) LightGBM (faster training) CatBoost (handles categoricals well) Logistic Regression (interpretable) Isolation Forest (unsupervised anomaly detection) One-Class SVM (unsupervised)</li>
+<li>Autoencoders (deep learning) Best performer: LightGBM with focal loss (handles class imbalance). Focal loss down-weights well-classified examples, forcing the model to focus on hard cases. Formula: <code>FL(p_t) = -(1 - p_t)^γ * log(p_t)</code> Where <code>p_t</code> is the model’s predicted probability and <code>γ</code> is a focusing parameter (we used 2.0).</li>
+<li>Training script (Python): Resource estimate: Training takes 2–4 hours on a 4-core CPU with 16GB RAM. We used a GCP n2-standard-4 instance ($0.15/hour). Real trade-off: <strong>Focal loss increases training time by 30% but improves precision by 4–6 points.</strong> Worth it for fraud modeling. Step 5: Hybrid Model Architecture</li>
 </ul>
 
-<p>Example feature calculation in Python:</p>
+<p>No single model catches all fraud. We built a two-stage pipeline: <strong>Stage 1: Supervised Model</strong> (LightGBM) for labeled fraud cases. Scores 0–1. <strong>Stage 2: Unsupervised Anomaly Detection</strong> (Isolation Forest) for emerging fraud patterns. Scores 0–1. Final score = 0.7 * Supervised Score + 0.3 * Unsupervised Score</p>
 
 <pre><code>def calc_claim_velocity(claims_df):
     policy_claims = claims_df.groupby('policy_id')['claim_number'].nunique()
@@ -361,92 +361,92 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 # Apply to raw claims
 claims_df['claim_velocity_12m'] = calc_claim_velocity(claims_df[claims_df['date_of_loss'] > (claims_df['date_of_loss'].max() - pd.DateOffset(months=12))])</code></pre>
 
-<h4>Network Features (Graph-Based)</h4>
+<h4>Why the weights? The supervised model is precise but misses novel fraud patterns. The unsupervised model catches anomalies but has high false positives. The hybrid balances both. Isolation Forest code: We scaled the Isolation Forest scores to 0–1 using min-max scaling: Hybrid score in production:</h4>
 <ul>
-<li><strong>Repair Shop Connections:</strong> Count unique repair shops per claim. >2 shops = possible kickback scheme.</li>
-<li><strong>Medical Provider Connections:</strong> Count unique medical providers per bodily injury claim. >3 providers = likely fraud ring.</li>
+<li>Real trade-off: <strong>The unsupervised model adds 150ms to inference time.</strong> We mitigated this by running it asynchronously and caching results for 24 hours. Adapters in our Flask API handle this: Step 6: Threshold Tuning and Business Rules We don’t deploy a model without a threshold, and start with a conservative threshold (e.g., top 5% of scores) and adjust based on business impact. Example tuning process:</li>
+<li>We landed on a threshold of 0.87, which gave us: Precision: 0.85 Recall: 0.32 F1: 0.47</li>
 </ul>
 
-<p>We used Neo4j for graph features. Example query:</p>
+<p>Not great recall, but precision is king for fraud. We compensate with business rules: If claim amount > $100K AND score > 0.80: auto-flag for SIU. If claim involves injury AND score > 0.75: auto-flag for medical review. If score > 0.95: auto-reject (no payment until investigation).</p>
 
 <pre><code>MATCH (c:Claim {claim_number: 'CL12345'})-[:BILLED_BY]->(p:Provider)
 RETURN count(p) AS provider_count;</code></pre>
 
-<h4>External Risk Features</h4>
+<h4>Real trade-off: <strong>Business rules introduce bias.</strong> We saw a 15% increase in fraud detection for high-value claims but missed some low-value fraud rings. We’re now exploring reinforcement learning to dynamically adjust thresholds by line of business. Step 7: Integration with Core Systems</h4>
 <ul>
-<li><strong>MVR Risk Score:</strong> 0–100 score from LexisNexis. >75 = high risk.</li>
-<li><strong>PII Mismatch Score:</strong> 0–100 score from Accurint. >80 = synthetic identity risk.</li>
-<li><strong>Weather Anomaly Score:</strong> Deviation from historical hail/flood frequency in the ZIP code.</li>
+<li>Fraud scoring is useless if it doesn’t integrate with adjusters’ workflows. We built three integration points: <strong>Pre-Validation API:</strong> Called during first notice of loss (FNOL). Scores claims immediately and flags high-risk ones for immediate SIU review. <strong>Adjudication Plugin:</strong> Embedded in Guidewire ClaimCenter. Displays fraud score and top 5 risk factors in the adjuster’s dashboard. <strong>Post-Payment Audit:</strong> Batch scoring of closed claims monthly. Flags claims for retroactive review.</li>
+<li>Example integration with Guidewire via REST API: Resource estimate: Integration takes 4–6 weeks per core system. We used MuleSoft for API orchestration ($15K) and a React-based dashboard for adjusters ($25K). Real trade-off: <strong>Core system APIs are slow and rate-limited.</strong> Guidewire’s REST API caps at 100 requests/minute. We mitigated this by: Batching claims into 50-claim chunks.</li>
+<li>Using a message queue (Kafka) to decouple scoring from updates. Caching scores for 1 hour to avoid redundant calls. Step 8: Model Monitoring and Feedback Loop Fraud patterns evolve. We monitor three things: <strong>Data Drift:</strong> Was this article helpful? Comments. Draw your own conclusions. I'll leave it there.</li>
 </ul>
 
-<p>Real trade-off: <strong>Feature explosion increases model latency.</strong> We started with 200 features, but our REST API response time jumped from 200ms to 800ms. We pruned to 120 features using SHAP importance and a 100ms latency budget. The top 20 features drove 85% of the model’s predictive power.</p>
+
 
 <table border="1" cellpadding="4" cellspacing="0">
 <thead>
 <tr>
-<th>Feature Category</th>
-<th>Top Signal</th>
-<th>SHAP Importance</th>
-<th>Data Source</th>
-<th>Risk Direction</th>
+
+
+
+
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Behavioral</td>
-<td>Claim velocity (12-month claims per policy)</td>
-<td>0.184</td>
-<td>Internal claims warehouse</td>
-<td>>5 claims = high fraud risk</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Behavioral</td>
-<td>Payment lag (days reported to first payment)</td>
-<td>0.142</td>
-<td>Payment ledger</td>
-<td>>45 days = elevated risk</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Behavioral</td>
-<td>Adjuster hops (count per claim)</td>
-<td>0.098</td>
-<td>Claims assignment log</td>
-<td>>3 = suspicious</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Network</td>
-<td>Repair shop connections per claim</td>
-<td>0.133</td>
-<td>Neo4j graph DB</td>
-<td>>2 shops = potential kickback</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>External</td>
-<td>MVR risk score (LexisNexis)</td>
-<td>0.121</td>
-<td>LexisNexis API</td>
-<td>>75 = high risk</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>External</td>
-<td>PII mismatch score (Accurint)</td>
-<td>0.107</td>
-<td>Accurint API</td>
-<td>>80 = synthetic identity risk</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>Network</td>
-<td>Medical provider count per BI claim</td>
-<td>0.089</td>
-<td>Neo4j graph DB</td>
-<td>>3 = fraud ring signal</td>
+
+
+
+
+
 </tr>
 <tr>
-<td>External</td>
-<td>Weather anomaly score (ZIP-level)</td>
-<td>0.061</td>
-<td>NOAA weather API</td>
-<td>>2 std dev = suspicious</td>
+
+
+
+
+
 </tr>
 </tbody>
 </table>
@@ -455,14 +455,14 @@ RETURN count(p) AS provider_count;</code></pre>
 
 ---
 
-<h3>Step 3: Labeling Strategy and Active Learning</h3>
 
-<p>Labeled fraud data is scarce and noisy. We used a three-tier labeling approach:</p>
+
+
 
 <ol>
-<li><strong>Confirmed Fraud:</strong> Claims with SIU findings, court convictions, or confirmed via subrogation recoveries. These are gold-standard labels.</li>
-<li><strong>Suspected Fraud:</strong> Claims flagged by adjusters or TPAs but not yet investigated. We treated these as weak labels with a 0.3 probability of being fraud.</li>
-<li><strong>Negative Labels:</strong> All other closed claims. We assumed these were clean unless proven otherwise.</li>
+
+
+
 </ol>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
@@ -470,7 +470,7 @@ RETURN count(p) AS provider_count;</code></pre>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <p>For active learning, we prioritized labeling claims the model scored in the 80th–95th percentile. This gave us the most bang for our labeling buck. Example query to identify candidates:</p>
+                
 
 <pre><code>SELECT claim_number, score
 FROM fraud_scores
@@ -478,33 +478,33 @@ WHERE score BETWEEN 0.8 AND 0.95
 ORDER BY score DESC
 LIMIT 100;</code></pre>
 
-<p>We hired a retired adjuster to label 200 claims per month. Cost: $5K/month. ROI: we reduced false positives by 12% in the first quarter.</p>
 
-<p>Real trade-off: <strong>Label noise hurts model performance.</strong> We initially treated all suspected fraud labels as positives, but our precision dropped from 0.82 to 0.65. We switched to probabilistic labeling (0.7 weight for suspected fraud) and retrained weekly. Precision rebounded to 0.85.</p>
+
+
 
 ---
 
-<h3>Step 4: Model Selection and Training</h3>
 
-<p>We tested seven models:</p>
+
+
 
 <ul>
-<li>XGBoost (baseline)</li>
-<li>LightGBM (faster training)</li>
-<li>CatBoost (handles categoricals well)</li>
-<li>Logistic Regression (interpretable)</li>
-<li>Isolation Forest (unsupervised anomaly detection)</li>
-<li>One-Class SVM (unsupervised)</li>
-<li>Autoencoders (deep learning)</li>
+
+
+
+
+
+
+
 </ul>
 
-<p>Best performer: LightGBM with focal loss (handles class imbalance). Focal loss down-weights well-classified examples, forcing the model to focus on hard cases. Formula:</p>
 
-<p><code>FL(p_t) = -(1 - p_t)^γ * log(p_t)</code></p>
 
-<p>Where <code>p_t</code> is the model’s predicted probability and <code>γ</code> is a focusing parameter (we used 2.0).</p>
 
-<p>Training script (Python):</p>
+
+
+
+
 
 <pre><code>import lightgbm as lgb
 from sklearn.model_selection import train_test_split
@@ -536,26 +536,26 @@ model = lgb.train(params, train_data, num_boost_round=1000)
 # Save model
 model.save_model('fraud_model_lgb.txt')</code></pre>
 
-<p>Resource estimate: Training takes 2–4 hours on a 4-core CPU with 16GB RAM. We used a GCP n2-standard-4 instance ($0.15/hour).</p>
 
-<p>Real trade-off: <strong>Focal loss increases training time by 30% but improves precision by 4–6 points.</strong> Worth it for fraud modeling.</p>
+
+
 
 ---
 
-<h3>Step 5: Hybrid Model Architecture</h3>
 
-<p>No single model catches all fraud. We built a two-stage pipeline:</p>
+
+
 
 <ol>
-<li><strong>Stage 1: Supervised Model</strong> (LightGBM) for labeled fraud cases. Scores 0–1.</li>
-<li><strong>Stage 2: Unsupervised Anomaly Detection</strong> (Isolation Forest) for emerging fraud patterns. Scores 0–1.</li>
+
+
 </ol>
 
-<p>Final score = 0.7 * Supervised Score + 0.3 * Unsupervised Score</p>
 
-<p>Why the weights? The supervised model is precise but misses novel fraud patterns. The unsupervised model catches anomalies but has high false positives. The hybrid balances both.</p>
 
-<p>Isolation Forest code:</p>
+
+
+
 
 <pre><code>from sklearn.ensemble import IsolationForest
 
@@ -566,19 +566,19 @@ iso_forest.fit(X_train[y_train == 0])
 # Predict anomaly score (lower is more anomalous)
 X_test['iso_score'] = -iso_forest.decision_function(X_test)</code></pre>
 
-<p>We scaled the Isolation Forest scores to 0–1 using min-max scaling:</p>
+
 
 <pre><code>from sklearn.preprocessing import MinMaxScaler
 
 scaler = MinMaxScaler()
 X_test['iso_score_scaled'] = scaler.fit_transform(X_test[['iso_score']])</code></pre>
 
-<p>Hybrid score in production:</p>
+
 
 <pre><code>def hybrid_score(supervised_score, iso_score_scaled):
     return 0.7 * supervised_score + 0.3 * iso_score_scaled</code></pre>
 
-<p>Real trade-off: <strong>The unsupervised model adds 150ms to inference time.</strong> We mitigated this by running it asynchronously and caching results for 24 hours. Adapters in our Flask API handle this:</p>
+
 
 <pre><code>from flask import Flask, request, jsonify
 import redis
@@ -608,11 +608,11 @@ def score():
 
 ---
 
-<h3>Step 6: Threshold Tuning and Business Rules</h3>
 
-<p>We don’t deploy a model without a threshold. Start with a conservative threshold (e.g., top 5% of scores) and adjust based on business impact.</p>
 
-<p>Example tuning process:</p>
+
+
+
 
 <pre><code>from sklearn.metrics import precision_recall_curve
 
@@ -633,37 +633,37 @@ plt.show()
 selected_threshold = thresholds[np.argmax(precision >= 0.85)]
 print(f"Selected threshold: {selected_threshold:.3f}")</code></pre>
 
-<p>We landed on a threshold of 0.87, which gave us:</p>
+
 
 <ul>
-<li>Precision: 0.85</li>
-<li>Recall: 0.32</li>
-<li>F1: 0.47</li>
+
+
+
 </ul>
 
-<p>Not great recall, but precision is king for fraud. We compensate with business rules:</p>
+
 
 <ul>
-<li>If claim amount > $100K AND score > 0.80: auto-flag for SIU.</li>
-<li>If claim involves injury AND score > 0.75: auto-flag for medical review.</li>
-<li>If score > 0.95: auto-reject (no payment until investigation).</li>
+
+
+
 </ul>
 
-<p>Real trade-off: <strong>Business rules introduce bias.</strong> We saw a 15% increase in fraud detection for high-value claims but missed some low-value fraud rings. We’re now exploring reinforcement learning to dynamically adjust thresholds by line of business.</p>
+
 
 ---
 
-<h3>Step 7: Integration with Core Systems</h3>
 
-<p>Fraud scoring is useless if it doesn’t integrate with adjusters’ workflows. We built three integration points:</p>
+
+
 
 <ol>
-<li><strong>Pre-Validation API:</strong> Called during first notice of loss (FNOL). Scores claims immediately and flags high-risk ones for immediate SIU review.</li>
-<li><strong>Adjudication Plugin:</strong> Embedded in Guidewire ClaimCenter. Displays fraud score and top 5 risk factors in the adjuster’s dashboard.</li>
-<li><strong>Post-Payment Audit:</strong> Batch scoring of closed claims monthly. Flags claims for retroactive review.</li>
+
+
+
 </ol>
 
-<p>Example integration with Guidewire via REST API:</p>
+
 
 <pre><code>@app.route('/guidewire/webhook', methods=['POST'])
 def guidewire_webhook():
@@ -688,24 +688,24 @@ def guidewire_webhook():
 
     return jsonify({'status': 'success'})</code></pre>
 
-<p>Resource estimate: Integration takes 4–6 weeks per core system. We used MuleSoft for API orchestration ($15K) and a React-based dashboard for adjusters ($25K).</p>
 
-<p>Real trade-off: <strong>Core system APIs are slow and rate-limited.</strong> Guidewire’s REST API caps at 100 requests/minute. We mitigated this by:</p>
+
+
 
 <ul>
-<li>Batching claims into 50-claim chunks.</li>
-<li>Using a message queue (Kafka) to decouple scoring from updates.</li>
-<li>Caching scores for 1 hour to avoid redundant calls.</li>
+
+
+
 </ul>
 
 ---
 
-<h3>Step 8: Model Monitoring and Feedback Loop</h3>
 
-<p>Fraud patterns evolve. We monitor three things:</p>
+
+
 
 <ol>
-<li><strong>Data Drift:</strong></li></ol>
+</ol>
 </div>
 
             
@@ -719,7 +719,7 @@ def guidewire_webhook():
             </div>
 
             <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0">
-                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</p>
+                
                 <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
                     <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
                     <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
@@ -728,7 +728,7 @@ def guidewire_webhook():
 
             <!-- COMMENTS -->
             <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              <h3 style="font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:24px">Comments</h3>
+              
               <script src="https://utteranc.es/client.js"
                       repo="cowcomzw/insurtech-repo"
                       issue-term="pathname"
