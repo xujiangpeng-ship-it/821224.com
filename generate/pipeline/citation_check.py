@@ -410,3 +410,4 @@ if __name__ == "__main__":
         print("\n--- Needs Fix ---")
         for nf in result["needs_fix"]:
             print(f"  {nf['raw_citation'][:120]} → {nf.get('matched_source', 'N/A')}")
+
