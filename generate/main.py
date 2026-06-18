@@ -21,6 +21,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from llm import generate_text
 from pipeline.deai import deai_process
+from pipeline.generator_v2 import enhance_article
 
 # PIL for image dimension retrieval (WebP width/height injection)
 try:
@@ -37,6 +38,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("main")
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
 CONTENT_DIR = ROOT / "content"
 
 CATEGORY_HERO = {
@@ -424,6 +426,13 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
 
     # Apply de-AI post-processing to disrupt LLM-detectable patterns
     html = deai_process(html)
+
+    # Apply stance injection + persona blending (generator_v2)
+    os.environ.setdefault("MISTRAL_API_KEY", "DaqhV9nv9V228XEPUWm52Rqsj8rpJbS4")
+    v2_result = enhance_article(html)
+    html = v2_result["enhanced_text"]
+    logger.info("enhance_article: stance=%s, personas=%s, llm=%s",
+                v2_result["stance_used"], v2_result["personas_used"], v2_result["llm_called"])
 
     out_dir = CONTENT_DIR / subdomain / slug
     out_dir.mkdir(parents=True, exist_ok=True)
