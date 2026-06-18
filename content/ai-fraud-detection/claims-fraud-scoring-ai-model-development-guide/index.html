@@ -1,3 +1,16 @@
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Claims Fraud Scoring AI Model Development Guide Claims Fraud Scoring AI Model Development Guide",
+        "description": "Claims Fraud Scoring AI Model Development Guide Claims Fraud Scoring AI Model Development Guide",
+        "datePublished": "2026-03-01T12:00:00+00:00",
+        "dateModified": "2026-03-01T12:00:00+00:00",
+        "author": {"@type": "Person", "name": "Jiangpeng Xu"},
+        "publisher": {"@type": "Organization", "name": "Insurtech Insights"}
+    }
+    </script>
+
 <article class="article-container">
 
             <nav class="article-breadcrumb" aria-label="Breadcrumb">
@@ -114,7 +127,6 @@ We tested seven models:
 <p>Formula:
 ```
 FL(p_t) = -(1 - p_t)^γ * log(p_t)
-```
 Where `p_t` is the model’s predicted probability and `γ` is a focusing parameter (we used 2.0).</p>
 <p>Training script (Python):</p>
 <p>```python
@@ -144,7 +156,7 @@ params = {
 model = lgb.train(params, train_data, num_boost_round=1000)</p>
 <p># Save model
 model.save_model('fraud_model_lgb.txt')
-```</p>
+</p>
 <p>> **Real trade-off**: Focal loss increases training time by 30% but improves precision by 4–6 points. Worth it for fraud modeling.</p>
 <p>### Systems-Thinking Rewrites</p>
 <p>#### Step 5: Hybrid Model Architecture
@@ -183,7 +195,7 @@ def score():
 <p># Cache for 24 hours
     redis_client.setex(claim_id, 86400, str(hybrid))</p>
 <p>return jsonify({'score': hybrid})
-```</p>
+</p>
 <p>#### Step 6: Threshold Tuning and Business Rules
 Threshold tuning isn’t a one-off decision—it’s a dynamic equilibrium point balancing false positives against false negatives in real time. The system begins conservatively (e.g., top 5% of scores) to prevent over-aggressive interventions. Yet, this initial configuration may miss subtle patterns or create feedback loops where fraudsters exploit the widened aperture to probe defenses. As business impact data accumulates, the system calibrates not just the threshold, but the *entire decisioning framework*. Adjustments aren't made in isolation—they ripple through claims processing, customer experience, and fraud investigator workloads. For example, lowering the threshold increases false positives, which overloads the claims adjudication system, causing backlogs and degrading service quality. This emergent behavior may drive fraudsters to shift tactics (e.g., smaller, more frequent fraud attempts), which the system must then detect. The tuning process itself becomes a feedback loop: each adjustment retroactively shapes the fraud landscape, forcing the model—and the organization—to continuously evolve in response.</p>
 <p>```python

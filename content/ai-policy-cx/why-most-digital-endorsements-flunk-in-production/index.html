@@ -1,3 +1,16 @@
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Why Most Digital Endorsements Flunk in Production Why Most Digital Endorsements Flunk in Production",
+        "description": "Why Most Digital Endorsements Flunk in Production Why Most Digital Endorsements Flunk in Production",
+        "datePublished": "2026-03-26T12:00:00+00:00",
+        "dateModified": "2026-03-26T12:00:00+00:00",
+        "author": {"@type": "Person", "name": "Jiangpeng Xu"},
+        "publisher": {"@type": "Organization", "name": "Insurtech Insights"}
+    }
+    </script>
+
 <article class="article-container">
 
             <nav class="article-breadcrumb" aria-label="Breadcrumb">
@@ -158,7 +171,7 @@ STATE_ZIP_PATTERNS = {
     pattern = STATE_ZIP_PATTERNS.get(state.upper(), r"\b(\d{5}(?:-\d{4})?)\b")
     match = re.search(pattern, text, re.IGNORECASE)
     return match.group(1) if match else None</p>
-<p>```python
+<p>python
 from pydantic import BaseModel, validator
 from typing import Optional</p>
 <p>Let me press F9 and extract the raw truth from this schema. The `policy_id` isn't just a string—it's a unique key, likely hashed, with an implied cardinality in the millions. The `endorsement_type` is categorical; if we one-hot encode it, we'd get a sparse matrix with 12-24 dummies, depending on regional underwriting rules. The `effective_date` is a time-series anchor—let's log-transform the Unix timestamp because seasonality in endorsement volume jumps out in ACF plots. The `change_amount` is continuous, but skew at 2.3 tells me we'll need a Yeo-Johnson transform before feeding it into any GLM. The `risk_address` is a nested dictionary of lat/long, building class, and flood zone—geocode that with 95% geohash precision, and you'll see spatial autocorrelation in residuals if we ignore it. The numbers don't lie.</p>
