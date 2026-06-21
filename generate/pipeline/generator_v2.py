@@ -11,9 +11,82 @@ Usage:
 """
 
 import random
+import re
 import logging
 
 logger = logging.getLogger("generator_v2")
+
+
+# ---------------------------------------------------------------------------
+# LLM Response Cleaning Utilities
+# ---------------------------------------------------------------------------
+
+def _clean_llm_html_response(text: str) -> str:
+    """Strip ```html fences and chatbot meta-text from LLM HTML responses.
+
+    LLMs (especially Mistral small) frequently wrap their output in markdown
+    code fences and prepend conversational preamble like
+    "Here's the enhanced article with added contrarian perspectives..."
+    This function extracts just the HTML content.
+    """
+    if not text or not text.strip():
+        return text
+
+    # Step 1: Extract content from ```html / ``` code fences if present
+    # Match ```html (or just ```) followed by content and closing ```
+    fence_patterns = [
+        r'```html\s*\n(.*?)```',   # ```html ... ```
+        r'```\s*\n(.*?)```',        # ``` ... ```
+    ]
+    for pattern in fence_patterns:
+        m = re.search(pattern, text, re.DOTALL)
+        if m:
+            text = m.group(1).strip()
+            break
+
+    # Step 2: Find where actual HTML begins (skip chatbot preamble)
+    # Look for <!DOCTYPE html> or <html tag
+    html_start_patterns = [
+        r'<!DOCTYPE\s+html',
+        r'<html[\s>]',
+    ]
+    for pattern in html_start_patterns:
+        m = re.search(pattern, text, re.IGNORECASE)
+        if m:
+            text = text[m.start():]
+            break
+
+    return text.strip()
+
+
+def _clean_paragraph_response(text: str) -> str:
+    """Strip chatbot preamble from a single-paragraph LLM rewrite response.
+
+    Pass 3 persona blending asks the LLM to rewrite individual paragraphs.
+    The LLM may prepend "Here's the rewritten paragraph:" or similar.
+    """
+    if not text or not text.strip():
+        return text
+
+    # Remove common chatbot prefixes (case-insensitive)
+    chatbot_prefixes = [
+        r"^Here[’'']s\s+(the|a|an|my)\s+(rewritten|enhanced|revised|updated)\s+(paragraph|version|text|passage)[\s:]*[.:]?\s*",
+        r"^Here[’'']s\s+(the|a|an)\s+(rewrite|revision|enhancement)[\s:]*[.:]?\s*",
+        r"^Here[’'']s\s+(how\s+I['’'']d|what\s+I\s+came\s+up\s+with)[\s:]*[.:]?\s*",
+        r"^(Certainly!|Of course!|Sure!|Absolutely!)\s*",
+        r"^(I['’'']ve|I\s+have)\s+(rewritten|enhanced|revised|updated)\s+.+?[.:]\s*",
+    ]
+    for pattern in chatbot_prefixes:
+        text = re.sub(pattern, "", text, flags=re.IGNORECASE).strip()
+
+    # Also strip ``` fences if LLM wrapped a single paragraph in them
+    for fence_pattern in [r'```html\s*\n(.*?)```', r'```\s*\n(.*?)```']:
+        m = re.search(fence_pattern, text, re.DOTALL)
+        if m:
+            text = m.group(1).strip()
+            break
+
+    return text.strip()
 
 # ---------------------------------------------------------------------------
 # Pass 2: 8 Stances with argument templates
@@ -275,6 +348,11 @@ def enhance_article(
                 temperature=0.8,
                 max_tokens=8192,
             )
+            # Clean LLM response: strip ```html fences and chatbot preamble
+            pass2_text = _clean_llm_html_response(pass2_text)
+            if not pass2_text:
+                logger.warning("Pass 2 output was empty after cleaning. Using original text.")
+                pass2_text = article_text
             llm_called = True
         except Exception as e:
             logger.warning(f"LLM call failed for stance injection: {e}. Using original text.")
@@ -315,7 +393,7 @@ def enhance_article(
                     temperature=0.9,
                     max_tokens=1024,
                 )
-                paragraphs[para_idx] = rewritten.strip()
+                paragraphs[para_idx] = _clean_paragraph_response(rewritten.strip())
                 llm_called = True
             except Exception as e:
                 logger.warning(f"LLM call failed for persona '{p_key}' on paragraph {para_idx}: {e}")

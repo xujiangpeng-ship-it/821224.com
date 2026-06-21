@@ -200,6 +200,41 @@ def mark_completed(keyword_entry):
 # Content Generation
 # ---------------------------------------------------------------------------
 
+def _clean_llm_body_response(text: str) -> str:
+    """Strip ```html fences and chatbot preamble from LLM body-content responses.
+
+    Unlike _clean_llm_html_response (which expects full HTML with DOCTYPE),
+    this handles the Pass 1 output which should be bare HTML body content
+    (h2, p, table, ul, etc. — no DOCTYPE / html / head / body tags).
+    """
+    if not text or not text.strip():
+        return text
+
+    # Step 1: Extract content from ```html / ``` code fences
+    fence_patterns = [
+        r'```html\s*\n(.*?)```',
+        r'```\s*\n(.*?)```',
+    ]
+    for pattern in fence_patterns:
+        m = re.search(pattern, text, re.DOTALL)
+        if m:
+            text = m.group(1).strip()
+            break
+
+    # Step 2: Find where real HTML body content begins
+    # Body content starts with <h2>, <h3>, <p>, <table>, <ul>, <ol>, etc.
+    body_start_patterns = [
+        r'<(h[1-6]|p|table|ul|ol|div|blockquote|figure|pre|section|article)\b',
+    ]
+    for pattern in body_start_patterns:
+        m = re.search(pattern, text, re.IGNORECASE)
+        if m:
+            text = text[m.start():]
+            break
+
+    return text.strip()
+
+
 CONTENT_LENGTH_RULES = {
     "tutorial":       (2000, 4000),
     "tool-review":    (1200, 2000),
@@ -449,6 +484,11 @@ def generate_article(keyword_entry, config) -> str:
         retry_attempts=gen_cfg.get("retry_attempts", 3),
         retry_delays=gen_cfg.get("retry_delay_seconds", [5, 15, 30]),
     )
+
+    # Safety net: strip ```html fences and chatbot preamble if LLM ignored
+    # the "NO code fences" instruction in the system prompt
+    raw = _clean_llm_body_response(raw)
+
     return raw
 
 
@@ -581,10 +621,24 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     # Apply de-AI post-processing to disrupt LLM-detectable patterns
     html = deai_process(html)
 
+    # Save clean pre-enhance copy as fallback
+    html_before_enhance = html
+
     # Apply stance injection + persona blending (generator_v2)
     os.environ.setdefault("MISTRAL_API_KEY", "DaqhV9nv9V228XEPUWm52Rqsj8rpJbS4")
     v2_result = enhance_article(html)
     html = v2_result["enhanced_text"]
+
+    # Final guard: if enhance_article returned polluted output (missing DOCTYPE),
+    # fall back to the clean Jinja2-rendered HTML
+    if not re.search(r'<!DOCTYPE\s+html|<html[\s>]', html, re.IGNORECASE):
+        logger.warning(
+            "enhance_article output missing DOCTYPE/html tag — falling back to clean rendered HTML. "
+            "stance=%s, personas=%s",
+            v2_result["stance_used"], v2_result["personas_used"]
+        )
+        html = html_before_enhance
+
     logger.info("enhance_article: stance=%s, personas=%s, llm=%s",
                 v2_result["stance_used"], v2_result["personas_used"], v2_result["llm_called"])
 
