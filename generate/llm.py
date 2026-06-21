@@ -137,7 +137,7 @@ def generate_text(
     system_prompt: str,
     user_prompt: str,
     temperature: float = 0.7,
-    max_tokens: int = 4096,
+    max_tokens: int = 16384,
     retry_attempts: int = 3,
     retry_delays: Optional[list] = None,
 ) -> str:

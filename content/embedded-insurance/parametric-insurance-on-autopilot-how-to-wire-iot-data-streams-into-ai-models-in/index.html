@@ -537,7 +537,12 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 <li><strong>Week 0</strong>: Pick trigger + data source. Validate with 10k historical events.</li>
 <li><strong>Week 1</strong>: Buy 5 sensors, run MQTT broker, ingest data.</li>
 <li><strong>Week 2</strong>: Build data-quality engine. Log failures.</li>
-<li><strong>Week 3</
+<li><strong>Week 3</strong>: Train the XGBoost model on cleaned data. Backtest against 10k historical events. Tune hyperparameters with Optuna — target F1 > 0.85 on the minority class. Export to ONNX.</li>
+<li><strong>Week 4</strong>: Deploy the ONNX model behind a FastAPI endpoint. Wire MQTT input to model inference. Add a 72-hour lookback window for trigger validation. Set up Prometheus alerts on prediction drift.</li>
+<li><strong>Week 5</strong>: Run a parallel GLM for 30 days. Show the actuary side-by-side performance. File the rate with the state DOI using the GLM as the primary model and the XGBoost as supplementary. Launch with a 90-day monitoring window before going live on production premium.</li>
+</ul>
+
+<p>The checklist above is deliberately aggressive. In practice most parametric pilots take 12-16 weeks because carrier legal review, DOI filing, and reinsurance treaty amendments each add 2-3 weeks of latency. Budget accordingly. The hardest step is not the AI — it is convincing the actuary, the regulator, and the reinsurer that a black-box model belongs in a rate filing. Run the parallel GLM for at least 12 months before you even think about retiring it. Parametric insurance on autopilot is not a technology problem. It is a trust problem, solved one auditable model at a time.</p>
             </div>
         </div>
 <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">

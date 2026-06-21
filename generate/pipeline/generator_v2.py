@@ -346,7 +346,7 @@ def enhance_article(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
                 temperature=0.8,
-                max_tokens=8192,
+                max_tokens=16384,
             )
             # Clean LLM response: strip ```html fences and chatbot preamble
             pass2_text = _clean_llm_html_response(pass2_text)
