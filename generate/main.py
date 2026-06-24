@@ -236,14 +236,13 @@ def _clean_llm_body_response(text: str) -> str:
 
 
 CONTENT_LENGTH_RULES = {
-CONTENT_LENGTH_RULES = {
-    "tutorial":       (2000, 4000),
-    "tool-review":    (2000, 3500),
-    "news":           (1500, 2500),
-    "comparison":     (2000, 3500),
-    "explainer":      (2000, 3500),
-    "case-study":     (2000, 3500),
-    "how-to":         (2000, 3500),
+    "tutorial": (2000, 4000),
+    "tool-review": (2000, 3500),
+    "news": (1500, 2500),
+    "comparison": (2000, 3500),
+    "explainer": (2000, 3500),
+    "case-study": (2000, 3500),
+    "how-to": (2000, 3500),
 }
 SYSTEM_PROMPT = textwrap.dedent("""\
 You are a senior insurance technology analyst writing for "Insurtech Insights" 鈥?a Gartner/Forrester-caliber publication covering AI in insurance. Your tone: confident, direct, data-driven, skeptical where warranted.
@@ -481,7 +480,7 @@ def build_user_prompt(keyword: str, content_type: str) -> str:
     return textwrap.dedent(f"""\
 Content Type: {content_type}
 Target Keyword: {keyword}
-Word Count Range: {min_words}鈥搟max_words} words
+Word Count Range: {min_words}-{max_words} words
 
 {type_instruction}
 
