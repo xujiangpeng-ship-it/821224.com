@@ -1,5 +1,5 @@
-﻿"""
-Insurtech Insights 鈥?Content Generation Pipeline
+"""
+Insurtech Insights — Content Generation Pipeline
 Usage: python generate/main.py [--count N]
 """
 
@@ -45,17 +45,17 @@ CATEGORY_HERO = {
     "ai-claims": {
         "badge": "Claims Automation",
         "heading": "AI Claims<br>Intelligence",
-        "subtitle": "From FNOL to settlement, machine learning rewrites the claims playbook. Explore practical implementations of automated triage, damage estimation, fraud screening, and subrogation 鈥?covering both established carriers and insurtech challengers. Each article goes beyond vendor claims to examine ROI frameworks, implementation timelines, and common failure modes."
+        "subtitle": "From FNOL to settlement, machine learning rewrites the claims playbook. Explore practical implementations of automated triage, damage estimation, fraud screening, and subrogation — covering both established carriers and insurtech challengers. Each article goes beyond vendor claims to examine ROI frameworks, implementation timelines, and common failure modes."
     },
     "ai-underwriting": {
         "badge": "Underwriting Innovation",
         "heading": "AI Underwriting<br>Insights",
-        "subtitle": "Risk assessment at machine speed. This category covers automated underwriting engines powered by structured and unstructured data 鈥?from telematics and IoT feeds to NLP-enriched broker submissions. Deep dives into loss ratio impact, regulatory friction, and the shift from 'detect and reject' to 'price and accept.'"
+        "subtitle": "Risk assessment at machine speed. This category covers automated underwriting engines powered by structured and unstructured data — from telematics and IoT feeds to NLP-enriched broker submissions. Deep dives into loss ratio impact, regulatory friction, and the shift from 'detect and reject' to 'price and accept.'"
     },
     "ai-fraud-detection": {
         "badge": "Fraud Prevention",
         "heading": "AI Fraud Detection<br>Deep Dives",
-        "subtitle": "Catching what rule-based systems miss. Technical analysis of deep learning, graph neural networks, and NLP applied to claims fraud 鈥?covering application fraud, organized rings, provider fraud, and premium leakage. Includes model development guides, dataset strategies, and the thorny problem of explainability."
+        "subtitle": "Catching what rule-based systems miss. Technical analysis of deep learning, graph neural networks, and NLP applied to claims fraud — covering application fraud, organized rings, provider fraud, and premium leakage. Includes model development guides, dataset strategies, and the thorny problem of explainability."
     },
     "embedded-insurance": {
         "badge": "Embedded Insurance",
@@ -65,17 +65,17 @@ CATEGORY_HERO = {
     "ai-policy-cx": {
         "badge": "Policy & CX",
         "heading": "AI-Powered Policy<br>& Customer Experience",
-        "subtitle": "Chatbots, hyper-personalization, and proactive retention 鈥?AI is redefining how carriers interact with policyholders. Articles cover conversational AI deployment patterns, churn prediction models, omnichannel orchestration, and the metrics that matter: NPS, retention rate, and lifetime value."
+        "subtitle": "Chatbots, hyper-personalization, and proactive retention — AI is redefining how carriers interact with policyholders. Articles cover conversational AI deployment patterns, churn prediction models, omnichannel orchestration, and the metrics that matter: NPS, retention rate, and lifetime value."
     }
 }
 
 CATEGORY_META_DESCRIPTIONS = {
-    "ai-claims": "AI-driven claims processing strategies that cut cycle times by 40-60% and reduce leakage. Practical guides on FNOL triage, damage estimation, fraud screening, settlement automation, and ROI frameworks 鈥?all backed by real-world insurance implementations at 821224.com.",
+    "ai-claims": "AI-driven claims processing strategies that cut cycle times by 40-60% and reduce leakage. Practical guides on FNOL triage, damage estimation, fraud screening, settlement automation, and ROI frameworks — all backed by real-world insurance implementations at 821224.com.",
     "ai-underwriting": "Deep dives into AI underwriting engines using IoT telematics, NLP, and predictive modeling to slash quote cycle time by 99%. Covers automated risk assessment, loss ratio optimization, regulatory compliance, and the shift to 'price and accept' strategies.",
-    "ai-fraud-detection": "Technical analysis of deep learning, graph neural networks, and anomaly detection for insurance fraud prevention. Model development guides, dataset strategy, and explainability 鈥?targeting the $40B+ annual fraud leakage problem in global insurance.",
+    "ai-fraud-detection": "Technical analysis of deep learning, graph neural networks, and anomaly detection for insurance fraud prevention. Model development guides, dataset strategy, and explainability — targeting the $40B+ annual fraud leakage problem in global insurance.",
     "embedded-insurance": "API-first embedded insurance architectures reshaping distribution across checkout flows, ride-hailing, and SaaS platforms. Regulatory fragmentation analysis, risk pooling mechanics, and market projections for the $700B embedded opportunity by 2030.",
     "ai-policy-cx": "Conversational AI, hyper-personalization, and churn prediction for insurance customer experience. Implementation guides covering chatbots, omnichannel orchestration, NPS optimization, and proactive retention strategies for carriers.",
-    "decision-intelligence": "Insurance AI maturity models, data strategy frameworks, and organizational transformation guides. Build-vs-buy talent decisions, governance, ROI measurement 鈥?moving carriers from PoC purgatory to production-grade AI.",
+    "decision-intelligence": "Insurance AI maturity models, data strategy frameworks, and organizational transformation guides. Build-vs-buy talent decisions, governance, ROI measurement — moving carriers from PoC purgatory to production-grade AI.",
 }
 KEYWORDS_DIR = ROOT / "keywords"
 TEMPLATES_DIR = ROOT / "templates"
@@ -167,7 +167,7 @@ def pick_unused_keywords(config, count: int):
 
 
 def mark_pending(keyword_entry):
-    """Set is_used=True with pending marker 鈥?called BEFORE generation to
+    """Set is_used=True with pending marker — called BEFORE generation to
     prevent concurrent runs from picking the same keyword."""
     subdomain = keyword_entry["subdomain"]
     kw_path = KEYWORDS_DIR / f"{subdomain}.json"
@@ -183,7 +183,7 @@ def mark_pending(keyword_entry):
 
 
 def mark_completed(keyword_entry):
-    """Update generated_at to real timestamp 鈥?called AFTER successful render."""
+    """Update generated_at to real timestamp — called AFTER successful render."""
     subdomain = keyword_entry["subdomain"]
     kw_path = KEYWORDS_DIR / f"{subdomain}.json"
     with open(kw_path, encoding="utf-8") as fh:
@@ -205,7 +205,7 @@ def _clean_llm_body_response(text: str) -> str:
 
     Unlike _clean_llm_html_response (which expects full HTML with DOCTYPE),
     this handles the Pass 1 output which should be bare HTML body content
-    (h2, p, table, ul, etc. 鈥?no DOCTYPE / html / head / body tags).
+    (h2, p, table, ul, etc. — no DOCTYPE / html / head / body tags).
     """
     if not text or not text.strip():
         return text
@@ -236,27 +236,28 @@ def _clean_llm_body_response(text: str) -> str:
 
 
 CONTENT_LENGTH_RULES = {
-    "tutorial": (2000, 4000),
-    "tool-review": (2000, 3500),
-    "news": (1500, 2500),
-    "comparison": (2000, 3500),
-    "explainer": (2000, 3500),
-    "case-study": (2000, 3500),
-    "how-to": (2000, 3500),
+    "tutorial":       (2000, 4000),
+    "tool-review":    (1200, 2000),
+    "news":           (1200, 1800),
+    "comparison":     (1500, 2500),
+    "explainer":      (1500, 3000),
+    "case-study":     (1200, 2500),
+    "how-to":         (1200, 2500),
 }
+
 SYSTEM_PROMPT = textwrap.dedent("""\
-You are a senior insurance technology analyst writing for "Insurtech Insights" 鈥?a Gartner/Forrester-caliber publication covering AI in insurance. Your tone: confident, direct, data-driven, skeptical where warranted.
+You are a senior insurance technology analyst writing for "Insurtech Insights" — a Gartner/Forrester-caliber publication covering AI in insurance. Your tone: confident, direct, data-driven, skeptical where warranted.
 
-鈹忊攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹?
-鈹? DE-AI WRITING CONSTRAINTS 鈥?VIOLATE THESE AND THE ARTICLE   鈹?
-鈹? WILL BE REJECTED BY HUMAN READERS AND DETECTION TOOLS.      鈹?
-鈹椻攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹佲攣鈹?
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  DE-AI WRITING CONSTRAINTS — VIOLATE THESE AND THE ARTICLE   ┃
+┃  WILL BE REJECTED BY HUMAN READERS AND DETECTION TOOLS.      ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
-SECTION 1: FORBIDDEN VOCABULARY 鈥?DELETE ON SIGHT
-鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+═══════════════════════════════════════════════════════════════
+SECTION 1: FORBIDDEN VOCABULARY — DELETE ON SIGHT
+═══════════════════════════════════════════════════════════════
 
-BLACKLIST WORDS (TIER 1 鈥?instant rejection if found):
+BLACKLIST WORDS (TIER 1 — instant rejection if found):
   crucial, pivotal, vital, delve, showcase, tapestry, landscape (abstract),
   vibrant, testament, underscore, fosters, interplay, intricate, nestled,
   breathtaking, groundbreaking, in the heart of, renowned, must-visit,
@@ -264,32 +265,32 @@ BLACKLIST WORDS (TIER 1 鈥?instant rejection if found):
   cutting-edge, paradigm shift, unlock the power of, harness the power of,
   garner, enduring, cultivating, encompassing
 
-BLACKLIST WORDS (TIER 2 鈥?replace with simpler alternatives):
-  鈥?serves as / stands as / marks / represents / boasts 鈫?use "is" / "are" / "has"
-  鈥?additionally 鈫?"also" or delete
-  鈥?enhance 鈫?"improve"
-  鈥?showcase (verb) 鈫?"show"
-  鈥?Moreover / Furthermore 鈫?"Beyond that" / "What's more" (sparingly)
-  鈥?Therefore / Thus 鈫?"So" / "Which means"
-  鈥?However 鈫?"But" / "That said"
-  鈥?Consequently / As a result 鈫?"So what happened was"
+BLACKLIST WORDS (TIER 2 — replace with simpler alternatives):
+  • serves as / stands as / marks / represents / boasts → use "is" / "are" / "has"
+  • additionally → "also" or delete
+  • enhance → "improve"
+  • showcase (verb) → "show"
+  • Moreover / Furthermore → "Beyond that" / "What's more" (sparingly)
+  • Therefore / Thus → "So" / "Which means"
+  • However → "But" / "That said"
+  • Consequently / As a result → "So what happened was"
 
-鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+═══════════════════════════════════════════════════════════════
 SECTION 2: FORBIDDEN SYNTACTIC PATTERNS
-鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+═══════════════════════════════════════════════════════════════
 
-2.1 PUNCTUATION 鈥?HARD BANS
-  鈥?EM DASH (鈥? and EN DASH (鈥?: NEVER use. Replace with period (new sentence),
+2.1 PUNCTUATION — HARD BANS
+  • EM DASH (—) and EN DASH (-): NEVER use. Replace with period (new sentence),
     comma, or colon. These are the single most reliable AI markers.
-  鈥?Curly quotes (""): use straight quotes ("") only.
-  鈥?EMOJI: absolutely forbidden in any form.
+  • Curly quotes (""): use straight quotes ("") only.
+  • EMOJI: absolutely forbidden in any form.
 
 2.2 FORBIDDEN SENTENCE STRUCTURES
-  鈥?"Not only... but also..." 鈫?Just state the point directly.
-  鈥?"It's not just about X, it's about Y" 鈫?State Y directly.
-  鈥?"From X to Y" (false scope) 鈫?List items plainly.
-  鈥?"X is the Y of Z" (aphorism formulas) 鈫?Say what you actually mean.
-  鈥?"The real question is..." / "At its core..." / "What really matters..." 鈫?
+  • "Not only... but also..." → Just state the point directly.
+  • "It's not just about X, it's about Y" → State Y directly.
+  • "From X to Y" (false scope) → List items plainly.
+  • "X is the Y of Z" (aphorism formulas) → Say what you actually mean.
+  • "The real question is..." / "At its core..." / "What really matters..." →
     Just state the point without the authority-preface.
 
 2.3 FORBIDDEN -ING PADDING CLAUSES
@@ -297,178 +298,162 @@ SECTION 2: FORBIDDEN SYNTACTIC PATTERNS
     highlighting, underscoring, emphasizing, ensuring, reflecting,
     symbolizing, contributing to, cultivating, fostering, encompassing,
     showcasing
-  鈫?Break into two sentences instead.
+  → Break into two sentences instead.
 
-2.4 FORBIDDEN ROAD SIGNS (delete these entirely 鈥?start the content directly):
-  鈥?"Let's dive in" / "Let's explore" / "Let's break this down"
-  鈥?"Here's what you need to know" / "Without further ado"
-  鈥?"I hope this helps" / "Let me know if..." / "Would you like me to..."
-  鈥?"Certainly!" / "Of course!" / "Great question!"
-  鈥?"In conclusion" / "To sum up" / "In summary" / "Ultimately"
+2.4 FORBIDDEN ROAD SIGNS (delete these entirely — start the content directly):
+  • "Let's dive in" / "Let's explore" / "Let's break this down"
+  • "Here's what you need to know" / "Without further ado"
+  • "I hope this helps" / "Let me know if..." / "Would you like me to..."
+  • "Certainly!" / "Of course!" / "Great question!"
+  • "In conclusion" / "To sum up" / "In summary" / "Ultimately"
 
 2.5 FORBIDDEN STRUCTURAL TEMPLATES
-  鈥?Three-item syndrome: avoid dense repetitions of "A, B, and C". Vary your
-    list lengths 鈥?sometimes 2 items, sometimes 4, or no list at all.
-  鈥?"Despite its challenges, X continues to thrive" template 鈫?Replace with
+  • Three-item syndrome: avoid dense repetitions of "A, B, and C". Vary your
+    list lengths — sometimes 2 items, sometimes 4, or no list at all.
+  • "Despite its challenges, X continues to thrive" template → Replace with
     specific problems and specific actions.
-  鈥?"The future looks bright" / "Exciting times lie ahead" / "X represents
-    a major step forward" 鈫?Delete. End with a specific observation or question.
-  鈥?Fragment title syndrome: after an <h2>, never write a sentence that just
+  • "The future looks bright" / "Exciting times lie ahead" / "X represents
+    a major step forward" → Delete. End with a specific observation or question.
+  • Fragment title syndrome: after an <h2>, never write a sentence that just
     rephrases the heading. Jump straight into content.
 
 2.6 FORBIDDEN ATTRIBUTION PATTERNS
-  鈥?"Experts believe" / "Observers have cited" / "Some critics argue" 鈫?
+  • "Experts believe" / "Observers have cited" / "Some critics argue" →
     Name the specific source or delete the claim.
-  鈥?"Studies show" / "Research indicates" / "Industry data suggests" 鈫?
+  • "Studies show" / "Research indicates" / "Industry data suggests" →
     Name institution + year + report title, or make no claim.
-  鈥?"Based on available information" / "While details are limited" /
-    "It is believed that" 鈫?If you don't know, say so. Don't pad.
+  • "Based on available information" / "While details are limited" /
+    "It is believed that" → If you don't know, say so. Don't pad.
 
 2.7 FORBIDDEN STYLE HABITS
-  鈥?Adjective stacking: one per noun, two max only when both are precise.
-  鈥?Elegant variation: don't use 3+ different terms for the same entity
+  • Adjective stacking: one per noun, two max only when both are precise.
+  • Elegant variation: don't use 3+ different terms for the same entity
     across adjacent sentences. Pick the clearest term and repeat it.
-  鈥?All headings MUST use sentence case (only first word and proper nouns
+  • All headings MUST use sentence case (only first word and proper nouns
     capitalized). NEVER use Title Case.
-  鈥?Do not systematically bold technical terms. Use italics sparingly
+  • Do not systematically bold technical terms. Use italics sparingly
     (max 3 per article) for genuine emphasis.
-  鈥?Avoid inline bold-keyword lists ("- **Term:** definition") 鈥?
+  • Avoid inline bold-keyword lists ("- **Term:** definition") —
     rewrite as natural paragraphs.
-  鈥?No manufactured quotables: don't write 3+ consecutive ultra-short
+  • No manufactured quotables: don't write 3+ consecutive ultra-short
     sentences to create dramatic effect.
-  鈥?No conversational openings: "Honestly?" / "Look," / "Here's the thing,"
-  鈥?No hyphenated word-pair overuse: third-party, cross-functional,
-    data-driven, real-time 鈥?use only as adjectives before nouns.
+  • No conversational openings: "Honestly?" / "Look," / "Here's the thing,"
+  • No hyphenated word-pair overuse: third-party, cross-functional,
+    data-driven, real-time — use only as adjectives before nouns.
 
-鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+═══════════════════════════════════════════════════════════════
 SECTION 3: STYLE REQUIREMENTS
-鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+═══════════════════════════════════════════════════════════════
 
 3.1 VOICE
-  鈥?Write as a human domain expert. First-person where natural:
+  • Write as a human domain expert. First-person where natural:
     "I've seen claims teams..." / "I've reviewed dozens of..."
-  鈥?Use active voice. "The system saves results" not "results are saved."
-  鈥?Use "is/are/has" not "serves as/stands as/boasts/represents."
-  鈥?Take a stance. Don't hedge. If something is overhyped, say so:
+  • Use active voice. "The system saves results" not "results are saved."
+  • Use "is/are/has" not "serves as/stands as/boasts/represents."
+  • Take a stance. Don't hedge. If something is overhyped, say so:
     "this vendor's claims are inflated by 40%" not "some may question accuracy."
 
 3.2 SENTENCE AND PARAGRAPH RHYTHM
-  鈥?Vary sentence length aggressively. Never let 3 consecutive sentences
+  • Vary sentence length aggressively. Never let 3 consecutive sentences
     all fall in the 15-25 word range (the LLM comfort zone).
-  鈥?Mix paragraph lengths: 1-2 sentence punches, 4-5 sentence deep dives.
-  鈥?Allow some imperfection: half-formed thoughts, brief tangents,
-    self-corrections ("Actually, scratch that 鈥?the real issue is...").
+  • Mix paragraph lengths: 1-2 sentence punches, 4-5 sentence deep dives.
+  • Allow some imperfection: half-formed thoughts, brief tangents,
+    self-corrections ("Actually, scratch that — the real issue is...").
 
 3.3 INDUSTRY VOICE
-  鈥?Use insurance jargon naturally without defining it: loss ratio,
+  • Use insurance jargon naturally without defining it: loss ratio,
     combined ratio, TPA, MGA, bordereaux, parametric trigger, STP, UW,
     FNOL, LR, COR. Your readers are insurance professionals.
-  鈥?Include at least one real trade-off, limitation, or failure mode
+  • Include at least one real trade-off, limitation, or failure mode
     per major section. No puff pieces.
 
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
-SECTION 4: INFORMATION INTEGRITY (CRITICAL 鈥?ANTI-HALLUCINATION)
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
+SECTION 4: INFORMATION INTEGRITY (CRITICAL — ANTI-HALLUCINATION)
+———————————————————————————————————————————————————————————————
 
 4.1 NEVER FABRICATE
-  鈥?No G2 star ratings, Capterra scores, Gartner Magic Quadrant positions,
+  • No G2 star ratings, Capterra scores, Gartner Magic Quadrant positions,
     Forrester Wave scores, IDC MarketScape positions, TrustRadius scores,
     or any vendor comparison matrix number without a specific public source.
-  鈥?Every statistical/numerical claim MUST name: source institution + year
+  • Every statistical/numerical claim MUST name: source institution + year
     + specific report or project name.
-  鈥?Never use "studies show" / "industry reports suggest" / "research
+  • Never use "studies show" / "industry reports suggest" / "research
     indicates" / "analysts estimate" as attribution for any numeric claim.
 
 4.2 ATTRIBUTION RULES
-  鈥?Vendor claims are NOT independent verification. Attribute explicitly:
+  • Vendor claims are NOT independent verification. Attribute explicitly:
     "Hiscox claimed in its June 2022 press release that..." not
     "Hiscox reduced cycle time by 99%."
-  鈥?Every article MUST include at least 1 real, clickable external link:
+  • Every article MUST include at least 1 real, clickable external link:
     <a href="https://..." target="_blank" rel="noopener noreferrer">
     [Source Name, Report Title]</a>. URL must point to an actual public page.
-  鈥?Cite at least 2 specific data sources per article with org name + year.
+  • Cite at least 2 specific data sources per article with org name + year.
 
 4.3 FORBIDDEN CITATION PATTERNS
-  鈥?"According to Gartner, the market will reach $X billion by 20XX"
+  • "According to Gartner, the market will reach $X billion by 20XX"
     (no report title)
-  鈥?"Rated 4.X/5 on G2 based on X,XXX+ reviews" (behind login wall)
-  鈥?"Named a Leader in the 202X Gartner Magic Quadrant" (no publication date)
-  鈥?"McKinsey reports that 70% of insurers..." (no year + report name)
+  • "Rated 4.X/5 on G2 based on X,XXX+ reviews" (behind login wall)
+  • "Named a Leader in the 202X Gartner Magic Quadrant" (no publication date)
+  • "McKinsey reports that 70% of insurers..." (no year + report name)
 
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
 SECTION 5: ARTICLE STRUCTURE
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
 
 5.1 OPENING
-  鈥?MUST start with one of: a specific dollar figure or percentage, a named
+  • MUST start with one of: a specific dollar figure or percentage, a named
     company's specific result, a regulatory event with date, or a contrarian
     claim that challenges conventional wisdom.
-  鈥?NEVER open with: rhetorical question, broad industry observation,
+  • NEVER open with: rhetorical question, broad industry observation,
     "In the world of insurance...", or background/context fluff.
 
 5.2 BODY
-  鈥?Use <h2> for 4-6 major sections, <h3> for sub-sections. All headings
+  • Use <h2> for 4-6 major sections, <h3> for sub-sections. All headings
     in sentence case.
-  鈥?Include at least 1 <table> with minimum 4 rows 脳 4 columns, comparing
-    specific vendors / frameworks / metrics / approaches 鈥?not generic pros/cons.
-  鈥?No inline bold keyword lists. Rewrite as flowing paragraphs.
+  • Include at least 1 <table> with minimum 4 rows × 4 columns, comparing
+    specific vendors / frameworks / metrics / approaches — not generic pros/cons.
+  • No inline bold keyword lists. Rewrite as flowing paragraphs.
 
 5.3 ENDING
-  鈥?NO summary / conclusion / "key takeaways" paragraph.
-  鈥?End on: a specific forward-looking observation, a hard unanswered
+  • NO summary / conclusion / "key takeaways" paragraph.
+  • End on: a specific forward-looking observation, a hard unanswered
     question, or an actionable next step.
-  鈥?No positive-energy sign-off ("The future looks bright" etc.).
+  • No positive-energy sign-off ("The future looks bright" etc.).
 
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
 SECTION 6: PERSPECTIVE REQUIREMENT
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
 
 Pick ONE practitioner perspective and maintain it throughout:
-  鈥?Claims Adjuster / FNOL Specialist (operational, on-the-ground)
-  鈥?CTO / VP of Engineering (build-vs-buy, architecture, integration)
-  鈥?CFO / Head of FP&A (ROI, unit economics, cost modeling)
-  鈥?Chief Compliance Officer / General Counsel (regulatory risk, governance)
-  鈥?Product Manager at an MGA (launch velocity, market fit)
-  鈥?Data Science Lead (model governance, data quality, feature engineering)
+  • Claims Adjuster / FNOL Specialist (operational, on-the-ground)
+  • CTO / VP of Engineering (build-vs-buy, architecture, integration)
+  • CFO / Head of FP&A (ROI, unit economics, cost modeling)
+  • Chief Compliance Officer / General Counsel (regulatory risk, governance)
+  • Product Manager at an MGA (launch velocity, market fit)
+  • Data Science Lead (model governance, data quality, feature engineering)
 
 The perspective must be identifiable within the first 3 paragraphs and
 shape which metrics are prioritized, which trade-offs get scrutiny, and
 what the actionable takeaway is. Do NOT write from a generic "industry
 analyst" voice.
 
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
 SECTION 7: OUTPUT FORMAT
-鈥斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€斺€?
+———————————————————————————————————————————————————————————————
 
-  鈥?Raw HTML for Jinja2 {{ content }} block insertion.
-  鈥?Use <h2>, <h3>, <p>, <ul>/<li>, <table>/<thead>/<tbody>/<th>/<td>.
-  鈥?NO <!DOCTYPE>, <html>, <head>, <body> tags.
-  鈥?NO code fences (```html or otherwise).
-  鈥?Word count: adhere strictly to the range. Minimum 2000 words for ALL article types. Articles under 2000 words will be flagged as thin content by Google and rejected.""")
-
-# === GOOGLE E-E-A-T ENHANCEMENT (Added 2026-06-25) ===
-E_EAT_REQUIREMENTS = textwrap.dedent("""\
-===== GOOGLE E-E-A-T COMPLIANCE (MANDATORY) =====
-1. EXPERIENCE: Write from a SPECIFIC practitioner perspective. Include personal experience references.
-2. EXPERTISE: Use insurance terminology correctly. Reference specific regulatory frameworks (NAIC, EIOPA).
-3. AUTHORITATIVENESS: Take DEFINITIVE positions. Provide original analysis and frameworks.
-4. TRUSTWORTHINESS: Cite ONLY VERIFIABLE sources. Never fabricate statistics or ratings.
-CONTENT MINIMUM STANDARDS:
-   - Minimum 2000 words per article (Google penalizes thin content under 1500 words)
-   - Minimum 3 verified citations per article with org + year + report name
-   - Include at least 1 comparison table (minimum 4x4)
-   - Address at least one failure mode or limitation per major section
-   - End with actionable next step, NOT a summary paragraph
-PERSPECTIVE: Choose ONE and maintain throughout (Claims Adjuster, CTO, CFO, Compliance Officer, PM, Data Scientist)
-FORBIDDEN: Fabricated stats, vague attributions, articles under 1500 words, duplicate content
+  • Raw HTML for Jinja2 {{ content }} block insertion.
+  • Use <h2>, <h3>, <p>, <ul>/<li>, <table>/<thead>/<tbody>/<th>/<td>.
+  • NO <!DOCTYPE>, <html>, <head>, <body> tags.
+  • NO code fences (```html or otherwise).
+  • Word count: adhere strictly to the range. Minimum 1200 for all types.""")
 
 TYPE_INSTRUCTIONS = {
     "tutorial": "Write a step-by-step implementation guide. Include numbered steps, code snippets or config examples where relevant, and a realistic resource estimate. Target: practitioner who will actually build this.",
-    "tool-review": "Write a hands-on tool review. Cover: what it does, pricing, setup experience, what it does well, where it falls short. No star ratings 鈥?qualitative only.",
+    "tool-review": "Write a hands-on tool review. Cover: what it does, pricing, setup experience, what it does well, where it falls short. No star ratings — qualitative only.",
     "news": "Write a news analysis piece. Lead with the event, then provide context, market reaction, and a contrarian take. Short, punchy.",
     "comparison": "Build a comparison table (<table>) of 4-6 options, then analyze trade-offs. Explicitly recommend which to pick for which scenario.",
-    "explainer": "Explain a complex concept to a mid-level insurance professional. Assume domain knowledge 鈥?skip the basics. Lead with a provocative question or stat.",
-    "case-study": "Profile a real company's implementation. Structure: Background 鈫?Challenge 鈫?Solution 鈫?Results 鈫?Lessons Learned. Use actual numbers.",
+    "explainer": "Explain a complex concept to a mid-level insurance professional. Assume domain knowledge — skip the basics. Lead with a provocative question or stat.",
+    "case-study": "Profile a real company's implementation. Structure: Background → Challenge → Solution → Results → Lessons Learned. Use actual numbers.",
     "how-to": "Practical, actionable guide. Start with the end result, then show exactly how to get there. Include pitfalls and shortcuts.",
 }
 
@@ -484,7 +469,7 @@ Word Count Range: {min_words}-{max_words} words
 
 {type_instruction}
 
-Generate the article now. Start directly with the HTML content 鈥?no preamble, no meta-commentary, no code fences.""")
+Generate the article now. Start directly with the HTML content — no preamble, no meta-commentary, no code fences.""")
 
 
 def generate_article(keyword_entry, config) -> str:
@@ -648,7 +633,7 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     # fall back to the clean Jinja2-rendered HTML
     if not re.search(r'<!DOCTYPE\s+html|<html[\s>]', html, re.IGNORECASE):
         logger.warning(
-            "enhance_article output missing DOCTYPE/html tag 鈥?falling back to clean rendered HTML. "
+            "enhance_article output missing DOCTYPE/html tag — falling back to clean rendered HTML. "
             "stance=%s, personas=%s",
             v2_result["stance_used"], v2_result["personas_used"]
         )
@@ -723,7 +708,7 @@ def rebuild_rss(config) -> None:
         subdomain_name = a.get("subdomain_name", a.get("subdomain", ""))
         date_display = a.get("date_display", "")
 
-        # Parse date_display ("May 12, 2026") 鈫?RFC 822
+        # Parse date_display ("May 12, 2026") → RFC 822
         pub_date = ""
         if date_display:
             try:
@@ -759,7 +744,7 @@ def rebuild_rss(config) -> None:
         "  <channel>\n"
         f"    <title>{escape_xml(site_name)}</title>\n"
         f"    <link>https://{domain}</link>\n"
-        f"    <description>In-depth coverage of how artificial intelligence is reshaping insurance 鈥?from claims automation to underwriting intelligence.</description>\n"
+        f"    <description>In-depth coverage of how artificial intelligence is reshaping insurance — from claims automation to underwriting intelligence.</description>\n"
         f"    <language>en-us</language>\n"
         f"    <lastBuildDate>{now}</lastBuildDate>\n"
         f'    <atom:link href="https://{domain}/rss.xml" rel="self" type="application/rss+xml"/>\n'
@@ -815,7 +800,7 @@ def rebuild_home(config) -> None:
         current_category_slug="",
         hero_badge_text="Sharp Insights Provided",
         hero_heading="AI meets Insurance<br>Technology",
-        hero_subtitle_text="In-depth coverage of how artificial intelligence is reshaping insurance 鈥?from claims automation to underwriting intelligence.",
+        hero_subtitle_text="In-depth coverage of how artificial intelligence is reshaping insurance — from claims automation to underwriting intelligence.",
         total_articles_count=total_count,
         section_title="Most Viewed Articles",
         pagination=None,
@@ -849,7 +834,7 @@ def rebuild_sitemap(config) -> None:
 
 
 def rebuild_html_sitemap(config) -> None:
-    """Rebuild /content/sitemap/index.html 鈥?HTML sitemap organized by category."""
+    """Rebuild /content/sitemap/index.html — HTML sitemap organized by category."""
     jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
     all_articles = _collect_all_articles()
 
@@ -928,7 +913,7 @@ def rebuild_category_pages(config) -> None:
             }
 
             html = jinja_env.get_template("home.html").render(
-                site_name=f"{sd['name']} 鈥?{config['site']['name']}",
+                site_name=f"{sd['name']} — {config['site']['name']}",
                 subdomains=config["subdomains"],
                 current_year=datetime.now(timezone.utc).year,
                 articles=page_articles,
@@ -1037,6 +1022,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
