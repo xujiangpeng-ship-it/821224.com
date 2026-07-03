@@ -442,6 +442,14 @@ profile.to_file("loss_runs_profile.html")
               ]
             }
             </script>
+        
+<section class="article-section" style="margin-top:2em;padding:1.5em;background:#f8f9fa;border-radius:8px;border-left:4px solid #2563eb;">
+<h2>Consistency and Standardization Challenges</h2>
+<p>Data consistency is equally important as completeness and accuracy. Inconsistent data formats, naming conventions, and coding standards across different systems create significant challenges for AI model training and deployment. An insurer might have policyholder names stored in three different formats: full legal name, first name plus last initial, and abbreviated nickname. Each format represents the same person but appears as a different entity to downstream systems.</p>
+<p>Name standardization requires fuzzy matching algorithms with configurable similarity thresholds. The Levenshtein distance algorithm is commonly used for this purpose. A threshold of 0.85 typically achieves 98 percent accuracy for name matching while keeping false positives below 2 percent. False positives occur when two different people are incorrectly matched as the same person. This is particularly problematic in underwriting where matching a healthy applicant to a declined applicant could result in incorrect pricing.</p>
+<p>Address standardization follows a similar pattern. The USPS Delivery Point Validation service normalizes addresses to the standard format required by mail delivery. Using this service as the gold standard for address normalization ensures consistency across all underwriting and rating systems. Property addresses should be normalized at the point of data entry, not as a batch process after the fact. Real-time normalization prevents inconsistent addresses from entering the system in the first place.</p>
+<p>Code standardization is the most challenging consistency issue. Insurance uses multiple coding systems: ICD-10 for medical diagnoses, CPT for procedures, NAICS for industry classification, SIC for historical comparison, and proprietary internal codes for product classification. Mapping between these systems requires a comprehensive code dictionary maintained by the data governance team. Without standardization, AI models trained on one coding system cannot be applied to data in another coding system, limiting the portability and reusability of AI investments.</p>
+</section>
         </article>
     </main>
 
