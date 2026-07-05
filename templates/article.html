@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +26,7 @@
         "description": "{{ description }}",
         "datePublished": "{{ date_iso }}",
         "dateModified": "{{ date_modified_iso }}",
-        "author": {"@type": "Person", "name": "Bin Sun"},
+        "author": {"@type": "Person", "name": "Jiangpeng Xu"},
         "publisher": {"@type": "Organization", "name": "{{ site_name }}"}
     }
     </script>
@@ -41,7 +41,7 @@
   "sameAs": [
     "https://linkedin.com/company/821224"
   ],
-  "description": "In-depth coverage of AI in insurance — claims automation, underwriting intelligence, fraud detection, and decision intelligence.",
+  "description": "In-depth coverage of AI in insurance 鈥?claims automation, underwriting intelligence, fraud detection, and decision intelligence.",
   "foundingDate": "2023-04-10"
 }
 </script>
@@ -257,7 +257,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             </header>
 
             {% if ad_slot_top %}
-            <div class="ad-slot">AD – 728×90 Leaderboard ({{ ad_slot_top }})</div>
+            <div class="ad-slot">AD 鈥?728脳90 Leaderboard ({{ ad_slot_top }})</div>
             {% endif %}
 
             <div class="article-content">
@@ -272,10 +272,28 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             </div>
 
             {% if ad_slot_bottom %}
-            <div class="ad-slot">AD – Responsive Bottom ({{ ad_slot_bottom }})</div>
+            <div class="ad-slot">AD 鈥?Responsive Bottom ({{ ad_slot_bottom }})</div>
             {% endif %}
 
-            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
+                        <!-- AUTHOR BIO BOX -->
+            <div class="author-bio" style="max-width:var(--content-width);margin:32px auto 0;padding:0 24px">
+                <div style="display:flex;gap:20px;background:var(--accent-light);border:1px solid #bfdbfe;border-radius:var(--radius-md);padding:24px;align-items:flex-start">
+                    <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:700;flex-shrink:0;overflow:hidden">
+                        <img src="/images/author-jiangpeng.svg" alt="Jiangpeng Xu" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.textContent='JX'">
+                    </div>
+                    <div>
+                        <h4 style="font-size:1rem;font-weight:700;color:var(--navy);margin:0 0 4px">About the Author</h4>
+                        <p style="font-size:0.85rem;color:var(--muted);margin:0 0 6px"><strong>Jiangpeng Xu</strong> — Lead Author &amp; Principal Analyst</p>
+                        <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;line-height:1.6">Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</p>
+                        <div style="display:flex;gap:8px;margin-top:10px">
+                            <a href="https://linkedin.com/in/jiangpeng-xu" target="_blank" rel="noopener" style="font-size:0.78rem;color:var(--accent);text-decoration:none">LinkedIn</a>
+                            <a href="mailto:contact@821224.com" style="font-size:0.78rem;color:var(--accent);text-decoration:none">Email</a>
+                            <a href="/about/" style="font-size:0.78rem;color:var(--accent);text-decoration:none">More about us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
                 <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: {{ current_date }}.
             </div>
 
@@ -355,5 +373,24 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
+    <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <span style="flex:1;min-width:280px">We use cookies to personalize content and ads, to analyze traffic, and to serve personalized ads via Google AdSense. By continuing to use this site, you consent to our use of cookies. <a href="/privacy/" style="color:#93c5fd;text-decoration:underline" target="_blank" rel="noopener">Privacy Policy</a> · <a href="/terms/" style="color:#93c5fd;text-decoration:underline" target="_blank" rel="noopener">Terms</a></span>
+        <div style="display:flex;gap:10px;flex-shrink:0">
+            <button onclick="acceptCookies()" style="padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer">Accept</button>
+        </div>
+    </div>
+</div>
+<script>
+function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000;path=/";document.getElementById("cookie-banner").style.display="none";}
+if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
+</script>
+
 </body>
 </html>
+
+
+
+
