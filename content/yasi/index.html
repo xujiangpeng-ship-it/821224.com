@@ -586,7 +586,7 @@ async function fetchRepoPDFs() {
   try {
     var url = GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/' + PDF_PATH;
     console.log('[Yasi] Fetching PDFs from:', url);
-    var resp = await fetch(url);
+    var resp = await fetch(url, { cache: 'no-cache' });
     if (!resp.ok) {
       console.warn('[Yasi] List API status:', resp.status, resp.statusText);
       return [];
@@ -684,6 +684,7 @@ document.getElementById('pdfUploader').addEventListener('change', async function
 
       var resp = await fetch(apiUrl, {
         method: 'PUT',
+        cache: 'no-cache',
         headers: {
           'Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json',
@@ -915,7 +916,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // Quick connectivity test
   try {
-    var testResp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO, { method: 'HEAD' });
+    var testResp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO, { method: 'HEAD', cache: 'no-cache' });
     console.log('[Yasi] API connectivity:', testResp.status, testResp.statusText);
   } catch(e) {
     console.error('[Yasi] API unreachable:', e.message);
