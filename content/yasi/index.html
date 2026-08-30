@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f8f0f5">
+<title>成功始于坚持</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink-100: oklch(0.96 0.02 0);
+  --pink-200: oklch(0.91 0.04 0);
+  --pink-300: oklch(0.85 0.06 0);
+  --pink-400: oklch(0.78 0.08 0);
+  --pink-500: oklch(0.68 0.12 0);
+  --pink-600: oklch(0.55 0.14 0);
+  --lavender-200: oklch(0.92 0.03 290);
+  --text-primary: oklch(0.22 0.02 0);
+  --text-secondary: oklch(0.45 0.02 0);
+  --text-muted: oklch(0.65 0.01 0);
+  --surface: oklch(1 0 0 / 0.85);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.06);
+  --shadow-md: 0 4px 16px oklch(0 0 0 / 0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans SC', -apple-system, sans-serif;
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; z-index: -2;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 80%, oklch(0.92 0.06 0 / 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 70% at 80% 20%, oklch(0.90 0.05 290 / 0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 50%, oklch(0.94 0.03 10 / 0.4) 0%, transparent 70%),
+    linear-gradient(160deg, oklch(0.97 0.01 0) 0%, oklch(0.95 0.03 300) 40%, oklch(0.97 0.02 60) 100%);
+}
+
+.petal {
+  position: fixed; z-index: -1; pointer-events: none;
+  width: 18px; height: 18px;
+  background: radial-gradient(circle at 30% 30%, oklch(0.85 0.08 0 / 0.7), oklch(0.9 0.06 0 / 0.3));
+  border-radius: 50% 0 50% 50%;
+  animation: fall linear infinite;
+}
+.petal:nth-child(1) { left: 5%; animation-duration: 14s; animation-delay: 0s; width: 14px; height: 14px; }
+.petal:nth-child(2) { left: 15%; animation-duration: 18s; animation-delay: 2s; width: 16px; height: 16px; }
+.petal:nth-child(3) { left: 25%; animation-duration: 12s; animation-delay: 4s; width: 12px; height: 12px; }
+.petal:nth-child(4) { left: 35%; animation-duration: 20s; animation-delay: 1s; width: 20px; height: 20px; }
+.petal:nth-child(5) { left: 45%; animation-duration: 16s; animation-delay: 5s; width: 15px; height: 15px; }
+.petal:nth-child(6) { left: 55%; animation-duration: 22s; animation-delay: 3s; width: 18px; height: 18px; }
+.petal:nth-child(7) { left: 65%; animation-duration: 13s; animation-delay: 6s; width: 14px; height: 14px; }
+.petal:nth-child(8) { left: 75%; animation-duration: 19s; animation-delay: 2.5s; width: 17px; height: 17px; }
+.petal:nth-child(9) { left: 85%; animation-duration: 15s; animation-delay: 4.5s; width: 13px; height: 13px; }
+.petal:nth-child(10) { left: 92%; animation-duration: 21s; animation-delay: 1.5s; width: 16px; height: 16px; }
+
+@keyframes fall {
+  0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(105vh) rotate(720deg) translateX(60px); opacity: 0; }
+}
+
+.character-silhouette {
+  position: fixed; bottom: -20px; right: -40px; z-index: -1; pointer-events: none;
+  opacity: 0.08; width: 400px; height: 500px;
+}
+
+#fireworks { position: fixed; inset: 0; z-index: 100; pointer-events: none; display: none; }
+
+.celebration {
+  position: fixed; inset: 0; z-index: 99; display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  background: oklch(0 0 0 / 0.4); backdrop-filter: blur(4px);
+}
+.celebration.active { display: flex; }
+.celebration-text {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 700; color: #fff;
+  text-shadow: 0 0 30px oklch(0.8 0.15 40), 0 0 60px oklch(0.7 0.2 10);
+  animation: glow 1.5s ease-in-out infinite alternate; margin-bottom: 24px;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 20px oklch(0.8 0.15 40), 0 0 40px oklch(0.7 0.2 10); }
+  to { text-shadow: 0 0 40px oklch(0.85 0.25 60), 0 0 80px oklch(0.75 0.3 30), 0 0 120px oklch(0.6 0.3 0); }
+}
+.dance-girl { width: 280px; height: 360px; position: relative; margin: 0 auto; }
+.dance-girl .body-part { position: absolute; background: oklch(0.85 0.06 350); border-radius: 4px; }
+.dance-head { width: 80px; height: 90px; border-radius: 50% 50% 45% 45% !important; top: 10px; left: 50%; transform: translateX(-50%); background: oklch(0.88 0.05 350) !important; animation: dance-head 0.8s ease-in-out infinite; }
+.dance-hair-l { width: 18px; height: 140px; top: 20px; left: 85px; transform-origin: top center; background: oklch(0.25 0.03 290) !important; border-radius: 10px !important; animation: dance-hair-l 0.8s ease-in-out infinite; }
+.dance-hair-r { width: 18px; height: 140px; top: 20px; left: 177px; transform-origin: top center; background: oklch(0.25 0.03 290) !important; border-radius: 10px !important; animation: dance-hair-r 0.8s ease-in-out infinite; }
+.dance-body { width: 55px; height: 80px; top: 100px; left: 50%; transform: translateX(-50%); animation: dance-body 0.8s ease-in-out infinite; }
+.dance-arm-l { width: 14px; height: 65px; top: 105px; left: 80px; transform-origin: top center; border-radius: 7px !important; animation: dance-arm-l 0.8s ease-in-out infinite; }
+.dance-arm-r { width: 14px; height: 65px; top: 105px; left: 186px; transform-origin: top center; border-radius: 7px !important; animation: dance-arm-r 0.8s ease-in-out infinite; }
+.dance-skirt { width: 100px; height: 50px; top: 170px; left: 50%; transform: translateX(-50%); background: oklch(0.7 0.12 350) !important; border-radius: 10px 10px 40px 40px !important; animation: dance-skirt 0.8s ease-in-out infinite; }
+.dance-leg-l { width: 16px; height: 70px; top: 215px; left: 115px; transform-origin: top center; border-radius: 8px !important; animation: dance-leg-l 0.8s ease-in-out infinite; }
+.dance-leg-r { width: 16px; height: 70px; top: 215px; left: 149px; transform-origin: top center; border-radius: 8px !important; animation: dance-leg-r 0.8s ease-in-out infinite; }
+.dance-eyes { position: absolute; top: 40px; left: 50%; transform: translateX(-50%); width: 36px; height: 10px; animation: dance-eyes 0.8s ease-in-out infinite; }
+.dance-eyes::before, .dance-eyes::after { content: ''; position: absolute; width: 8px; height: 10px; background: oklch(0.2 0.02 0); border-radius: 50%; top: 0; }
+.dance-eyes::before { left: 0; } .dance-eyes::after { right: 0; }
+.dance-mouth { position: absolute; top: 55px; left: 50%; transform: translateX(-50%); width: 12px; height: 6px; border-bottom: 2px solid oklch(0.4 0.08 0); border-radius: 0 0 6px 6px; animation: dance-mouth 0.8s ease-in-out infinite; }
+@keyframes dance-head { 0%,100% { transform: translateX(-50%) rotate(-5deg); } 50% { transform: translateX(-50%) rotate(5deg); } }
+@keyframes dance-hair-l { 0%,100% { transform: rotate(10deg); } 50% { transform: rotate(-15deg); } }
+@keyframes dance-hair-r { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(15deg); } }
+@keyframes dance-body { 0%,100% { transform: translateX(-50%) translateX(-5px); } 50% { transform: translateX(-50%) translateX(5px); } }
+@keyframes dance-arm-l { 0%,100% { transform: rotate(-30deg); } 50% { transform: rotate(40deg); } }
+@keyframes dance-arm-r { 0%,100% { transform: rotate(30deg); } 50% { transform: rotate(-40deg); } }
+@keyframes dance-skirt { 0%,100% { transform: translateX(-50%) rotate(-10deg) scaleX(1); } 50% { transform: translateX(-50%) rotate(10deg) scaleX(0.85); } }
+@keyframes dance-leg-l { 0%,100% { transform: rotate(-15deg); } 50% { transform: rotate(20deg); } }
+@keyframes dance-leg-r { 0%,100% { transform: rotate(15deg); } 50% { transform: rotate(-20deg); } }
+@keyframes dance-eyes { 0%,45%,55%,100% { width: 36px; } 50% { width: 0; } }
+@keyframes dance-mouth { 0%,100% { transform: translateX(-50%) scaleX(1); } 50% { transform: translateX(-50%) scaleX(1.3); } }
+.celebration-close { margin-top: 32px; padding: 12px 36px; font-size: 1rem; font-weight: 600; color: #fff; background: oklch(0.6 0.15 350 / 0.8); border: 2px solid oklch(0.8 0.1 350 / 0.6); border-radius: 50px; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s; z-index: 101; }
+.celebration-close:hover { background: oklch(0.65 0.18 350 / 0.9); transform: scale(1.05); }
+
+/* ========== LAYOUT ========== */
+.app { display: flex; min-height: 100vh; max-width: 1400px; margin: 0 auto; }
+
+.sidebar {
+  width: 220px; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; padding: 32px 16px;
+  background: oklch(0.98 0.01 0 / 0.7); backdrop-filter: blur(12px);
+  border-right: 1px solid oklch(0.9 0.02 0 / 0.5); z-index: 10;
+}
+.sidebar-logo { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; font-weight: 700; color: var(--pink-600); margin-bottom: 24px; line-height: 1.4; }
+.week-nav-item {
+  display: block; padding: 10px 14px; margin-bottom: 4px; border-radius: var(--radius-sm);
+  font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.2s ease; border: none; background: none; text-align: left; width: 100%;
+}
+.week-nav-item:hover { background: var(--pink-200); color: var(--pink-600); }
+.week-nav-item.active { background: var(--pink-300); color: var(--pink-600); font-weight: 600; }
+.week-nav-item .week-num { font-size: 0.7rem; font-weight: 400; color: var(--text-muted); display: block; }
+
+.main { flex: 1; padding: 32px 40px 80px; max-width: 950px; }
+
+.hero { margin-bottom: 36px; padding-bottom: 24px; border-bottom: 2px solid var(--pink-300); }
+.hero h1 { font-family: 'Noto Serif SC', serif; font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; color: var(--pink-600); letter-spacing: 0.06em; margin-bottom: 8px; }
+.hero .subtitle { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+.hero .stats { display: flex; gap: 24px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+.stat-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-secondary); }
+.stat-item .stat-val { font-weight: 700; font-size: 1.1rem; color: var(--pink-600); }
+
+/* ========== COUNTDOWN ========== */
+.countdown-box {
+  display: flex; align-items: center;
+  background: linear-gradient(135deg, oklch(0.92 0.04 15 / 0.5), oklch(0.93 0.04 60 / 0.4));
+  border: 1px solid oklch(0.85 0.06 30 / 0.4);
+  border-radius: 20px;
+  padding: 8px 18px;
+  margin-top: 14px;
+  width: fit-content;
+  animation: countdown-pulse 2s ease-in-out infinite;
+}
+@keyframes countdown-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.7 0.12 30 / 0.3); }
+  50% { box-shadow: 0 0 0 8px oklch(0.7 0.12 30 / 0); }
+}
+.countdown-box .cd-text {
+  font-size: 0.88rem; font-weight: 500;
+  color: oklch(0.4 0.08 30);
+}
+
+/* ========== TEXTBOOK SECTION ========== */
+.textbook-section { margin-bottom: 36px; }
+.textbook-header {
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--pink-200), var(--lavender-200));
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--pink-500);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.textbook-header h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--pink-600);
+}
+.textbook-actions { display: flex; gap: 8px; align-items: center; }
+.upload-btn {
+  padding: 6px 16px; font-size: 0.8rem; font-weight: 500;
+  color: #fff; background: var(--pink-500); border: none;
+  border-radius: 20px; cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 4px;
+}
+.upload-btn:hover { background: var(--pink-600); transform: scale(1.04); }
+.upload-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.upload-status {
+  font-size: 0.72rem; color: var(--text-secondary);
+  max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.upload-status.error { color: oklch(0.5 0.15 15); }
+
+.textbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.pdf-card {
+  background: var(--surface);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-md);
+  padding: 16px 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid oklch(0.9 0.02 0 / 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 8px;
+}
+.pdf-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--pink-400); }
+.pdf-card .pdf-icon {
+  width: 44px; height: 54px;
+  background: linear-gradient(135deg, oklch(0.75 0.1 0), oklch(0.65 0.12 15));
+  border-radius: 4px;
+  position: relative;
+  flex-shrink: 0;
+}
+.pdf-card .pdf-icon::after {
+  content: 'PDF';
+  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+  font-size: 0.6rem; font-weight: 700; color: #fff;
+  background: oklch(0.5 0.12 0); padding: 1px 6px; border-radius: 2px;
+}
+.pdf-card .pdf-name {
+  font-size: 0.78rem; font-weight: 500; color: var(--text-primary);
+  line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; word-break: break-all;
+}
+
+.empty-hint {
+  grid-column: 1 / -1;
+  text-align: center; padding: 32px;
+  color: var(--text-muted); font-size: 0.85rem;
+}
+
+.loading-hint {
+  grid-column: 1 / -1;
+  text-align: center; padding: 24px;
+  color: var(--text-muted); font-size: 0.85rem;
+}
+
+/* ========== TOKEN MODAL ========== */
+.token-modal {
+  position: fixed; inset: 0; z-index: 300; display: none;
+  align-items: center; justify-content: center;
+  background: oklch(0 0 0 / 0.5); backdrop-filter: blur(4px);
+}
+.token-modal.active { display: flex; }
+.token-dialog {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  max-width: 420px; width: 90%;
+  box-shadow: 0 8px 32px oklch(0 0 0 / 0.15);
+}
+.token-dialog h3 { font-family: 'Noto Serif SC', serif; font-size: 1.05rem; margin-bottom: 6px; color: var(--pink-600); }
+.token-dialog p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
+.token-dialog p a { color: var(--pink-500); }
+.token-dialog p code { font-size: 0.72rem; word-break: break-all; background: #f5f5f5; padding: 1px 4px; border-radius: 3px; }
+.token-dialog input {
+  width: 100%; padding: 10px 12px; font-size: 0.85rem;
+  border: 1px solid oklch(0.85 0.02 0); border-radius: 6px;
+  margin-bottom: 14px; outline: none;
+}
+.token-dialog input:focus { border-color: var(--pink-400); box-shadow: 0 0 0 3px oklch(0.8 0.08 0 / 0.15); }
+.token-dialog .btn-row { display: flex; gap: 8px; justify-content: flex-end; }
+.token-dialog button {
+  padding: 8px 20px; border-radius: 6px; font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.token-dialog .btn-cancel { background: #f5f5f5; border: 1px solid #ddd; color: var(--text-secondary); }
+.token-dialog .btn-save { background: var(--pink-500); border: none; color: #fff; }
+.token-dialog .btn-save:hover { background: var(--pink-600); }
+
+/* ========== PDF VIEWER MODAL ========== */
+.pdf-modal {
+  position: fixed; inset: 0; z-index: 200; display: none;
+  flex-direction: column;
+  background: oklch(0 0 0 / 0.7); backdrop-filter: blur(6px);
+}
+.pdf-modal.active { display: flex; }
+.pdf-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  background: oklch(0.98 0.01 0 / 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid oklch(0.88 0.02 0 / 0.5);
+}
+.pdf-modal-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); flex: 1; margin-right: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pdf-modal-actions { display: flex; gap: 8px; }
+.pdf-modal-btn {
+  padding: 6px 14px; font-size: 0.78rem; font-weight: 500;
+  border-radius: 6px; cursor: pointer; border: 1px solid oklch(0.85 0.02 0);
+  background: #fff; color: var(--text-secondary);
+  transition: all 0.15s;
+}
+.pdf-modal-btn:hover { background: var(--pink-200); }
+.pdf-modal-btn.close-btn { color: oklch(0.5 0.15 15); border-color: oklch(0.8 0.08 15 / 0.4); }
+.pdf-modal-btn.close-btn:hover { background: oklch(0.92 0.06 15 / 0.2); }
+.pdf-modal-body { flex: 1; overflow: hidden; position: relative; }
+.pdf-modal-body iframe { width: 100%; height: 100%; border: none; }
+
+/* Week section */
+.week-section { margin-bottom: 40px; }
+.week-header {
+  margin-bottom: 16px; padding: 12px 16px;
+  background: linear-gradient(135deg, var(--pink-200), var(--lavender-200));
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--pink-500);
+}
+.week-header h2 { font-family: 'Noto Serif SC', serif; font-size: 1.15rem; font-weight: 600; color: var(--pink-600); }
+.week-header .week-goal { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+
+.day-card {
+  background: var(--surface); backdrop-filter: blur(8px);
+  border-radius: var(--radius-md); margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid oklch(0.9 0.02 0 / 0.3); overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.15s ease, background 0.4s ease, border-color 0.4s ease;
+}
+.day-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.day-card.completed { background: oklch(0.92 0.08 145 / 0.25); border-color: oklch(0.75 0.12 145 / 0.4); }
+.day-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; cursor: pointer; user-select: none;
+  transition: background 0.15s ease;
+}
+.day-header:hover { background: oklch(0.97 0.01 0 / 0.5); }
+.day-title { display: flex; align-items: center; gap: 10px; flex: 1; }
+.day-num { font-family: 'Noto Serif SC', serif; font-size: 0.85rem; font-weight: 700; color: var(--pink-500); min-width: 50px; }
+.day-date { font-size: 0.9rem; font-weight: 500; color: var(--text-primary); }
+.day-meta { display: flex; align-items: center; gap: 10px; }
+.task-count { font-size: 0.75rem; color: var(--text-muted); background: var(--pink-200); padding: 2px 8px; border-radius: 12px; }
+.star-toggle {
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; cursor: pointer; color: oklch(0.8 0.02 0);
+  transition: color 0.3s ease, transform 0.2s ease; user-select: none; flex-shrink: 0;
+}
+.star-toggle:hover { transform: scale(1.25); }
+.star-toggle.active { color: oklch(0.55 0.18 145); }
+.expand-icon { font-size: 0.7rem; color: var(--text-muted); transition: transform 0.2s ease; }
+.day-card.expanded .expand-icon { transform: rotate(180deg); }
+
+.task-list { display: none; border-top: 1px solid oklch(0.93 0.02 0 / 0.5); }
+.day-card.expanded .task-list { display: block; }
+.task-item {
+  display: grid; grid-template-columns: 120px 60px 90px 1fr; gap: 8px;
+  padding: 8px 16px; font-size: 0.82rem;
+  border-bottom: 1px solid oklch(0.95 0.01 0 / 0.4); align-items: center;
+}
+.task-item:last-child { border-bottom: none; }
+.task-period { color: var(--text-secondary); font-weight: 500; font-size: 0.78rem; }
+.task-duration { text-align: center; color: var(--text-muted); font-size: 0.75rem; background: oklch(0.96 0.01 0 / 0.6); border-radius: 4px; padding: 1px 6px; }
+.task-subject { font-weight: 600; font-size: 0.78rem; text-align: center; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+.task-desc { color: var(--text-secondary); line-height: 1.5; font-size: 0.8rem; }
+
+.s-math { background: oklch(0.92 0.06 25 / 0.3); color: oklch(0.45 0.12 25); }
+.s-chem { background: oklch(0.92 0.05 250 / 0.3); color: oklch(0.45 0.1 250); }
+.s-bio { background: oklch(0.92 0.06 145 / 0.3); color: oklch(0.4 0.1 145); }
+.s-phy { background: oklch(0.93 0.05 300 / 0.3); color: oklch(0.4 0.1 300); }
+.s-eng { background: oklch(0.93 0.06 80 / 0.3); color: oklch(0.45 0.1 80); }
+.s-other { background: oklch(0.95 0.01 0 / 0.3); color: oklch(0.5 0.02 0); }
+
+@media (max-width: 768px) {
+  body { -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+  .app { flex-direction: column; }
+  .sidebar { position: sticky; top: 0; width: 100%; height: auto; z-index: 20; padding: 10px 12px; border-right: none; border-bottom: 1px solid oklch(0.9 0.02 0 / 0.5); display: flex; overflow-x: auto; gap: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-logo { display: none; }
+  .week-nav-item { white-space: nowrap; flex-shrink: 0; margin-bottom: 0; padding: 8px 12px; font-size: 0.8rem; min-height: 36px; display: flex; align-items: center; }
+  .main { padding: 14px 12px 80px; }
+  .hero { margin-bottom: 20px; padding-bottom: 16px; }
+  .hero h1 { font-size: 1.3rem; letter-spacing: 0.04em; }
+  .hero .subtitle { font-size: 0.72rem; }
+  .hero .stats { gap: 10px; }
+  .stat-item { font-size: 0.72rem; }
+  .stat-item .stat-val { font-size: 0.95rem; }
+  .countdown-box .cd-text { font-size: 0.78rem; }
+  .textbook-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+  .pdf-card { padding: 12px 8px; }
+  .pdf-card .pdf-icon { width: 36px; height: 44px; }
+  .week-section { margin-bottom: 24px; }
+  .week-header { padding: 10px 14px; margin-bottom: 10px; }
+  .week-header h2 { font-size: 1rem; }
+  .day-card { margin-bottom: 8px; border-radius: 10px; }
+  .day-header { padding: 10px 12px; }
+  .day-num { font-size: 0.75rem; min-width: 40px; }
+  .day-date { font-size: 0.78rem; }
+  .star-toggle { width: 40px; height: 40px; }
+  .task-item { grid-template-columns: 1fr 1fr; gap: 3px 8px; padding: 8px 10px; font-size: 0.74rem; }
+  .character-silhouette { display: none; }
+  .celebration-text { font-size: 1.5rem; text-align: center; padding: 0 20px; }
+  .dance-girl { width: 200px; height: 260px; }
+  .dance-head { width: 60px; height: 68px; top: 8px; }
+  .dance-body { width: 42px; height: 60px; top: 76px; }
+  .dance-skirt { width: 76px; height: 38px; top: 128px; }
+  .dance-arm-l { left: 58px; top: 80px; height: 50px; width: 11px; }
+  .dance-arm-r { left: 131px; top: 80px; height: 50px; width: 11px; }
+  .dance-hair-l { left: 58px; top: 16px; height: 110px; width: 14px; }
+  .dance-hair-r { left: 128px; top: 16px; height: 110px; width: 14px; }
+  .dance-leg-l { left: 80px; top: 162px; height: 54px; width: 13px; }
+  .dance-leg-r { left: 107px; top: 162px; height: 54px; width: 13px; }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) { .main { padding-bottom: calc(80px + env(safe-area-inset-bottom)); } }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar { width: 160px; padding: 20px 10px; }
+  .sidebar-logo { font-size: 0.95rem; margin-bottom: 18px; }
+  .week-nav-item { padding: 8px 10px; font-size: 0.78rem; }
+  .main { padding: 24px 20px 60px; max-width: 100%; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero .subtitle { font-size: 0.8rem; }
+  .hero .stats { gap: 16px; flex-wrap: wrap; }
+  .stat-item { font-size: 0.78rem; }
+  .textbook-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .day-header { padding: 10px 12px; }
+  .day-num { font-size: 0.78rem; min-width: 44px; }
+  .day-date { font-size: 0.82rem; }
+  .task-item { grid-template-columns: 100px 50px 75px 1fr; gap: 6px; padding: 6px 12px; font-size: 0.76rem; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--pink-300); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="petal"></div><div class="petal"></div><div class="petal"></div>
+<div class="petal"></div><div class="petal"></div><div class="petal"></div>
+<div class="petal"></div><div class="petal"></div><div class="petal"></div>
+<div class="petal"></div>
+
+<svg class="character-silhouette" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="100" cy="80" rx="50" ry="55" fill="currentColor" opacity="0.6"/>
+  <path d="M45 200 Q40 160 50 140 Q60 120 100 115 Q140 120 150 140 Q160 160 155 200" fill="currentColor" opacity="0.4"/>
+  <ellipse cx="100" cy="240" rx="65" ry="30" fill="currentColor" opacity="0.3"/>
+</svg>
+
+<canvas id="fireworks"></canvas>
+
+<div class="celebration" id="celebration">
+  <div class="celebration-text">52天，你做到了！</div>
+  <div class="dance-girl">
+    <div class="body-part dance-head"><div class="dance-eyes"></div><div class="dance-mouth"></div></div>
+    <div class="body-part dance-hair-l"></div><div class="body-part dance-hair-r"></div>
+    <div class="body-part dance-body"></div>
+    <div class="body-part dance-arm-l"></div><div class="body-part dance-arm-r"></div>
+    <div class="body-part dance-skirt"></div>
+    <div class="body-part dance-leg-l"></div><div class="body-part dance-leg-r"></div>
+  </div>
+  <button class="celebration-close" onclick="closeCelebration()">太棒了</button>
+</div>
+
+<!-- PDF Viewer Modal -->
+<div class="pdf-modal" id="pdfModal">
+  <div class="pdf-modal-header">
+    <span class="pdf-modal-title" id="pdfModalTitle">教材</span>
+    <div class="pdf-modal-actions">
+      <button class="pdf-modal-btn" onclick="toggleFullscreen()">全屏</button>
+      <button class="pdf-modal-btn close-btn" onclick="closePdfModal()">关闭</button>
+    </div>
+  </div>
+  <div class="pdf-modal-body">
+    <iframe id="pdfFrame"></iframe>
+  </div>
+</div>
+
+<!-- Token Modal -->
+<div class="token-modal" id="tokenModal">
+  <div class="token-dialog">
+    <h3>配置 GitHub Token</h3>
+    <p>上传 PDF 需要 GitHub Personal Access Token（Fine-grained token，Contents → Read and Write）。<br>
+    创建地址：<a href="https://github.com/settings/tokens?type=beta" target="_blank">github.com/settings/tokens</a></p>
+    <input type="password" id="tokenInput" placeholder="github_pat_...">
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeTokenModal()">取消</button>
+      <button class="btn-save" onclick="saveToken()">保存</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="pdfUploader" accept=".pdf" multiple style="display:none">
+
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">学习计划</div>
+  </nav>
+  <main class="main" id="main">
+    <div class="hero">
+      <h1>成功始于坚持</h1>
+      <div class="subtitle">2026年7月12日 — 9月1日 · 52天逐日细化 · 每日上午/下午/晚上三时段 <span style="color:var(--text-muted);font-size:0.65rem">v4.1</span></div>
+      <div class="stats">
+        <div class="stat-item"><span class="stat-val">52</span> 天</div>
+        <div class="stat-item"><span class="stat-val">7</span> 周</div>
+        <div class="stat-item"><span class="stat-val">~300h</span> 总学时</div>
+        <div class="stat-item"><span class="stat-val">4</span> 科目</div>
+      </div>
+      <div class="countdown-box">
+        <span class="cd-text">暑假还有 <strong id="cdDays">--</strong> 天结束 加油~</span>
+      </div>
+    </div>
+    <div class="textbook-section">
+      <div class="textbook-header">
+        <h2>教材</h2>
+        <div class="textbook-actions">
+          <span class="upload-status" id="uploadStatus"></span>
+          <button class="upload-btn" id="uploadBtn" onclick="handleUploadClick()">+ 上传PDF</button>
+        </div>
+      </div>
+      <div class="textbook-grid" id="textbookGrid">
+        <div class="loading-hint">加载中...</div>
+      </div>
+    </div>
+    <div id="weeks-container"></div>
+  </main>
+</div>
+
+<script>
+const DATA = [{"title": "第一周：7月12日（周六）— 7月18日（周五）", "days": [{"title": "7月12日（周六）· Day 1", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学术语", "task": "学习 Number 章节术语①：integer, whole number, natural number, real number, rational, irrational — 每词抄写英文+中文+例句"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学术语", "task": "学习 Number 章节术语②：fraction, decimal, percentage, reciprocal, numerator, denominator — 每词抄写+互转练习（如 3/4 → 0.75 → 75%）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "IGCSE 数学", "task": "通读教材第1章 Number（英文原版），不求全懂但求建立章节框架"}, {"period": "11:00-11:30", "duration": "30min", "subject": "当日复盘", "task": "把当天学过的12个数学术语录入 Anki，每词一面卡片"}, {"period": "13:30-14:15", "duration": "45min", "subject": "化学术语", "task": "学习化学术语①：atom, element, compound, mixture, molecule, ion — 每词写定义+1个例子"}, {"period": "14:20-15:05", "duration": "45min", "subject": "化学术语", "task": "学习化学术语②：periodic table, group, period, metal, non-metal, metalloid — 每词写定义+周期表位置"}, {"period": "15:10-16:00", "duration": "50min", "subject": "化学术语", "task": "补充化学实验术语：bunsen burner, beaker, test tube, filter funnel, thermometer — 看图识词"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English：任选1篇，第1遍盲听→第2遍看文本→第3遍跟读"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语笔记", "task": "默写听力中出现的≥10个关键词"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "写3行总结：①今天学会了什么 ②哪个部分最难 ③明天要注意什么"}]}, {"title": "7月13日（周日）· Day 2", "tasks": [{"period": "09:00-09:45", "duration": "45min", "subject": "Anki复习", "task": "复习昨日全部卡片（数学12张+化学12张=24张）"}, {"period": "09:50-10:35", "duration": "45min", "subject": "数学术语", "task": "学习 Number 术语③：prime, composite, factor, multiple, LCM, HCF — 每词做题1道"}, {"period": "10:40-11:30", "duration": "50min", "subject": "学科全景", "task": "看 Crash Course Chemistry #1-3（B站搜索，开英文字幕），每集5分钟暂停记录1个核心概念"}, {"period": "14:00-16:00", "duration": "2h", "subject": "自由巩固", "task": "任选：①重读数学教材第1章有困难段落 ②B站搜\"IGCSE Chemistry Introduction\"看1个入门视频"}]}, {"title": "7月14日（周一）· Day 3", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学术语", "task": "学习 Number 术语④：index, exponent, square root, cube root, surd — 每词计算1个例子"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学术语", "task": "学习 Number 术语⑤：standard form (scientific notation), significant figure, decimal place, rounding — 各做3道练习题"}, {"period": "10:10-11:00", "duration": "50min", "subject": "IGCSE 数学", "task": "精读教材第1章 Number，逐段理解并做段末练习题（Exercises 1.1-1.3）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入：今日8个数学术语"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学术语", "task": "学习化学术语③：atomic number, mass number, isotope, relative atomic mass — 用碳12/碳14做例子"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学术语", "task": "学习化学术语④：electron shell, valence electron, cation, anion, ionic bond, covalent bond — 画简图辅助记忆"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "新卡录入：今日10个化学术语"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇，3遍法"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读 IGCSE 数学教材第1章任意1页，计时测阅读速度（目标 ≥100词/分钟）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月15日（周二）· Day 4", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学复习", "task": "复习 Number 全部术语（24词），做1份自测：遮住中文，看英文写中文释义"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学练习", "task": "教材第1章 Exercises 1.4-1.6（标准形式、有效数字、四舍五入）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学练习", "task": "教材第1章 Review Exercise，限时40分钟完成，批改+错题分析"}, {"period": "11:00-11:30", "duration": "30min", "subject": "错题本", "task": "把第1章错题整理到错题本：原题+错误原因+正确解法"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学术语", "task": "学习化学术语⑤：state of matter, solid, liquid, gas, melting, boiling, condensation, sublimation — 画状态变化图"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学术语", "task": "学习化学术语⑥：solution, solute, solvent, saturated, solubility, concentration — 用盐水实验做联想"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "新卡录入14个化学术语 + 复习旧卡"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语表达", "task": "用英文口头复述今天学的\"状态变化\"内容（对着镜子说2分钟）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月16日（周三）· Day 5", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第1章末综合测试（自选PapaCambridge真题中Number相关题目5道）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析+重做，确保第1章全部知识点过关（正确率目标 ≥85%）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "预习教材第2章目录和引言，列出第2章将出现的术语清单"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学术语", "task": "全面复习本周化学术语（约55词），用Anki刷一遍到期卡片"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学术语", "task": "专项：默写前20个化学术语的英文定义（不看书）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理化学术语中容易混淆的词对（如 element vs compound, atom vs molecule）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读 IGCSE 化学教材随机1页，计时测阅读速度"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每周小结", "task": "写本周总结：完成了什么 + 哪个科目进展最快/最慢 + 下周调整方向"}]}, {"title": "7月17日（周四）· Day 6", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "化学术语", "task": "学习化学术语⑦：acid, base, alkali, pH scale, indicator, neutralization — 每词做1道识别题"}, {"period": "09:30-10:30", "duration": "1h", "subject": "化学术语", "task": "学习化学术语⑧：oxidation, reduction, redox, oxidizing agent, reducing agent — 每词举例1个反应"}, {"period": "10:30-11:30", "duration": "1h", "subject": "化学", "task": "看1个入门视频\"IGCSE Chemistry Chapter 1 States of Matter\"（YouTube/B站搜索），做笔记"}, {"period": "13:30-14:15", "duration": "45min", "subject": "数学", "task": "教材第2章 Algebra 第1小节：看懂 algebraic expression, variable, constant, coefficient 的定义"}, {"period": "14:15-15:00", "duration": "45min", "subject": "数学", "task": "做教材第2章 Exercise 2.1（代数表达式基础，10-15题）"}, {"period": "15:00-16:00", "duration": "1h", "subject": "Anki", "task": "新卡录入今日术语 + 复习到期旧卡（预计60-80张）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语写作", "task": "写1段50-80字的英文段落，主题：\"Describe the difference between an element and a compound\""}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月18日（周五）· Day 7", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第2章 Exercise 2.2-2.3（代数式的加减乘除，15题）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析 + 重做第2章全部错题"}, {"period": "10:30-11:30", "duration": "1h", "subject": "综合", "task": "本周所有Anki卡片全面复习（预计100+张），标记❌的卡片单独建小牌组"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学", "task": "通读教材第1章 States of Matter（英文），用中文在笔记本上做思维导图"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学", "task": "做教材第1章章末练习题（选择题+简答题，不限时，重点理解）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理本周所有错题，写1段总结\"本周踩了哪些坑\""}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语检测", "task": "自我测试：不看笔记，用英文写出本周学过的15个化学术语的定义"}, {"period": "20:00-20:30", "duration": "30min", "subject": "周度复盘", "task": "完整周度复盘：①目标达成率 ②时间利用效率 ③下周计划微调"}]}]}, {"title": "第二周：7月19日（周六）— 7月25日（周五）", "days": [{"title": "7月19日（周六）· Day 8", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Algebra 术语①：expression, equation, inequality, identity, formula — 每词做区分练习"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第2章 Exercise 2.4-2.5（一元一次方程，15题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "教材第2章 Exercise 2.6（不等式，10题）+ 理解数轴表示法"}, {"period": "11:00-11:30", "duration": "30min", "subject": "错题本", "task": "整理错题"}, {"period": "13:30-14:15", "duration": "45min", "subject": "生物术语", "task": "学习 Cell 术语①：cell, cell membrane, cell wall, cytoplasm, nucleus, nucleolus — 画细胞简图标注"}, {"period": "14:20-15:05", "duration": "45min", "subject": "生物术语", "task": "学习 Cell 术语②：mitochondria, ribosome, endoplasmic reticulum (rough/smooth), Golgi apparatus, lysosome — 画图"}, {"period": "15:10-16:00", "duration": "50min", "subject": "生物术语", "task": "学习 Cell 术语③：chloroplast, vacuole, vesicle, centriole, cytoskeleton — 完成细胞器一览表"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "TED-Ed", "task": "看 TED-Ed \"The wacky history of cell theory\"（YouTube/B站），做听力笔记"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月20日（周日）· Day 9", "tasks": [{"period": "09:00-09:45", "duration": "45min", "subject": "Anki", "task": "复习全部到期卡片"}, {"period": "09:50-10:35", "duration": "45min", "subject": "生物全景", "task": "看 Crash Course Biology #1-2（B站搜索，英文字幕），做笔记"}, {"period": "10:40-11:30", "duration": "50min", "subject": "数学易错", "task": "整理本周 Algebra 易错点清单（如：coefficient vs constant, ≠ vs <）"}, {"period": "14:00-16:00", "duration": "2h", "subject": "自由巩固", "task": "任选：①重做数学错题 ②看 Crash Course Biology #3-4 ③课外阅读"}]}, {"title": "7月21日（周一）· Day 10", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Algebra 术语②：substitution, expansion (distributive law), factorisation, common factor — 每词做3道例题"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第2章 Exercise 2.7（展开括号，15题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "教材第2章 Exercise 2.8（因式分解，15题）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入10个数学术语"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物术语", "task": "学习 Cell 术语④：diffusion, osmosis, active transport, passive transport, facilitated diffusion — 每词画过程图"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物术语", "task": "学习 Cell 术语⑤：hypertonic, hypotonic, isotonic, turgid, plasmolysed — 用红/蓝笔画3种溶液下细胞状态"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "新卡录入10个生物术语"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读 IGCSE 生物教材 Cell 章节1页，计时测速度"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月22日（周二）· Day 11", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第2章 Exercise 2.9（综合复习题，20题）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析 + 重做 第2章全部错题"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "教材第2章 Chapter Test，限时45分钟，批改打分（目标 ≥85%）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物术语", "task": "学习 Biomolecules 术语①：carbohydrate, monosaccharide, disaccharide, polysaccharide, glucose, starch, glycogen, cellulose — 建分类表"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物术语", "task": "学习 Biomolecules 术语②：protein, amino acid, peptide bond, enzyme, active site, substrate — 画酶催化示意图"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "新卡录入15个生物术语"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "TED-Ed", "task": "看 TED-Ed \"How do carbohydrates impact your health?\" 做笔记"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月23日（周三）· Day 12", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "预习第3章 Geometry 术语①：point, line, ray, segment, angle, vertex — 每词画图标注"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第3章 Exercise 3.1（角度基础，10题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "学习 Geometry 术语②：acute, right, obtuse, straight, reflex angle — 每词画1个角"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入10个几何术语"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物术语", "task": "学习 Biomolecules 术语③：lipid, fatty acid, triglyceride, phospholipid, cholesterol — 建对照表"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物术语", "task": "学习 Biomolecules 术语④：DNA, RNA, nucleotide, nitrogenous base (A/T/G/C/U), double helix — 画双螺旋简图"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "新卡录入 + 复习（预计100+张）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语写作", "task": "写1段英文，比较 DNA 和 RNA 的3个不同点（50-80字）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月24日（周四）· Day 13", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第3章 Exercise 3.2-3.3（三角形类型+内角和，15题）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "教材第3章 Exercise 3.4-3.5（四边形+多边形内角和，15题）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "综合题：自选5道几何证明题（角度计算类）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物", "task": "看 Crash Course Biology #3-4（Biological Molecules 专题），做笔记"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物", "task": "用英文写1页 A4 的 Biomolecules 四大类总结表（糖/蛋白/脂/核酸 → 单体/功能/例子）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "全面复习生物术语卡片（预计80张）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读 IGCSE 生物教材 Biomolecules 相关段落，计时测速"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每周小结", "task": "提前写周中小结"}]}, {"title": "7月25日（周五）· Day 14", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第3章 Chapter Review，限时40分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析 + 数学第1-3章交叉错题练习（自选10题混合）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "Anki", "task": "两周累积全部卡片复习（预计200+张），标记困难卡片"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物术语", "task": "默写：A4纸对折——左边写英文术语，右边写中文释义，不看书完成50个词"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物", "task": "做1份 Cell + Biomolecules 自测题（15道选择题+5道简答，自己出题自己答）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理本周所有错题"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语检测", "task": "用英文默写 Biomolecules 四类的定义（糖/蛋白/脂/核酸，每类2句话）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "周度复盘", "task": "完整周度复盘：①目标达成率 ②生物术语掌握度自评 ③数学代数/几何掌握情况"}]}]}, {"title": "第三周：7月26日（周六）— 8月1日（周五）", "days": [{"title": "7月26日（周六）· Day 15", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Geometry 术语③：parallel, perpendicular, transversal, alternate angles, corresponding angles — 画平行线图标注"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第4章 Exercise 4.1-4.2（平行线角度，10题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "学习 Geometry 术语④：triangle, quadrilateral, pentagon, hexagon, octagon, regular/irregular polygon — 做分类表"}, {"period": "11:00-11:30", "duration": "30min", "subject": "错题本", "task": "整理"}, {"period": "13:30-14:15", "duration": "45min", "subject": "化学教材", "task": "第1章 States of Matter：逐段精读英文教材（可使用ZNotes辅助理解）"}, {"period": "14:20-15:05", "duration": "45min", "subject": "化学教材", "task": "第1章续：用英文做 Cornell 笔记（左栏关键词，右栏详细笔记，底部总结）"}, {"period": "15:10-16:00", "duration": "50min", "subject": "化学教材", "task": "做第1章章末练习题（选择题+简答题），答案用英文写"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "Anki", "task": "复习到期卡片"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月27日（周日）· Day 16", "tasks": [{"period": "09:00-10:30", "duration": "1.5h", "subject": "数学", "task": "PapaCambridge 下载1份IGCSE数学真题中第1-4章相关题目，自选10题混合练习"}, {"period": "10:30-11:30", "duration": "1h", "subject": "错题复习", "task": "重做前2周所有❌标记的错题"}, {"period": "14:00-16:00", "duration": "2h", "subject": "自由巩固", "task": "任选：①看Khan Academy Algebra视频 ②化学教材第2章预习 ③休息"}]}, {"title": "7月28日（周一）· Day 17", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Geometry 术语⑤：circle theorem 术语集 — radius, diameter, chord, tangent, arc, sector, segment — 画图标注"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第4章 Exercise 4.3-4.4（圆的定理，8题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "圆定理证明题3道（angle at centre = 2× angle at circumference 等）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学教材", "task": "第2章 Atomic Structure：逐段精读英文教材（原子结构）"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学教材", "task": "第2章续：用英文做 Cornell 笔记，重点理解 proton/neutron/electron 的 charge/mass/location"}, {"period": "15:30-16:00", "duration": "30min", "subject": "化学练习", "task": "做第2章选择题（10题），批改"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读化学教材第2章随机1页，计时测速"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月29日（周二）· Day 18", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Geometry 术语⑥：Pythagorean theorem, hypotenuse, leg, right triangle — 每词画图+做1道例题"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第5章 Exercise 5.1-5.2（Pythagoras定理，10题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "教材第5章 Exercise 5.3（Pythagoras应用：三维、坐标几何，8题）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学教材", "task": "第2章 Atomic Structure 续：电子排布（2,8,8法则），画前20号元素电子结构图"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学教材", "task": "第2章续：isotope概念深挖，做 relative atomic mass 计算题5道"}, {"period": "15:30-16:00", "duration": "30min", "subject": "化学练习", "task": "第2章简答题（5题），用完整英文句子回答"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "TED-Ed", "task": "看 TED-Ed \"The 2,400-year search for the atom\""}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月30日（周三）· Day 19", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第5章 Chapter Review，限时35分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析+重做（几何+勾股定理全部错题）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "自选5道综合几何题（混合角度+圆定理+勾股）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学总结", "task": "用英文写1页A4的第1-2章总结：States of Matter + Atomic Structure 核心概念"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学练习", "task": "做ZNotes或PapaCambridge上第1-2章综合题（15题）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理化学错题"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语写作", "task": "写1段英文解释 \"How does the atomic structure determine an element's chemical properties?\"（80-100字）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "7月31日（周四）· Day 20", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学综合", "task": "下载PapaCambridge IGCSE数学真题1份，完成 Section A 前10题（Number+Algebra+Geometry 混合）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学综合", "task": "批改+错题分析"}, {"period": "10:30-11:30", "duration": "1h", "subject": "Anki", "task": "三周全部卡片复习（预计300+张），重点清理❌标记卡片"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学教材", "task": "预习第3章 Stoichiometry 术语：mole, Avogadro's constant, molar mass, empirical formula, molecular formula — 建术语表"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学教材", "task": "通读第3章开头部分（英文），理解 mole concept 基本概念"}, {"period": "15:30-16:00", "duration": "30min", "subject": "化学", "task": "看 Khan Academy \"Introduction to Moles\" 视频（B站/Khan Academy官网）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇（尝试 1.1x 倍速）"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读化学教材第3章，计时测速"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每周小结", "task": "提前写周中小结"}]}, {"title": "8月1日（周五）· Day 21", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学检测", "task": "数学第4-5章自测（15题选择题+5题计算题），限时60分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析+重做"}, {"period": "10:30-11:30", "duration": "1h", "subject": "Anki", "task": "标记的困难卡片专项复习"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学检测", "task": "化学第1-2章自测（20题选择题+5题简答），用英文作答"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学", "task": "错题分析+用英文重新写正确答案"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理本周全部错题"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语检测", "task": "用英文默写化学第1-2章核心概念（至少8个）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "周度复盘", "task": "三周累计复盘：①数学进度（第1-5章）②化学进度（第1-2章）③生物术语掌握度 ④英语阅读速度变化"}]}]}, {"title": "第四周：8月2日（周六）— 8月8日（周五）", "days": [{"title": "8月2日（周六）· Day 22", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Statistics 术语①：data, qualitative, quantitative, discrete, continuous — 每词举例1个"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "学习 Statistics 术语②：mean, median, mode, range — 每词做计算题2道"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "教材第6章 Exercise 6.1-6.2（平均数/中位数/众数，15题）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入"}, {"period": "13:30-14:15", "duration": "45min", "subject": "生物教材", "task": "第1章 Cell Structure：逐段精读英文教材"}, {"period": "14:20-15:05", "duration": "45min", "subject": "生物教材", "task": "第1章续：用英文做 Cornell 笔记，画细胞器结构图"}, {"period": "15:10-16:00", "duration": "50min", "subject": "生物练习", "task": "做第1章章末选择题（15题），批改"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思入门", "task": "了解雅思 Task2 基本结构：Introduction-Body-Conclusion 三段式"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月3日（周日）· Day 23", "tasks": [{"period": "09:00-10:00", "duration": "1h", "subject": "数学", "task": "自选10道统计题混合练习（来自教材 Review 或 PapaCambridge）"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "生物", "task": "看 Crash Course Biology #5-8（Cell membrane & transport专题），做笔记"}, {"period": "14:00-16:00", "duration": "2h", "subject": "自由", "task": "任选：①雅思Task2范文阅读2篇 ②化学第3章预习 ③休息"}]}, {"title": "8月4日（周一）· Day 24", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "数学", "task": "学习 Statistics 术语③：bar chart, pie chart, histogram, scatter plot, line graph — 每词看1个例子"}, {"period": "09:20-10:05", "duration": "45min", "subject": "数学", "task": "教材第6章 Exercise 6.3-6.4（图表绘制/解读，10题）"}, {"period": "10:10-11:00", "duration": "50min", "subject": "数学", "task": "教材第6章 Exercise 6.5（散点图+相关性，8题）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "Anki", "task": "新卡录入"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物教材", "task": "第1章 Cell Structure 续：Specialised cells（红细胞/神经细胞/根毛细胞等），建对照表"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物练习", "task": "第1章简答题（5题），用完整英文句子回答"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "复习生物术语卡片"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第1篇 Task2 短文：主题 \"Should students learn a foreign language from an early age?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月5日（周二）· Day 25", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "教材第6章 Chapter Review，限时35分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "错题分析+重做"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学综合", "task": "数学第1-6章综合复习：自选20题混合练习（涵盖Number/Algebra/Geometry/Stats）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物教材", "task": "第2章 Biological Molecules：逐段精读英文教材"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物教材", "task": "第2章续：用英文做 Cornell 笔记"}, {"period": "15:30-16:00", "duration": "30min", "subject": "生物", "task": "看 Khan Academy \"Biological Molecules\" 系列视频（2个）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读生物教材第2章，计时测速"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月6日（周三）· Day 26", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "做1份完整的第1-6章综合测试卷（自编，30题），限时75分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "批改+错题分析+弱项标注（写清楚哪一章最弱）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "针对性补弱：选最弱章节的5道真题重新做"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物教材", "task": "第2章 Biological Molecules 续：Enzymes专题精读"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物练习", "task": "第2章选择题（15题）+ 简答题（3题），英文作答"}, {"period": "15:30-16:00", "duration": "30min", "subject": "生物总结", "task": "用英文写1页 Enzyme 工作原理总结（lock and key model vs induced fit model）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第2篇 Task2 短文：主题 \"Is technology making us more isolated?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月7日（周四）· Day 27", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "重新做昨天综合测试中全部错题，确保每道题都理解"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "PapaCambridge下载真题中统计图表类题目5道专项练习"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学总结", "task": "用1页A4写出数学第1-6章的公式/定理速查表（如：Pythagoras a²+b²=c², 平均值公式等）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物", "task": "生物第1-2章综合复习：用英文默写每章核心概念（至少5条）"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物综合", "task": "自编15道选择题（第1-2章混合），做+批改"}, {"period": "15:30-16:00", "duration": "30min", "subject": "生物", "task": "看 Crash Course Biology #9-10（Photosynthesis & Respiration 预览）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第3篇 Task2 短文：主题 \"Do advantages of studying abroad outweigh disadvantages?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每周小结", "task": "提前周中小结"}]}, {"title": "8月8日（周五）· Day 28", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "数学第1-6章公式速查表查漏补缺，确保每个公式都有1道例题"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "再做1份第1-6章综合练习（15题），检查相比 Day 26 是否有进步"}, {"period": "10:30-11:30", "duration": "1h", "subject": "Anki", "task": "四周全部卡片大规模复习（预计400+张）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物检测", "task": "生物第1-2章自测（25题选择 + 5题简答），限时75分钟"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物", "task": "批改+错题分析+用英文重写答错简答题"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理本周全部错题"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第4篇 Task2 短文：主题 \"Should governments invest more in space exploration?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "月度复盘", "task": "四周（28天）完整复盘：①数学第1-6章掌握度 ②生物第1-2章掌握度 ③化学第1-2章掌握度 ④英语阅读速度（应 ≥120词/分钟）⑤雅思写作4篇完成情况"}]}]}, {"title": "第五周：8月9日（周六）— 8月15日（周五）", "days": [{"title": "8月9日（周六）· Day 29", "tasks": [{"period": "08:30-09:15", "duration": "45min", "subject": "化学", "task": "第3章 Stoichiometry 术语复习+预热：mole, molar mass, Avogadro's number, empirical formula — 每词做1道计算题"}, {"period": "09:20-10:05", "duration": "45min", "subject": "化学", "task": "教材第3章 Section 3.1（The Mole）：逐段阅读"}, {"period": "10:10-11:00", "duration": "50min", "subject": "化学", "task": "做 mole 基础计算题8道（moles = mass ÷ molar mass）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "错题本", "task": "整理"}, {"period": "13:30-14:15", "duration": "45min", "subject": "物理术语", "task": "学习 Forces & Motion 术语①：force, mass, weight, gravity, gravitational field strength — 每词写定义+公式"}, {"period": "14:20-15:05", "duration": "45min", "subject": "物理术语", "task": "学习 Forces & Motion 术语②：speed, velocity, acceleration, deceleration, displacement — 每词做1道计算题"}, {"period": "15:10-16:00", "duration": "50min", "subject": "物理术语", "task": "学习 Forces & Motion 术语③：Newton's 1st/2nd/3rd law, inertia, momentum, impulse — 每定律写1句话解释+1个生活例子"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇（1.1x倍速）"}, {"period": "19:30-20:00", "duration": "30min", "subject": "物理", "task": "看 Crash Course Physics #1（Motion）"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月10日（周日）· Day 30", "tasks": [{"period": "09:00-10:00", "duration": "1h", "subject": "化学", "task": "做 Mole 计算题10道（进阶：含化学方程式的mole计算）"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "物理", "task": "看 Crash Course Physics #2-3（Derivatives & Integrals in Physics），了解物理中的数学工具"}, {"period": "14:00-16:00", "duration": "2h", "subject": "自由", "task": "任选：①雅思写作范文阅读 ②数学第1-6章复习 ③休息"}]}, {"title": "8月11日（周一）· Day 31", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "化学", "task": "教材第3章 Section 3.2（Empirical & Molecular Formula）：逐段阅读"}, {"period": "09:30-10:30", "duration": "1h", "subject": "化学", "task": "做 empirical formula 计算题8道（已知元素质量%求最简式）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "化学", "task": "做 molecular formula 计算题5道（已知molar mass+empirical formula求分子式）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "物理术语", "task": "学习 Energy 术语①：kinetic energy, potential energy (gravitational/elastic), work, power, efficiency — 每词写公式+1道计算"}, {"period": "14:30-15:30", "duration": "1h", "subject": "物理术语", "task": "学习 Energy 术语②：thermal energy, heat, temperature, specific heat capacity, latent heat — 每词写定义"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "新卡录入物理术语（约20个）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "读物理教材随机1页，计时测速"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月12日（周二）· Day 32", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "化学", "task": "教材第3章 Section 3.3（Balancing Equations）：学配平方法"}, {"period": "09:30-10:30", "duration": "1h", "subject": "化学", "task": "做方程式配平练习10道（从简单到复杂）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "化学", "task": "综合练习：mole + 配平 + 产率计算混合5道"}, {"period": "13:30-14:30", "duration": "1h", "subject": "物理", "task": "物理教材第1章 Motion 逐段阅读"}, {"period": "14:30-15:30", "duration": "1h", "subject": "物理", "task": "做教材第1章 Exercises（速度/加速度计算，10题）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "物理", "task": "用英文做速度-时间图的1道综合分析题"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "复习前4篇Task2，对照范文找差距，记3条改进点"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月13日（周三）· Day 33", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "化学", "task": "教材第4章 Chemical Reactions：逐段阅读（反应类型：合成/分解/置换/燃烧）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "化学", "task": "建反应类型对照表：每种类型写1个配平的方程式"}, {"period": "10:30-11:30", "duration": "1h", "subject": "化学", "task": "做第4章选择题（15题）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "物理", "task": "物理教材第1章 Motion 续：理解 distance-time 和 speed-time 图"}, {"period": "14:30-15:30", "duration": "1h", "subject": "物理", "task": "做图形分析题5道（从图中提取信息计算加速度/距离）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "全面复习物理术语卡片"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇（尝试 1.2x 倍速）"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第5篇 Task2 短文：主题 \"Is homework beneficial for students?\"，150字，重点改进前4篇发现的问题"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每周小结", "task": "提前周中小结"}]}, {"title": "8月14日（周四）· Day 34", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "化学", "task": "教材第4章续：Redox 反应（氧化还原）深入理解"}, {"period": "09:30-10:30", "duration": "1h", "subject": "化学", "task": "做 redox 练习：判断氧化数变化、识别氧化剂/还原剂（8题）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "化学", "task": "第3-4章综合复习：用英文写1页反应类型+计算方法的总结"}, {"period": "13:30-14:30", "duration": "1h", "subject": "物理", "task": "物理教材第1章 Chapter Review 题目（10题）"}, {"period": "14:30-15:30", "duration": "1h", "subject": "物理术语", "task": "学习 Waves 术语：wave, amplitude, wavelength, frequency, period, speed — 每词画图+公式"}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "复习物理卡片"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "TED-Ed", "task": "看 TED-Ed \"What is entropy?\" 或物理任意TED-Ed视频，做笔记"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月15日（周五）· Day 35", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "化学", "task": "化学第3-4章综合自测（20题选择 + 5题计算），限时75分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "化学", "task": "批改+错题分析+用英文重写算错的 mole 计算题"}, {"period": "10:30-11:30", "duration": "1h", "subject": "Anki", "task": "五周全部卡片集中复习（预计500+张）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "物理", "task": "物理第1章自测（10题选择 + 3题计算），限时45分钟"}, {"period": "14:30-15:30", "duration": "1h", "subject": "物理", "task": "批改+错题分析"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理本周全部错题（化学+物理）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语检测", "task": "自测：用英文写出物理Motion章节5个核心概念的英文定义"}, {"period": "20:00-20:30", "duration": "30min", "subject": "周度复盘", "task": "第五周复盘：①化学第3-4章掌握度 ②物理入门情况 ③英语听力倍速适应情况（应能听懂1.1x）④雅思写作5篇完成情况"}]}]}, {"title": "第六周：8月16日（周六）— 8月22日（周五）", "days": [{"title": "8月16日（周六）· Day 36", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "数学第1-2章（Number + Algebra 基础）专项复习：重做标志性易错题各5道"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "数学第3-4章（Geometry + Circle Theorem）专项复习：画图+重做证明题3道"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "数学第5-6章（Pythagoras + Statistics）专项复习：公式默写+计算题5道"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学", "task": "用英文默写化学第1-2章核心概念思维导图（States of Matter + Atomic Structure），不看教材"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学", "task": "用英文默写化学第3-4章核心概念思维导图（Stoichiometry + Chemical Reactions），不看教材"}, {"period": "15:30-16:00", "duration": "30min", "subject": "化学", "task": "对照教材查漏补缺，用红笔标注遗漏点"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇（1.2x倍速）"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "速度测试：读生物教材随机1页，计时60秒，数单词数 → 目标 ≥150词/分钟"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月17日（周日）· Day 37", "tasks": [{"period": "09:00-10:30", "duration": "1.5h", "subject": "数学真题", "task": "PapaCambridge下载1份IGCSE数学真题，完成 Section A（20题选择题），限时30分钟"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "批改+分析Section A错题"}, {"period": "14:00-16:00", "duration": "2h", "subject": "自由", "task": "任选：①继续做Section B ②化学/生物查漏 ③休息"}]}, {"title": "8月18日（周一）· Day 38", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "完成前一天真题的 Section B（10题简答+计算），限时50分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "批改+错题归因（标注每道错题属于哪一章）"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "针对最弱章节再做5道针对性练习题"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物", "task": "用英文默写生物第1-2章核心概念思维导图（Cell Structure + Biological Molecules），不看教材"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物", "task": "对照教材查漏补缺，用红笔标注遗漏点"}, {"period": "15:30-16:00", "duration": "30min", "subject": "生物", "task": "补充默写 Enzyme 专题（lock and key / induced fit / factors affecting enzyme activity）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第6篇 Task2 短文：主题 \"Is social media good for society?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月19日（周二）· Day 39", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "再做1份完整的数学第1-6章综合测试（20题），限时60分钟"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "批改+与前一次综合测试对比：①哪些章节进步了？②哪些章节仍然薄弱？"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "薄弱章节专项攻破：选该章节真题10道集中练习"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学", "task": "化学第1-4章综合思维导图（用英文手绘1页B4大小），串联四个章节的逻辑关系"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学", "task": "做化学第1-4章混合题（15道选择 + 5道计算），来自ZNotes或PapaCambridge"}, {"period": "15:30-16:00", "duration": "30min", "subject": "错题本", "task": "整理化学错题"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "速度测试：读化学教材随机1页，计时60秒 → 目标 ≥150词/分钟"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每周小结", "task": "周中小结"}]}, {"title": "8月20日（周三）· Day 40", "tasks": [{"period": "08:30-09:30", "duration": "1h", "subject": "数学", "task": "数学公式速查表最终版：用1页A4手写第1-6章全部公式+1道例题（考试前可以快速复习用）"}, {"period": "09:30-10:30", "duration": "1h", "subject": "数学", "task": "用速查表做10道题（开卷式），检验速查表的完整性和可用性"}, {"period": "10:30-11:30", "duration": "1h", "subject": "数学", "task": "查漏补缺速查表，补充遗漏的公式"}, {"period": "13:30-14:30", "duration": "1h", "subject": "生物", "task": "生物第1-2章综合思维导图（英文手绘），串联 Cell → Biomolecules → Enzymes 逻辑"}, {"period": "14:30-15:30", "duration": "1h", "subject": "生物", "task": "做生物第1-2章混合题（20道选择 + 5道简答）"}, {"period": "15:30-16:00", "duration": "30min", "subject": "生物", "task": "用英文口头复述整个 Cell + Biomolecules 内容（录音，自己听找问题）"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第7篇 Task2 短文：主题 \"Should university education be free?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月21日（周四）· Day 41", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "全科检测", "task": "数学第1-6章全面检测（25题），限时90分钟 — 这是暑假数学的\"期末考试\""}, {"period": "10:00-11:00", "duration": "1h", "subject": "数学", "task": "批改+深度分析：计算正确率、每章得分率、速度是否达标（≥1题/3分钟）"}, {"period": "11:00-11:30", "duration": "30min", "subject": "数学", "task": "根据检测结果，写出\"数学开学前待补清单\"（开学后第一个月要重点攻克的3-5个知识点）"}, {"period": "13:30-14:30", "duration": "1h", "subject": "化学", "task": "化学第1-4章自测（20题选择 + 5题简答），限时75分钟"}, {"period": "14:30-15:30", "duration": "1h", "subject": "化学", "task": "批改+分析+写出\"化学开学前待补清单\""}, {"period": "15:30-16:00", "duration": "30min", "subject": "Anki", "task": "六周全部卡片复习"}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "英语阅读", "task": "最终速度测试：读3页不同科目教材，各计时60秒，取平均值 → 标记最终阅读速度"}, {"period": "20:00-20:30", "duration": "30min", "subject": "每日复盘", "task": "3行总结"}]}, {"title": "8月22日（周五）· Day 42", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "全科自检", "task": "制作\"暑假学习成果总清单\"：按科目（数学/化学/生物/物理/英语）列出所有已学内容，每项标记 ✅熟练 / ⚠️需巩固 / ❌需重学"}, {"period": "10:00-11:00", "duration": "1h", "subject": "错题总览", "task": "翻看全部6周的错题本，统计：①哪类错误最多（计算/概念/阅读/粗心）②哪个科目错题最多"}, {"period": "11:00-11:30", "duration": "30min", "subject": "总结", "task": "写1页\"暑假学习总结报告\"：①最大的收获 ②最大的困难 ③开学后的学习策略"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "生物", "task": "生物第1-2章全面自测（30题选择 + 5题简答），限时90分钟 — 暑假生物\"期末考试\""}, {"period": "15:00-16:00", "duration": "1h", "subject": "生物", "task": "批改+分析+写出\"生物开学前待补清单\""}, {"period": "19:00-19:30", "duration": "30min", "subject": "英语听力", "task": "BBC 6 Minute English 新1篇"}, {"period": "19:30-20:00", "duration": "30min", "subject": "雅思写作", "task": "写第8篇 Task2 短文：主题 \"Should fast food be banned in schools?\"，150字"}, {"period": "20:00-20:30", "duration": "30min", "subject": "周度复盘", "task": "第六周完整复盘：①数学\"期末考试\"成绩 ②化学/生物思维导图完整度 ③英语阅读最终速度 ④各科待补清单"}]}]}, {"title": "第七周：8月23日（周六）— 8月31日（周日）+ 9月1日（周一）", "days": [{"title": "8月23日（周六）· Day 43", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "补弱", "task": "根据前一天的\"暑假学习成果总清单\"，选择全部 ❌ 项，制定补弱计划（今天重点攻克数学 ❌ 项）"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "数学补弱", "task": "针对数学 ❌ 项做专项练习（每项5道题，直到理解为止）"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "化学补弱", "task": "针对化学 ❌ 项做专项练习"}, {"period": "15:00-16:00", "duration": "1h", "subject": "Anki", "task": "复习所有 ❌ 术语卡片"}, {"period": "19:00-20:30", "duration": "1.5h", "subject": "自由", "task": "任选：英语听力 或 雅思写作复习"}]}, {"title": "8月24日（周日）· Day 44", "tasks": [{"period": "全天", "duration": "—", "subject": "弹性日", "task": "补弱进度较慢的科目 + 休息"}]}, {"title": "8月25日（周一）· Day 45", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "生物补弱", "task": "针对生物 ❌ 项做专项练习 + 复习生物思维导图"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "物理补弱", "task": "针对物理薄弱点做专项练习"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "⚠️ 项攻克", "task": "选择全部 ⚠️ 项（需巩固），逐项过，每项做完5题确保从 ⚠️→✅"}, {"period": "15:00-16:00", "duration": "1h", "subject": "数学公式", "task": "再次默写数学第1-6章公式速查表（不看书），与之前版本对比"}, {"period": "19:00-20:30", "duration": "1.5h", "subject": "英语", "task": "英语阅读+听力综合训练"}]}, {"title": "8月26日（周二）· Day 46", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "⚠️ 项攻克", "task": "继续攻克剩余的 ⚠️ 项"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "综合", "task": "做1份全科小测验（数学10题+化学5题+生物5题），限时60分钟"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "综合", "task": "批改+分析：所有 ✅ 项是否真的 ✅？"}, {"period": "15:00-16:00", "duration": "1h", "subject": "总结", "task": "更新\"暑假学习成果总清单\"，目标：❌=0，⚠️≤3"}, {"period": "19:00-20:30", "duration": "1.5h", "subject": "英语", "task": "英语听说读写综合练习"}]}, {"title": "8月27日（周三）· Day 47", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "开学预习", "task": "浏览南外剑桥班IGCSE课表，了解G1年级第一个月会学什么（提前找学长学姐问）"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "开学预习", "task": "预习IGCSE数学第7章（根据教材目录，提前看下一个要学的章节）"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "物品准备", "task": "列出开学物品清单：科学计算器（CASIO fx-991CN X）、英文词典、笔记本（每科1本）、荧光笔、文件夹、U盘"}, {"period": "15:00-16:00", "duration": "1h", "subject": "物品采购", "task": "检查已有物品，标注需要购买的（淘宝/文具店）"}, {"period": "19:00-20:30", "duration": "1.5h", "subject": "自由", "task": "英语或其他"}]}, {"title": "8月28日（周四）· Day 48", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "化学", "task": "预习IGCSE化学后面章节（浏览目录，了解G1年级上学期化学会覆盖哪些内容）"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "生物", "task": "预习IGCSE生物后面章节"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "心态准备", "task": "写1页\"开学心态准备\"：①对IGCSE的期待 ②可能的挑战 ③应对策略"}, {"period": "15:00-16:00", "duration": "1h", "subject": "学习工具", "task": "调试科学计算器（学会基本功能：分数、指数、三角函数、统计模式）"}, {"period": "19:00-20:00", "duration": "1h", "subject": "作息调整", "task": "开始调整作息：今晚 22:30 上床"}]}, {"title": "8月29日（周五）· Day 49", "tasks": [{"period": "08:30-10:00", "duration": "1.5h", "subject": "全科复习", "task": "快速翻阅所有错题本+思维导图+公式速查表（30分钟每科）"}, {"period": "10:00-11:30", "duration": "1.5h", "subject": "全科复习", "task": "继续快速翻阅"}, {"period": "13:30-15:00", "duration": "1.5h", "subject": "暑假总结", "task": "写暑假最终总结报告（中英双语，1页A4）：①7周内完成了什么 ②学到的3个最重要的学习方法 ③对开学的信心指数（1-10分）"}, {"period": "15:00-16:00", "duration": "1h", "subject": "奖励", "task": "给自己选1个适当的奖励（看1部电影/吃1顿好的/买1本喜欢的书）"}, {"period": "19:00-20:00", "duration": "1h", "subject": "作息调整", "task": "今晚 22:00 上床"}]}, {"title": "8月30日（周六）· Day 50", "tasks": [{"period": "09:00-11:00", "duration": "2h", "subject": "轻松复习", "task": "Anki卡片轻松刷一遍（不追求全对，保持语感就行）"}, {"period": "11:00-12:00", "duration": "1h", "subject": "开学准备", "task": "整理书包、文具、笔记本；确认课表和教室位置"}, {"period": "下午/晚上", "duration": "—", "subject": "休息", "task": "最后1天完整自由时间，放松为主"}, {"period": "21:30", "duration": "—", "subject": "作息", "task": "上床，为明天开学做准备"}]}, {"title": "8月31日（周日）· Day 51", "tasks": [{"period": "上午", "duration": "2h", "subject": "轻松复习", "task": "Anki卡片快速刷 + 翻阅公式速查表"}, {"period": "下午", "duration": "—", "subject": "放松", "task": "运动/散步，保持好心情"}, {"period": "晚上", "duration": "—", "subject": "准备", "task": "检查明天要带的物品；21:30 上床"}]}, {"title": "9月1日（周一）· Day 52", "tasks": [{"period": "时间", "duration": "任务", "subject": "时长", "task": "备注"}, {"period": "08:00-08:30", "duration": "Anki 术语卡片复习", "subject": "30min", "task": "前1天新卡+到期旧卡"}, {"period": "08:30-11:30", "duration": "上午主攻（数学/科学新内容）", "subject": "3h", "task": "45min/段，段间休息5min"}, {"period": "11:30-13:30", "duration": "午饭 + 午休", "subject": "2h", "task": "必须午休30min"}, {"period": "16:00-18:00", "duration": "自由活动/运动", "subject": "2h", "task": "每天保证户外30min+"}, {"period": "20:30-21:00", "duration": "当日复盘 + 规划次日", "subject": "30min", "task": "用笔记本写3行总结"}, {"period": "21:00-22:00", "duration": "自由时间", "subject": "1h", "task": "从第7周起逐步提前"}]}]}];
+const TOTAL_DAYS = 52;
+const TARGET_DATE = new Date(2026, 8, 1);
+const GITHUB_REPO = 'xujiangpeng-ship-it/821224.com';
+const PDF_PATH = 'content/yasi';
+const GITHUB_API = 'https://api.github.com';
+const RAW_BASE = 'https://raw.githubusercontent.com/' + GITHUB_REPO + '/main/' + PDF_PATH;
+
+console.log('[Yasi v4.1] Page loaded');
+
+// ========== TOKEN ==========
+function getToken() { return localStorage.getItem('gh_token_yasi'); }
+function setToken(t) { localStorage.setItem('gh_token_yasi', t); }
+
+function handleUploadClick() {
+  if (!getToken()) {
+    document.getElementById('tokenModal').classList.add('active');
+    return;
+  }
+  document.getElementById('pdfUploader').click();
+}
+
+function closeTokenModal() {
+  document.getElementById('tokenModal').classList.remove('active');
+  document.getElementById('tokenInput').value = '';
+}
+
+function saveToken() {
+  const val = document.getElementById('tokenInput').value.trim();
+  if (!val) return;
+  setToken(val);
+  closeTokenModal();
+  console.log('[Yasi] Token saved');
+  document.getElementById('uploadStatus').textContent = 'Token 已保存';
+  document.getElementById('uploadStatus').className = 'upload-status';
+  setTimeout(function(){ document.getElementById('uploadStatus').textContent = ''; }, 2000);
+  document.getElementById('pdfUploader').click();
+}
+
+// ========== COUNTDOWN ==========
+function updateCountdown() {
+  var now = new Date();
+  var diff = TARGET_DATE - now;
+  var days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  document.getElementById('cdDays').textContent = days;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// ========== FETCH PDFs ==========
+async function fetchRepoPDFs() {
+  try {
+    var url = GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/' + PDF_PATH;
+    console.log('[Yasi] Fetching PDFs from:', url);
+    var resp = await fetch(url, { cache: 'no-cache' });
+    if (!resp.ok) {
+      console.warn('[Yasi] List API status:', resp.status, resp.statusText);
+      return [];
+    }
+    var files = await resp.json();
+    console.log('[Yasi] API returned', files.length, 'items');
+    var pdfs = [];
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (f.type === 'file' && f.name.toLowerCase().endsWith('.pdf')) {
+        pdfs.push({ name: f.name, download_url: f.download_url });
+        console.log('[Yasi] Found PDF:', f.name);
+      }
+    }
+    return pdfs;
+  } catch (e) {
+    console.error('[Yasi] Fetch PDFs error:', e.message, e);
+    return [];
+  }
+}
+
+async function renderPDFCards() {
+  var grid = document.getElementById('textbookGrid');
+  grid.innerHTML = '<div class="loading-hint">加载中...</div>';
+  var pdfs = await fetchRepoPDFs();
+
+  if (pdfs.length === 0) {
+    grid.innerHTML = '<div class="empty-hint">还没有教材PDF，点击「+ 上传PDF」添加（首次需配置 GitHub Token）</div>';
+    return;
+  }
+
+  grid.innerHTML = pdfs.map(function(p) {
+    return '<div class="pdf-card" onclick="openPdfViewer(\'' + escapeHtml(p.name) + '\', \'' + escapeHtml(p.download_url) + '\')"><div class="pdf-icon"></div><span class="pdf-name" title="' + escapeHtml(p.name) + '">' + escapeHtml(p.name) + '</span></div>';
+  }).join('');
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ========== UPLOAD ==========
+document.getElementById('pdfUploader').addEventListener('change', async function(event) {
+  var files = event.target.files;
+  if (!files.length) return;
+
+  var token = getToken();
+  if (!token) {
+    document.getElementById('tokenModal').classList.add('active');
+    event.target.value = '';
+    return;
+  }
+
+  var status = document.getElementById('uploadStatus');
+  var btn = document.getElementById('uploadBtn');
+
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) continue;
+
+    var path = PDF_PATH + '/' + file.name;
+    var apiUrl = GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/' + path;
+
+    console.log('[Yasi] Uploading to:', apiUrl);
+    console.log('[Yasi] File:', file.name, file.size, 'bytes');
+    console.log('[Yasi] Token prefix:', token.substring(0, 15) + '...');
+
+    status.textContent = '正在上传 ' + file.name + '...';
+    status.className = 'upload-status';
+    btn.disabled = true;
+
+    try {
+      // Read file as base64
+      var base64Content = await new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          var result = reader.result;
+          var comma = result.indexOf(',');
+          resolve(result.substring(comma + 1));
+        };
+        reader.onerror = function(e) { reject(e); };
+        reader.readAsDataURL(file);
+      });
+
+      console.log('[Yasi] Base64 length:', base64Content.length);
+
+      var body = JSON.stringify({
+        message: 'Upload ' + file.name,
+        content: base64Content,
+        branch: 'main'
+      });
+
+      console.log('[Yasi] Sending PUT request...');
+
+      var resp = await fetch(apiUrl, {
+        method: 'PUT',
+        cache: 'no-cache',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: body
+      });
+
+      console.log('[Yasi] Response status:', resp.status, resp.statusText);
+
+      if (!resp.ok) {
+        var errText = await resp.text();
+        console.error('[Yasi] Error response:', errText);
+        try {
+          var err = JSON.parse(errText);
+          throw new Error(err.message || 'HTTP ' + resp.status);
+        } catch(parseErr) {
+          throw new Error('HTTP ' + resp.status + ': ' + (errText.substring(0, 100)));
+        }
+      }
+
+      var result = await resp.json();
+      console.log('[Yasi] Upload success:', result.content.name);
+
+      status.textContent = file.name + ' 上传成功！';
+      status.className = 'upload-status';
+      await renderPDFCards();
+    } catch (e) {
+      console.error('[Yasi] Upload error:', e.message, e);
+      status.textContent = '上传失败: ' + e.message;
+      status.className = 'upload-status error';
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  event.target.value = '';
+  setTimeout(function() {
+    if (status.className === 'upload-status') status.textContent = '';
+  }, 4000);
+});
+
+// ========== PDF VIEWER ==========
+function openPdfViewer(name, url) {
+  document.getElementById('pdfFrame').src = url;
+  document.getElementById('pdfModalTitle').textContent = name;
+  document.getElementById('pdfModal').classList.add('active');
+}
+
+function closePdfModal() {
+  document.getElementById('pdfModal').classList.remove('active');
+  document.getElementById('pdfFrame').src = '';
+}
+
+function toggleFullscreen() {
+  var modal = document.getElementById('pdfModal');
+  if (!document.fullscreenElement) {
+    modal.requestFullscreen().catch(function(){});
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('pdfModal').classList.contains('active')) closePdfModal();
+    if (document.getElementById('celebration').classList.contains('active')) closeCelebration();
+    if (document.getElementById('tokenModal').classList.contains('active')) closeTokenModal();
+  }
+});
+
+// ========== STUDY PLAN ==========
+function getSubjectClass(subject) {
+  var s = subject.toLowerCase();
+  if (s.indexOf('数学') !== -1) return 's-math';
+  if (s.indexOf('化学') !== -1) return 's-chem';
+  if (s.indexOf('生物') !== -1) return 's-bio';
+  if (s.indexOf('物理') !== -1) return 's-phy';
+  if (s.indexOf('英语') !== -1 || s.indexOf('雅思') !== -1 || s.indexOf('bbc') !== -1 || s.indexOf('ted') !== -1) return 's-eng';
+  return 's-other';
+}
+
+function render() {
+  var container = document.getElementById('weeks-container');
+  var sidebar = document.getElementById('sidebar');
+  var weekGoalMap = {
+    '第一周': '数学第1章 + 化学150词术语 + 每日BBC听力',
+    '第二周': '数学第2-3章 Algebra + 生物150词术语',
+    '第三周': '数学第4-5章 Geometry/Pythagoras + 化学精读',
+    '第四周': '数学第6章 Statistics + 生物精读 + 雅思写作入门',
+    '第五周': '化学第3-4章 + 物理术语50词 + 物理第1章',
+    '第六周': '数学全面复习 + 化学/生物思维导图默写 + 阅读速度检测',
+    '第七周': '针对性补弱 + 开学准备 + 作息调整'
+  };
+
+  var html = '';
+  DATA.forEach(function(week, wi) {
+    var weekKey = week.title.replace(/：.*/, '');
+    var goal = weekGoalMap[weekKey] || '';
+
+    var navBtn = document.createElement('button');
+    navBtn.className = 'week-nav-item';
+    navBtn.innerHTML = '<span class="week-num">Week ' + (wi + 1) + '</span>' + week.title.replace(/：.*/, '');
+    navBtn.onclick = function() { document.getElementById('week-' + wi).scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    sidebar.appendChild(navBtn);
+
+    html += '<section class="week-section" id="week-' + wi + '">';
+    html += '<div class="week-header"><h2>' + week.title + '</h2>';
+    if (goal) html += '<div class="week-goal">目标：' + goal + '</div>';
+    html += '</div>';
+
+    week.days.forEach(function(day, di) {
+      var globalDay = DATA.slice(0, wi).reduce(function(s, w) { return s + w.days.length; }, 0) + di + 1;
+      html += '<div class="day-card" id="day-' + globalDay + '" data-day="' + globalDay + '">';
+      html += '<div class="day-header" onclick="event.stopPropagation(); this.parentElement.classList.toggle(\'expanded\')">';
+      html += '<div class="day-title"><span class="day-num">Day ' + globalDay + '</span><span class="day-date">' + day.title + '</span></div>';
+      html += '<div class="day-meta"><span class="task-count">' + day.tasks.length + ' 项任务</span>';
+      html += '<span class="star-toggle" data-day="' + globalDay + '" onclick="event.stopPropagation(); toggleStar(' + globalDay + ')" title="标记完成">☆</span>';
+      html += '<span class="expand-icon">▼</span></div>';
+      html += '</div>';
+      html += '<div class="task-list">';
+      day.tasks.forEach(function(t) {
+        html += '<div class="task-item">';
+        html += '<span class="task-period">' + t.period + '</span>';
+        html += '<span class="task-duration">' + t.duration + '</span>';
+        html += '<span class="task-subject ' + getSubjectClass(t.subject) + '">' + t.subject + '</span>';
+        html += '<span class="task-desc">' + t.task + '</span>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    });
+    html += '</section>';
+  });
+  container.innerHTML = html;
+}
+
+// ========== STAR ==========
+function toggleStar(dayNum) {
+  var card = document.getElementById('day-' + dayNum);
+  var star = card.querySelector('.star-toggle');
+  var isActive = star.classList.contains('active');
+  if (isActive) {
+    star.classList.remove('active');
+    star.textContent = '\u2606';
+    card.classList.remove('completed');
+  } else {
+    star.classList.add('active');
+    star.textContent = '\u2605';
+    card.classList.add('completed');
+    if (dayNum === TOTAL_DAYS) {
+      setTimeout(function() {
+        var lastStar = document.getElementById('day-' + TOTAL_DAYS).querySelector('.star-toggle');
+        if (lastStar.classList.contains('active')) triggerCelebration();
+      }, 400);
+    }
+  }
+}
+
+// ========== FIREWORKS ==========
+var canvas = document.getElementById('fireworks');
+var ctx = canvas.getContext('2d');
+var particles = [];
+var animationId = null;
+
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function Particle(x, y) {
+  this.x = x; this.y = y;
+  var angle = Math.random() * Math.PI * 2;
+  var speed = Math.random() * 6 + 3;
+  this.vx = Math.cos(angle) * speed;
+  this.vy = Math.sin(angle) * speed;
+  this.life = 1;
+  this.decay = Math.random() * 0.015 + 0.008;
+  this.size = Math.random() * 3 + 1.5;
+  this.hue = Math.random() * 360;
+}
+Particle.prototype.update = function() { this.x += this.vx; this.y += this.vy; this.vy += 0.04; this.life -= this.decay; };
+Particle.prototype.draw = function() {
+  ctx.save(); ctx.globalAlpha = this.life;
+  ctx.fillStyle = 'hsl(' + this.hue + ', 80%, 60%)';
+  ctx.shadowBlur = 6; ctx.shadowColor = 'hsl(' + this.hue + ', 80%, 60%)';
+  ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+};
+
+function spawnFirework() {
+  var x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
+  var y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
+  for (var i = 0; i < 60; i++) particles.push(new Particle(x, y));
+}
+
+function animateFireworks() {
+  if (particles.length === 0 && !animationId) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.globalCompositeOperation = 'lighter';
+  particles = particles.filter(function(p) { return p.life > 0; });
+  particles.forEach(function(p) { p.update(); p.draw(); });
+  if (Math.random() < 0.15) spawnFirework();
+  animationId = requestAnimationFrame(animateFireworks);
+}
+
+function triggerCelebration() {
+  canvas.style.display = 'block';
+  document.getElementById('celebration').classList.add('active');
+  for (var i = 0; i < 3; i++) spawnFirework();
+  animateFireworks();
+  setInterval(function() {
+    if (document.getElementById('celebration').classList.contains('active')) spawnFirework();
+  }, 800);
+}
+
+function closeCelebration() {
+  document.getElementById('celebration').classList.remove('active');
+  canvas.style.display = 'none';
+  particles = [];
+  if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', async function() {
+  console.log('[Yasi v4.1] DOM ready, checking token...');
+  var t = getToken();
+  console.log('[Yasi] Token exists:', !!t, t ? 'prefix=' + t.substring(0, 10) + '...' : 'none');
+  console.log('[Yasi] User-Agent:', navigator.userAgent);
+
+  // Quick connectivity test
+  try {
+    var testResp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO, { method: 'HEAD', cache: 'no-cache' });
+    console.log('[Yasi] API connectivity:', testResp.status, testResp.statusText);
+  } catch(e) {
+    console.error('[Yasi] API unreachable:', e.message);
+  }
+
+  render();
+  await renderPDFCards();
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        document.querySelectorAll('.week-nav-item').forEach(function(btn, i) {
+          btn.classList.toggle('active', 'week-' + i === id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  setTimeout(function() {
+    document.querySelectorAll('.week-section').forEach(function(s) { observer.observe(s); });
+  }, 100);
+});
+</script>
+</body>
+</html>
