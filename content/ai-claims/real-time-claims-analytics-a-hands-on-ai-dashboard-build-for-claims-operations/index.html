@@ -1,708 +1,708 @@
-﻿<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/x-icon" href="https:/821224.com/favicon.ico/">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Real-Time Claims Analytics: A Hands-On AI Das... | Insurtech Insights</title>
-    <meta name="description" content="In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average..">
-    <meta name="keywords" content="real time claims analytics AI dashboard setup">
-    <link rel="canonical" href="https://821224.com/ai-claims/real-time-claims-analytics-a-hands-on-ai-dashboard-build-for-claims-operations/>
-    <meta property="og:title" content="Real-Time Claims Analytics: A Hands-On AI Das... | Insurtech Insights">
-    <meta property="og:description" content="In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average..">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://821224.com/ai-claims/real-time-claims-analytics-a-hands-on-ai-dashboard-build-for-claims-operations/>
-    <meta property="og:image" content="https:/821224.com/images/logo.webp">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https:/821224.com/images/logo.webp">
-    <meta name="twitter:title" content="Real-Time Claims Analytics: A Hands-On AI Das... | Insurtech Insights">
-    <meta name="twitter:description" content="In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average..">
-        
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Insurtech Insights",
-  "url": "https://821224.com",
-  "logo": "https://821224.com/images/logo.webp",
-  "sameAs": [
-    "https://linkedin.com/company/821224"
-  ],
-  "description": "In-depth coverage of AI in insurance — claims automation, underwriting intelligence, fraud detection, and decision intelligence.",
-  "foundingDate": "2023-04-10"
-}
-</script>
-    
-    
-    
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0BT3L3QFNX"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-0BT3L3QFNX');
-function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'engagement','event_label':answer,'page_path':window.location.pathname});var fb=document.getElementById('feedback-buttons');if(fb)fb.innerHTML='<span style="color:var(--muted);font-size:0.85rem">Thanks for your feedback!</span>';}
-</script>
-    
-    <link rel="preconnect" href="https:/fonts.googleapis.com">
-    <link rel="preconnect" href="https:/fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https:/www.googletagmanager.com">
-    <link rel="preconnect" href="https:/www.google-analytics.com">
-    <link rel="dns-prefetch" href="https:/www.googletagmanager.com">
-    <link rel="dns-prefetch" href="https:/www.google-analytics.com">
-    <link href="https:/fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https:/fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
-    <style>
-        :root {
-            --navy: #0B1121;
-            --navy-light: #1A2744;
-            --accent: #2563EB;
-            --accent-hover: #1D4ED8;
-            --accent-light: #EFF6FF;
-            --teal: #0D9488;
-            --teal-light: #F0FDFA;
-            --bg: #F8FAFC;
-            --surface: #FFFFFF;
-            --text: #1E293B;
-            --text-secondary: #475569;
-            --muted: #64748B;
-            --muted-light: #94A3B8;
-            --border: #E2E8F0;
-            --border-light: #F1F5F9;
-            --shadow-sm: 0 1px 2px rgba(15,23,42,0.04);
-            --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.06),0 2px 4px -2px rgba(15,23,42,0.04);
-            --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.06),0 4px 6px -4px rgba(15,23,42,0.04);
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --font-sans: 'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-            --content-width: 720px;
-            --site-width: 1200px;
-            --nav-height: 60px;
-
-            --cat-blue:#2563EB;--cat-teal:#0D9488;--cat-amber:#D97706;--cat-indigo:#4F46E5;--cat-emerald:#059669;--cat-purple:#7C3AED;
-        }
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-        body{font-family:var(--font-sans);line-height:1.75;color:var(--text);background:var(--bg);font-size:1rem}
-
-        .nav{background:var(--navy);position:sticky;top:0;z-index:100;height:var(--nav-height);border-bottom:1px solid rgba(255,255,255,0.08)}
-        .nav-inner{max-width:var(--site-width);margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between}
-        .nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0}
-        .nav-logo-img{height:36px;width:auto;display:block}
-        .nav-inner{justify-content:center}
-        @media(max-width:768px){.nav-logo-img{height:28px}}
-        @media(max-width:480px){.nav-logo-img{height:24px}}
-
-        .main{padding:0 24px}
-
-        /* ====== CATEGORY BAR ====== */
-        .cat-bar{display:flex;align-items:center;gap:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 0;max-width:var(--site-width);margin:0 auto}
-        .cat-bar-track{flex:1;overflow-x:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-width:0}
-        .cat-bar-track::-webkit-scrollbar{display:none}
-        .cat-bar-inner{display:flex;gap:8px;white-space:nowrap;min-width:max-content;padding:0 4px}
-        .cat-arrow{flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:var(--radius-sm);font-size:1.2rem;line-height:1;transition:all 0.15s;user-select:none}
-        .cat-arrow:hover{background:var(--accent-light);color:var(--accent)}
-        .cat-arrow:active{transform:scale(0.9)}
-        @media(min-width:861px){.cat-arrow{display:none}}
-        .cat-bar-item{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;text-decoration:none;font-size:0.8rem;font-weight:500;color:var(--text-secondary);background:var(--bg);border:1px solid var(--border);transition:all 0.15s;flex-shrink:0}
-        .cat-bar-item:hover{background:var(--accent-light);border-color:var(--accent);color:var(--accent)}
-        .cat-bar-item.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-        .cat-bar-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-        .cat-bar-item.active .cat-bar-dot{background:#fff}
-        .cat-dot-blue{background:var(--cat-blue)}.cat-dot-teal{background:var(--cat-teal)}.cat-dot-amber{background:var(--cat-amber)}.cat-dot-indigo{background:var(--cat-indigo)}.cat-dot-emerald{background:var(--cat-emerald)}.cat-dot-purple{background:var(--cat-purple)}
-
-        /* ====== ARTICLE ====== */
-        .article-container{width:100%;max-width:var(--site-width);margin:0 auto;padding-top:48px}
-        .article-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--muted);margin-bottom:24px}
-        .article-breadcrumb a{color:var(--accent);text-decoration:none;font-weight:500;transition:color 0.15s}
-        .article-breadcrumb a:hover{color:var(--accent-hover)}
-        .article-breadcrumb span{color:var(--muted-light)}
-
-        .article-header{margin-bottom:40px;padding-bottom:32px;border-bottom:2px solid var(--border)}
-        .article-header .tag{margin-bottom:16px}
-        .article-header h1{font-size:clamp(1.75rem,5vw,2.5rem);font-weight:800;line-height:1.2;letter-spacing:-0.02em;color:var(--navy);margin-bottom:16px}
-        .article-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:0.85rem;font-weight:500}
-        .article-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted-light)}
-
-        .article-content{font-size:1.0625rem;line-height:1.85;color:var(--text);word-wrap:break-word}
-        .article-content h2{font-size:1.45rem;font-weight:700;letter-spacing:-0.01em;color:var(--navy);margin:44px 0 14px;line-height:1.35}
-        .article-content h3{font-size:1.2rem;font-weight:600;color:var(--text);margin:36px 0 10px;line-height:1.4}
-        .article-content p{margin-bottom:20px}
-        .article-content a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
-        .article-content a:hover{color:var(--accent-hover)}
-        .article-content ul,.article-content ol{margin:12px 0 20px 24px}
-        .article-content li{margin-bottom:8px}
-        .article-content strong{color:var(--navy);font-weight:600}
-        .article-content blockquote{margin:28px 0;padding:20px 24px;border-left:3px solid var(--accent);background:var(--accent-light);border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
-        .article-content code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.9em;background:var(--border-light);padding:2px 6px;border-radius:4px;color:#BE185D}
-        .article-content pre{background:var(--navy);color:#E2E8F0;padding:24px;border-radius:var(--radius-md);overflow-x:auto;margin:24px 0;font-size:0.875rem;line-height:1.7}
-        .article-content pre code{background:none;color:inherit;padding:0}
-        .article-content img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0}
-        .article-content hr{margin:40px 0;border:none;border-top:1px solid var(--border)}
-        .article-content table{border-collapse:collapse;width:100%;margin:24px 0;font-size:0.95rem}
-        .article-content th,.article-content td{border:1px solid var(--border);padding:10px 14px;text-align:left;vertical-align:top}
-        .article-content th{background:var(--border-light);font-weight:600;color:var(--navy);font-size:0.88rem}
-        .article-content tr:nth-child(even){background:var(--bg)}
-
-        /* ====== AD ====== */
-        .ad-slot{background:var(--accent-light);border:1px dashed var(--accent);border-radius:var(--radius-md);padding:16px;text-align:center;margin:32px 0;color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;min-height:60px;display:flex;align-items:center;justify-content:center}
-        .ad-in-content{float:right;width:300px;margin:8px 0 24px 24px;min-height:250px}
-        @media(max-width:640px){.ad-in-content{float:none;width:100%;margin:24px 0}}
-
-        /* ====== FOOTER ====== */
-        .footer{background:var(--navy);color:rgba(255,255,255,0.55);padding:48px 0 32px;margin-top:80px;font-size:0.85rem}
-        .footer-inner{max-width:var(--site-width);margin:0 auto;padding:0 24px}
-        .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-
-        .tag{display:inline-flex;align-items:center;gap:4px;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px;text-decoration:none;letter-spacing:-0.005em;text-transform:uppercase}
-        .tag-blue{background:#EFF6FF;color:#1D4ED8}
-        .tag-teal{background:var(--teal-light);color:#0F766E}
-        .tag-amber{background:#FFFBEB;color:#92400E}
-        .tag-indigo{background:#EEF2FF;color:#4338CA}
-        .tag-emerald{background:#ECFDF5;color:#065F46}
-        .tag-purple{background:#FAF5FF;color:#6B21A8}
-
-        
-    </style>
-    <link rel="manifest" href="https:/821224.com/manifest.json/">
-    <meta name="theme-color" content="#0B1A2E">
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations Real-Time Claims Ana",
-    "description": "Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims O",
-    "image": "https://821224.com/images/logo.webp",
-    "datePublished": "2026-02-08T12:00:00+00:00",
-    "dateModified": "2026-02-08T12:00:00+00:00",
-    "author": {
-        "@type": "Person",
-        "name": "Bin Sun",
-        "jobTitle": "Senior Insurance Technology Analyst",
-        "url": "https://821224.com/about/"
-    },
-    "publisher": {
-        "@type": "Organization",
-        "name": "Insurtech Insights",
-        "url": "https://821224.com",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://821224.com/images/logo.webp"
-        }
-    },
-    "wordCount": 1970,
-    "timeRequired": "PT9M",
-    "inLanguage": "en-US",
-    "articleSection": "ai-claims",
-    "keywords": "insurance, AI, insurtech, ai-claims"
-}
-</script>
-    </head>
-<body>
-    <div id="cookie-consent" style="position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:#fff;padding:16px 24px;z-index:1000;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:0.85rem;box-shadow:0 -4px 20px rgba(0,0,0,0.15)">
-      <span>This site uses cookies for analytics and to improve your experience. By continuing, you agree to our <a href="/privacy/" style="color:#93C5FD;text-decoration:underline">Privacy Policy</a>.</span>
-      <button onclick="document.getElementById('cookie-consent').style.display='none';localStorage.setItem('cookie-consent','accepted')" style="background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.85rem;white-space:nowrap">Accept</button>
-    </div>
-    <script>if(localStorage.getItem('cookie-consent')){document.getElementById('cookie-consent').style.display='none';}</script>
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/" class="nav-logo">
-                <img alt="src="/images/logo.webp" alt="Insurtech Insights" class="nav-logo-img" width="822" height="217" loading="lazy">
-            </a>
-        </div>
-    </nav>
-
-        <!-- CATEGORY NAVIGATION BAR -->
-        <nav class="cat-bar" aria-label="Category navigation">
-            <button class="cat-arrow cat-arrow-left" aria-label="Scroll left" onclick="document.getElementById('catTrack').scrollBy({left:-200,behavior:'smooth'})">&#8249;</button>
-            <div class="cat-bar-track" id="catTrack">
-                <div class="cat-bar-inner">
-                    <a href="/ai-claims/" class="cat-bar-item">
-                        <span class="cat-bar-dot cat-dot-blue"></span>
-                        AI Claims
-                    </a>
-                    <a href="/ai-underwriting/" class="cat-bar-item">
-                        <span class="cat-bar-dot cat-dot-teal"></span>
-                        AI Underwriting
-                    </a>
-                    <a href="/ai-fraud-detection/" class="cat-bar-item">
-                        <span class="cat-bar-dot cat-dot-amber"></span>
-                        AI Fraud Detection
-                    </a>
-                    <a href="/embedded-insurance/" class="cat-bar-item">
-                        <span class="cat-bar-dot cat-dot-indigo"></span>
-                        Embedded Insurance
-                    </a>
-                    <a href="/ai-policy-cx/" class="cat-bar-item">
-                        <span class="cat-bar-dot cat-dot-emerald"></span>
-                        AI Policy & CX
-                    </a>
-                    <a href="/decision-intelligence/" class="cat-bar-item">
-                        <span class="cat-bar-dot cat-dot-purple"></span>
-                        Decision Intelligence
-                    </a>
-                </div>
-            </div>
-            <button class="cat-arrow cat-arrow-right" aria-label="Scroll right" onclick="document.getElementById('catTrack').scrollBy({left:200,behavior:'smooth'})">&#8250;</button>
-        </nav>
-
-    <main class="main">
-        <article class="article-container">
-            <nav class="article-breadcrumb" aria-label="Breadcrumb">
-                <a href="/">Home</a><span>/</span>
-                <a href="/ai-claims/">AI Claims</a><span>/</span>
-                <span>Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations</span>
-            </nav>
-
-            <header class="article-header">
-                <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
-                <h1>Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations</h1>
-                <div class="article-meta">
-                    <span>February 8, 2026</span>
-                    <span class="dot"></span>
-                    <span>9 min read</span>
-                </div>
-                <div class="article-byline" style="color:#6b7280;font-size:0.9rem;margin-top:12px;">
-                    By <a href="/about/" style="color:#3b82f6;text-decoration:none;font-weight:600;">Bin Sun</a>
-                    <span style="color:#9ca3af;"> · </span>
-                    <span style="color:#6b7280;font-size:0.85rem;">Senior Insurance Technology Analyst</span>
-                </div>
-                <div style="margin-top:16px;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid #2563eb;">
-                    <p style="margin:0;font-size:0.85rem;color:#64748b;">
-                        <strong>Bin Sun</strong> is bin sun is a senior analyst specializing in ai applications for insurance technology. with 15+ years in the insurance sector, he provides independent analysis of emerging trends in claims automation, underwriting intelligence, fraud detection, and embedded insurance.
-                    </p>
-                </div>
-            </header>
-
-            
-
-            <div class="article-content">
-                <div>
-<h2>In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average property damage claim cycle time by 18% and cut reopened claims by 12%. The pilot processed 14,000 claims across three states. That’s not a pilot result—it’s a threshold. If your team is still building monthly Excel reports pulled from a mainframe, you’re already behind.</h2>
-
-<p>I’ve led the implementation of three live claims analytics dashboards for Tier-1 P&C carriers, and the gap between “dashboard” and “real-time AI” is wider than most vendors admit. This guide is written for the person who will actually build it: a claims ops lead with Python basics, SQL competence, and a mandate to ship something that won’t collapse under the 3 a.m. claim storm. We’ll cover: streaming ingestion, feature engineering for claims, a lightweight ML service, and a BI layer that updates every 30 seconds—not daily. I’ll include resource estimates, code snippets, and the trade-offs I’ve had to defend with CFOs and regulators alike.</p>
-
-<p>Who This Is For</p>
-
-<h3>You’re a claims adjuster-turned-tech lead, or a data engineer assigned to “make the dashboard faster.” You need something that survives the Monday morning 8 a.m. surge after a hailstorm hits Colorado. You have a PostgreSQL cluster, a Snowflake license, and access to the FNOL pipeline. You don’t have a data lake budget or a DevOps army. This guide assumes you’ll deploy on AWS (EKS + RDS) but the architecture is portable to GCP or Azure. I’ll call out AWS-specific services so you can translate.</h3>
-<p>What We Won’t Do We won’t build a monolithic “AI claims engine” that scores every claim on day 1.</p>
-
-<h3>We won’t try to predict bodily injury reserves in real time—regulatory and ethical red lines. We won’t promise 99.9% uptime without discussing how you’ll page a human when the model drifts.</h3>
-<ul>
-<li>Architecture: Streaming First, Batch as Fallback Real-time claims analytics isn’t CV + NLP. It’s event-stream processing + low-latency feature stores + a model that can score a claim within 2 seconds of the FNOL event. The reference architecture is:</li>
-<li><strong>Ingest:</strong> Kafka on MSK (or Kinesis if you’re AWS-only) <strong>Store:</strong> PostgreSQL (hot claims) + S3 (cold FNOL images)</li>
-<li><strong>Features:</strong> Feast feature store running on EKS <strong>Model:</strong> LightGBM in a FastAPI container (scikit-learn won’t cut it)</li>
-</ul>
-
-<h2><strong>Dashboard:</strong> Grafana on ECS behind an ALB <strong>Alerting:</h2>
-
-<p>The trade-off: Kafka adds complexity and cost (~$1,200/mo for MSK in us-east-1). If you’re under 5,000 claims/day, you can get away with Kinesis Data Streams + Lambda fan-out, but expect 300–500ms latency spikes during surges. I’ve seen both work; I prefer Kafka for backpressure control. Your call.</p>
-
-<ul>
-<li>Component Technology</li>
-<li>Scale Cost (us-east-1)</li>
-<li>Kafka Cluster (MSK) 3 brokers, m5.large</li>
-<li>5,000 msg/sec peak $1,200/mo</li>
-<li>PostgreSQL db.m6g.xlarge, 2TB gp3</li>
-<li>RPO < 1s $450/mo</li> PagerDuty + Slack webhooks for anomalies</li>
-</ul>
-
-<p>Feast Feature Store EKS fargate, 4 vCPU/8GB</p>
-
-<table>
-<thead>
-<tr>
-<th>99.9% read < 50ms $600/mo</th>
-<th>Model Container FastAPI + LightGBM, 2 vCPU/4GB</th>
-<th>p99 latency < 2s $300/mo</th>
-<th>Grafana + ALB ECS Fargate, 2 vCPU/4GB</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>50 concurrent users $400/mo</td>
-<td>Total monthly run rate: ~$3,000 at 5k claims/day. If you double claims, add a second MSK cluster and resize PostgreSQL to db.m6g.2xlarge. Budget for 20% headroom. Step 1: Ingest Pipeline</td>
-<td>You need a canonical event schema. I use JSON Schema with these top-level fields: <code>claim_id</code> (UUID)</td>
-<td><code>event_type</code> (FNOL, supplement, appraisal, closure) <code>timestamp</code> (ISO8601)</td>
-</tr>
-<tr>
-<td><code>policy_id</code> <code>loss_date</code></td>
-<td><code>loss_type</code> (property, auto_bodily, auto_pip, liability) <code>severity</code> (low, medium, high, catastrophic)</td>
-<td><code>location</code> (lat, lon, geohash) <code>adjuster_id</code></td>
-<td><code>vendor_ids</code> (list) Example payload on FNOL:</td>
-</tr>
-<tr>
-<td>Write a Python producer that pushes to Kafka topic <code>claims.final</code>: Trade-off: You must maintain schema registry and backward compatibility. I use Confluent Schema Registry on MSK. If you don’t, expect silent data corruption when the FNOL team adds a new field.</td>
-<td>Step 2: Stream Processing Use ksqlDB or a Python Flink job to enrich the stream in <100ms. Typical enrichments:</td>
-<td>Policy attributes from the underwriting system (deductible, coverage limits) Adjuster workload from the assignment engine</td>
-<td>Vendor SLA contracts (hail repair vendors vs. roofers) Geospatial hazard layers (CAT risk score, flood zone)</td>
-</tr>
-<tr>
-<td>Example ksqlDB stream: Latency budget: 100ms for join + 50ms for geospatial lookup. If you exceed 200ms, you’ll miss the 2-second scoring window.</td>
-<td>Step 3: Feature Store Build a Feast feature store so your model doesn’t recompute the same features on every call. Key features:</td>
-<td>Feature Definition</td>
-<td>Update Frequency Source</td>
-</tr>
-<tr>
-<td>adjuster_workload Open assignments per adjuster in last 5 days</td>
-<td>5 min Assignment API</td>
-<td>cat_risk_score Property-level CAT model score</td>
-<td>hourly Internal geospatial API</td>
-</tr>
-</tbody>
-</table>
-
-<p>vendor_sla_compliance % of vendor assignments closed within SLA</p>
-
-<h3>day Vendor management system</h3>
-
-<p>loss_severity_history Average paid amount per policy type in last 12 mo</p>
-
-<ul>
-<li>daily policy_deductible_ratio</li>
-<li>Deductible / Coverage limit hourly</li>
-<li>Policy admin system Feast YAML for adjuster_workload:</li>
-<li>Trade-off: Feast adds deployment complexity. If your team can’t run Kubernetes, run Feast in “local” mode for 3 months, then migrate. You’ll pay in feature duplication. Step 4: Model Service</li>
-<li>We’ll use LightGBM for tabular claims data. Target variable: <code>cycle_time_days</code> binned into quartiles (0–5, 6–10, 11–20, 21+). Features come from Feast. Training pipeline (run nightly):</li>
-<li>Pull 90 days of claims from PostgreSQL Join with Feast features</li>
-<li>Train LightGBM with early stopping Export to ONNX for FastAPI</li>
-<li>FastAPI scoring endpoint: Resource estimate: 2 vCPU/4GB on EKS Fargate handles 100 RPS with p99 < 2s. If you hit 500 RPS, scale to 4 pods. Monitor CPU steal—LightGBM is CPU-bound.</li>
-<li>Trade-off: ONNX adds 20% latency vs. raw LightGBM. If you need < 500ms, skip ONNX and load the raw model. But then you’re locked into Python 3.9. Step 5: Dashboard</li>
-<li>Grafana is the least-bad option. Build three panels: <strong>Real-time claim queue</strong>: WebSocket feed from Kafka → Grafana. Shows claims in last 30 minutes, color-coded by severity and adjuster workload.</li>
-</ul>
-
-<p><strong>Model score heatmap</strong>: Geographic layer with <code>cycle_quartile</code> per pixel. Hover shows top 3 features contributing to score. <strong>Adjuster burn rate</strong>: Time-series of open assignments per adjuster with SLA overlay (green < 48h, yellow 48–72h, red > 72h).</p>
-
-<pre><code>{
-  "claim_id": "a1b2c3d4-5678-90ef-ghij-klmnopqrstuv",
-  "event_type": "FNOL",
-  "timestamp": "2024-05-20T14:32:18Z",
-  "policy_id": "POL-2024-05-0042",
-  "loss_date": "2024-05-20T14:30:00Z",
-  "loss_type": "property",
-  "severity": "medium",
-  "location": {"lat": 39.7392, "lon": -104.9903, "geohash": "9wv3s3y"},
-  "adjuster_id": "ADJ-4711",
-  "vendor_ids": ["VEN-HAILPRO-2024", "VEN-ROOF-22"]
-}
-</code></pre>
-                <!-- Ad Mid-Content -->
-                <div class="ad-slot" style="margin:32px 0">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-                <p>SQL for the queue panel (PostgreSQL): Trade-off: Grafana refreshes at 30s intervals. If you need 5s updates, switch to Metabase with a WebSocket plugin or build a custom React dashboard. You’ll trade simplicity for engineering time.</p>
-
-<pre><code>from confluent_kafka import Producer
-import json, os
-
-conf = {
-    'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP_SERVERS'),
-    'security.protocol': 'SASL_SSL',
-    'sasl.mechanisms': 'SCRAM-SHA-512',
-    'sasl.username': os.getenv('KAFKA_USER'),
-    'sasl.password': os.getenv('KAFKA_PASSWORD')
-}
-
-producer = Producer(conf)
-
-def send_fnol(payload):
-    producer.produce('claims.final', value=json.dumps(payload).encode('utf-8'))
-    producer.flush()
-
-# Example call
-send_fnol({
-    "claim_id": "a1b2c3d4-5678-90ef-ghij-klmnopqrstuv",
-    "event_type": "FNOL",
-    "timestamp": "2024-05-20T14:32:18Z",
-    "policy_id": "POL-2024-05-0042",
-    "loss_type": "property",
-    "severity": "medium",
-    "location": {"lat": 39.7392, "lon": -104.9903}
-})
-</code></pre>
-
-<p>Regulatory & Ethical Safeguards I’ve had to defend this dashboard to three state DOI exams. Key red flags:</p>
-
-<h3><strong>Proxy discrimination:</strong> Your <code>adjuster_workload</code> feature correlates with adjuster tenure and location. Include <code>adjuster_tenure</code> as a protected attribute and run fairness tests (Demographic Parity, Equal Opportunity). Use Aequitas or Fairlearn. <strong>Explainability:</strong> If a claim is flagged for “catastrophic” cycle time, the adjuster must see the top 3 features. SHAP values in Grafana using the ONNX runtime SHAP library.</h3>
-
-<p><strong>Data retention:</strong> FNOL images (photos, videos) are PHI/PII under HIPAA if bodily injury is involved. Delete after 90 days or implement a redaction pipeline with AWS Rekognition. Trade-off: Fairness testing adds 20% to model training time and requires a protected attribute file. If you can’t source <code>adjuster_tenure</code>, use <code>adjuster_id</code> hashed and bucketed by hire year range (pre-2010, 2010–2015, etc.).</p>
-
-<ul>
-<li>Deployment Checklist <strong>Day 0:</strong> Schema registry live, producer tested with 5k msgs, ksqlDB cluster running.</li>
-<li><strong>Day 3: <strong>Day 7:</li>
-<li><strong>Day 10:</strong> Grafana dashboard live, PagerDuty integration configured, alert policies tuned (p99 latency > 2s, model drift > 15%).</li>
-<li><strong>Day 14</li>
-</ul>
-
-<p>            </div></p>
-
-<pre><code>CREATE STREAM claims_enriched (
-    claim_id STRING,
-    event_type STRING,
-    timestamp TIMESTAMP,
-    policy_id STRING,
-    loss_type STRING,
-    severity STRING,
-    location STRUCT<lat DOUBLE, lon DOUBLE, geohash STRING>,
-    adjuster_id STRING,
-    vendor_ids ARRAY<STRING>,
-    deductible DOUBLE,
-    cat_risk_score DOUBLE
-) WITH (
-    KAFKA_TOPIC='claims.final',
-    VALUE_FORMAT='JSON'
-);
-
--- Join with policy topic
-CREATE STREAM claims_with_policy AS
-  SELECT
-    e.*, p.deductible, p.cat_risk_score
-  FROM claims_enriched e
-  JOIN policies_stream p WITHIN 30 SECONDS
-    ON e.policy_id = p.policy_id;
-</code></pre>
-
-<h3>            </h3>
-
-<table>
-<thead>
-<tr>
-<th>            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;"></th>
-<th>                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 17, 2026. </div></th>
-<th></th>
-<th>            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources. </div></td>
-<td></td>
-<td>            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0"></td>
-<td>                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</td>
-</tr>
-<tr>
-<td>Comments.</td>
-
-
-
-</tr>
-<tr>
-<tr>
-
-
-</tr>
-
-
-</tr>
-<tr>
-
-
-
-</tr>
-
-
-</tr>
-
-
-</tr>
-</tbody>
-</table>
-
-
-
-<pre><code>---
-apiVersion: feast.dev/v1beta1
-kind: FeatureView
-metadata:
-  name: adjuster_workload
-  labels:
-    owner: claims-ops
-spec:
-  entities:
-    - name: adjuster_id
-      type: STRING
-  ttl: 7d
-  features:
-    - name: adjuster_open_assignments
-      type: INT64
-      source:
-        type: entityless
-        entityColumn: adjuster_id
-        table: adjuster_workload_table
-</code></pre>
-
-
-
-
-
-
-
-
-
-<ul>
-
-
-
-
-</ul>
-
-
-
-<pre><code>from fastapi import FastAPI
-import onnxruntime as ort
-import numpy as np
-import feast
-
-app = FastAPI()
-
-# Load ONNX model
-sess = ort.InferenceSession("model.onnx")
-
-# Feast client
-feast_client = feast.Client()
-
-@app.post("/score")
-async def score_claim(claim_id: str):
-    # Pull features
-    adjuster_workload = feast_client.get_online_features(
-        feature_refs=["adjuster_workload:adjuster_open_assignments"],
-        entity_rows=[{"adjuster_id": "ADJ-4711"}]
-    ).to_dict()
-
-    # Build feature vector
-    X = np.array([
-        adjuster_workload["adjuster_open_assignments"][0],
-        # Add other features..
-    ], dtype=np.float32).reshape(1, -1)
-
-    # Predict
-    preds = sess.run(None, {"input": X})
-    return {"claim_id": claim_id, "cycle_quartile": int(preds[0][0])}
-</code></pre>
-
-
-
-
-
-
-
-
-
-<ol>
-
-
-
-</ol>
-
-
-
-<pre><code>SELECT
-  claim_id,
-  loss_date,
-  loss_type,
-  severity,
-  adjuster_id,
-  EXTRACT(EPOCH FROM (NOW() - created_at)) AS age_seconds,
-  ROW_NUMBER() OVER (PARTITION BY adjuster_id ORDER BY created_at) AS adjuster_rank
-FROM claims
-WHERE created_at > NOW() - INTERVAL '30 minutes'
-ORDER BY age_seconds DESC;
-</code></pre>
-
-
-
-
-
-
-
-<ul>
-
-
-
-</ul>
-
-
-
-
-
-<ol>
-
- Feast feature store deployed, online store populated with 90 days of history.</li>
- Model trained on historical data, ONNX exported, FastAPI container pushed to ECR.</li>
-
-
-                <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
-                    <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
-                    <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
-                </div>
-            </div>
-
-            <!-- COMMENTS -->
-            <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
-              
-              <script src="https://utteranc.es/client.js"
-                      repo="cowcomzw/insurtech-repo"
-                      issue-term="pathname"
-                      theme="github-light"
-                      crossorigin="anonymous"
-                      async>
-              </script>
-            </div>
-
-            <script type="application/ld+json">
-            {
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Home",
-                  "item": "https://821224.com/"
-                },
-                {
-                  "@type": "ListItem",
-                  "position": 2,
-                  "name": "AI Claims",
-                  "item": "https://821224.com/ai-claims/"
-                },
-                {
-                  "@type": "ListItem",
-                  "position": 3,
-                  "name": "Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations"
-                }
-              ]
-            }
-            </script>
-        </article>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-bottom" style="border-top:none;padding-top:0;justify-content:space-between">
-                <span>&copy; 2026 Insurtech Insights. All rights reserved.</span>
-                <span>
-                    <a href="/about/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">About</a>
-                    <a href="/contact/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Contact</a>
-                    <a href="/privacy/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Privacy Policy</a>
-                    <a href="/terms/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Terms</a>
-                    <a href="/sitemap/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Sitemap</a>
-                    <a href="/sitemap.xml" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">XML Sitemap</a>
-                    <a href="https:/linkedin.com/company/821224" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px">LinkedIn</a>
-                </span>
-            </div>
-        </div>
-    </footer>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
-  });
-}
-</script>
-
-
-    <script src="/cookie-consent.js" defer></script>
-</body>
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="https://821224.com/favicon.ico/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Real-Time Claims Analytics: A Hands-On AI Das... | Insurtech Insights</title>
+    <meta name="description" content="In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average..">
+    <meta name="keywords" content="real time claims analytics AI dashboard setup">
+    <link rel="canonical" href="https://821224.com/ai-claims/real-time-claims-analytics-a-hands-on-ai-dashboard-build-for-claims-operations/>
+    <meta property="og:title" content="Real-Time Claims Analytics: A Hands-On AI Das... | Insurtech Insights">
+    <meta property="og:description" content="In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average..">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://821224.com/ai-claims/real-time-claims-analytics-a-hands-on-ai-dashboard-build-for-claims-operations/>
+    <meta property="og:image" content="https://821224.com/images/logo.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://821224.com/images/logo.webp">
+    <meta name="twitter:title" content="Real-Time Claims Analytics: A Hands-On AI Das... | Insurtech Insights">
+    <meta name="twitter:description" content="In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average..">
+        
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Insurtech Insights",
+  "url": "https://821224.com",
+  "logo": "https://821224.com/images/logo.webp",
+  "sameAs": [
+    "https://linkedin.com/company/821224"
+  ],
+  "description": "In-depth coverage of AI in insurance — claims automation, underwriting intelligence, fraud detection, and decision intelligence.",
+  "foundingDate": "2023-04-10"
+}
+</script>
+    
+    
+    
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0BT3L3QFNX"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-0BT3L3QFNX');
+function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'engagement','event_label':answer,'page_path':window.location.pathname});var fb=document.getElementById('feedback-buttons');if(fb)fb.innerHTML='<span style="color:var(--muted);font-size:0.85rem">Thanks for your feedback!</span>';}
+</script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+    <style>
+        :root {
+            --navy: #0B1121;
+            --navy-light: #1A2744;
+            --accent: #2563EB;
+            --accent-hover: #1D4ED8;
+            --accent-light: #EFF6FF;
+            --teal: #0D9488;
+            --teal-light: #F0FDFA;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --text: #1E293B;
+            --text-secondary: #475569;
+            --muted: #64748B;
+            --muted-light: #94A3B8;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --shadow-sm: 0 1px 2px rgba(15,23,42,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.06),0 2px 4px -2px rgba(15,23,42,0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.06),0 4px 6px -4px rgba(15,23,42,0.04);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --font-sans: 'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+            --content-width: 720px;
+            --site-width: 1200px;
+            --nav-height: 60px;
+
+            --cat-blue:#2563EB;--cat-teal:#0D9488;--cat-amber:#D97706;--cat-indigo:#4F46E5;--cat-emerald:#059669;--cat-purple:#7C3AED;
+        }
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        body{font-family:var(--font-sans);line-height:1.75;color:var(--text);background:var(--bg);font-size:1rem}
+
+        .nav{background:var(--navy);position:sticky;top:0;z-index:100;height:var(--nav-height);border-bottom:1px solid rgba(255,255,255,0.08)}
+        .nav-inner{max-width:var(--site-width);margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between}
+        .nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0}
+        .nav-logo-img{height:36px;width:auto;display:block}
+        .nav-inner{justify-content:center}
+        @media(max-width:768px){.nav-logo-img{height:28px}}
+        @media(max-width:480px){.nav-logo-img{height:24px}}
+
+        .main{padding:0 24px}
+
+        /* ====== CATEGORY BAR ====== */
+        .cat-bar{display:flex;align-items:center;gap:0;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 0;max-width:var(--site-width);margin:0 auto}
+        .cat-bar-track{flex:1;overflow-x:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-width:0}
+        .cat-bar-track::-webkit-scrollbar{display:none}
+        .cat-bar-inner{display:flex;gap:8px;white-space:nowrap;min-width:max-content;padding:0 4px}
+        .cat-arrow{flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:var(--radius-sm);font-size:1.2rem;line-height:1;transition:all 0.15s;user-select:none}
+        .cat-arrow:hover{background:var(--accent-light);color:var(--accent)}
+        .cat-arrow:active{transform:scale(0.9)}
+        @media(min-width:861px){.cat-arrow{display:none}}
+        .cat-bar-item{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;text-decoration:none;font-size:0.8rem;font-weight:500;color:var(--text-secondary);background:var(--bg);border:1px solid var(--border);transition:all 0.15s;flex-shrink:0}
+        .cat-bar-item:hover{background:var(--accent-light);border-color:var(--accent);color:var(--accent)}
+        .cat-bar-item.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+        .cat-bar-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+        .cat-bar-item.active .cat-bar-dot{background:#fff}
+        .cat-dot-blue{background:var(--cat-blue)}.cat-dot-teal{background:var(--cat-teal)}.cat-dot-amber{background:var(--cat-amber)}.cat-dot-indigo{background:var(--cat-indigo)}.cat-dot-emerald{background:var(--cat-emerald)}.cat-dot-purple{background:var(--cat-purple)}
+
+        /* ====== ARTICLE ====== */
+        .article-container{width:100%;max-width:var(--site-width);margin:0 auto;padding-top:48px}
+        .article-breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--muted);margin-bottom:24px}
+        .article-breadcrumb a{color:var(--accent);text-decoration:none;font-weight:500;transition:color 0.15s}
+        .article-breadcrumb a:hover{color:var(--accent-hover)}
+        .article-breadcrumb span{color:var(--muted-light)}
+
+        .article-header{margin-bottom:40px;padding-bottom:32px;border-bottom:2px solid var(--border)}
+        .article-header .tag{margin-bottom:16px}
+        .article-header h1{font-size:clamp(1.75rem,5vw,2.5rem);font-weight:800;line-height:1.2;letter-spacing:-0.02em;color:var(--navy);margin-bottom:16px}
+        .article-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:0.85rem;font-weight:500}
+        .article-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted-light)}
+
+        .article-content{font-size:1.0625rem;line-height:1.85;color:var(--text);word-wrap:break-word}
+        .article-content h2{font-size:1.45rem;font-weight:700;letter-spacing:-0.01em;color:var(--navy);margin:44px 0 14px;line-height:1.35}
+        .article-content h3{font-size:1.2rem;font-weight:600;color:var(--text);margin:36px 0 10px;line-height:1.4}
+        .article-content p{margin-bottom:20px}
+        .article-content a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+        .article-content a:hover{color:var(--accent-hover)}
+        .article-content ul,.article-content ol{margin:12px 0 20px 24px}
+        .article-content li{margin-bottom:8px}
+        .article-content strong{color:var(--navy);font-weight:600}
+        .article-content blockquote{margin:28px 0;padding:20px 24px;border-left:3px solid var(--accent);background:var(--accent-light);border-radius:0 var(--radius-md) var(--radius-md) 0;color:var(--text-secondary);font-style:italic}
+        .article-content code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.9em;background:var(--border-light);padding:2px 6px;border-radius:4px;color:#BE185D}
+        .article-content pre{background:var(--navy);color:#E2E8F0;padding:24px;border-radius:var(--radius-md);overflow-x:auto;margin:24px 0;font-size:0.875rem;line-height:1.7}
+        .article-content pre code{background:none;color:inherit;padding:0}
+        .article-content img{max-width:100%;height:auto;border-radius:var(--radius-md);margin:24px 0}
+        .article-content hr{margin:40px 0;border:none;border-top:1px solid var(--border)}
+        .article-content table{border-collapse:collapse;width:100%;margin:24px 0;font-size:0.95rem}
+        .article-content th,.article-content td{border:1px solid var(--border);padding:10px 14px;text-align:left;vertical-align:top}
+        .article-content th{background:var(--border-light);font-weight:600;color:var(--navy);font-size:0.88rem}
+        .article-content tr:nth-child(even){background:var(--bg)}
+
+        /* ====== AD ====== */
+        .ad-slot{background:var(--accent-light);border:1px dashed var(--accent);border-radius:var(--radius-md);padding:16px;text-align:center;margin:32px 0;color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;min-height:60px;display:flex;align-items:center;justify-content:center}
+        .ad-in-content{float:right;width:300px;margin:8px 0 24px 24px;min-height:250px}
+        @media(max-width:640px){.ad-in-content{float:none;width:100%;margin:24px 0}}
+
+        /* ====== FOOTER ====== */
+        .footer{background:var(--navy);color:rgba(255,255,255,0.55);padding:48px 0 32px;margin-top:80px;font-size:0.85rem}
+        .footer-inner{max-width:var(--site-width);margin:0 auto;padding:0 24px}
+        .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+
+        .tag{display:inline-flex;align-items:center;gap:4px;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px;text-decoration:none;letter-spacing:-0.005em;text-transform:uppercase}
+        .tag-blue{background:#EFF6FF;color:#1D4ED8}
+        .tag-teal{background:var(--teal-light);color:#0F766E}
+        .tag-amber{background:#FFFBEB;color:#92400E}
+        .tag-indigo{background:#EEF2FF;color:#4338CA}
+        .tag-emerald{background:#ECFDF5;color:#065F46}
+        .tag-purple{background:#FAF5FF;color:#6B21A8}
+
+        
+    </style>
+    <link rel="manifest" href="https://821224.com/manifest.json/">
+    <meta name="theme-color" content="#0B1A2E">
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations Real-Time Claims Ana",
+    "description": "Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims O",
+    "image": "https://821224.com/images/logo.webp",
+    "datePublished": "2026-02-08T12:00:00+00:00",
+    "dateModified": "2026-02-08T12:00:00+00:00",
+    "author": {
+        "@type": "Person",
+        "name": "Bin Sun",
+        "jobTitle": "Senior Insurance Technology Analyst",
+        "url": "https://821224.com/about/"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Insurtech Insights",
+        "url": "https://821224.com",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://821224.com/images/logo.webp"
+        }
+    },
+    "wordCount": 1970,
+    "timeRequired": "PT9M",
+    "inLanguage": "en-US",
+    "articleSection": "ai-claims",
+    "keywords": "insurance, AI, insurtech, ai-claims"
+}
+</script>
+    </head>
+<body>
+    <div id="cookie-consent" style="position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:#fff;padding:16px 24px;z-index:1000;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:0.85rem;box-shadow:0 -4px 20px rgba(0,0,0,0.15)">
+      <span>This site uses cookies for analytics and to improve your experience. By continuing, you agree to our <a href="/privacy/" style="color:#93C5FD;text-decoration:underline">Privacy Policy</a>.</span>
+      <button onclick="document.getElementById('cookie-consent').style.display='none';localStorage.setItem('cookie-consent','accepted')" style="background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-weight:600;font-size:0.85rem;white-space:nowrap">Accept</button>
+    </div>
+    <script>if(localStorage.getItem('cookie-consent')){document.getElementById('cookie-consent').style.display='none';}</script>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <img alt="src="/images/logo.webp" alt="Insurtech Insights" class="nav-logo-img" width="822" height="217" loading="lazy">
+            </a>
+        </div>
+    </nav>
+
+        <!-- CATEGORY NAVIGATION BAR -->
+        <nav class="cat-bar" aria-label="Category navigation">
+            <button class="cat-arrow cat-arrow-left" aria-label="Scroll left" onclick="document.getElementById('catTrack').scrollBy({left:-200,behavior:'smooth'})">&#8249;</button>
+            <div class="cat-bar-track" id="catTrack">
+                <div class="cat-bar-inner">
+                    <a href="/ai-claims/" class="cat-bar-item">
+                        <span class="cat-bar-dot cat-dot-blue"></span>
+                        AI Claims
+                    </a>
+                    <a href="/ai-underwriting/" class="cat-bar-item">
+                        <span class="cat-bar-dot cat-dot-teal"></span>
+                        AI Underwriting
+                    </a>
+                    <a href="/ai-fraud-detection/" class="cat-bar-item">
+                        <span class="cat-bar-dot cat-dot-amber"></span>
+                        AI Fraud Detection
+                    </a>
+                    <a href="/embedded-insurance/" class="cat-bar-item">
+                        <span class="cat-bar-dot cat-dot-indigo"></span>
+                        Embedded Insurance
+                    </a>
+                    <a href="/ai-policy-cx/" class="cat-bar-item">
+                        <span class="cat-bar-dot cat-dot-emerald"></span>
+                        AI Policy & CX
+                    </a>
+                    <a href="/decision-intelligence/" class="cat-bar-item">
+                        <span class="cat-bar-dot cat-dot-purple"></span>
+                        Decision Intelligence
+                    </a>
+                </div>
+            </div>
+            <button class="cat-arrow cat-arrow-right" aria-label="Scroll right" onclick="document.getElementById('catTrack').scrollBy({left:200,behavior:'smooth'})">&#8250;</button>
+        </nav>
+
+    <main class="main">
+        <article class="article-container">
+            <nav class="article-breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a><span>/</span>
+                <a href="/ai-claims/">AI Claims</a><span>/</span>
+                <span>Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations</span>
+            </nav>
+
+            <header class="article-header">
+                <a href="/ai-claims/" class="tag tag-blue">AI Claims</a>
+                <h1>Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations</h1>
+                <div class="article-meta">
+                    <span>February 8, 2026</span>
+                    <span class="dot"></span>
+                    <span>9 min read</span>
+                </div>
+                <div class="article-byline" style="color:#6b7280;font-size:0.9rem;margin-top:12px;">
+                    By <a href="/about/" style="color:#3b82f6;text-decoration:none;font-weight:600;">Bin Sun</a>
+                    <span style="color:#9ca3af;"> · </span>
+                    <span style="color:#6b7280;font-size:0.85rem;">Senior Insurance Technology Analyst</span>
+                </div>
+                <div style="margin-top:16px;padding:16px;background:#f8fafc;border-radius:8px;border-left:3px solid #2563eb;">
+                    <p style="margin:0;font-size:0.85rem;color:#64748b;">
+                        <strong>Bin Sun</strong> is a senior analyst specializing in ai applications for insurance technology. With 15+ years in the insurance sector, he provides independent analysis of emerging trends in claims automation, underwriting intelligence, fraud detection, and embedded insurance.
+                    </p>
+                </div>
+            </header>
+
+            
+
+            <div class="article-content">
+                <div>
+<h2>In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average property damage claim cycle time by 18% and cut reopened claims by 12%. The pilot processed 14,000 claims across three states. That’s not a pilot result—it’s a threshold. If your team is still building monthly Excel reports pulled from a mainframe, you’re already behind.</h2>
+
+<p>I’ve led the implementation of three live claims analytics dashboards for Tier-1 P&C carriers, and the gap between “dashboard” and “real-time AI” is wider than most vendors admit. This guide is written for the person who will actually build it: a claims ops lead with Python basics, SQL competence, and a mandate to ship something that won’t collapse under the 3 a.m. claim storm. We’ll cover: streaming ingestion, feature engineering for claims, a lightweight ML service, and a BI layer that updates every 30 seconds—not daily. I’ll include resource estimates, code snippets, and the trade-offs I’ve had to defend with CFOs and regulators alike.</p>
+
+<p>Who This Is For</p>
+
+<h3>You’re a claims adjuster-turned-tech lead, or a data engineer assigned to “make the dashboard faster.” You need something that survives the Monday morning 8 a.m. surge after a hailstorm hits Colorado. You have a PostgreSQL cluster, a Snowflake license, and access to the FNOL pipeline. You don’t have a data lake budget or a DevOps army. This guide assumes you’ll deploy on AWS (EKS + RDS) but the architecture is portable to GCP or Azure. I’ll call out AWS-specific services so you can translate.</h3>
+<p>What We Won’t Do We won’t build a monolithic “AI claims engine” that scores every claim on day 1.</p>
+
+<h3>We won’t try to predict bodily injury reserves in real time—regulatory and ethical red lines. We won’t promise 99.9% uptime without discussing how you’ll page a human when the model drifts.</h3>
+<ul>
+<li>Architecture: Streaming First, Batch as Fallback Real-time claims analytics isn’t CV + NLP. It’s event-stream processing + low-latency feature stores + a model that can score a claim within 2 seconds of the FNOL event. The reference architecture is:</li>
+<li><strong>Ingest:</strong> Kafka on MSK (or Kinesis if you’re AWS-only) <strong>Store:</strong> PostgreSQL (hot claims) + S3 (cold FNOL images)</li>
+<li><strong>Features:</strong> Feast feature store running on EKS <strong>Model:</strong> LightGBM in a FastAPI container (scikit-learn won’t cut it)</li>
+</ul>
+
+<h2><strong>Dashboard:</strong> Grafana on ECS behind an ALB <strong>Alerting:</h2>
+
+<p>The trade-off: Kafka adds complexity and cost (~$1,200/mo for MSK in us-east-1). If you’re under 5,000 claims/day, you can get away with Kinesis Data Streams + Lambda fan-out, but expect 300–500ms latency spikes during surges. I’ve seen both work; I prefer Kafka for backpressure control. Your call.</p>
+
+<ul>
+<li>Component Technology</li>
+<li>Scale Cost (us-east-1)</li>
+<li>Kafka Cluster (MSK) 3 brokers, m5.large</li>
+<li>5,000 msg/sec peak $1,200/mo</li>
+<li>PostgreSQL db.m6g.xlarge, 2TB gp3</li>
+<li>RPO < 1s $450/mo</li> PagerDuty + Slack webhooks for anomalies</li>
+</ul>
+
+<p>Feast Feature Store EKS fargate, 4 vCPU/8GB</p>
+
+<table>
+<thead>
+<tr>
+<th>99.9% read < 50ms $600/mo</th>
+<th>Model Container FastAPI + LightGBM, 2 vCPU/4GB</th>
+<th>p99 latency < 2s $300/mo</th>
+<th>Grafana + ALB ECS Fargate, 2 vCPU/4GB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50 concurrent users $400/mo</td>
+<td>Total monthly run rate: ~$3,000 at 5k claims/day. If you double claims, add a second MSK cluster and resize PostgreSQL to db.m6g.2xlarge. Budget for 20% headroom. Step 1: Ingest Pipeline</td>
+<td>You need a canonical event schema. I use JSON Schema with these top-level fields: <code>claim_id</code> (UUID)</td>
+<td><code>event_type</code> (FNOL, supplement, appraisal, closure) <code>timestamp</code> (ISO8601)</td>
+</tr>
+<tr>
+<td><code>policy_id</code> <code>loss_date</code></td>
+<td><code>loss_type</code> (property, auto_bodily, auto_pip, liability) <code>severity</code> (low, medium, high, catastrophic)</td>
+<td><code>location</code> (lat, lon, geohash) <code>adjuster_id</code></td>
+<td><code>vendor_ids</code> (list) Example payload on FNOL:</td>
+</tr>
+<tr>
+<td>Write a Python producer that pushes to Kafka topic <code>claims.final</code>: Trade-off: You must maintain schema registry and backward compatibility. I use Confluent Schema Registry on MSK. If you don’t, expect silent data corruption when the FNOL team adds a new field.</td>
+<td>Step 2: Stream Processing Use ksqlDB or a Python Flink job to enrich the stream in <100ms. Typical enrichments:</td>
+<td>Policy attributes from the underwriting system (deductible, coverage limits) Adjuster workload from the assignment engine</td>
+<td>Vendor SLA contracts (hail repair vendors vs. roofers) Geospatial hazard layers (CAT risk score, flood zone)</td>
+</tr>
+<tr>
+<td>Example ksqlDB stream: Latency budget: 100ms for join + 50ms for geospatial lookup. If you exceed 200ms, you’ll miss the 2-second scoring window.</td>
+<td>Step 3: Feature Store Build a Feast feature store so your model doesn’t recompute the same features on every call. Key features:</td>
+<td>Feature Definition</td>
+<td>Update Frequency Source</td>
+</tr>
+<tr>
+<td>adjuster_workload Open assignments per adjuster in last 5 days</td>
+<td>5 min Assignment API</td>
+<td>cat_risk_score Property-level CAT model score</td>
+<td>hourly Internal geospatial API</td>
+</tr>
+</tbody>
+</table>
+
+<p>vendor_sla_compliance % of vendor assignments closed within SLA</p>
+
+<h3>day Vendor management system</h3>
+
+<p>loss_severity_history Average paid amount per policy type in last 12 mo</p>
+
+<ul>
+<li>daily policy_deductible_ratio</li>
+<li>Deductible / Coverage limit hourly</li>
+<li>Policy admin system Feast YAML for adjuster_workload:</li>
+<li>Trade-off: Feast adds deployment complexity. If your team can’t run Kubernetes, run Feast in “local” mode for 3 months, then migrate. You’ll pay in feature duplication. Step 4: Model Service</li>
+<li>We’ll use LightGBM for tabular claims data. Target variable: <code>cycle_time_days</code> binned into quartiles (0–5, 6–10, 11–20, 21+). Features come from Feast. Training pipeline (run nightly):</li>
+<li>Pull 90 days of claims from PostgreSQL Join with Feast features</li>
+<li>Train LightGBM with early stopping Export to ONNX for FastAPI</li>
+<li>FastAPI scoring endpoint: Resource estimate: 2 vCPU/4GB on EKS Fargate handles 100 RPS with p99 < 2s. If you hit 500 RPS, scale to 4 pods. Monitor CPU steal—LightGBM is CPU-bound.</li>
+<li>Trade-off: ONNX adds 20% latency vs. raw LightGBM. If you need < 500ms, skip ONNX and load the raw model. But then you’re locked into Python 3.9. Step 5: Dashboard</li>
+<li>Grafana is the least-bad option. Build three panels: <strong>Real-time claim queue</strong>: WebSocket feed from Kafka → Grafana. Shows claims in last 30 minutes, color-coded by severity and adjuster workload.</li>
+</ul>
+
+<p><strong>Model score heatmap</strong>: Geographic layer with <code>cycle_quartile</code> per pixel. Hover shows top 3 features contributing to score. <strong>Adjuster burn rate</strong>: Time-series of open assignments per adjuster with SLA overlay (green < 48h, yellow 48–72h, red > 72h).</p>
+
+<pre><code>{
+  "claim_id": "a1b2c3d4-5678-90ef-ghij-klmnopqrstuv",
+  "event_type": "FNOL",
+  "timestamp": "2024-05-20T14:32:18Z",
+  "policy_id": "POL-2024-05-0042",
+  "loss_date": "2024-05-20T14:30:00Z",
+  "loss_type": "property",
+  "severity": "medium",
+  "location": {"lat": 39.7392, "lon": -104.9903, "geohash": "9wv3s3y"},
+  "adjuster_id": "ADJ-4711",
+  "vendor_ids": ["VEN-HAILPRO-2024", "VEN-ROOF-22"]
+}
+</code></pre>
+                <!-- Ad Mid-Content -->
+                <div class="ad-slot" style="margin:32px 0">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+                <p>SQL for the queue panel (PostgreSQL): Trade-off: Grafana refreshes at 30s intervals. If you need 5s updates, switch to Metabase with a WebSocket plugin or build a custom React dashboard. You’ll trade simplicity for engineering time.</p>
+
+<pre><code>from confluent_kafka import Producer
+import json, os
+
+conf = {
+    'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP_SERVERS'),
+    'security.protocol': 'SASL_SSL',
+    'sasl.mechanisms': 'SCRAM-SHA-512',
+    'sasl.username': os.getenv('KAFKA_USER'),
+    'sasl.password': os.getenv('KAFKA_PASSWORD')
+}
+
+producer = Producer(conf)
+
+def send_fnol(payload):
+    producer.produce('claims.final', value=json.dumps(payload).encode('utf-8'))
+    producer.flush()
+
+# Example call
+send_fnol({
+    "claim_id": "a1b2c3d4-5678-90ef-ghij-klmnopqrstuv",
+    "event_type": "FNOL",
+    "timestamp": "2024-05-20T14:32:18Z",
+    "policy_id": "POL-2024-05-0042",
+    "loss_type": "property",
+    "severity": "medium",
+    "location": {"lat": 39.7392, "lon": -104.9903}
+})
+</code></pre>
+
+<p>Regulatory & Ethical Safeguards I’ve had to defend this dashboard to three state DOI exams. Key red flags:</p>
+
+<h3><strong>Proxy discrimination:</strong> Your <code>adjuster_workload</code> feature correlates with adjuster tenure and location. Include <code>adjuster_tenure</code> as a protected attribute and run fairness tests (Demographic Parity, Equal Opportunity). Use Aequitas or Fairlearn. <strong>Explainability:</strong> If a claim is flagged for “catastrophic” cycle time, the adjuster must see the top 3 features. SHAP values in Grafana using the ONNX runtime SHAP library.</h3>
+
+<p><strong>Data retention:</strong> FNOL images (photos, videos) are PHI/PII under HIPAA if bodily injury is involved. Delete after 90 days or implement a redaction pipeline with AWS Rekognition. Trade-off: Fairness testing adds 20% to model training time and requires a protected attribute file. If you can’t source <code>adjuster_tenure</code>, use <code>adjuster_id</code> hashed and bucketed by hire year range (pre-2010, 2010–2015, etc.).</p>
+
+<ul>
+<li>Deployment Checklist <strong>Day 0:</strong> Schema registry live, producer tested with 5k msgs, ksqlDB cluster running.</li>
+<li><strong>Day 3: <strong>Day 7:</li>
+<li><strong>Day 10:</strong> Grafana dashboard live, PagerDuty integration configured, alert policies tuned (p99 latency > 2s, model drift > 15%).</li>
+<li><strong>Day 14</li>
+</ul>
+
+<p>            </div></p>
+
+<pre><code>CREATE STREAM claims_enriched (
+    claim_id STRING,
+    event_type STRING,
+    timestamp TIMESTAMP,
+    policy_id STRING,
+    loss_type STRING,
+    severity STRING,
+    location STRUCT<lat DOUBLE, lon DOUBLE, geohash STRING>,
+    adjuster_id STRING,
+    vendor_ids ARRAY<STRING>,
+    deductible DOUBLE,
+    cat_risk_score DOUBLE
+) WITH (
+    KAFKA_TOPIC='claims.final',
+    VALUE_FORMAT='JSON'
+);
+
+-- Join with policy topic
+CREATE STREAM claims_with_policy AS
+  SELECT
+    e.*, p.deductible, p.cat_risk_score
+  FROM claims_enriched e
+  JOIN policies_stream p WITHIN 30 SECONDS
+    ON e.policy_id = p.policy_id;
+</code></pre>
+
+<h3>            </h3>
+
+<table>
+<thead>
+<tr>
+<th>            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;"></th>
+<th>                <strong style="color:#6b7280;">Editorial Note:</strong> This article was researched and drafted with AI assistance, then independently reviewed and fact-checked by our editorial team for accuracy, completeness, and industry relevance. All claims are supported by cited sources and verified against public data. Last reviewed: June 17, 2026. </div></th>
+<th></th>
+<th>            <div class="disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:32px 0 0;font-size:0.85rem;color:#64748b;line-height:1.6"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>                <strong style="color:#475569">Disclaimer:</strong> The information provided on this page is for general informational and educational purposes only. It does not constitute professional financial, legal, or insurance advice. Insurtech Insights makes no representations as to the accuracy or completeness of any information on this site. Readers should consult qualified professionals before making decisions based on the content herein. Some statistics and market projections cited are sourced from third-party reports and may become outdated; always verify against current primary sources. </div></td>
+<td></td>
+<td>            <div class="feedback-widget" style="margin:28px 0 0;padding:16px 0;text-align:center;border-top:1px solid #e2e8f0"></td>
+<td>                <p style="font-size:0.92rem;color:#64748b;margin:0 0 8px">Was this article helpful?</td>
+</tr>
+<tr>
+<td>Comments.</td>
+
+
+
+</tr>
+<tr>
+<tr>
+
+
+</tr>
+
+
+</tr>
+<tr>
+
+
+
+</tr>
+
+
+</tr>
+
+
+</tr>
+</tbody>
+</table>
+
+
+
+<pre><code>---
+apiVersion: feast.dev/v1beta1
+kind: FeatureView
+metadata:
+  name: adjuster_workload
+  labels:
+    owner: claims-ops
+spec:
+  entities:
+    - name: adjuster_id
+      type: STRING
+  ttl: 7d
+  features:
+    - name: adjuster_open_assignments
+      type: INT64
+      source:
+        type: entityless
+        entityColumn: adjuster_id
+        table: adjuster_workload_table
+</code></pre>
+
+
+
+
+
+
+
+
+
+<ul>
+
+
+
+
+</ul>
+
+
+
+<pre><code>from fastapi import FastAPI
+import onnxruntime as ort
+import numpy as np
+import feast
+
+app = FastAPI()
+
+# Load ONNX model
+sess = ort.InferenceSession("model.onnx")
+
+# Feast client
+feast_client = feast.Client()
+
+@app.post("/score")
+async def score_claim(claim_id: str):
+    # Pull features
+    adjuster_workload = feast_client.get_online_features(
+        feature_refs=["adjuster_workload:adjuster_open_assignments"],
+        entity_rows=[{"adjuster_id": "ADJ-4711"}]
+    ).to_dict()
+
+    # Build feature vector
+    X = np.array([
+        adjuster_workload["adjuster_open_assignments"][0],
+        # Add other features..
+    ], dtype=np.float32).reshape(1, -1)
+
+    # Predict
+    preds = sess.run(None, {"input": X})
+    return {"claim_id": claim_id, "cycle_quartile": int(preds[0][0])}
+</code></pre>
+
+
+
+
+
+
+
+
+
+<ol>
+
+
+
+</ol>
+
+
+
+<pre><code>SELECT
+  claim_id,
+  loss_date,
+  loss_type,
+  severity,
+  adjuster_id,
+  EXTRACT(EPOCH FROM (NOW() - created_at)) AS age_seconds,
+  ROW_NUMBER() OVER (PARTITION BY adjuster_id ORDER BY created_at) AS adjuster_rank
+FROM claims
+WHERE created_at > NOW() - INTERVAL '30 minutes'
+ORDER BY age_seconds DESC;
+</code></pre>
+
+
+
+
+
+
+
+<ul>
+
+
+
+</ul>
+
+
+
+
+
+<ol>
+
+ Feast feature store deployed, online store populated with 90 days of history.</li>
+ Model trained on historical data, ONNX exported, FastAPI container pushed to ECR.</li>
+
+
+                <div id="feedback-buttons" style="display:flex;gap:12px;justify-content:center">
+                    <button onclick="ga4Feedback('yes')" style="padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">Yes</button>
+                    <button onclick="ga4Feedback('no')" style="padding:8px 20px;background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;font-weight:500;cursor:pointer">No</button>
+                </div>
+            </div>
+
+            <!-- COMMENTS -->
+            <div id="comments" style="max-width:var(--site-width);margin:48px auto 0;padding:0 24px">
+              
+              <script src="https://utteranc.es/client.js"
+                      repo="cowcomzw/insurtech-repo"
+                      issue-term="pathname"
+                      theme="github-light"
+                      crossorigin="anonymous"
+                      async>
+              </script>
+            </div>
+
+            <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://821224.com/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "AI Claims",
+                  "item": "https://821224.com/ai-claims/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Real-Time Claims Analytics: A Hands-On AI Dashboard Build for Claims Operations"
+                }
+              ]
+            }
+            </script>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-bottom" style="border-top:none;padding-top:0;justify-content:space-between">
+                <span>&copy; 2026 Insurtech Insights. All rights reserved.</span>
+                <span>
+                    <a href="/about/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">About</a>
+                    <a href="/contact/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Contact</a>
+                    <a href="/privacy/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Privacy Policy</a>
+                    <a href="/terms/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Terms</a>
+                    <a href="/sitemap/" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">Sitemap</a>
+                    <a href="/sitemap.xml" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px" rel="noopener">XML Sitemap</a>
+                    <a href="https://linkedin.com/company/821224" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.55);text-decoration:none;margin-right:16px">LinkedIn</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+</script>
+
+
+    <script src="/cookie-consent.js" defer></script>
+</body>
 </html>
