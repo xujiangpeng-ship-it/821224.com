@@ -54,10 +54,16 @@ def _clean_llm_html_response(text: str) -> str:
     if doctype_match:
         text = text[doctype_match.start():]
     else:
-        # Fallback: look for <html tag
-        html_match = re.search(r'<html[\s>]', text, re.IGNORECASE)
-        if html_match:
-            text = text[html_match.start():]
+        # No full-document wrapper. Strip any conversational preamble that the LLM
+        # may have prepended (e.g. "Here's the enhanced article:") by cutting to the
+        # first real HTML body tag. This also covers the body-only input mode used by
+        # main.render_article (which passes only the article body, never the <head>).
+        body_start = re.search(
+            r'<(!DOCTYPE|html|h[1-6]|p|table|ul|ol|div|blockquote|figure|pre|section|article)\b',
+            text, re.IGNORECASE
+        )
+        if body_start:
+            text = text[body_start.start():]
 
     return text.strip()
 
@@ -339,7 +345,9 @@ def enhance_article(
         system_prompt = (
             "You are an expert insurance technology analyst. Your task is to enhance an existing "
             "article by injecting a specific analytical perspective as 2-3 additional paragraphs. "
-            "Output the complete enhanced article with your additions clearly integrated. "
+            "Return ONLY the article BODY HTML (h2/h3/p/ul/li/table/blockquote etc.) with your "
+            "additions clearly integrated. Do NOT wrap the output in <!DOCTYPE>, <html>, <head>, or "
+            "<body> tags, and do not add any explanatory preamble — output the HTML directly. "
             "Preserve all original content and structure."
         )
         user_prompt = f"{stance_info['prompt']}\n\nOriginal article:\n\n{article_text}"

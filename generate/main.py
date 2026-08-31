@@ -590,11 +590,35 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     date_iso = now.strftime("%Y-%m-%dT%H:%M:%S+00:00")
     date_display = now.strftime("%B %d, %Y")
 
-    content_first, content_rest = split_content_at_third(html_body)
-
     adsense = config.get("adsense", {})
     pub_id = adsense.get("pub_id", "")
     ad_slots = adsense.get("ad_units", {})
+
+    # ── ROOT-CAUSE FIX: HTML <head> pollution ─────────────────────────────────
+    # Previously the FULL rendered HTML document (including the <head> with the
+    # title / meta description / canonical / Open Graph tags) was handed to the
+    # LLM, and Pass 2's "Output the complete enhanced article" instruction made
+    # the model rewrite or drop the <head> — producing pages with a destroyed or
+    # missing <head> (the 34 broken articles seen in the Aug 2026 cleanup).
+    #
+    # We now enhance ONLY the article BODY, then re-render the template, so the
+    # <head> is always the pristine template output and can never be corrupted by
+    # the LLM. As a safety net we also strip any code fences / chatbot preamble /
+    # stray full-document wrapper that the model might still return.
+    os.environ.setdefault("MISTRAL_API_KEY", "DaqhV9nv9V228XEPUWm52Rqsj8rpJbS4")
+    v2_result = enhance_article(html_body)
+    enhanced_body = v2_result["enhanced_text"]
+    enhanced_body = _clean_llm_body_response(enhanced_body) if enhanced_body else ""
+    if not enhanced_body or len(enhanced_body) < 200:
+        logger.warning(
+            "enhance_article returned unusable body (len=%d) — falling back to clean body. "
+            "stance=%s, personas=%s",
+            len(enhanced_body) if enhanced_body else 0,
+            v2_result["stance_used"], v2_result["personas_used"]
+        )
+        enhanced_body = html_body
+
+    content_first, content_rest = split_content_at_third(enhanced_body)
 
     html = jinja_env.get_template("article.html").render(
         site_name=config["site"]["name"],
@@ -620,38 +644,6 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
 
     # Apply de-AI post-processing to disrupt LLM-detectable patterns
     html = deai_process(html)
-
-    # Save clean pre-enhance copy as fallback
-    html_before_enhance = html
-
-    # Apply stance injection + persona blending (generator_v2)
-    os.environ.setdefault("MISTRAL_API_KEY", "DaqhV9nv9V228XEPUWm52Rqsj8rpJbS4")
-    v2_result = enhance_article(html)
-    html = v2_result["enhanced_text"]
-
-    # Final guard: if enhance_article returned polluted output (missing DOCTYPE or prose before it),
-    # strip any preamble and ensure clean HTML; fall back if unrecoverable.
-    if re.search(r'<!DOCTYPE\s+html|<html[\s>]', html, re.IGNORECASE):
-        # Check for preamble before DOCTYPE or BOM
-        stripped = html.lstrip('\ufeff')
-        dm = re.search(r'<!DOCTYPE\s+html', stripped, re.IGNORECASE)
-        if dm and dm.start() > 0:
-            logger.warning(
-                "enhance_article output has preamble before DOCTYPE — stripping %d chars. "
-                "stance=%s, personas=%s",
-                dm.start(), v2_result["stance_used"], v2_result["personas_used"]
-            )
-            html = stripped[dm.start():]
-        elif dm is None:
-            # DOCTYPE exists but not in expected form; fall back
-            html = html_before_enhance
-    else:
-        logger.warning(
-            "enhance_article output missing DOCTYPE/html tag — falling back to clean rendered HTML. "
-            "stance=%s, personas=%s",
-            v2_result["stance_used"], v2_result["personas_used"]
-        )
-        html = html_before_enhance
 
     logger.info("enhance_article: stance=%s, personas=%s, llm=%s",
                 v2_result["stance_used"], v2_result["personas_used"], v2_result["llm_called"])
