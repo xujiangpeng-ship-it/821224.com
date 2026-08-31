@@ -629,9 +629,23 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     v2_result = enhance_article(html)
     html = v2_result["enhanced_text"]
 
-    # Final guard: if enhance_article returned polluted output (missing DOCTYPE),
-    # fall back to the clean Jinja2-rendered HTML
-    if not re.search(r'<!DOCTYPE\s+html|<html[\s>]', html, re.IGNORECASE):
+    # Final guard: if enhance_article returned polluted output (missing DOCTYPE or prose before it),
+    # strip any preamble and ensure clean HTML; fall back if unrecoverable.
+    if re.search(r'<!DOCTYPE\s+html|<html[\s>]', html, re.IGNORECASE):
+        # Check for preamble before DOCTYPE or BOM
+        stripped = html.lstrip('\ufeff')
+        dm = re.search(r'<!DOCTYPE\s+html', stripped, re.IGNORECASE)
+        if dm and dm.start() > 0:
+            logger.warning(
+                "enhance_article output has preamble before DOCTYPE — stripping %d chars. "
+                "stance=%s, personas=%s",
+                dm.start(), v2_result["stance_used"], v2_result["personas_used"]
+            )
+            html = stripped[dm.start():]
+        elif dm is None:
+            # DOCTYPE exists but not in expected form; fall back
+            html = html_before_enhance
+    else:
         logger.warning(
             "enhance_article output missing DOCTYPE/html tag — falling back to clean rendered HTML. "
             "stance=%s, personas=%s",
@@ -646,7 +660,6 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / "index.html"
     out_file.write_text(html, encoding="utf-8")
-    inject_widget(out_file)
 
     logger.info("Rendered: %s", out_file)
     return out_file, slug, title, description, subdomain_name, date_display
@@ -807,7 +820,6 @@ def rebuild_home(config) -> None:
         pagination=None,
     )
     (CONTENT_DIR / "index.html").write_text(html, encoding="utf-8")
-    inject_widget(CONTENT_DIR / "index.html")
     logger.info("Rebuilt home page with %d articles (total: %d).", len(picked), total_count)
 
 
@@ -939,10 +951,8 @@ def rebuild_category_pages(config) -> None:
             out_dir.mkdir(parents=True, exist_ok=True)
             if page == 1:
                 (out_dir / "index.html").write_text(html, encoding="utf-8")
-                inject_widget(out_dir / "index.html")
             else:
                 (out_dir / f"page{page}.html").write_text(html, encoding="utf-8")
-                inject_widget(out_dir / f"page{page}.html")
 
         logger.info("Rebuilt category page: /%s/ (%d articles, %d pages)", slug, len(cat_articles), total_pages)
 
@@ -1022,22 +1032,6 @@ def main():
         rebuild_category_pages(config)
 
     logger.info("Done. Generated %d/%d articles successfully.", len(articles_meta), len(selected))
-
-
-_WIDGET_SCRIPT = """<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Insurtech Insights 助手"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>"""
-
-def inject_widget(html_path):
-    try:
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html = f.read()
-        if 'ChatWidgetConfig' not in html and '</body>' in html:
-            html = html.replace('</body>', _WIDGET_SCRIPT + chr(10) + '</body>')
-            with open(html_path, 'w', encoding='utf-8') as f:
-                f.write(html)
-            logger.info('Injected widget into %s', html_path)
-    except Exception as e:
-        logger.warning('Failed to inject widget into %s: %s', html_path, e)
 
 
 if __name__ == "__main__":

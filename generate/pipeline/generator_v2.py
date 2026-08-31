@@ -32,6 +32,9 @@ def _clean_llm_html_response(text: str) -> str:
     if not text or not text.strip():
         return text
 
+    # Strip BOM (U+FEFF) that some LLMs prepend
+    text = text.lstrip('\ufeff')
+
     # Step 1: Extract content from ```html / ``` code fences if present
     # Match ```html (or just ```) followed by content and closing ```
     fence_patterns = [
@@ -44,17 +47,17 @@ def _clean_llm_html_response(text: str) -> str:
             text = m.group(1).strip()
             break
 
-    # Step 2: Find where actual HTML begins (skip chatbot preamble)
-    # Look for <!DOCTYPE html> or <html tag
-    html_start_patterns = [
-        r'<!DOCTYPE\s+html',
-        r'<html[\s>]',
-    ]
-    for pattern in html_start_patterns:
-        m = re.search(pattern, text, re.IGNORECASE)
-        if m:
-            text = text[m.start():]
-            break
+    # Step 2: Strip ALL non-HTML prose before <!DOCTYPE html>
+    # LLMs sometimes return conversational preamble like "Here's a mentor-style rewrite..."
+    # We strip everything before the first <!DOCTYPE html> (case-insensitive)
+    doctype_match = re.search(r'<!DOCTYPE\s+html', text, re.IGNORECASE)
+    if doctype_match:
+        text = text[doctype_match.start():]
+    else:
+        # Fallback: look for <html tag
+        html_match = re.search(r'<html[\s>]', text, re.IGNORECASE)
+        if html_match:
+            text = text[html_match.start():]
 
     return text.strip()
 
