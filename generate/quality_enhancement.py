@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 ROOT = Path(__file__).resolve().parent
-CONTENT_DIR = ROOT / \"content\"
+CONTENT_DIR = ROOT / "content"
 
 # ===========================================================================
 # 1. ENHANCE ARTICLE SYSTEM PROMPT WITH STRICTER QUALITY CONTROLS
@@ -102,7 +102,7 @@ OUTPUT FORMAT:
 - Word count: minimum 2000 words
 '''
 
-print(\"Enhanced system prompt saved.\")
-print(f\"Total characters: {len(ENHANCED_SYSTEM_PROMPT)}\")
-print(f\"This prompt enforces 2000+ word minimum, 3+ verified citations,\")
-print(f\"specific author perspective, and strict anti-hallucination rules.\")
+print("Enhanced system prompt saved.")
+print(f"Total characters: {len(ENHANCED_SYSTEM_PROMPT)}")
+print(f"This prompt enforces 2000+ word minimum, 3+ verified citations,")
+print(f"specific author perspective, and strict anti-hallucination rules.")

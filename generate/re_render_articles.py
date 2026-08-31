@@ -164,11 +164,28 @@ def extract_description(html_content: str, max_chars: int = 160) -> str:
 
 
 def extract_article_body(html_text: str) -> str:
-    """Extract the raw content from within <div class="article-content">...</div>"""
+    """Extract the raw content from within <div class="article-content">...</div>
+
+    Falls back to the OLD/minimal template layout (no article-content wrapper): in
+    that layout the article body sits directly in <body>, right after the title
+    <h1>, and ends at <footer>. This lets legacy articles be re-rendered to the
+    current benchmark template.
+    """
     start_marker = '<div class="article-content">'
     start_idx = html_text.find(start_marker)
     if start_idx == -1:
-        return ""
+        # Old/minimal template fallback: title </h1> ... <footer>
+        hi = html_text.find('</h1>')
+        if hi == -1:
+            hi = html_text.find('</header>')
+        foot = html_text.find('<footer')
+        if foot == -1:
+            foot = html_text.find('</body>')
+        if hi == -1 or foot == -1 or foot <= hi:
+            return ""
+        body = html_text[hi + len('</h1>'):foot].strip()
+        body = fix_html_body(body)
+        return body.strip()
 
     start_idx += len(start_marker)
 
@@ -393,6 +410,34 @@ def split_content_at_third(html_body: str) -> tuple:
     return html_body, ""
 
 
+def is_benchmark_clean(html: str) -> bool:
+    """True only if the article already uses the COMPLETE benchmark template:
+    article-container + article-header + author-bio + feedback widget + comments,
+    a sane <title> (no duplicated site name / truncated ellipsis), and a real
+    datePublished (not "None").
+    """
+    if 'class="article-container"' not in html:
+        return False
+    if 'class="article-header"' not in html:
+        return False
+    if 'class="author-bio"' not in html:
+        return False
+    if 'id="feedback-buttons"' not in html:
+        return False
+    if 'id="comments"' not in html:
+        return False
+    m = re.search(r'<title>(.+?)</title>', html)
+    if m:
+        t = m.group(1)
+        if (' | Insurtech Insights | Insurtech Insights' in t
+                or t.rstrip().endswith('…')
+                or len(t.strip()) < 15):
+            return False
+    if '"datePublished":"None"' in html or 'datePublished": "None"' in html:
+        return False
+    return True
+
+
 def main():
     config = load_config()
     jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
@@ -458,6 +503,14 @@ def main():
 
             # Read existing rendered HTML
             old_html = article_file.read_text(encoding="utf-8")
+
+            # Only re-render articles that are NOT already full benchmark-conformant.
+            # A legacy/hybrid article may already contain <article class="article-container">
+            # (from a previous partial fix) yet still miss key blocks, a valid title, or a
+            # real publication date — so we require the COMPLETE benchmark signature.
+            if is_benchmark_clean(old_html):
+                skipped += 1
+                continue
 
             # Extract body content
             body = extract_article_body(old_html)
