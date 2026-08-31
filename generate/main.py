@@ -939,9 +939,10 @@ def rebuild_category_pages(config) -> None:
             out_dir.mkdir(parents=True, exist_ok=True)
             if page == 1:
                 (out_dir / "index.html").write_text(html, encoding="utf-8")
-            inject_widget(out_dir / "index.html")
+                inject_widget(out_dir / "index.html")
             else:
                 (out_dir / f"page{page}.html").write_text(html, encoding="utf-8")
+                inject_widget(out_dir / f"page{page}.html")
 
         logger.info("Rebuilt category page: /%s/ (%d articles, %d pages)", slug, len(cat_articles), total_pages)
 
