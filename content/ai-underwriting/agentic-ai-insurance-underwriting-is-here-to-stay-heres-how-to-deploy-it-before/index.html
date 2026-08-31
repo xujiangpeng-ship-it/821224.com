@@ -636,8 +636,6 @@ resource "aws_lb_listener_rule" "agent_canary" {
   listener_arn = aws_lb_listener.underwriting.arn
   priority     = 100
 
-**Rewritten from a carrier executive’s perspective:**
-
 *"Before we sign off on this add-on, we need to run the numbers—starting with total cost of ownership. The price tag isn’t just the upfront license; we’re looking at integration hours, custom scripting to align with our existing AWS load balancer architecture, and ongoing maintenance. If the vendor’s documentation is anything like their last tool (which it usually is), expect a 30–40% overrun on dev hours.
 
 Then there’s integration complexity—this isn’t a plug-and-play. The target group ARN is unique to our setup, and forcing it to forward to aws_lb_target_group.agent.arn means we’ll need to refactor our routing policies, which could introduce latency or break existing failover rules. And let’s be real: if the reference calls the vendor provided were handpicked, we’re not getting the full picture of how this behaves in a scaled, multi-region environment.
@@ -741,13 +739,7 @@ in a mentor's voice:
 
 "When you're diving into the data, you'll find that seasonality plays a huge role in interpreting the numbers. Look at the spikes in the third quarter of last year—they weren’t just random noise. Here’s what I tell my team: always plot your data over time first, before you run any advanced models. The key insight is that understanding the rhythm of your data—whether it’s weekly, monthly, or quarterly patterns—often explains more than the fancy regression you’re tempted to run right away.
 
-And don’t gloss over the outliers. That one month where the numbers shot up but the trend didn’t hold? You’ll find that’s usually where the story lives—whether it’s a campaign blip, a system glitch, or a true shift in behavior. Cleaning the data is important, but asking *why* a data point looks odd is often where the real learning happens."
-
-Here’s your data-obsessed rewrite, complete with statistical rigor and spreadsheet-level specificity:
-
----
-
-**Original:**
+And don’t gloss over the outliers. That one month where the numbers shot up but the trend didn’t hold? You’ll find that’s usually where the story lives—whether it’s a campaign blip, a system glitch, or a true shift in behavior. Cleaning the data is important, but asking *why* a data point looks odd is often w**Original:**
 *The intervention group showed a modest but meaningful improvement over the control group in post-treatment outcomes.*
 
 **Rewritten:**

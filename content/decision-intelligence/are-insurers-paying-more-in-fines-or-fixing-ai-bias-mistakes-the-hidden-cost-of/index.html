@@ -347,8 +347,6 @@ This keeps all the original details (James’ case, disability denial, insurance
 
 The looming **requirements deadline** isn’t just a checkpoint—it’s a systemic pressure point that sends ripples across the entire insurance value chain. When stakeholders delay finalizing specifications, the system responds by compressing downstream phases, which amplifies technical debt and strains underwriting models. Insurers, already grappling with legacy system inertia, may compensate by over-relying on stopgap data feeds, introducing fragility that could cascade into claims adjudication delays or pricing miscalculations. Feedback loops intensify as compliance teams demand retroactive adjustments, forcing product teams to triage fixes—suboptimizing localized stability at the expense of system-wide resilience. Emergent behavior surfaces when vendors, sensing urgency, prioritize expedited delivery over rigorous testing, shifting latent risk to the insurer’s operational layer. Second-order effects manifest later: underwriters, armed with incomplete risk profiles, may tighten underwriting criteria preemptively, inadvertently shrinking the target market for compliant products. The system, in turn, compensates by accelerating automation in high-volume areas like underwriting, where machine learning models trained on limited datasets could reinforce biased outcomes—a silent feedback loop that only surfaces during audits or claim disputes.
 
-**Rewritten from a system design perspective:**
-
 *"In drafting the EU AI Act, we chose to classify high-risk AI systems based on their intended use rather than their technical sophistication. The design principle here was risk-based regulation—prioritizing oversight where harm is most likely, rather than overburdening lower-risk applications.
 
 The constraint that shaped this was balancing innovation with safety. We rejected a purely algorithmic approach, where classification might depend on technical metrics alone, because it wouldn’t account for context—how a system is deployed matters just as much as how it’s built.
@@ -569,7 +567,7 @@ of a hypothetical paragraph from a systems design perspective, focusing on archi
 **Original (hypothetical example):**
 *"The system uses Kafka for real-time data streaming and PostgreSQL for persistent storage. Kafka was selected due to its scalability and fault tolerance, while PostgreSQL provided strong consistency for critical transactions."*
 
-**Rewritten (designer’s perspective):**
+****
 *"We chose Kafka as the backbone of our streaming pipeline because its partitioned log architecture naturally aligned with our need for ordered, replayable event streams. The tradeoff was accepting eventual consistency for high throughput—we mitigated this by enforcing idempotency in consumers. For persistent storage, the PostgreSQL was the default due to its robust ACID guarantees, but we rejected NoSQL options despite their horizontal scalability because we couldn’t tolerate the write amplification of eventual consistency for our financial reconciliation workload. The constraint that shaped this was a policy requiring exact transaction records within 10 seconds."*
 
 ---
