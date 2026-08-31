@@ -40,6 +40,28 @@ logger = logging.getLogger("main")
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 CONTENT_DIR = ROOT / "content"
+# ---------------------------------------------------------------------------
+# Chat Widget Injection
+# ---------------------------------------------------------------------------
+_WIDGET_SCRIPT = (
+    '<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>'
+    '<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>'
+)
+
+def inject_widget(html_path):
+    """Inject chat widget script before </body> tag."""
+    try:
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html = f.read()
+        if 'ChatWidgetConfig' not in html and '</body>' in html:
+            html = html.replace('</body>', _WIDGET_SCRIPT + '\n</body>')
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html)
+        logger.info('Injected widget into %s', html_path)
+    except Exception as e:
+        logger.warning('Failed to inject widget into %s: %s', html_path, e)
+
+
 
 CATEGORY_HERO = {
     "ai-claims": {
@@ -652,6 +674,7 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / "index.html"
     out_file.write_text(html, encoding="utf-8")
+    inject_widget(out_file)
 
     logger.info("Rendered: %s", out_file)
     return out_file, slug, title, description, subdomain_name, date_display
@@ -812,6 +835,7 @@ def rebuild_home(config) -> None:
         pagination=None,
     )
     (CONTENT_DIR / "index.html").write_text(html, encoding="utf-8")
+    inject_widget(CONTENT_DIR / "index.html")
     logger.info("Rebuilt home page with %d articles (total: %d).", len(picked), total_count)
 
 
@@ -864,6 +888,7 @@ def rebuild_html_sitemap(config) -> None:
     out_dir = CONTENT_DIR / "sitemap"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(html, encoding="utf-8")
+    inject_widget(out_dir / "index.html")
     logger.info("Rebuilt HTML sitemap with %d articles across %d categories.", len(all_articles), len(config["subdomains"]))
 
 
@@ -943,6 +968,7 @@ def rebuild_category_pages(config) -> None:
             out_dir.mkdir(parents=True, exist_ok=True)
             if page == 1:
                 (out_dir / "index.html").write_text(html, encoding="utf-8")
+                inject_widget(out_dir / "index.html")
             else:
                 (out_dir / f"page{page}.html").write_text(html, encoding="utf-8")
 
