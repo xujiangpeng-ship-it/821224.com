@@ -261,7 +261,7 @@ This version maintains all factual details while framing the considerations as p
 <div class="article-content">
                 <h2>Hiscox used to need 14 calendar days to bind a small business insurance policy. Now it takes 3 hours. The 99 percent reduction didn’t come from throwing more underwriters at the queue or outsourcing to a third-party administrator. It came from a decision engine that sits between the broker’s portal and Hiscox’s underwriting rules.</h2>
 
-**Rewritten Version:**
+<strong>Rewritten Version:</strong>
 
 On a rainy Tuesday afternoon in October 2022, Sarah, a small business owner in Manchester, logged into Hiscox Pro to get a quote for her café’s new insurance policy. Within three hours, she had a bound policy—no underwriter needed, no delays. By the time autumn leaves blanketed the streets, 25,000 quotes like hers had raced through the system.
 
@@ -288,12 +288,12 @@ from a system designer’s perspective, focusing on architectural and design con
 
 From the metrics, we could see the pain points clearly. Hiscox Pro’s digital front door—a quote engine we built to handle 3,000–4,000 requests per month—wasn’t meeting expectations. Only 12 percent of users were converting, a stark contrast to the 28 percent conversion rate we saw in the telephone channel. That gap was unacceptable for a digital-first insurer like us.
 
-When we dug into the data, we found that **46 percent of users abandoned the quote process after waiting more than 10 minutes**—a clear signal that our system’s latency was unacceptable. Another **22 percent dropped off when the system requested the same data twice**, which told us our data collection design had serious flaws.
+When we dug into the data, we found that **46 percent of users abandoned the quote process after waiting more than 10 minutes<strong>—a clear signal that our system’s latency was unacceptable. Another </strong>22 percent dropped off when the system requested the same data twice**, which told us our data collection design had serious flaws.
 
 The constraint that shaped this was the need for speed—both in response time and in minimizing user effort. We chose to streamline the quote flow by:
-- **Reducing redundant data collection** (rejecting designs that required manual re-entry).
-- **Optimizing backend processing** to ensure quotes were generated in under 30 seconds (a design principle driven by user behavior data).
-- **Implementing real-time validation** to prevent errors that would force users to restart.
+- <strong>Reducing redundant data collection</strong> (rejecting designs that required manual re-entry).
+- <strong>Optimizing backend processing</strong> to ensure quotes were generated in under 30 seconds (a design principle driven by user behavior data).
+- <strong>Implementing real-time validation</strong> to prevent errors that would force users to restart.
 
 These weren’t just guesses—they were hard lessons learned from observing how real users interacted with our system. And the numbers proved us right.
 
@@ -325,7 +325,7 @@ Here are the rewritten paragraphs from the perspective of a systems designer and
 
 ---
 
-**Key components: Ad Mid-Content Slot**
+<strong>Key components: Ad Mid-Content Slot</strong>
 
 We chose to implement this mid-content ad slot as a responsive banner unit because the design principle of user experience dictated that ads should integrate seamlessly with the content flow rather than disrupt it. The constraint that shaped this was the need to balance monetization without sacrificing readability or loading performance—a common tradeoff in ad-supported platforms.
 
@@ -339,7 +339,7 @@ For the ad serving logic, we integrated Google AdSense (`ca-pub-3057389153621190
 
 Would you like any part of this expanded or refined further?
 
-**Rewritten version:**
+<strong>Rewritten version:</strong>
 
 The first time Clara’s team ingested a terabyte of raw sensor data at 3 a.m. only to watch the pipeline collapse under the weight of bad timestamps, she vowed never again to treat deployment like an afterthought. That midnight baptism set the tone for every subsequent release of the new data ingestion layer: a painstaking ritual that begins with the click of a Jenkins job at 4:27 p.m., followed by 117 automated smoke tests, a rolling blue-green swap that pushes new pods into a live Kubernetes cluster one rack at a time, and finally a final canary check against real-time traffic. Each release cycle now carries the scar of Clara’s first night on watch, which is why the team still pauses—even when the dashboards glow green—for the ritual sip of bitter coffee and the whispered reminder: “We ship at dawn, but we debug in the dark.”
 
@@ -393,7 +393,7 @@ that frames the transformation through a systems-thinking lens, emphasizing inte
 
 ---
 
-The engine’s implementation triggered **second-order effects** that rippled through the broader system, reshaping not just operational efficiency but also the human and financial dimensions of the underwriting ecosystem. Initially, the automation of routine quoting—handling roughly 60 percent of underwriter workload—freed skilled labor from repetitive tasks, creating a **feedback loop** where institutional knowledge could be redirected toward higher-value activities. As underwriters shifted their focus to the **6 percent of borderline risks**—those requiring nuanced judgment—the system responded by amplifying their strategic impact. Productivity per underwriter surged by 35 percent, a change that, while measurable in output, also fed into a more intangible yet critical dynamic: workforce retention. Attrition in the small business unit plummeted by 22 percent, suggesting that **emergent behavior** had taken hold—perhaps as morale improved, or as underwriters, now liberated from drudgery, found renewed purpose in their roles. The system adjusted not just in efficiency metrics but in cultural resilience, demonstrating how localized optimization can ripple outward, influencing satisfaction, performance, and ultimately, the sustainability of the entire insurance value chain.
+The engine’s implementation triggered <strong>second-order effects</strong> that rippled through the broader system, reshaping not just operational efficiency but also the human and financial dimensions of the underwriting ecosystem. Initially, the automation of routine quoting—handling roughly 60 percent of underwriter workload—freed skilled labor from repetitive tasks, creating a <strong>feedback loop</strong> where institutional knowledge could be redirected toward higher-value activities. As underwriters shifted their focus to the <strong>6 percent of borderline risks</strong>—those requiring nuanced judgment—the system responded by amplifying their strategic impact. Productivity per underwriter surged by 35 percent, a change that, while measurable in output, also fed into a more intangible yet critical dynamic: workforce retention. Attrition in the small business unit plummeted by 22 percent, suggesting that <strong>emergent behavior</strong> had taken hold—perhaps as morale improved, or as underwriters, now liberated from drudgery, found renewed purpose in their roles. The system adjusted not just in efficiency metrics but in cultural resilience, demonstrating how localized optimization can ripple outward, influencing satisfaction, performance, and ultimately, the sustainability of the entire insurance value chain.
 
 ---
 
@@ -498,11 +498,11 @@ from the perspective of a system designer:
 
 ---
 
-We chose **Utterances** for our comment system because we wanted a lightweight, embeddable solution that wouldn’t introduce heavy client-side dependencies. The design principle was to keep the commenting infrastructure decoupled from our core application—using GitHub issues as the backend meant we could leverage existing authentication (via GitHub OAuth) and issue tracking without reinventing the wheel.
+We chose <strong>Utterances</strong> for our comment system because we wanted a lightweight, embeddable solution that wouldn’t introduce heavy client-side dependencies. The design principle was to keep the commenting infrastructure decoupled from our core application—using GitHub issues as the backend meant we could leverage existing authentication (via GitHub OAuth) and issue tracking without reinventing the wheel.
 
-The constraint that shaped this was **performance**. We rejected heavier solutions (like Disqus or custom-built systems) because they introduced unnecessary JavaScript bloat and third-party tracking. By using a static embed (`async`), we ensured the comments loaded non-blockingly, preserving page performance—an especially critical factor for a site where financial calculators and interactive tools already demanded client-side resources.
+The constraint that shaped this was <strong>performance</strong>. We rejected heavier solutions (like Disqus or custom-built systems) because they introduced unnecessary JavaScript bloat and third-party tracking. By using a static embed (`async`), we ensured the comments loaded non-blockingly, preserving page performance—an especially critical factor for a site where financial calculators and interactive tools already demanded client-side resources.
 
-We also had to consider **moderation and maintainability**. Storing comments as GitHub issues means issues can be closed, labeled, or managed via standard repo workflows—no admin panel required. The only tradeoff was sacrificing some UI customization, but we accepted that limitation in favor of reliability and developer ergonomics.
+We also had to consider <strong>moderation and maintainability</strong>. Storing comments as GitHub issues means issues can be closed, labeled, or managed via standard repo workflows—no admin panel required. The only tradeoff was sacrificing some UI customization, but we accepted that limitation in favor of reliability and developer ergonomics.
 
 ---
 

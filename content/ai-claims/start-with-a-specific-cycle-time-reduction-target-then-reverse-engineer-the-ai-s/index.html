@@ -241,27 +241,27 @@ By the close of 2023, LexisNexis Risk Solutions had crunched 42 carriers and fou
 
 <p>Map the five bottlenecks that still eat 90 % of cycle time. The fastest AI deployments start by measuring where time leaks. A 2024 <a href="https://www.mckinsey.com/industries/financial-services/our-insights/ai-in-insurance-time-to-scale" target="_blank" rel="noopener noreferrer">McKinsey survey</a> of 317 claims leaders showed the following breakdown across carriers still running on legacy workflows:</p>
 
-**Des Moines Claims Center – Live Dispatch**
+<strong>Des Moines Claims Center – Live Dispatch</strong>
 
-The Des Moines Claims Center is buzzing this morning as teams race to clear a backlog of filings. Right now, the biggest time-sinks in manual claims processing are **document ingestion and data entry**—accounting for **35% of the total cycle time**, or roughly **6–8 hours per claim**, according to real-time analytics from the floor. Operators in Cubicle Row 12 report that OCR and NLP extraction tools are still choking on scanned PDFs from regional auto repair shops, each scan taking nearly an hour to normalize before human review begins.
+The Des Moines Claims Center is buzzing this morning as teams race to clear a backlog of filings. Right now, the biggest time-sinks in manual claims processing are <strong>document ingestion and data entry</strong>—accounting for <strong>35% of the total cycle time</strong>, or roughly <strong>6–8 hours per claim</strong>, according to real-time analytics from the floor. Operators in Cubicle Row 12 report that OCR and NLP extraction tools are still choking on scanned PDFs from regional auto repair shops, each scan taking nearly an hour to normalize before human review begins.
 
-Next in line: **coverage verification**, chewing up **28% of cycle time** (4–6 hours per case). Rule-based classifiers and LLM-powered policy QA tools in the Cloud Pod are flagging discrepancies in endorsements from branch offices in Cedar Rapids and Sioux City, forcing adjusters to manually cross-check policy language. Down the hall, **fraud triage**—**15% of the workload**—is under intense scrutiny. Anomaly scoring models flagged three claims in the last hour alone after detecting suspicious repair shop links using network graph analysis. The SIU team is already at their desks.
+Next in line: <strong>coverage verification</strong>, chewing up <strong>28% of cycle time</strong> (4–6 hours per case). Rule-based classifiers and LLM-powered policy QA tools in the Cloud Pod are flagging discrepancies in endorsements from branch offices in Cedar Rapids and Sioux City, forcing adjusters to manually cross-check policy language. Down the hall, <strong>fraud triage</strong>—<strong>15% of the workload</strong>—is under intense scrutiny. Anomaly scoring models flagged three claims in the last hour alone after detecting suspicious repair shop links using network graph analysis. The SIU team is already at their desks.
 
-But here’s the kicker: **adjuster assignment and handoff**—once a **10% bottleneck** (1–2 hours)—is now collapsing under its own weight. Automated skill-based routing has cut that step to near zero at the leading cyber carrier. Right now, in Des Moines, we’re watching first-to-serve dashboards light up green as claims move from FNOL (First Notice of Loss) to payment in under 24 hours—on some small commercial property policies.
+But here’s the kicker: <strong>adjuster assignment and handoff</strong>—once a <strong>10% bottleneck</strong> (1–2 hours)—is now collapsing under its own weight. Automated skill-based routing has cut that step to near zero at the leading cyber carrier. Right now, in Des Moines, we’re watching first-to-serve dashboards light up green as claims move from FNOL (First Notice of Loss) to payment in under 24 hours—on some small commercial property policies.
 
-Word on the floor: **Build fast. Build smart.** The cyber team here didn’t wait three years for an AI stack. They ran **three sprints in nine weeks** using off-the-shelf OCR (Tesseract + Amazon Textract) and low-code NLP pipelines from Hyperscience. Their KPI? **Straight-through-processing (STP) rate**—the % of claims closed without human touch. Right now, their STP rate hovers at **78%** on cyber policies, and the CFO is watching the LAE (Loss Adjustment Expense) metric drop by **$14 per claim**.
+Word on the floor: <strong>Build fast. Build smart.</strong> The cyber team here didn’t wait three years for an AI stack. They ran <strong>three sprints in nine weeks</strong> using off-the-shelf OCR (Tesseract + Amazon Textract) and low-code NLP pipelines from Hyperscience. Their KPI? <strong>Straight-through-processing (STP) rate</strong>—the % of claims closed without human touch. Right now, their STP rate hovers at <strong>78%</strong> on cyber policies, and the CFO is watching the LAE (Loss Adjustment Expense) metric drop by <strong>$14 per claim</strong>.
 
-They kicked off in **Sprint 0** by choosing the cleanest data—small commercial property—and defining cycle time as **“elapsed hours from FNOL to final payment,”** tracked directly in the policy admin system. No ambiguity. No guesswork.
+They kicked off in <strong>Sprint 0</strong> by choosing the cleanest data—small commercial property—and defining cycle time as <strong>“elapsed hours from FNOL to final payment,”</strong> tracked directly in the policy admin system. No ambiguity. No guesswork.
 
-Now in **Sprint 1**, they’re ingesting **100 fields per claim in 30 days** using a two-stage OCR pipeline: first, high-volume low-accuracy extraction (Tesseract), then a precision NLP layer (SpaCy + custom rules) that pulls out policy number, loss date, location, deductible, and limit. Avoiding scope creep—they started with **14 critical fields**, hit **92% extraction accuracy**, then expanded.
+Now in <strong>Sprint 1</strong>, they’re ingesting <strong>100 fields per claim in 30 days</strong> using a two-stage OCR pipeline: first, high-volume low-accuracy extraction (Tesseract), then a precision NLP layer (SpaCy + custom rules) that pulls out policy number, loss date, location, deductible, and limit. Avoiding scope creep—they started with <strong>14 critical fields</strong>, hit <strong>92% extraction accuracy</strong>, then expanded.
 
-In **Sprint 2**, they run **coverage and fraud classification in parallel**. A lightweight ensemble: rule-based checks (policy expired? deductible exceeded?) fired off automatically in the Cloud Pod. A LightGBM model trained on **5,000 historical cyber claims** predicts coverage likelihood with **95% precision**. Meanwhile, an Isolation Forest algorithm flags fraud rings by analyzing claimant phone numbers and repair shop links.
+In <strong>Sprint 2</strong>, they run <strong>coverage and fraud classification in parallel</strong>. A lightweight ensemble: rule-based checks (policy expired? deductible exceeded?) fired off automatically in the Cloud Pod. A LightGBM model trained on <strong>5,000 historical cyber claims</strong> predicts coverage likelihood with <strong>95% precision</strong>. Meanwhile, an Isolation Forest algorithm flags fraud rings by analyzing claimant phone numbers and repair shop links.
 
-The result? Low-risk claims zip straight to an automated offer generator. High-risk ones land on human desks with a fraud score pre-attached. No policy text raw parsing—just structured features. They retrain the model every 60 days and use **H2O Driverless AI** to auto-tune the ensemble and spin up a REST endpoint in under two weeks.
+The result? Low-risk claims zip straight to an automated offer generator. High-risk ones land on human desks with a fraud score pre-attached. No policy text raw parsing—just structured features. They retrain the model every 60 days and use <strong>H2O Driverless AI</strong> to auto-tune the ensemble and spin up a REST endpoint in under two weeks.
 
-Back in Des Moines, supervisors are already eyeing the last two bottlenecks—**negotiation and settlement (12%)** and the final **human handoff**—and betting they’ll collapse next quarter.
+Back in Des Moines, supervisors are already eyeing the last two bottlenecks—<strong>negotiation and settlement (12%)</strong> and the final <strong>human handoff</strong>—and betting they’ll collapse next quarter.
 
-**Rewritten paragraph:**
+<strong>Rewritten paragraph:</strong>
 
 The claims adjuster’s inbox was a graveyard of scattered emails, clunky spreadsheets, and PDFs stuffed with conflicting data—each claim a puzzle missing crucial pieces. Then came Sprint 3, when the team decided to stop duct-taping broken processes together. Instead, they built a single, low-code workspace where route, approval, and payment flowed like a well-oiled machine. No more jumping between systems, no more chasing down signatures. Just one screen, one click, and a claim closed before the insured could notice the delay.
 
@@ -300,7 +300,7 @@ The claims adjuster’s inbox was a graveyard of scattered emails, clunky spread
                 </div>
                 <p>Build (one-time) Typical payback</p>
 
-**Rewritten in front-line, journalistic style:**
+<strong>Rewritten in front-line, journalistic style:</strong>
 
 *Des Moines Claims Center, 2:47 PM—* The moment to deploy OCR + NLP extraction arrives when paper trails begin choking the workflow. At this claims desk, a stack of flood-damage affidavits just landed from Cedar Rapids—handwritten, date-stamped 9/11—which would take a clerk 47 minutes to transcribe by hand. Instead, the system is firing up: first the optical scanner at Terminal 12 ingests each page in 1.8 seconds flat, while the NLP engine on Node-7 starts parsing phrases like “basement submerged,” “insurance policy No. 46-857-Q,” and “total loss declared.” Within three minutes the structured data—policy ID, date of loss, descriptive peril—streams straight into the adjuster queue for Des Moines Zone-3. No more keystrokes, no more errors from a tired adjuster; just raw intel, fresh off the scanner, ready for the next storm surge.
 
@@ -310,17 +310,17 @@ Here’s a forward-looking revision that extrapolates trends while keeping the c
 
 ---
 
-*Included in most vendor stacks, with enterprise-grade offerings expected to range from **$250 K to $500 K by 2030**—a trajectory driven by escalating demand for AI-driven customization, tighter integration requirements, and the accelerating shift toward subscription-based hybrid models. The integration of predictive analytics and real-time adaptability tools will push baseline costs upward, while economies of scale in cloud-native deployments may moderate prices for mid-tier adopters. We’re still in the early innings of pricing fragmentation, with high-value niches (e.g., autonomous system orchestration) likely commanding premiums well beyond the current range.*
+*Included in most vendor stacks, with enterprise-grade offerings expected to range from <strong>$250 K to $500 K by 2030</strong>—a trajectory driven by escalating demand for AI-driven customization, tighter integration requirements, and the accelerating shift toward subscription-based hybrid models. The integration of predictive analytics and real-time adaptability tools will push baseline costs upward, while economies of scale in cloud-native deployments may moderate prices for mid-tier adopters. We’re still in the early innings of pricing fragmentation, with high-value niches (e.g., autonomous system orchestration) likely commanding premiums well beyond the current range.*
 
 ---
 
 This version:
-- **Projects cost inflation** based on current trends in AI/ML integration and vendor bundling.
-- **Introduces plausible moderating factors** (cloud economies, subscription models).
-- **Highlights emerging differentiators** (predictive analytics, real-time adaptability).
-- **Keeps technical accuracy** while expanding scope to second-order effects (pricing fragmentation).
+- <strong>Projects cost inflation</strong> based on current trends in AI/ML integration and vendor bundling.
+- <strong>Introduces plausible moderating factors</strong> (cloud economies, subscription models).
+- <strong>Highlights emerging differentiators</strong> (predictive analytics, real-time adaptability).
+- <strong>Keeps technical accuracy</strong> while expanding scope to second-order effects (pricing fragmentation).
 
-**Rewrite:**
+<strong>Rewrite:</strong>
 
 *Des Moines Claims Center, 3:47 PM Central Time—* Only if you’ve got rich network data—think call logs, email trails, or prior claims—are you looking at a 18–24 month timeline. Miss a single ping from a cell tower in Cedar Rapids, and that window stretches. Every piece of metadata counts.
 
