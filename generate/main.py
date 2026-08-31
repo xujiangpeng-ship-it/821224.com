@@ -106,6 +106,39 @@ DEFAULT_IMG_W = 800
 DEFAULT_IMG_H = 450
 
 
+
+def inject_csp(html_path):
+    """Inject CSP meta tag to override header CSP for widget scripts."""
+    try:
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html = f.read()
+        csp_value = (
+            "script-src 'self' 'unsafe-inline' "
+            "https://www.googletagmanager.com "
+            "https://pagead2.googlesyndication.com "
+            "https://static.cloudflareinsights.com "
+            "https://insurtech-cs-worker.wicro.workers.dev; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+            "font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data: https://pagead2.googlesyndication.com; "
+            "connect-src 'self' https://www.google-analytics.com "
+            "https://api.github.com "
+            "https://pagead2.googlesyndication.com "
+            "https://www.googletagmanager.com "
+            "https://insurtech-cs-worker.wicro.workers.dev; "
+            "frame-src https://pagead2.googlesyndication.com "
+            "https://insurtech-cs-worker.wicro.workers.dev;"
+        )
+        csp_meta = f'<meta http-equiv="Content-Security-Policy" content="{csp_value}">'
+        if 'Content-Security-Policy' not in html and '</head>' in html:
+            html = html.replace('</head>', csp_meta + '\n</head>')
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html)
+            logger.info('Injected CSP meta tag into %s', html_path)
+    except Exception as e:
+        logger.warning('Failed to inject CSP into %s: %s', html_path, e)
+
+
 def get_image_dimensions(src: str) -> tuple:
     """Resolve img src to local file, return (width, height) or defaults."""
     if not HAS_PIL:
@@ -675,6 +708,7 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     out_file = out_dir / "index.html"
     out_file.write_text(html, encoding="utf-8")
     inject_widget(out_file)
+    inject_csp(out_file)
 
     logger.info("Rendered: %s", out_file)
     return out_file, slug, title, description, subdomain_name, date_display
@@ -836,6 +870,7 @@ def rebuild_home(config) -> None:
     )
     (CONTENT_DIR / "index.html").write_text(html, encoding="utf-8")
     inject_widget(CONTENT_DIR / "index.html")
+    inject_csp(CONTENT_DIR / "index.html")
     logger.info("Rebuilt home page with %d articles (total: %d).", len(picked), total_count)
 
 
@@ -889,6 +924,7 @@ def rebuild_html_sitemap(config) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(html, encoding="utf-8")
     inject_widget(out_dir / "index.html")
+    inject_csp(out_dir / "index.html")
     logger.info("Rebuilt HTML sitemap with %d articles across %d categories.", len(all_articles), len(config["subdomains"]))
 
 
@@ -969,6 +1005,7 @@ def rebuild_category_pages(config) -> None:
             if page == 1:
                 (out_dir / "index.html").write_text(html, encoding="utf-8")
                 inject_widget(out_dir / "index.html")
+                inject_csp(out_dir / "index.html")
             else:
                 (out_dir / f"page{page}.html").write_text(html, encoding="utf-8")
 
