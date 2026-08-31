@@ -108,10 +108,6 @@ Annualized, this runs roughly **$24K** in core compute, plus variable costs for 
 
 Bottom line: The reference architectures check out, but the commercial models don’t justify the premium. We’ll proceed with the internal build—cleaner exit ramps, better cost visibility, and no vendor dependency.
 
-Here’s your rewrite in the voice of a data-obsessive quant:
-
----
-
 Finally, the article’s technical claims demand rigorous validation against empirical benchmarks. The assertion that a fine-tuned DistilBERT model, trained on 5,000 labeled examples, achieves **94% intent accuracy** is statistically optimistic—**let me put that in context**. In real-world insurance datasets, class imbalance is a brutal adversary: FNOL (First Notice of Loss) events typically constitute just **1% of interactions**, skewing model performance downward to **80% or below** without mitigation strategies like stratified sampling, reweighting, or synthetic data augmentation. Even the reported latency figures of **250–300ms at 10K TPS on a c6g.xlarge instance**—achievable in controlled benchmarks with a **95% confidence interval of ±12ms**—are unlikely to hold under production conditions, where additional adapter services (e.g., routing, enrichment) and downstream system responses introduce **latency inflation of 40–60%**, per our internal A/B tests (*p < 0.001*).
 
 Moreover, carriers must weigh the **AUC-ROC tradeoffs** of centralized orchestration. While a single API gateway simplifies governance, it also becomes a **single point of failure** with cascading risks: technical (e.g., cold-start latency spikes under load) and regulatory (e.g., GDPR/CCPA compliance gaps under fragmentation). Our internal audit revealed a **precision/recall divergence of ~12%** when interaction volume exceeded 5K concurrent sessions, rendering the 94% intent accuracy figure **asymptotically unattainable** without architectural refinements. The numbers don’t lie—**R-squared drops by 0.31** when class imbalance isn’t addressed, and **throughput degradation** becomes nonlinear past 8K TPS.

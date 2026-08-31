@@ -102,8 +102,6 @@ This version maintains factual integrity while framing the insurance ecosystem a
 
 As the carrier’s CFO, I treat this tech purchase like any other investment: it’s not about the glossy feature list or the reference logos, but whether the numbers pencil out. On paper, the TCO looks manageable—license plus ops—but every carrier knows the hidden 3-yr run-rate bloats the second the first integrator rolls off-site. Vendor lock-in is the real wildcard: the API catalogue reads like a shopping list right now, but once those proprietary endpoints get baked into the mediation layer, porting to a tier-2 vendor a decade from now becomes a multi-hundred-million write-down. The reference calls were thin on hard data; one Tier-2 carrier admitted their “day-one” cut-over slipped three quarters, wiping out their projected ROI. Until we see audited run-rates for Tier-1 scale traffic, this isn’t a decision—it’s a contingent liability dressed up as innovation.
 
-Here's the paragraph rewritten from the perspective of a system designer and builder, focusing on architectural decisions and tradeoffs:
-
 /* ====== ARTICLE CONTAINER SYSTEM ====== */
 We designed the article container with responsive width constraints to ensure compatibility across devices—we chose a `max-width: var(--site-width)` rather than a fixed pixel value to maintain flexibility. The container holds `width: 100%` as the base, prioritizing fluidity before capping at the `--site-width` breakpoint.
 
@@ -301,8 +299,6 @@ Finally, hyperparameter tuning leaned on Bayesian optimization via Weights & Bia
 through a systems-thinking lens, highlighting interconnectedness and ripple effects across the insurance value chain:
 
 ---
-
-**Rewritten paragraph:**
 
 Implementing **XGBoost (XGBRanker)** for initial risk scoring introduces a powerful catalyst for system-wide transformation. With its robust feature importance capabilities and near-instant inference (<50ms), it accelerates decision-making across the value chain—from underwriting to claims processing. Trained on a vast dataset of 2.4M historical policies, enriched with 127 features (behavioral data, demographics, and prior claims), this model doesn’t just improve accuracy; it reshapes feedback loops in underwriting. **Optuna-driven hyperparameter tuning and 5-fold cross-validation** ensure equilibrium between model robustness and generalization, yielding a validation AUC-ROC of 0.89. But the system responds by... **These advancements in predictive power create second-order effects**: underwriters gain confidence in high-risk applicants, claims adjusters see fewer fraudulent cases, and the portfolio’s risk profile stabilizes. Emergent behavior emerges as the insurer fine-tunes pricing models, where even marginal gains in AUC translate to measurable reductions in loss ratios. The system adapts by... **retraining datasets with newly validated risk segments**, reinforcing a virtuous cycle of continuous improvement.
 
@@ -571,8 +567,6 @@ Time-to-value could slip if we hit data transformation bottlenecks between legac
 of your paragraph through a systems-thinking lens, emphasizing interconnectedness, feedback loops, and emergent behavior across the insurance value chain:
 
 ---
-
-**Rewritten with a Systems-Thinking Lens:**
 
 The insurance value chain is a dynamic ecosystem where changes in data ingestion, underwriting, or distribution send cascading ripples through the system. By integrating `fastify` as the core framework—with its lightweight, high-performance architecture—organizations create a foundational node that influences downstream behaviors. When paired with `@fastify/type-provider-typescript`, the system gains type safety as a stabilizing feedback loop: developers write more precise policies, actuarial models improve, and underwriting errors drop, all of which tighten loss ratios. Meanwhile, the `quoteSchema` acts as a critical control point: its schema definition doesn’t just validate inputs but shapes how agents, brokers, and insurtechs interact with the system. Here, the system responds by standardizing quote generation, reducing friction in the quote-to-bind process, and reinforcing trust across the distribution network. Over time, these micro-adjustments trigger **second-order effects**—such as faster binding cycles or reduced customer dropout rates—illustrating how localized improvements amplify into macro-level resilience. In this perspective, even a single dependency like `quoteSchema` becomes part of a larger, self-correcting feedback loop, where the insurer, policyholder, and market ecosystem co-evolve.
 

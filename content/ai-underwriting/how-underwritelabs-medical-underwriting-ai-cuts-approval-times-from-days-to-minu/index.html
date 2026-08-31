@@ -204,10 +204,6 @@ We chose to store consent via `localStorage` rather than cookies to avoid unnece
 
 The navigation bar was designed to balance branding and usability. The logo dimensions (822x217) were optimized for sharp rendering across devices while maintaining load performance—using WebP format with lazy loading (`loading="lazy"`) reduced initial payload without sacrificing quality. The inner container’s constraints ensured the logo wouldn’t grow disproportionately on larger screens, keeping the layout predictable.
 
-Here's your paragraph rewritten in the grizzled voice of a battle-scarred insurance vet:
-
----
-
 <!-- CATEGORY NAVIGATION BAR -->
 <nav class="cat-bar" aria-label="Category navigation">
     <button class="cat-arrow cat-arrow-left" aria-label="Scroll left" onclick="document.getElementById('catTrack').scrollBy({left:-200,behavior:'smooth'})">&#8249;</button>
@@ -276,7 +272,7 @@ The constraint that shaped our architecture was the legacy PDF flood: 80 % of in
 <div class="article-content">
                 <h2>In April 2023 UnitedHealthcare quietly stopped accepting paper life-insurance applications for non-medical exams above $1 million. The reason wasn’t regulatory pressure; it was the backlog of underwriters still processing two-page paramed exams that had arrived in January. That same month, a midsize carrier in the Midwest told me its average medical underwriting cycle had stretched to 7.8 days because two of its three underwriters had quit. When I asked the incoming CTO what she was buying first, she said, “UnderwriteLab’s MedScore AI — but only if it can actually read an attending physician’s statement before the applicant dies of frustration.”</h2>
 
-**Rewritten in the voice of a battle-scarred insurance veteran:**
+**Rewritten **
 
 You want to know the hard truth? MedScore’s one of the first cloud-native tools that doesn’t just *help* with underwriting—it *replaces* human reviewers. Not the big, ugly cases where labs and para-medicals are involved, but the bread-and-butter stuff. No PDF is safe from its hungry maw—unstructured APS, physician’s statements, all of it. It chews through ICD-10 codes like they’re popcorn, maps them to your guidelines, and spits out an underwriting class before your coffee even gets cold. In my experience, I spent two weeks running 51 live apps through it while shadowing a senior underwriter at a $2B regional shop. And let me tell you, I’ve seen this movie before—some parts worked, some parts broke, and some costs you forgot to budget for. You’ll want to hear this before you blindly click "purchase."
 
@@ -291,10 +287,6 @@ You want to know the hard truth? MedScore’s one of the first cloud-native tool
 <p>Our rationale was two-fold: first, narrative sections past page 8 rarely contain tabular ICD-10 data, so the compute investment offered diminishing returns; second, the summarizer had already been tuned on the first eight pages, and we feared domain drift when it ingested later, more conversational prose. To avoid overfitting, we enforced a hard page cutoff and treated the remainder as unstructured text, feeding it to a separately optimized pipeline.</p>
 
 <p>The codes are mapped to the carrier’s underwriting manual in JSON format; the mapping table is versioned and auditable. A risk score is produced using a proprietary gradient-boosted model trained on 1.2 million policies underwritten since 2018.</p>
-
-Here’s your rewrite, channeled through the voice of a grizzled insurance veteran who’s watched too many “silver bullets” come and go:
-
----
 
 That recommendation gets pushed right back into the policy admin system—Guidewire, Duck Creek, whatever legacy pile we’re nursing this quarter. The benefit? We get a full paper trail of evidence this time, not just a lazy ICD code slapped in with a shrug. Sentence-level citations, proper substantiation. Not exactly groundbreaking, but at least it’s better than the black box we used to drag in.
 
@@ -397,15 +389,9 @@ We chose a minimal, inline interaction model for user feedback to avoid disrupti
 
 ---
 
-This version keeps the original intent (a simple feedback mechanism) while framing it in terms of tradeoffs and design rationale.
+This version keeps the original intent (a simple feeThe tone will carry the weight of cycles gone by, with phrases like *"I’ve seen this movie before"* and *"in my experience"* woven in while keeping all technical details intact.
 
-Understood! Please provide the paragraph you'd like rewritten, and I’ll adapt it in the voice of a battle-scarred insurance veteran—grounded, weary, yet sharp with experience. The tone will carry the weight of cycles gone by, with phrases like *"I’ve seen this movie before"* and *"in my experience"* woven in while keeping all technical details intact.
-
-Here’s the biographical note rewritten in the voice of a relentlessly data-driven analyst, heavy on metrics and statistical rigor:
-
----
-
-<section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
+Here’s the biographical note rewritten <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
             <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>
             <ul style="margin:0;padding-left:20px;color:#1E293B;line-height:1.85;font-size:0.95rem;">
             <li>In April 2023 UnitedHealthcare quietly stopped accepting paper life-insurance applications for non-medical exams above $1 million. The reason wasn’t regulatory pressure; it was the backlog of underwriters still processing two-page paramed exams that had arrived in January. That same month, a midsize carrier in the Midwest told me its average medical underwriting cycle had stretched to 7.8 days because two of its three underwriters had quit. When I asked the incoming CTO what she was buying first, she said, “UnderwriteLab’s MedScore AI — but only if it can actually read an attending physician’s statement before the applicant dies of frustration.”</li>
@@ -595,10 +581,6 @@ if ('serviceWorker' in navigator) {
    - *Why `/sw.js`?* It’s a lightweight manifest that caches static assets, though we considered scoped registrations initially to avoid cache pollution.
 
 This rewrite keeps all factual content intact while framing decisions from a builder’s perspective.
-
-Here’s your rewrite, channeling the grizzled voice of a seasoned insurance veteran who’s seen enough compliance cycles to know when a policy’s about to come back to bite someone:
-
----
 
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">

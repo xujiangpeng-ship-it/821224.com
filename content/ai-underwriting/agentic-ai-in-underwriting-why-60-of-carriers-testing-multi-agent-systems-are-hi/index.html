@@ -340,8 +340,6 @@ Critically, LangChain’s in-memory "context window," which maintains conversati
 <li><strong>Debugging:</strong> a single misfired event can orphan six interdependent pods. Finding the root cause requires grepping 400 logs across three namespaces and a Prometheus query that still returns “no data found.”</li>
 </ul>
 
-**Rewritten Paragraph:**
-
 Right now, at the claims center in Des Moines, a carrier we’re tracking recently wrangled this same bottleneck by shifting their state machine into a PostgreSQL advisory lock. The results are striking—latency just cratered from minutes down to 48 seconds, and their debug surface collapsed to a single table. But here’s the catch: the database is now the single chokepoint. When the primary instance in Chicago flips during failover, every in-flight submission freezes—leaving ops scrambling to manually replay each record before the claim pipeline seizes up again.
 
 <h2>The hidden variable: designing around model drift in the pricing engine</h2>
@@ -476,8 +474,6 @@ Would you like additional refinements (e.g., more citations, statistical elabora
 <p>The agent is not allowed to invent a new confidence interval; it can only choose from the ones the cat model provides. The legal team signs off on the distribution once; the agent’s role is constrained to a bounded optimization problem. This design reduced Munich Re’s legal review time from 45 hours to 2.3 hours.</p>
 
 <h2>Regulatory risk: the agent that cannot be audited</h2>
-
-**Rewritten paragraph:**
 
 By 2030, the EU’s AI Act will have forced the insurance industry to confront a fundamental tension: agents built from chained LLM calls may execute complex underwriting decisions in seconds, but their outputs remain fragmented fragments rather than a single explainable artifact. The trajectory suggests that early attempts to manually stitch together partial audit trails will collapse under volume, violating the Act’s mandate for “explainability within a reasonable time.” Unless automated reasoning layers emerge to consolidate fragmented LLM outputs into coherent, regulator-ready explanations, we're in the early innings of systemic non-compliance—where cutting-edge AI delivers efficiency but fails the transparency test incumbent on underwriting decisions.
 

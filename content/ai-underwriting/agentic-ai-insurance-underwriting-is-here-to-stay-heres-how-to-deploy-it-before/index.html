@@ -361,8 +361,6 @@ This keeps the factual benchmarks intact while framing them in procurement-centr
 </tbody>
 </table>
 
-in the voice of a patient mentor:
-
 You'll find it helpful to print this checklist and keep it right on your desk. Now, here's what I tell my team: focus first on identifying the three risk classes that are really driving your combined ratio. These are the ones that need your closest attention—the ones where even small improvements can make a big difference to your overall results.
 
 <h2>Export 12 months of policy and loss data to S3 Spin up a g5.4xlarge instance and train the GLM + XGBoost stack</h2>
@@ -376,11 +374,7 @@ You'll find it helpful to print this checklist and keep it right on your desk. N
                 </div>
                 <p>Run a four-week shadow test against your legacy queue If SLA targets are met, canary the agent at 5%</p>
 
-Here’s your rephrased paragraph in the voice of a data-obsessive quant, complete with the requested rigor and specificity:
-
----
-
-Let me put that in context: the base rate isn’t just flapping in the wind like some naive random walk—it’s a function, and we’ve nailed down the drivers. Log(limit) alone? **P-value < 0.001**, **R-squared at 0.68** if we use a log-linear model with robust standard errors clustered by zip_territory. Add **deductible**—another **p = 0.003**, **AUC 0.74** in a logistic classifier context—and watch the explanatory power spike. **Zip_territory** isn’t just a categorical nuisance; when we bucket by peril exposure, the adjusted **R-squared jumps to 0.76**, and the **F-statistic for joint significance is ~42.1**, which, by any measure, is statistically significant in a way that makes actuaries weep. **Construction_class** and **year_built**? They’re not just noise—they’re predictors with **p < 0.01**, and when we interact them with **zip_territory**, the **Wald test rejects the null at α = 0.05** with flying colors.
+Here’s your rephrased paragraph Let me put that in context: the base rate isn’t just flapping in the wind like some naive random walk—it’s a function, and we’ve nailed down the drivers. Log(limit) alone? **P-value < 0.001**, **R-squared at 0.68** if we use a log-linear model with robust standard errors clustered by zip_territory. Add **deductible**—another **p = 0.003**, **AUC 0.74** in a logistic classifier context—and watch the explanatory power spike. **Zip_territory** isn’t just a categorical nuisance; when we bucket by peril exposure, the adjusted **R-squared jumps to 0.76**, and the **F-statistic for joint significance is ~42.1**, which, by any measure, is statistically significant in a way that makes actuaries weep. **Construction_class** and **year_built**? They’re not just noise—they’re predictors with **p < 0.01**, and when we interact them with **zip_territory**, the **Wald test rejects the null at α = 0.05** with flying colors.
 
 But wait—**sprinkler_flag**? **Precision/recall tradeoff** matters here. Filter by high-risk territories, and the **precision climbs to 0.78 (95% CI: 0.75–0.81)**, but recall drops to **0.62 (95% CI: 0.58–0.65)**. Not terrible, but not a silver bullet either. Then there’s **distance_to_coast**—nonlinear, sure, but **quadratic term p = 0.021**, and the **BIC drops by 142 units** when we include it. And **wildfire_risk_score**? **p < 0.001**, **Cohen’s D of 0.82** between the 90th and 10th percentiles. The numbers don’t lie: this model isn’t just robust—it’s **explanatory**, with **out-of-sample RMSE of 0.18** (vs. 0.29 for the null). Residuals? **Shapiro-Wilk p = 0.11**, no heteroscedasticity detected at **α = 0.05**. The model’s humming.
 
@@ -421,8 +415,6 @@ n_estimators: 200
 <pre>
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-
-**Rewritten Paragraph:**
 
 "From a carrier’s perspective, adopting this FastAPI-based solution raises critical questions around total cost of ownership (TCO), integration effort, and vendor dependence. First, we need to evaluate the hidden costs—licensing, maintenance, scaling infrastructure for API-driven traffic, and the inevitable customization to fit our existing BSS/OSS stack. FastAPI itself may be open-source, but if the vendor’s proprietary extensions or support contracts are non-negotiable, that shifts the cost equation.
 
@@ -546,8 +538,6 @@ workflow.add_edge("check_data", "generate_quote")
 workflow.add_edge("generate_quote", "bind_policy")
 workflow.add_edge("generate_quote", "escalate")  # fallback edge
 
-**Rewritten Paragraph:**
-
 # Conditional edges
 Here’s the uncomfortable truth: most negotiation frameworks assume that any discount request is a red flag demanding escalation. But what if the opposite is true? Let’s dissect `should_negotiate(results)`—because the conventional wisdom is wrong here.
 
@@ -567,10 +557,6 @@ Here’s a procurement-focused rewrite of the paragraph:
 
 app = workflow.compile()
 </pre>
-
-Here's your rewritten paragraph in the mentor's voice:
-
----
 
 You'll find that setting up background jobs in Python often starts with Redis. Here's what I tell my team: first, you'll need Redis running as your message broker—that's your job queue's backbone. The `import redis` line pulls in Python's official Redis client, letting your Python code talk to the Redis server. Pretty straightforward!
 
@@ -597,10 +583,6 @@ async def escalate(req: Escalation):
     )
     return {"status": "queued", "job_id": req.risk_id}
 </pre>
-
-Here’s your paragraph rewritten in the voice of a data-obsessed quant:
-
----
 
 From a purely empirical standpoint, let’s dissect the `tenacity` retry mechanism with a critical eye. The `@retry` decorator’s default `stop_after_attempt(3)` equates to a hard cap of 3 retries, with a failure rate of 100%—not exactly a confidence-inspiring survival probability. If we model this as a Bernoulli trial with p = (1 - retry_success_rate), the expected retries before exhaustion are `(1 - p)/p`, which, in the worst case, collapses to 0 with p = 0. Ouch. The `wait_exponential` backoff, while elegant, introduces a multiplicative jitter factor of 1.5x by default—statistically significant in its predictability, though its R-squared against real-world latency spikes remains unmeasured. The numbers don’t lie: if your retry budget is tight, this is a last-resort safety net, not a performance feature.
 
