@@ -660,6 +660,7 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / "index.html"
     out_file.write_text(html, encoding="utf-8")
+    inject_widget(out_file)
 
     logger.info("Rendered: %s", out_file)
     return out_file, slug, title, description, subdomain_name, date_display
@@ -820,6 +821,7 @@ def rebuild_home(config) -> None:
         pagination=None,
     )
     (CONTENT_DIR / "index.html").write_text(html, encoding="utf-8")
+    inject_widget(CONTENT_DIR / "index.html")
     logger.info("Rebuilt home page with %d articles (total: %d).", len(picked), total_count)
 
 
@@ -951,6 +953,7 @@ def rebuild_category_pages(config) -> None:
             out_dir.mkdir(parents=True, exist_ok=True)
             if page == 1:
                 (out_dir / "index.html").write_text(html, encoding="utf-8")
+                inject_widget(out_dir / "index.html")
             else:
                 (out_dir / f"page{page}.html").write_text(html, encoding="utf-8")
 
@@ -960,6 +963,27 @@ def rebuild_category_pages(config) -> None:
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# Widget injection - auto-add chat widget to all generated HTML
+# ---------------------------------------------------------------------------
+_WIDGET_SCRIPT = (
+    '<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Insurtech Insights 助手"}</script>'
+    '<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>'
+)
+
+def inject_widget(html_path):
+    try:
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html = f.read()
+        if 'ChatWidgetConfig' not in html and '</body>' in html:
+            html = html.replace('</body>', _WIDGET_SCRIPT + chr(10) + '</body>')
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html)
+            logger.info('Injected widget into %s', html_path)
+    except Exception as e:
+        logger.warning('Failed to inject widget into %s: %s', html_path, e)
 
 def main():
     parser = argparse.ArgumentParser(description="Insurtech Insights Content Generator")
