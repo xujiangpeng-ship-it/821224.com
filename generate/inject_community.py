@@ -30,6 +30,7 @@ import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -163,6 +164,9 @@ def main():
             elif status == "empty":
                 stats["empty"] += 1
                 print(f"  empty     {subdomain}/{slug} (no relevant community content)")
+            # 限速：每篇之间停顿，避免批量回填触发 ScrapeCreators 速率限制（429）。
+            # 即使撞墙，build_community_section 的缓存会保留已成功的篇，重跑只补缺失。
+            time.sleep(4)
     print(f"\n[done] pending={stats['pending']} injected={stats['injected']} "
           f"empty={stats['empty']} already_or_old={stats['skip']}")
 

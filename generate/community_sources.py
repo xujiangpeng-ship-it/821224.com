@@ -48,8 +48,10 @@ except Exception:  # 允许单独运行
     cfg = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cfg)
 
-PROXY = os.environ.get("COMMUNITY_PROXY", "http://127.0.0.1:10809")
-HTTP_PROXIES = {"http": PROXY, "https": PROXY}
+# 本地沙箱出网需要代理；GitHub Actions 等 CI 环境无此代理，必须直连。
+# 只有显式设置 COMMUNITY_PROXY 时才走代理，否则 requests 走系统默认（直连）。
+PROXY = os.environ.get("COMMUNITY_PROXY")
+HTTP_PROXIES = {"http": PROXY, "https": PROXY} if PROXY else None
 REQ_TIMEOUT = 20
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "

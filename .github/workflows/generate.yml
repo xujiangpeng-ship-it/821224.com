@@ -35,12 +35,14 @@ jobs:
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          COMMUNITY_ENABLE: "1"
+          SCRAPECREATORS_API_KEY: ${{ secrets.SCRAPECREATORS_API_KEY }}
         run: python generate/main.py --count 1
 
       - name: Commit and push
         run: |
           git config user.name "content-bot"
           git config user.email "bot@insurtechinsights.com"
-          git add content/ keywords/ generate/
+          git add content/ keywords/
           git diff --staged --quiet || git commit -m "auto: content batch $(date +%Y-%m-%dT%H:%M:%S)"
           git push

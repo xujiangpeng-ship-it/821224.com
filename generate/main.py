@@ -19,17 +19,17 @@ from xml.sax.saxutils import escape as escape_xml
 import yaml
 from jinja2 import Environment, FileSystemLoader
 
-from llm import generate_text
-from pipeline.deai import deai_process
-from pipeline.generator_v2 import enhance_article
-
-# Community-perspectives block (真人讨论策展，提升 E-E-A-T)。
+# Community-perspectives block（真人讨论策展，提升 E-E-A-T）。
 # build_community_section 默认不调 API（需 COMMUNITY_ENABLE=1 + 主题在允许列表），
 # 失败/未启用时返回 "" —— 绝不阻断文章生成。
 try:
     from community_sources import build_community_section
 except Exception:  # 模块缺失不致命
     build_community_section = None
+
+from llm import generate_text
+from pipeline.deai import deai_process
+from pipeline.generator_v2 import enhance_article
 
 # PIL for image dimension retrieval (WebP width/height injection)
 try:
@@ -48,28 +48,6 @@ logger = logging.getLogger("main")
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 CONTENT_DIR = ROOT / "content"
-# ---------------------------------------------------------------------------
-# Chat Widget Injection
-# ---------------------------------------------------------------------------
-_WIDGET_SCRIPT = (
-    '<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>'
-    '<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>'
-)
-
-def inject_widget(html_path):
-    """Inject chat widget script before </body> tag."""
-    try:
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html = f.read()
-        if 'ChatWidgetConfig' not in html and '</body>' in html:
-            html = html.replace('</body>', _WIDGET_SCRIPT + '\n</body>')
-            with open(html_path, 'w', encoding='utf-8') as f:
-                f.write(html)
-        logger.info('Injected widget into %s', html_path)
-    except Exception as e:
-        logger.warning('Failed to inject widget into %s: %s', html_path, e)
-
-
 
 CATEGORY_HERO = {
     "ai-claims": {
@@ -112,39 +90,6 @@ TEMPLATES_DIR = ROOT / "templates"
 
 DEFAULT_IMG_W = 800
 DEFAULT_IMG_H = 450
-
-
-
-def inject_csp(html_path):
-    """Inject CSP meta tag to override header CSP for widget scripts."""
-    try:
-        with open(html_path, 'r', encoding='utf-8') as f:
-            html = f.read()
-        csp_value = (
-            "script-src 'self' 'unsafe-inline' "
-            "https://www.googletagmanager.com "
-            "https://pagead2.googlesyndication.com "
-            "https://static.cloudflareinsights.com "
-            "https://insurtech-cs-worker.wicro.workers.dev; "
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-            "font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: https://pagead2.googlesyndication.com; "
-            "connect-src 'self' https://www.google-analytics.com "
-            "https://api.github.com "
-            "https://pagead2.googlesyndication.com "
-            "https://www.googletagmanager.com "
-            "https://insurtech-cs-worker.wicro.workers.dev; "
-            "frame-src https://pagead2.googlesyndication.com "
-            "https://insurtech-cs-worker.wicro.workers.dev;"
-        )
-        csp_meta = f'<meta http-equiv="Content-Security-Policy" content="{csp_value}">'
-        if 'Content-Security-Policy' not in html and '</head>' in html:
-            html = html.replace('</head>', csp_meta + '\n</head>')
-            with open(html_path, 'w', encoding='utf-8') as f:
-                f.write(html)
-            logger.info('Injected CSP meta tag into %s', html_path)
-    except Exception as e:
-        logger.warning('Failed to inject CSP into %s: %s', html_path, e)
 
 
 def get_image_dimensions(src: str) -> tuple:
@@ -653,45 +598,22 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     date_iso = now.strftime("%Y-%m-%dT%H:%M:%S+00:00")
     date_display = now.strftime("%B %d, %Y")
 
-    adsense = config.get("adsense", {})
-    pub_id = adsense.get("pub_id", "")
-    ad_slots = adsense.get("ad_units", {})
+    content_first, content_rest = split_content_at_third(html_body)
 
-    # ── ROOT-CAUSE FIX: HTML <head> pollution ─────────────────────────────────
-    # Previously the FULL rendered HTML document (including the <head> with the
-    # title / meta description / canonical / Open Graph tags) was handed to the
-    # LLM, and Pass 2's "Output the complete enhanced article" instruction made
-    # the model rewrite or drop the <head> — producing pages with a destroyed or
-    # missing <head> (the 34 broken articles seen in the Aug 2026 cleanup).
-    #
-    # We now enhance ONLY the article BODY, then re-render the template, so the
-    # <head> is always the pristine template output and can never be corrupted by
-    # the LLM. As a safety net we also strip any code fences / chatbot preamble /
-    # stray full-document wrapper that the model might still return.
-    os.environ.setdefault("MISTRAL_API_KEY", "DaqhV9nv9V228XEPUWm52Rqsj8rpJbS4")
-    v2_result = enhance_article(html_body)
-    enhanced_body = v2_result["enhanced_text"]
-    enhanced_body = _clean_llm_body_response(enhanced_body) if enhanced_body else ""
-    if not enhanced_body or len(enhanced_body) < 200:
-        logger.warning(
-            "enhance_article returned unusable body (len=%d) — falling back to clean body. "
-            "stance=%s, personas=%s",
-            len(enhanced_body) if enhanced_body else 0,
-            v2_result["stance_used"], v2_result["personas_used"]
-        )
-        enhanced_body = html_body
-
-    content_first, content_rest = split_content_at_third(enhanced_body)
-
-    # 社区视角区块：按子域名路由抓取真人讨论（带缓存 + 开关，默认关闭）。
+    # Community perspectives（真人讨论策展）。仅在启用且主题命中时调用；
+    # 任何异常都吞掉，保证文章照常生成。
     community_section = ""
     if build_community_section is not None:
         try:
             community_section = build_community_section(
-                subdomain, title, slug, keyword_entry.get("keyword", ""))
+                subdomain, title, slug, keyword_entry["keyword"])
         except Exception as e:
-            logger.warning("community section skipped: %s", e)
+            logger.warning("community_section skipped: %s", e)
             community_section = ""
+
+    adsense = config.get("adsense", {})
+    pub_id = adsense.get("pub_id", "")
+    ad_slots = adsense.get("ad_units", {})
 
     html = jinja_env.get_template("article.html").render(
         site_name=config["site"]["name"],
@@ -703,11 +625,11 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
         keyword=keyword_entry["keyword"],
         content_first=content_first,
         content_rest=content_rest,
-        community_section=community_section,
         date_iso=date_iso,
         date_display=date_display,
         subdomain=subdomain,
         subdomain_name=subdomain_name,
+        community_section=community_section,
         adsense_pub_id=pub_id or None,
         ad_slot_top=ad_slots.get("top_banner", {}).get("slot", ""),
         ad_slot_in=ad_slots.get("in_content", {}).get("slot", ""),
@@ -719,6 +641,24 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     # Apply de-AI post-processing to disrupt LLM-detectable patterns
     html = deai_process(html)
 
+    # Save clean pre-enhance copy as fallback
+    html_before_enhance = html
+
+    # Apply stance injection + persona blending (generator_v2)
+    os.environ.setdefault("MISTRAL_API_KEY", "DaqhV9nv9V228XEPUWm52Rqsj8rpJbS4")
+    v2_result = enhance_article(html)
+    html = v2_result["enhanced_text"]
+
+    # Final guard: if enhance_article returned polluted output (missing DOCTYPE),
+    # fall back to the clean Jinja2-rendered HTML
+    if not re.search(r'<!DOCTYPE\s+html|<html[\s>]', html, re.IGNORECASE):
+        logger.warning(
+            "enhance_article output missing DOCTYPE/html tag — falling back to clean rendered HTML. "
+            "stance=%s, personas=%s",
+            v2_result["stance_used"], v2_result["personas_used"]
+        )
+        html = html_before_enhance
+
     logger.info("enhance_article: stance=%s, personas=%s, llm=%s",
                 v2_result["stance_used"], v2_result["personas_used"], v2_result["llm_called"])
 
@@ -726,8 +666,6 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / "index.html"
     out_file.write_text(html, encoding="utf-8")
-    inject_widget(out_file)
-    inject_csp(out_file)
 
     logger.info("Rendered: %s", out_file)
     return out_file, slug, title, description, subdomain_name, date_display
@@ -888,8 +826,6 @@ def rebuild_home(config) -> None:
         pagination=None,
     )
     (CONTENT_DIR / "index.html").write_text(html, encoding="utf-8")
-    inject_widget(CONTENT_DIR / "index.html")
-    inject_csp(CONTENT_DIR / "index.html")
     logger.info("Rebuilt home page with %d articles (total: %d).", len(picked), total_count)
 
 
@@ -942,8 +878,6 @@ def rebuild_html_sitemap(config) -> None:
     out_dir = CONTENT_DIR / "sitemap"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(html, encoding="utf-8")
-    inject_widget(out_dir / "index.html")
-    inject_csp(out_dir / "index.html")
     logger.info("Rebuilt HTML sitemap with %d articles across %d categories.", len(all_articles), len(config["subdomains"]))
 
 
@@ -1023,8 +957,6 @@ def rebuild_category_pages(config) -> None:
             out_dir.mkdir(parents=True, exist_ok=True)
             if page == 1:
                 (out_dir / "index.html").write_text(html, encoding="utf-8")
-                inject_widget(out_dir / "index.html")
-                inject_csp(out_dir / "index.html")
             else:
                 (out_dir / f"page{page}.html").write_text(html, encoding="utf-8")
 
