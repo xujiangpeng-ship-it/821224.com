@@ -23,6 +23,14 @@ from llm import generate_text
 from pipeline.deai import deai_process
 from pipeline.generator_v2 import enhance_article
 
+# Community-perspectives block (真人讨论策展，提升 E-E-A-T)。
+# build_community_section 默认不调 API（需 COMMUNITY_ENABLE=1 + 主题在允许列表），
+# 失败/未启用时返回 "" —— 绝不阻断文章生成。
+try:
+    from community_sources import build_community_section
+except Exception:  # 模块缺失不致命
+    build_community_section = None
+
 # PIL for image dimension retrieval (WebP width/height injection)
 try:
     from PIL import Image
@@ -675,6 +683,16 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
 
     content_first, content_rest = split_content_at_third(enhanced_body)
 
+    # 社区视角区块：按子域名路由抓取真人讨论（带缓存 + 开关，默认关闭）。
+    community_section = ""
+    if build_community_section is not None:
+        try:
+            community_section = build_community_section(
+                subdomain, title, slug, keyword_entry.get("keyword", ""))
+        except Exception as e:
+            logger.warning("community section skipped: %s", e)
+            community_section = ""
+
     html = jinja_env.get_template("article.html").render(
         site_name=config["site"]["name"],
         subdomains=config["subdomains"],
@@ -685,6 +703,7 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
         keyword=keyword_entry["keyword"],
         content_first=content_first,
         content_rest=content_rest,
+        community_section=community_section,
         date_iso=date_iso,
         date_display=date_display,
         subdomain=subdomain,

@@ -156,6 +156,14 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
         .article-content th,.article-content td{border:1px solid var(--border);padding:10px 14px;text-align:left;vertical-align:top}
         .article-content th{background:var(--border-light);font-weight:600;color:var(--navy);font-size:0.88rem}
         .article-content tr:nth-child(even){background:var(--bg)}
+        .community-perspectives{max-width:var(--content-width);margin:44px auto 0;padding:28px 24px;border:1px solid #e2e8f0;border-radius:var(--radius-md);background:#f8fafc}
+        .community-perspectives h2{font-size:1.3rem;font-weight:700;color:var(--navy);margin:0 0 6px}
+        .community-perspectives .community-note{font-size:0.85rem;color:var(--muted);margin:0 0 18px;line-height:1.6}
+        .community-perspectives .community-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
+        .community-perspectives .community-list li{margin:0}
+        .community-perspectives blockquote{margin:0;padding:14px 18px;border-left:3px solid var(--accent);background:#fff;border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:var(--text-secondary);font-style:italic;font-size:0.98rem;line-height:1.7}
+        .community-perspectives cite{display:block;margin-top:8px;font-size:0.82rem;color:var(--muted);font-style:normal}
+        .community-perspectives cite a{color:var(--accent);text-decoration:underline}
 
         /* ====== AD ====== */
         .ad-slot{background:var(--accent-light);border:1px dashed var(--accent);border-radius:var(--radius-md);padding:16px;text-align:center;margin:32px 0;color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;min-height:60px;display:flex;align-items:center;justify-content:center}
@@ -270,6 +278,8 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 </div>
                 {{ content_rest }}
             </div>
+
+            <!-- COMMUNITY-SECTION-START -->{{ community_section | safe }}<!-- COMMUNITY-SECTION-END -->
 
             {% if ad_slot_bottom %}
             <div class="ad-slot">AD – Responsive Bottom ({{ ad_slot_bottom }})</div>
