@@ -64,7 +64,6 @@ Delta Avg. cycle time
 180 min 8.4 min
 –95 % False positives
 
-
 21 % 11 %
 
 –10 ppt Manual review rate
@@ -83,14 +82,10 @@ Direct KYC cost reduction: $18 M Conversion uplift (7 % on 2.4 M): $168 M in inc
 Fraud loss reduction: $42 M (based on 2023 Coalition claims data) Net annual value: $228 M
 
 
-
-
 Payback on a $2 M AI stack is 
 You do not need a full digital transformation to get value. A pragmatic six-week sprint looks like this: Week 1–2: Data mapping & graph build
 Extract the last 12 months of KYC logs from the policy admin system. Map every field to a canonical schema. Then spin up a managed identity graph and run a one-time join. Expect 25–30 % more identities resolved on day one.
 Week 3–4: RL rules engine prototype
-
-
 
 
 Start with a no-code RL service (DataRobot, H2O.ai, or AWS SageMaker RL). Feed the last six months of manual override data. Train a simple ε-greedy agent that adjusts only the sanctions stringency and identity-strength thresholds. Measure on a 20 % holdout sample.
@@ -98,31 +93,25 @@ Week 5: Smart OCR pilot Pick one document type—driver’s license or utility b
 If the false-negative rate on fraudulent docs is >5 %, iterate the model; otherwise push to production with an A/B flag. Week 6: Continuous sanctions refresh
 Subscribe to a nightly sanctions graph feed (or use a managed service). Run a cosine similarity job against applicant embeddings. Push alerts to the underwriting queue only when the score crosses a predefined threshold per segment. Key integration points:
 
-
 PAS ↔ Identity graph: REST webhook on policy bind request RL agent ↔ PAS: Real-time policy decision point (PDP) via JSON API
 Sanctions graph ↔ PAS: Async nightly batch, push to underwriting dashboard What can still go wrong
 Even with the AI stack, three failure modes persist: 1. Model drift in sanctions screening
 Sanctions lists change daily. A 2023 Oliver Wyman report found 12 % of false positives were due to stale sanctions data that had already been delisted [Oliver Wyman 2023]. Mitigation: implement a nightly re-scoring pipeline and push deltas to the underwriting queue within 2 hours.
-
 
 2. Cold-start on new products
 When a carrier launches a new cyber product with a novel risk profile, the RL agent has no historical overrides to learn from. The early manual review rate can spike to 30 %. Mitigation: seed the RL model with synthetic data generated from a rules-based fallback until 500 genuine overrides accumulate.
 3. Regulatory backlash on biometric consent
 A Florida appellate court ruled in 2024 that one insurer’s selfie consent form did not meet BIPA standards [Florida 5D20-22]. Mitigation: move to a two-step consent flow—first collect the biometric sample, then present the consent screen with a 2-second display timer to prove user interaction.
 
-
 Vendor shortlist with hard numbers Vendor
 Identity Graph RL Rules Engine
 Smart OCR Sanctions Refresh
 Avg. Cost per KYC Time to Deploy
 
-
 Socure ✓
 ✓ (via SageMaker) ✕
 ✓ $0.07
 4 weeks ID.me
-
-
 
 
 ✓ ✕
@@ -131,7 +120,6 @@ Socure ✓
 $0.11 6 weeks
 Ekdata ✓
 ✕ ✕
-
 
 ✓ $0.05
 
@@ -156,7 +144,6 @@ Conversion uplift pays for the new stack: 7 % on $10 B GWP is $700 M. Even a 2 %
 What the CTO should ask before signing Before you green-light any vendor, force the demo on your own production data, not a sandbox. Ask:
 “Show me the false-positive rate on my last 100 KYC declines.” If the vendor refuses to ingest your data, walk away. “What’s the incremental lift over the rules engine I already paid for?” A lift 
 “Where is the model’s explainability layer?” Under EIOPA’s AI governance rules, you need to produce a rationale for every automated decision. If the vendor only offers a black-box score, you’ll fail an audit. “What’s the exit cost?” Vendor lock-in manifests as egress fees, data portability limits, or API deprecation timelines. Demand a 30-day data export clause.
-
 
 Endgame: KYC as a profit center In 2025, the carriers treating KYC as a cost center will lose market share to those treating it as a revenue lever. Lemonade’s 15-minute onboarding is not magic; it’s a stack that:
 reduces data collection steps from 13 to 5, cuts manual review from 18 % to 9 %,
@@ -559,16 +546,9 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
-
-
 <table>
 <thead>
 <tr>
-
-
-
-
 
 
 
@@ -579,7 +559,8 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
+</tr>
+<tr>
 
 
 
@@ -588,34 +569,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
-
-
-
 </tr>
 <tr>
 
 
 
-
-
-
-
 </tr>
 <tr>
-
-
-
-
-
-
-
-</tr>
-<tr>
-
-
-
-
 
 
 
@@ -624,35 +584,19 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </table>
 
 
-
-
-
 <ul>
 
-
-
 </ul>
-
-
-
 
 
 <ol>
 
 
-
-
 </ol>
-
-
 
 <ul>
 
-
-
 </ul>
-
-
 
 
             
@@ -785,7 +729,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -800,8 +743,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>

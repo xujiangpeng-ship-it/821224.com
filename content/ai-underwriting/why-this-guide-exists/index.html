@@ -282,16 +282,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 <h2>Why This Guide Exists</h2>
 
 
-
-
-
 <p>Insurers that bet $500 million on ML-driven pricing models without proper guardrails saw their combined ratio rise by 12 points within two years. In 2023, the NAIC market conduct database flagged 18 pricing-related violations where carriers couldn’t explain model decisions to regulators. I’ve reviewed a dozen implementations and the difference between a 3-point lift in loss ratio and a regulatory fine often comes down to whether the team treated pricing as a modeling exercise or a governance nightmare.</p>
-
-
-
-
-
-
 
 
 
@@ -300,16 +291,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h2>Who This Is For</h2>
 
 
-
-
-
 <p>You’re a pricing actuary or data science lead at a Tier-2 or Tier-3 P/C insurer. You must ship a GLM-grade model that auditors and regulators will accept. You have 3–6 months, a $75k cloud budget, and a compliance team that will veto anything without lineage, explainability, and rate manual integration. You’re not here to build the next Lemonade; you’re here to ship something that underpins a product filing in two states next quarter.</p>
-
-
-
-
-
-
 
 
 
@@ -318,58 +300,28 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h2>What “ML Pricing” Actually Means in Insurance</h2>
 
 
-
-
-
 <p>Real insurance ML pricing models are hybrid GLM-ML ensembles: GLMs for regulatory filings, ML for signal extraction, and strict post-processing to keep rates monotonic and file-ready. Anything else is a toy. I’ve seen teams waste six months on a pure XGBoost model only to retool it into a GLM-calibrated ensemble when the filing department rejected the “black box” label.</p>
-
-
-
 
 
 <p>Key constraints:</p>
 
 
-
-
-
 <ul>
-
-
-
 
 
 <li>Rate manuals require explicit factors and ranges, not feature importance charts.</li>
 
 
-
-
-
 <li>Regulatory filings demand “as if” GLM documentation for every parameter.</li>
-
-
-
 
 
 <li>Underwriting guidelines must map directly to model outputs without manual overrides 80% of the time.</li>
 
 
-
-
-
 <li>You cannot retrain daily; quarterly or monthly is the realistic cadence for most carriers.</li>
 
 
-
-
-
 </ul>
-
-
-
-
-
-
 
 
 
@@ -378,76 +330,37 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h3>Trade-offs You Must Accept Day One</h3>
 
 
-
-
-
 <p>If you choose pure ML:</p>
 
 
-
-
-
 <ul>
-
-
-
 
 
 <li>You’ll need a parallel GLM for filings (doubles maintenance).</li>
 
 
-
-
-
 <li>You’ll lose monotonicity guarantees unless you bake them in (extra constraints = slower training).</li>
-
-
-
 
 
 <li>Regulators will ask for “model cards” and you’ll have to generate them from feature attribution outputs.</li>
 
 
-
-
-
 </ul>
-
-
-
 
 
 <p>If you choose hybrid GLM-ML:</p>
 
 
-
-
-
 <ul>
-
-
-
 
 
 <li>You’ll spend 40% of effort aligning ML signals with GLM factors.</li>
 
 
-
-
-
 <li>You’ll need a rollback mechanism when ML signals drift beyond GLM tolerance.</li>
 
 
-
-
-
 </ul>
-
-
-
-
-
-
 
 
 
@@ -456,49 +369,25 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h2>Step 1: Data Assembly — The 90-Day Grind</h2>
 
 
-
-
-
 <p>I’ve reviewed six pricing implementations that stalled before modeling because the data team treated “loss runs” as a single table. It’s not. You need:</p>
-
-
-
 
 
 <ul>
 
 
-
-
-
 <li>Historical policy-level exposure, premium, and loss data (minimum 5 years, ideally 7+).</li>
-
-
-
 
 
 <li>Detailed claims data with paid loss, open reserves, and claim attributes (injury type, attorney involvement, repair cost drivers).</li>
 
 
-
-
-
 <li>External data: credit scores, property characteristics, telematics snapshots, and bureau data (CLUE, MVR, ISO).</li>
-
-
-
 
 
 <li>Underwriting rules in force at policy inception (not just current rules).</li>
 
 
-
-
-
 <li>Regulatory rate filings for the same period to audit against approved rates.</li>
-
-
-
 
 
 </ul>
@@ -507,265 +396,130 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
-
-
-
-
-
 <table>
-
-
-
 
 
 <thead>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <th>Data Asset</th>
 
 
-
-
-
 <th>Granularity</th>
-
-
-
 
 
 <th>Retention</th>
 
 
-
-
-
 <th>Typical Cleaning Effort</th>
 
 
-
-
-
 </tr>
-
-
-
 
 
 </thead>
 
 
-
-
-
 <tbody>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>Policy Master</td>
 
 
-
-
-
 <td>Policy + Coverage + Endorsements</td>
-
-
-
 
 
 <td>10 years</td>
 
 
-
-
-
 <td>3–4 weeks (merge endorsements, handle mid-term changes)</td>
-
-
-
 
 
 </tr>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>Loss Runs</td>
 
 
-
-
-
 <td>Claim + Transaction + Reserve</td>
-
-
-
 
 
 <td>7 years</td>
 
 
-
-
-
 <td>6–8 weeks (close open claims, adjust paid vs. incurred, handle salvage)</td>
-
-
-
 
 
 </tr>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>Bureau Data</td>
 
 
-
-
-
 <td>Annual snapshot per policy</td>
-
-
-
 
 
 <td>5 years</td>
 
 
-
-
-
 <td>2–3 weeks (standardize codes, impute missing)</td>
-
-
-
 
 
 </tr>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>Telematics</td>
 
 
-
-
-
 <td>Trip-level + aggregated scores</td>
-
-
-
 
 
 <td>3 years rolling</td>
 
 
-
-
-
 <td>4–6 weeks (filter low-mileage outliers, align to policy periods)</td>
 
 
-
-
-
 </tr>
-
-
-
 
 
 <tr>
 
 
-
-
-
 <td>Rate Manuals</td>
-
-
-
 
 
 <td>State + Coverage + Factor + Effective Date</td>
 
 
-
-
-
 <td>Current + 2 prior versions</td>
-
-
-
 
 
 <td>1–2 weeks (parse PDFs or extract from legacy systems)</td>
 
 
-
-
-
 </tr>
-
-
-
 
 
 </tbody>
 
 
-
-
-
 </table>
-
-
-
-
-
-
 
 
 
@@ -777,49 +531,22 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
-
-
-
-
-
 <h3>Critical Data Quality Checks</h3>
-
-
-
 
 
 <ol>
 
 
-
-
-
 <li><strong>Premium leakage check:</strong> Compare written premium in policy data vs. GL. If >2% variance, flag for root cause before modeling.</li>
-
-
-
 
 
 <li><strong>Loss ratio sanity:</strong></li>
 
 
-
-
-
 <li>Compute LR by state-coverage-year. If any cell is <30% or >150% without clear justification, investigate data gaps (e.g., closed claims not booked).</li>
 
 
-
-
-
 </ol>
-
-
-
-
-
-
 
 
 
@@ -831,73 +558,34 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
-
-
-
-
-
 <h3>Tier 1: Core Pricing Features</h3>
-
-
-
 
 
 <p>These are the GLM factors you’ll calibrate later. The ML part extracts signals from them.</p>
 
 
-
-
-
 <ul>
-
-
-
 
 
 <li><code>age</code>, <code>gender</code>, <code>marital_status</code></li>
 
 
-
-
-
 <li><code>zip3</code> (3-digit ZIP for territory granularity)</li>
-
-
-
 
 
 <li><code>vehicle_age</code>, <code>vehicle_value</code>, <code>vehicle_symbol</code></li>
 
 
-
-
-
 <li><code>limit_liability</code>, <code>limit_comp</code></li>
-
-
-
 
 
 <li><code>years_licensed</code>, <code>mvr_points</code></li>
 
 
-
-
-
 <li><code>credit_score_tier</code> (FICO 8, VantageScore 4)</li>
 
 
-
-
-
 </ul>
-
-
-
-
-
-
 
 
 
@@ -906,70 +594,34 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h3>Tier 2: External Signals</h3>
 
 
-
-
-
 <p>These are the ML differentiators. Treat them as “feature candidates” until you prove lift.</p>
-
-
-
 
 
 <ul>
 
 
-
-
-
 <li><code>property_age</code> (from public records)</li>
-
-
-
 
 
 <li><code>crime_score_zip3</code> (neighborhood risk)</li>
 
 
-
-
-
 <li><code>telematics_risk_score</code> (aggregated from trip data)</li>
-
-
-
 
 
 <li><code>bureau_mvr_count_last3y</code></li>
 
 
-
-
-
 <li><code>iso_protection_class</code></li>
-
-
-
 
 
 <li><code>flood_zone</code> (FEMA data)</li>
 
 
-
-
-
 <li><code>fire_district_score</code> (ISO fire suppression)</li>
 
 
-
-
-
 </ul>
-
-
-
-
-
-
 
 
 
@@ -985,46 +637,22 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 <p>Build these in a feature store. Do not recalc on every model run.</p>
 
 
-
-
-
 <ul>
-
-
-
 
 
 <li><code>age_times_credit_score</code> (nonlinear term)</li>
 
 
-
-
-
 <li><code>vehicle_value_over_limit</code> (exposure signal)</li>
-
-
-
 
 
 <li><code>years_licensed_over_vehicle_age</code> (young driver penalty attenuation)</li>
 
 
-
-
-
 <li><code>territory_crime_times_vehicle_symbol</code> (high crime + flashy car interaction)</li>
 
 
-
-
-
 </ul>
-
-
-
-
-
-
 
 
 
@@ -1033,43 +661,22 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h3>Temporal Features (The Silent Killer)</h3>
 
 
-
-
-
 <p>Your loss data is time-dependent. If you don’t encode time explicitly, your model will learn spurious trends.</p>
-
-
-
 
 
 <ul>
 
 
-
-
-
 <li><code>policy_effective_year</code> (categorical)</li>
-
-
-
 
 
 <li><code>vintage_month</code> (policy age in months)</li>
 
 
-
-
-
 <li><code>inflation_adj_factor</code> (claims paid vs. CPI)</li>
 
 
-
-
-
 <li><code>cat_event_flag</code> (CAT year dummy)</li>
-
-
-
 
 
 </ul>
@@ -1078,22 +685,10 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-
-
-
-
-
-
 <h3>Code Snippet: Feature Store Ingestion (Python)</h3>
 
 
-
-
-
 <pre><code>import pandas as pd
-
-
-
 
 
 from feast import FeatureStore
@@ -1102,16 +697,7 @@ from feast import FeatureStore
 
 
 
-
-
-
-
-
-
 # Load policy data with features
-
-
-
 
 
 policy_df = pd.read_parquet("data/policy_master_clean.parquet")
@@ -1120,46 +706,22 @@ policy_df = pd.read_parquet("data/policy_master_clean.parquet")
 
 
 
-
-
-
-
-
-
 # Define features
-
-
-
 
 
 features = {
 
 
-
-
-
     "driver": ["age", "gender", "credit_score_tier"],
-
-
-
 
 
     "vehicle": ["vehicle_age", "vehicle_value", "vehicle_symbol"],
 
 
-
-
-
     "territory": ["zip3", "crime_score_zip3", "flood_zone"],
 
 
-
-
-
     "temporal": ["policy_effective_year", "vintage_month"]
-
-
-
 
 
 }
@@ -1168,37 +730,16 @@ features = {
 
 
 
-
-
-
-
-
-
 # Initialize Feast and push to online store
-
-
-
 
 
 fs = FeatureStore(repo_path="feature_repo")
 
 
-
-
-
 fs.materialize_incremental("2024-01-01")
 
 
-
-
-
 </code></pre>
-
-
-
-
-
-
 
 
 
@@ -1210,19 +751,7 @@ fs.materialize_incremental("2024-01-01")
 
 
 
-
-
-
-
-
-
 <h2>Step 3: Target Construction — The Art of Defining “Good”</h2>
-
-
-
-
-
-
 
 
 
@@ -1231,16 +760,7 @@ fs.materialize_incremental("2024-01-01")
 <h3>Option A: Pure Loss Ratio Target (Simple, Risky)</h3>
 
 
-
-
-
 <p>Target = incurred losses / earned premium. Problem: noisy at policy level, sensitive to reserve changes. Regulators hate it.</p>
-
-
-
-
-
-
 
 
 
@@ -1249,37 +769,19 @@ fs.materialize_incremental("2024-01-01")
 <h3>Option B: Loss Cost Plus LAE (Recommended)</h3>
 
 
-
-
-
 <p>Target = (incurred_loss + allocated_LAE) / on_level_exposure. Why?</p>
-
-
-
 
 
 <ul>
 
 
-
-
-
 <li>LAE is a real cost you can’t ignore.</li>
-
-
-
 
 
 <li>On-level exposure adjusts premium to current rates (removes rate change noise).</li>
 
 
-
-
-
 <li>Auditors prefer it because it’s close to the GLM target.</li>
-
-
-
 
 
 </ul>
@@ -1288,16 +790,7 @@ fs.materialize_incremental("2024-01-01")
 
 
 
-
-
-
-
-
-
 <h3>Option C: Pure Premium (Hybrid)</h3>
-
-
-
 
 
 <p>Target = (paid_loss + allocated_LAE) / earned_exposure. Use when you have lag in incurred data. Problem: understates tail risk.</p>
@@ -1306,25 +799,10 @@ fs.materialize_incremental("2024-01-01")
 
 
 
-
-
-
-
-
-
 <h3>Data Leakage Pitfall</h3>
 
 
-
-
-
 <p>Never include future claims in target construction. Even a 3-month lag can leak information if you’re not careful. In 2022, a carrier’s model leaked because they used “claims closed within 6 months” as target and trained on policies written 9 months ago. Their validation LR was 85%; production was 112%.</p>
-
-
-
-
-
-
 
 
 
@@ -1336,265 +814,130 @@ fs.materialize_incremental("2024-01-01")
 
 
 
-
-
-
-
-
-
 <table>
-
-
-
 
 
 <thead>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <th>Model Type</th>
 
 
-
-
-
 <th>Pros</th>
-
-
-
 
 
 <th>Cons</th>
 
 
-
-
-
 <th>Regulatory Audit Score (1-5)</th>
-
-
-
 
 
 <th>Training Time</th>
 
 
-
-
-
 </tr>
-
-
-
 
 
 </thead>
 
 
-
-
-
 <tbody>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>GLM (Tweedie)</td>
 
 
-
-
-
 <td>Monotonic by design, filing-ready, fast inference</td>
-
-
-
 
 
 <td>Misses nonlinear interactions, hard to encode external signals</td>
 
 
-
-
-
 <td>5</td>
-
-
-
 
 
 <td>1 day</td>
 
 
-
-
-
 </tr>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>Gradient Boosting (XGBoost)</td>
 
 
-
-
-
 <td>Captures complex interactions, high lift potential</td>
-
-
-
 
 
 <td>Non-monotonic, hard to explain, slow inference for rating</td>
 
 
-
-
-
 <td>1</td>
-
-
-
 
 
 <td>2–4 hours</td>
 
 
-
-
-
 </tr>
 
 
-
-
-
 <tr>
-
-
-
 
 
 <td>Hybrid GLM-ML</td>
 
 
-
-
-
 <td>GLM for factors + ML for residual signal, auditable</td>
-
-
-
 
 
 <td>Doubles maintenance, needs alignment layer</td>
 
 
-
-
-
 <td>4</td>
-
-
-
 
 
 <p>3–5 hours (GLM) +</p>
 
 
-
-
-
 <p>1–2 hours (ML)</p>
 
 
-
-
-
 </tr>
-
-
-
 
 
 <tr>
 
 
-
-
-
 <td>Poisson Regression + Neural Boosting</td>
-
-
-
 
 
 <td>Handles zero-inflated data well, interpretable via SHAP</td>
 
 
-
-
-
 <td>Requires careful initialization, slower convergence</td>
-
-
-
 
 
 <td>3</td>
 
 
-
-
-
 <td>6–8 hours</td>
-
-
-
 
 
 </tr>
 
 
-
-
-
 </tbody>
 
 
-
-
-
 </table>
-
-
-
-
-
-
 
 
 
@@ -1606,19 +949,7 @@ fs.materialize_incremental("2024-01-01")
 
 
 
-
-
-
-
-
-
 <h2>Step 5: Training Pipeline — The Three-Bucket Split</h2>
-
-
-
-
-
-
 
 
 
@@ -1627,16 +958,7 @@ fs.materialize_incremental("2024-01-01")
 <h3>Bucket 1: Training (70% of data)</h3>
 
 
-
-
-
 <p>Use policy data from 5+ years ago to capture claim development. Exclude the most recent 12 months (they’re still developing).</p>
-
-
-
-
-
-
 
 
 
@@ -1645,16 +967,7 @@ fs.materialize_incremental("2024-01-01")
 <h3>Bucket 2: Validation (15%)</h3>
 
 
-
-
-
 <p>Use data from 24–12 months ago. This is your “as if” period—you’ll compare model predictions to actual loss costs in this window.</p>
-
-
-
-
-
-
 
 
 
@@ -1663,16 +976,7 @@ fs.materialize_incremental("2024-01-01")
 <h3>Bucket 3: Holdout (15%)</h3>
 
 
-
-
-
 <p>Use the most recent 12 months. This is your bleeding edge—your model should not overfit to recent CAT activity.</p>
-
-
-
-
-
-
 
 
 
@@ -1681,16 +985,7 @@ fs.materialize_incremental("2024-01-01")
 <h3>Code Snippet: Splitting Logic</h3>
 
 
-
-
-
 <pre><code>from sklearn.model_selection import train_test_split
-
-
-
-
-
-
 
 
 
@@ -1699,13 +994,7 @@ fs.materialize_incremental("2024-01-01")
 # Define time split
 
 
-
-
-
 train_end = pd.Timestamp("2021-12-31")
-
-
-
 
 
 val_end = pd.Timestamp("2022-12-31")
@@ -1714,28 +1003,13 @@ val_end = pd.Timestamp("2022-12-31")
 
 
 
-
-
-
-
-
-
 train = policy_df[policy_df["policy_effective_date"] <= train_end]
-
-
-
 
 
 val = policy_df[(policy_df["policy_effective_date"] > train_end) &
 
 
-
-
-
                 (policy_df["policy_effective_date"] <= val_end)]
-
-
-
 
 
 test = policy_df[policy_df["policy_effective_date"] > val_end]
@@ -1744,31 +1018,13 @@ test = policy_df[policy_df["policy_effective_date"] > val_end]
 
 
 
-
-
-
-
-
-
 # Stratify by state and coverage to avoid skew
-
-
-
 
 
 train, _ = train_test_split(train, test_size=0.3, stratify=train[["state", "coverage"]])
 
 
-
-
-
 </code></pre>
-
-
-
-
-
-
 
 
 
@@ -1777,16 +1033,7 @@ train, _ = train_test_split(train, test_size=0.3, stratify=train[["state", "cove
 <h2>Step 6: GLM Baseline — The “Nothing Breaks” Model</h2>
 
 
-
-
-
 <p>Before touching ML, build a GLM that matches your current rate manual. This is your baseline and your rollback plan.</p>
-
-
-
-
-
-
 
 
 
@@ -1795,43 +1042,22 @@ train, _ = train_test_split(train, test_size=0.3, stratify=train[["state", "cove
 <h3>Steps</h3>
 
 
-
-
-
 <ol>
-
-
-
 
 
 <li>Start with Poisson GLM with log link.</li>
 
 
-
-
-
 <li>Use <code>statsmodels</code> for interpretability. Later, port to <code>scikit-learn</code> for pipeline consistency.</li>
-
-
-
 
 
 <li>Enforce monotonicity on key factors: <code>age</code>, <code>credit_score_tier</code>, <code>vehicle_age</code>.</li>
 
 
-
-
-
 <li>Fit on loss cost + LAE / on-level exposure.</li>
 
 
-
-
-
 <li>Compare actual vs. predicted LR by state-coverage. If any cell deviates >15%, investigate (data error, filing error, or missing factor).</li>
-
-
-
 
 
 </ol>
@@ -1840,22 +1066,10 @@ train, _ = train_test_split(train, test_size=0.3, stratify=train[["state", "cove
 
 
 
-
-
-
-
-
-
 <h3>Code Snippet: GLM Monotonic Constraints</h3>
 
 
-
-
-
 <pre><code>import statsmodels.api as sm
-
-
-
 
 
 import statsmodels.formula.api as smf
@@ -1864,49 +1078,22 @@ import statsmodels.formula.api as smf
 
 
 
-
-
-
-
-
-
 # Define formula with monotonic terms
-
-
-
 
 
 formula = (
 
 
-
-
-
     "loss_cost ~ age + C(gender) + credit_score_tier + "
-
-
-
 
 
     "vehicle_age + vehicle_value + zip3 + "
 
 
-
-
-
     "C(coverage) + C(state)"
 
 
-
-
-
 )
-
-
-
-
-
-
 
 
 
@@ -1915,82 +1102,40 @@ formula = (
 # Fit with constraints
 
 
-
-
-
 mod = smf.glm(
-
-
-
 
 
     formula,
 
 
-
-
-
     data=train,
-
-
-
 
 
     family=sm.families.Poisson(),
 
 
-
-
-
     var_weights=train["on_level_exposure"]
-
-
-
 
 
 )
 
 
-
-
-
 result = mod.fit_constrained({
-
-
-
 
 
     "age": "age >= 0",  # Implicit monotonic
 
 
-
-
-
     "credit_score_tier": "credit_score_tier >= 0",
-
-
-
 
 
     "vehicle_age": "vehicle_age >= 0"
 
 
-
-
-
 })
 
 
-
-
-
 </code></pre>
-
-
-
-
-
-
 
 
 
@@ -2002,19 +1147,7 @@ result = mod.fit_constrained({
 
 
 
-
-
-
-
-
-
 <h2>Step 7: Hybrid Ensemble — The ML Lift Layer</h2>
-
-
-
-
-
-
 
 
 
@@ -2023,13 +1156,7 @@ result = mod.fit_constrained({
 <h3>Step 7.1: Residual Target</h3>
 
 
-
-
-
 <p>Compute residual = actual_loss_ratio - glmm_predicted_loss_ratio.</p>
-
-
-
 
 
 <p>Truncate residuals to [-0.2, 0.2] to prevent wild swings in rating.</p>
@@ -2038,16 +1165,7 @@ result = mod.fit_constrained({
 
 
 
-
-
-
-
-
-
 <h3>Step 7.2: Feature Selection</h3>
-
-
-
 
 
 <p>Use SHAP to rank features. Keep only those with SHAP importance >0.01. In practice, this reduces feature count from 45 to 12–15.</p>
@@ -2056,58 +1174,28 @@ result = mod.fit_constrained({
 
 
 
-
-
-
-
-
-
 <h3>Step 7.3: Model Training</h3>
-
-
-
 
 
 <p>Train XGBoost on residuals with:</p>
 
 
-
-
-
 <ul>
-
-
-
 
 
 <li>Objective: reg:squarederror</li>
 
 
-
-
-
 <li>Max depth: 6</li>
-
-
-
 
 
 <li>Learning rate: 0.05</li>
 
 
-
-
-
 <li>Subsample: 0.8</li>
 
 
-
-
-
 <li>Early stopping on validation set (patience=10)</li>
-
-
-
 
 
 </ul>
@@ -2116,22 +1204,10 @@ result = mod.fit_constrained({
 
 
 
-
-
-
-
-
-
 <h3>Step 7.4: Calibration</h3>
 
 
-
-
-
 <p>Scale predictions to match the GLM’s expected loss ratio. Formula:</p>
-
-
-
 
 
 <p><code>final_prediction = glmm_prediction * (1 + residual_prediction)</code></p>
@@ -2140,22 +1216,10 @@ result = mod.fit_constrained({
 
 
 
-
-
-
-
-
-
 <h3>Code Snippet: Hybrid Inference</h3>
 
 
-
-
-
 <pre><code>import xgboost as xgb
-
-
-
 
 
 import joblib
@@ -2164,28 +1228,13 @@ import joblib
 
 
 
-
-
-
-
-
-
 # Load models
-
-
-
 
 
 glmm = joblib.load("models/glmm_baseline.joblib")
 
 
-
-
-
 xgb_model = xgb.Booster()
-
-
-
 
 
 xgb_model.load_model("models/residual_xgb.json")
@@ -2194,22 +1243,10 @@ xgb_model.load_model("models/residual_xgb.json")
 
 
 
-
-
-
-
-
-
 def predict_hybrid(policy_data):
 
 
-
-
-
     # GLM prediction (in log space)
-
-
-
 
 
     glmm_pred = glmm.predict(policy_data)
@@ -2218,28 +1255,13 @@ def predict_hybrid(policy_data):
 
 
 
-
-
-
-
-
-
     # ML residual prediction
-
-
-
 
 
     ml_features = policy_data[ml_feature_list]
 
 
-
-
-
     dmatrix = xgb.DMatrix(ml_features)
-
-
-
 
 
     residual_pred = xgb_model.predict(dmatrix)
@@ -2248,16 +1270,7 @@ def predict_hybrid(policy_data):
 
 
 
-
-
-
-
-
-
     # Clip residual to prevent wild swings
-
-
-
 
 
     residual_pred = np.clip(residual_pred, -0.2, 0.2)
@@ -2266,28 +1279,13 @@ def predict_hybrid(policy_data):
 
 
 
-
-
-
-
-
-
     # Final prediction
-
-
-
 
 
     final_pred = glmm_pred * (1 + residual_pred)
 
 
-
-
-
     return final_pred
-
-
-
 
 
 </code></pre>
@@ -2296,37 +1294,16 @@ def predict_hybrid(policy_data):
 
 
 
-
-
-
-
-
-
 <h2>Step
 
 
-
-
-
             
 
 
 
 
 
-
-
-
-
-
-
             
-
-
-
-
-
-
 
 
 
@@ -2362,8 +1339,6 @@ def predict_hybrid(policy_data):
 
         </section>
 
-
-
             <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
 
             <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>
@@ -2393,28 +1368,13 @@ def predict_hybrid(policy_data):
             <li>Step
 
 
-
-
-
             
 
 
 
 
 
-
-
-
-
-
-
             
-
-
-
-
-
-
 
 
 
@@ -2530,7 +1490,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -2545,8 +1504,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>

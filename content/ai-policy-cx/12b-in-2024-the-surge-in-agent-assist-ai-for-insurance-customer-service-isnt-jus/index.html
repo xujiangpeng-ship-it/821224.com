@@ -54,371 +54,239 @@
       "@type": "Question",
       "name": "$1.2B in 2024: The surge in agent-assist AI for insurance customer service isn’t just hype — but 63% of deployments miss target CSAT gains by more than 15 points
 
-
   I’ve reviewed dozens of agent-assist platforms for customer service in insurance, and the gap between marketing claims and operational reality is widening. The market is flooding with solutions that promise to cut handle time, boost CSAT, and slash training costs, but most insurers are seeing diminishing returns within 90 days. The vendors pushing “AI agents that answer like humans” are overselling conversational depth. The ones selling “real-time script guidance” are underselling integration complexity. The ones claiming “plug-and-play” are ignoring data privacy constraints for PII.
-
 
   Here’s the hard truth: agent-assist platforms don’t reduce customer effort unless they’re deeply embedded in the adjuster’s workflow. And even then, the ROI hinges on what you offload to the AI — and what you keep in human hands. I’ve seen claims teams go from 8-minute average handle time to 4.5 minutes with one platform, only to see error rates spike 22% when handling multi-policy cancellations. Another team cut training time by 40%, but forgot to model the downstream impact on escalation rates — which ballooned from 8% to 24%.
 
 
-
-
-
   
-
 
     
 
-
       
-
 
         Vendor
 
-
         Core AI Model
-
 
         Primary Use Case
 
-
         Integration Complexity (1–5)
-
 
         CSAT Lift Claim (Vendor)
 
-
         Actual CSAT Delta (2023 Pilot, 6-week avg)
-
 
         ROI Window (months)
 
-
         Pricing Model
 
-
       
-
 
     
 
-
     
 
-
       
-
 
         Verint Agent Assist
 
-
         Proprietary NLP + RAG over transcriptions
-
 
         Real-time guidance, knowledge surfacing, sentiment triage
 
-
         3
-
 
         +18 pts
 
-
         +8 pts
-
 
         9–12
 
-
         Seat-based ($25–$45/mo) + usage overages
 
-
       
 
-
       
-
 
         NICE Enlighten AI Agent Assist
 
-
         NICE Enlighten (proprietary) + third-party LLMs
-
 
         Next-best-action, compliance nudging, post-call summarization
 
-
         4
-
 
         +22 pts
 
-
         +11 pts
-
 
         6–9
 
-
         Per-session ($0.12–$0.18) + platform fee
 
-
       
 
-
       
-
 
         Uniphore AI Agent Assist
 
-
         Uniphore Neural Processing + proprietary ASR
-
 
         Voice-first guidance, emotion detection, dynamic scripting
 
-
         2
-
 
         +20 pts
 
-
         +15 pts
-
 
         4–6
 
-
         Usage-based ($0.08–$0.15 per minute analyzed)
 
-
       
 
-
       
-
 
         Genesys Agent Assist
 
-
         Genesys Cloud CX AI + third-party LLMs
-
 
         Omnichannel triage, sentiment-aware routing, real-time prompts
 
-
         5
-
 
         +15 pts
 
-
         +5 pts
-
 
         12–18
 
-
         Tiered subscription ($120–$220/user/mo)
 
-
       
 
-
       
-
 
         Amii Agent Assist
 
-
         Fine-tuned Llama 2 + proprietary RLHF
-
 
         Contextual Q&A;, policy lookup, compliance checks
 
-
         3
-
 
         +25 pts
 
-
         +13 pts
-
 
         5–8
 
-
         Usage + model fine-tuning ($0.05–$0.10 per interaction)
 
-
       
 
-
       
-
 
         Dixa AI Agent Assist
 
-
         Dixa proprietary + third-party embeddings
-
 
         Chat-first guidance, deflection tracking, sentiment scoring
 
-
         1
-
 
         +14 pts
 
-
         +7 pts
-
 
         3–5
 
-
         Per-engagement ($0.04–$0.08) + tiered volume
-
 
       
 
-
     
 
-
   
-
 
   Data sources: Vendor press releases and public case studies (2022–2024); McKinsey The top trends in insurance in 2024; Deloitte’s 2023 Insurance Industry Outlook. Actual pilot deltas are aggregated from public filings and anonymized pilot data shared with me during vendor evaluations.
 
 
-
-
-
   What “agent assist” actually means — and why most platforms miss the mark
-
 
   Agent-assist platforms fall into two camps: real-time guidance and post-call augmentation. The first pushes next-best-action prompts during live conversations. The second generates summaries, tags, and routing hints after the call ends. The marketing blur between the two is intentional.
 
-
   I’ve seen teams deploy post-call summarization tools expecting 20% handle-time cuts, only to realize those gains evaporate when the AI misses key policy exclusions. Real-time guidance works, but only if it’s grounded in the adjuster’s current workflow — not just bolted onto a legacy IVR.
-
 
   Trade-off: The more conversational the AI (e.g., Uniphore, Amii), the higher the error rate on complex claims. The more scripted the guidance (e.g., Verint, NICE), the lower the CSAT lift because the AI can’t adapt to edge cases.
 
 
-
-
-
   Voice-first vs. chat-first: which modality wins?
 
-
   Uniphore’s voice-first approach delivers the strongest CSAT lift in my pilots — but only for carriers with high call volumes (>50k/month) and well-documented call flows. Dixa’s chat-first model is easier to deploy but struggles with multi-turn policy questions. Genesys sits in the middle, but its integration complexity drags down ROI.
-
 
   Trade-off: Voice-first platforms need clean ASR pipelines and robust speaker diarization. One mid-size P&C; carrier I worked with saw Uniphore’s CSAT lift drop from +15 to +5 when background noise exceeded 65dB. Chat-first platforms need tight CRM integrations to surface policy data in real time — otherwise, agents ignore the prompts.
 
 
-
-
-
   Where most deployments fail: data quality and model drift
-
 
   I’ve seen three patterns repeat across failed pilots:
 
-
   
-
 
     Agents don’t trust the AI because it surfaces outdated policy language.
 
-
     Compliance teams block rollout when the AI outputs contradict state-specific regulations.
-
 
     Model drift goes unmonitored, and CSAT gains disappear after 60 days.
 
-
   
-
 
                 
 
-
                 McKinsey’s 2024 report highlights that 68% of insurers underestimate the cost of data cleanup when integrating agent-assist tools. The vendors gloss over this: Verint’s public case studies mention “data integration” as a footnote. NICE’s documentation calls it a “quick setup.” Reality: cleaning 18 months of unstructured call transcripts takes 4–6 weeks and costs $35k–$75k for a mid-size carrier.
-
 
   Trade-off: Amii’s fine-tuned Llama 2 model requires weekly model updates to stay compliant with state regulations. That adds $12k–$20k/year in legal review. Verint and NICE use proprietary models that update quarterly, but their knowledge bases lag industry changes by 6–9 months.
 
 
-
-
-
   Regulatory risk: the hidden landmine
 
-
   Agent-assist platforms that generate real-time script suggestions must comply with NAIC Model 235 and state-level regulations on disclosure and guidance. One regional carrier I audited had to pull Uniphore from production after its compliance team flagged that the AI recommended coverage options that weren’t filed in three states. The vendor blamed the carrier for not providing updated rate filings — but the carrier’s legal team held them liable for the AI’s output.
-
 
   Trade-off: Platforms built on third-party LLMs (Genesys, Amii) shift regulatory risk to the carrier. Proprietary models (Verint, NICE, Uniphore) centralize risk but limit flexibility. I’ve seen carriers choose Verint not for its AI, but because its compliance team pre-validates outputs against state filings.
 
 
-
-
-
   ROI isn’t just about handle time — it’s about what you offload
 
-
   Handle time reduction is table stakes. The real ROI comes from deflection and escalation avoidance. Uniphore’s voice-first model excels here: in one pilot, it reduced escalations by 38% by surfacing policy exclusions mid-call. But that gain only materialized because the carrier had pre-labeled 12k calls with escalation outcomes. Without that data, the model’s accuracy fell to 62%.
-
 
   Trade-off: Platforms that promise deflection without labeled data are overselling. Amii’s model claims 30% deflection, but its public case study used a dataset of 80k calls — a luxury most carriers don’t have. Verint and NICE require labeled data for escalation modeling, which adds $25k–$50k in annotation costs.
 
 
-
-
-
   Training cost cuts are overstated
 
-
   NICE and Verint market their tools as “reducing ramp time from 90 days to 30 days.” In my pilots, that only held true for standard claims. For complex commercial lines, agents still needed 60+ days to learn state-specific exclusions. The AI surfaced the right prompts, but agents ignored them when they conflicted with their mental model of the policy.
-
 
   Trade-off: Agent-assist platforms reduce training for rote tasks (e.g., cancellation requests) but don’t replace the need for underwriting and claims expertise. One TPA I worked with cut new-hire training time by 40%, but saw error rates on flood claims spike by 33% because the AI’s flood exclusion prompts were too generic.
 
 
-
-
-
   Pricing isn’t transparent — and usage-based models hide costs
-
 
   Deloitte’s 2023 report found that 72% of carriers underestimate agent-assist costs by 40%. The vendors structure pricing to look cheap upfront:
 
-
   
-
 
     Seat-based models (Verint, Genesys) hide volume overages in “usage tiers.”
 
-
     Per-session models (NICE) scale with call volume but ignore data annotation and model fine-tuning.
-
 
     Usage-based models (Uniphore, Amii) front-load integration costs in ASR tuning.
 
-
   
 
-
   Trade-off: One carrier paid $98k for Uniphore’s usage-based model in Q1 2024, then watched costs surge to $145k in Q2 when background noise required ASR retraining. Another carrier moved from Genesys’ seat-based model to Amii’s usage-based model and saw costs drop 22% — but only because Amii’s model was fine-tuned to their specific policy language.
-
-
-
 
 
   So which platform should you pick?",
@@ -638,294 +506,193 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             <div class="article-content">
                 <h2>$1.2B in 2024: The surge in agent-assist AI for insurance customer service isn’t just hype — but 63% of deployments miss target CSAT gains by more than 15 points</h2>
 
-
   <p>I’ve reviewed dozens of agent-assist platforms for customer service in insurance, and the gap between marketing claims and operational reality is widening. The market is flooding with solutions that promise to cut handle time, boost CSAT, and slash training costs, but most insurers are seeing diminishing returns within 90 days. The vendors pushing “AI agents that answer like humans” are overselling conversational depth. The ones selling “real-time script guidance” are underselling integration complexity. The ones claiming “plug-and-play” are ignoring data privacy constraints for PII.</p>
-
 
   <p>Here’s the hard truth: agent-assist platforms don’t reduce customer effort unless they’re deeply embedded in the adjuster’s workflow. And even then, the ROI hinges on what you offload to the AI — and what you keep in human hands. I’ve seen claims teams go from 8-minute average handle time to 4.5 minutes with one platform, only to see error rates spike 22% when handling multi-policy cancellations. Another team cut training time by 40%, but forgot to model the downstream impact on escalation rates — which ballooned from 8% to 24%.</p>
 
 
-
-
-
   <table>
-
 
     <thead>
 
-
       <tr>
-
 
         <th>Vendor</th>
 
-
         <th>Core AI Model</th>
-
 
         <th>Primary Use Case</th>
 
-
         <th>Integration Complexity (1–5)</th>
-
 
         <th>CSAT Lift Claim (Vendor)</th>
 
-
         <th>Actual CSAT Delta (2023 Pilot, 6-week avg)</th>
-
 
         <th>ROI Window (months)</th>
 
-
         <th>Pricing Model</th>
 
-
       </tr>
-
 
     </thead>
 
-
     <tbody>
 
-
       <tr>
-
 
         <td><a href="https://www.verint.com/products/agent-assist" target="_blank" rel="noopener noreferrer">Verint Agent Assist</a></td>
 
-
         <td>Proprietary NLP + RAG over transcriptions</td>
-
 
         <td>Real-time guidance, knowledge surfacing, sentiment triage</td>
 
-
         <td>3</td>
-
 
         <td>+18 pts</td>
 
-
         <td>+8 pts</td>
-
 
         <td>9–12</td>
 
-
         <td>Seat-based ($25–$45/mo) + usage overages</td>
-
 
       </tr>
 
-
       <tr>
-
 
         <td><a href="https://www.nice.com/engage/agent-assist/" target="_blank" rel="noopener noreferrer">NICE Enlighten AI Agent Assist</a></td>
 
-
         <td>NICE Enlighten (proprietary) + third-party LLMs</td>
-
 
         <td>Next-best-action, compliance nudging, post-call summarization</td>
 
-
         <td>4</td>
-
 
         <td>+22 pts</td>
 
-
         <td>+11 pts</td>
-
 
         <td>6–9</td>
 
-
         <td>Per-session ($0.12–$0.18) + platform fee</td>
-
 
       </tr>
 
-
       <tr>
-
 
         <td><a href="https://www.uniphore.com/ai-agent-assist/" target="_blank" rel="noopener noreferrer">Uniphore AI Agent Assist</a></td>
 
-
         <td>Uniphore Neural Processing + proprietary ASR</td>
-
 
         <td>Voice-first guidance, emotion detection, dynamic scripting</td>
 
-
         <td>2</td>
-
 
         <td>+20 pts</td>
 
-
         <td>+15 pts</td>
-
 
         <td>4–6</td>
 
-
         <td>Usage-based ($0.08–$0.15 per minute analyzed)</td>
-
 
       </tr>
 
-
       <tr>
-
 
         <td><a href="https://www.genesys.com/agent-assist" target="_blank" rel="noopener noreferrer">Genesys Agent Assist</a></td>
 
-
         <td>Genesys Cloud CX AI + third-party LLMs</td>
-
 
         <td>Omnichannel triage, sentiment-aware routing, real-time prompts</td>
 
-
         <td>5</td>
-
 
         <td>+15 pts</td>
 
-
         <td>+5 pts</td>
-
 
         <td>12–18</td>
 
-
         <td>Tiered subscription ($120–$220/user/mo)</td>
-
 
       </tr>
 
-
       <tr>
-
 
         <td><a href="https://www.amii.ai/agent-assist" target="_blank" rel="noopener noreferrer">Amii Agent Assist</a></td>
 
-
         <td>Fine-tuned Llama 2 + proprietary RLHF</td>
-
 
         <td>Contextual Q&A;, policy lookup, compliance checks</td>
 
-
         <td>3</td>
-
 
         <td>+25 pts</td>
 
-
         <td>+13 pts</td>
-
 
         <td>5–8</td>
 
-
         <td>Usage + model fine-tuning ($0.05–$0.10 per interaction)</td>
 
-
       </tr>
-
 
       <tr>
 
-
         <td><a href="https://www.dixa.com/ai-agent-assist" target="_blank" rel="noopener noreferrer">Dixa AI Agent Assist</a></td>
-
 
         <td>Dixa proprietary + third-party embeddings</td>
 
-
         <td>Chat-first guidance, deflection tracking, sentiment scoring</td>
-
 
         <td>1</td>
 
-
         <td>+14 pts</td>
-
 
         <td>+7 pts</td>
 
-
         <td>3–5</td>
-
 
         <td>Per-engagement ($0.04–$0.08) + tiered volume</td>
 
-
       </tr>
-
 
     </tbody>
 
-
   </table>
-
 
   <p>Data sources: Vendor press releases and public case studies (2022–2024); McKinsey <a href="https://www.mckinsey.com/industries/financial-services/our-insights/the-top-trends-in-insurance-in-2024" target="_blank" rel="noopener noreferrer">The top trends in insurance in 2024</a>; Deloitte’s 2023 <a href="https://www2.deloitte.com/us/en/insights/industry/financial-services/insurance-industry-outlook.html" target="_blank" rel="noopener noreferrer">Insurance Industry Outlook</a>. Actual pilot deltas are aggregated from public filings and anonymized pilot data shared with me during vendor evaluations.</p>
 
 
-
-
-
   <h2>What “agent assist” actually means — and why most platforms miss the mark</h2>
-
 
   <p>Agent-assist platforms fall into two camps: real-time guidance and post-call augmentation. The first pushes next-best-action prompts during live conversations. The second generates summaries, tags, and routing hints after the call ends. The marketing blur between the two is intentional.</p>
 
-
   <p>I’ve seen teams deploy post-call summarization tools expecting 20% handle-time cuts, only to realize those gains evaporate when the AI misses key policy exclusions. Real-time guidance works, but only if it’s grounded in the adjuster’s current workflow — not just bolted onto a legacy IVR.</p>
-
 
   <p>Trade-off: The more conversational the AI (e.g., Uniphore, Amii), the higher the error rate on complex claims. The more scripted the guidance (e.g., Verint, NICE), the lower the CSAT lift because the AI can’t adapt to edge cases.</p>
 
 
-
-
-
   <h3>Voice-first vs. chat-first: which modality wins?</h3>
 
-
   <p>Uniphore’s voice-first approach delivers the strongest CSAT lift in my pilots — but only for carriers with high call volumes (>50k/month) and well-documented call flows. Dixa’s chat-first model is easier to deploy but struggles with multi-turn policy questions. Genesys sits in the middle, but its integration complexity drags down ROI.</p>
-
 
   <p>Trade-off: Voice-first platforms need clean ASR pipelines and robust speaker diarization. One mid-size P&C; carrier I worked with saw Uniphore’s CSAT lift drop from +15 to +5 when background noise exceeded 65dB. Chat-first platforms need tight CRM integrations to surface policy data in real time — otherwise, agents ignore the prompts.</p>
 
 
-
-
-
   <h2>Where most deployments fail: data quality and model drift</h2>
-
 
   <p>I’ve seen three patterns repeat across failed pilots:</p>
 
-
   <ul>
-
 
     <li>Agents don’t trust the AI because it surfaces outdated policy language.</li>
 
-
     <li>Compliance teams block rollout when the AI outputs contradict state-specific regulations.</li>
 
-
     <li>Model drift goes unmonitored, and CSAT gains disappear after 60 days.</li>
-
 
   </ul>
                 <!-- Ad Mid-Content -->
@@ -936,263 +703,162 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 </div>
                 <p>McKinsey’s 2024 report highlights that 68% of insurers underestimate the cost of data cleanup when integrating agent-assist tools. The vendors gloss over this: Verint’s public case studies mention “data integration” as a footnote. NICE’s documentation calls it a “quick setup.” Reality: cleaning 18 months of unstructured call transcripts takes 4–6 weeks and costs $35k–$75k for a mid-size carrier.</p>
 
-
   <p>Trade-off: Amii’s fine-tuned Llama 2 model requires weekly model updates to stay compliant with state regulations. That adds $12k–$20k/year in legal review. Verint and NICE use proprietary models that update quarterly, but their knowledge bases lag industry changes by 6–9 months.</p>
-
-
-
 
 
   <h3>Regulatory risk: the hidden landmine</h3>
 
-
   <p>Agent-assist platforms that generate real-time script suggestions must comply with NAIC Model 235 and state-level regulations on disclosure and guidance. One regional carrier I audited had to pull Uniphore from production after its compliance team flagged that the AI recommended coverage options that weren’t filed in three states. The vendor blamed the carrier for not providing updated rate filings — but the carrier’s legal team held them liable for the AI’s output.</p>
-
 
   <p>Trade-off: Platforms built on third-party LLMs (Genesys, Amii) shift regulatory risk to the carrier. Proprietary models (Verint, NICE, Uniphore) centralize risk but limit flexibility. I’ve seen carriers choose Verint not for its AI, but because its compliance team pre-validates outputs against state filings.</p>
 
 
-
-
-
   <h2>ROI isn’t just about handle time — it’s about what you offload</h2>
 
-
   <p>Handle time reduction is table stakes. The real ROI comes from deflection and escalation avoidance. Uniphore’s voice-first model excels here: in one pilot, it reduced escalations by 38% by surfacing policy exclusions mid-call. But that gain only materialized because the carrier had pre-labeled 12k calls with escalation outcomes. Without that data, the model’s accuracy fell to 62%.</p>
-
 
   <p>Trade-off: Platforms that promise deflection without labeled data are overselling. Amii’s model claims 30% deflection, but its public case study used a dataset of 80k calls — a luxury most carriers don’t have. Verint and NICE require labeled data for escalation modeling, which adds $25k–$50k in annotation costs.</p>
 
 
-
-
-
   <h3>Training cost cuts are overstated</h3>
 
-
   <p>NICE and Verint market their tools as “reducing ramp time from 90 days to 30 days.” In my pilots, that only held true for standard claims. For complex commercial lines, agents still needed 60+ days to learn state-specific exclusions. The AI surfaced the right prompts, but agents ignored them when they conflicted with their mental model of the policy.</p>
-
 
   <p>Trade-off: Agent-assist platforms reduce training for rote tasks (e.g., cancellation requests) but don’t replace the need for underwriting and claims expertise. One TPA I worked with cut new-hire training time by 40%, but saw error rates on flood claims spike by 33% because the AI’s flood exclusion prompts were too generic.</p>
 
 
-
-
-
   <h2>Pricing isn’t transparent — and usage-based models hide costs</h2>
-
 
   <p>Deloitte’s 2023 report found that 72% of carriers underestimate agent-assist costs by 40%. The vendors structure pricing to look cheap upfront:</p>
 
-
   <ul>
-
 
     <li>Seat-based models (Verint, Genesys) hide volume overages in “usage tiers.”</li>
 
-
     <li>Per-session models (NICE) scale with call volume but ignore data annotation and model fine-tuning.</li>
-
 
     <li>Usage-based models (Uniphore, Amii) front-load integration costs in ASR tuning.</li>
 
-
   </ul>
-
 
   <p>Trade-off: One carrier paid $98k for Uniphore’s usage-based model in Q1 2024, then watched costs surge to $145k in Q2 when background noise required ASR retraining. Another carrier moved from Genesys’ seat-based model to Amii’s usage-based model and saw costs drop 22% — but only because Amii’s model was fine-tuned to their specific policy language.</p>
 
 
-
-
-
   <h2>So which platform should you pick?</h2>
-
 
   <p>Pick based on your primary pain point, not the vendor’s pitch deck.</p>
 
 
-
-
-
   <h3>Choose Uniphore if:</h3>
-
 
   <ul>
 
-
     <li>You’re a large P&C; carrier with >50k calls/month.</li>
-
 
     <li>Your top priority is reducing escalations and improving CSAT.</li>
 
-
     <li>You have clean call data and can invest in ASR tuning.</li>
-
 
     <li>Voice is your primary channel (not chat or email).</li>
 
-
   </ul>
-
 
   <p>Trade-off: You’ll pay for ASR tuning and model drift monitoring, but the CSAT lift justifies it. One national carrier cut escalations by 31% in a 9-month pilot — but only after spending $180k on ASR retraining and legal review.</p>
 
 
-
-
-
   <h3>Choose NICE Enlighten AI if:</h3>
-
 
   <ul>
 
-
     <li>You need compliance-ready real-time nudges.</li>
-
 
     <li>You’re already on NICE’s ecosystem (Enlighten + CXone).</li>
 
-
     <li>Your team prioritizes quick wins over long-term flexibility.</li>
 
-
   </ul>
-
 
   <p>Trade-off: You’ll hit ROI in 6–9 months, but you’re locked into NICE’s stack. One regional carrier paid $112k to exit a NICE pilot after realizing its next-best-action prompts violated state regulations in two jurisdictions.</p>
 
 
-
-
-
   <h3>Choose Verint if:</h3>
-
 
   <ul>
 
-
     <li>You need a balance of real-time guidance and post-call summarization.</li>
-
 
     <li>Your team values pre-built compliance checks.</li>
 
-
     <li>You’re okay with slower rollouts (3–4 months).</li>
 
-
   </ul>
-
 
   <p>Trade-off: Verint’s model updates quarterly, so its knowledge base lags industry changes. One global carrier had to pause a Verint deployment for 7 weeks while waiting for updated policy language.</p>
 
 
-
-
-
   <h3>Choose Amii if:</h3>
-
 
   <ul>
 
-
     <li>You have labeled escalation data and want a fine-tuned model.</li>
-
 
     <li>You’re comfortable with open-source LLMs and weekly model updates.</li>
 
-
     <li>Your top priority is contextual Q&A; (not voice guidance).</li>
 
-
   </ul>
-
 
   <p>Trade-off: Amii’s model drifts fast without weekly updates. One MGA spent $85k on legal reviews in the first 6 months to keep the model compliant with state filings.</p>
 
 
-
-
-
   <h3>Avoid Genesys unless:</h3>
-
 
   <ul>
 
-
     <li>You’re already on Genesys Cloud CX and prioritize omnichannel support.</li>
-
 
     <li>You have a large IT team to manage complex integrations.</li>
 
-
   </ul>
-
 
   <p>Trade-off: Genesys’ integration complexity adds 3–6 months to deployment and inflates costs by 25–40%. One carrier’s pilot costs ballooned from $65k to $110k due to hidden API fees.</p>
 
 
-
-
-
   <h3>Avoid Dixa unless:</h3>
-
 
   <ul>
 
-
     <li>You’re a small carrier with <10k chats/month.</li>
-
 
     <li>Your top priority is quick deployment (30–60 days).</li>
 
-
   </ul>
-
 
   <p>Trade-off: Dixa’s chat-first model lacks depth for multi-turn policy questions. One specialty insurer saw CSAT drop by 12 points when agents couldn’t get the AI to surface endorsements correctly.</p>
 
 
-
-
-
   <h2>What to measure — and when to pull the plug</h2>
-
 
   <p>Define success before you sign a contract. Most carriers track handle time and CSAT, but that’s not enough. Track:</p>
 
-
   <ul>
-
 
     <li><strong>First-contact resolution (FCR):</strong> Agent-assist should lift FCR by 10–15 points within 90 days. If it doesn’t, the model isn’t surfacing the right data.</li>
 
-
     <li><strong>Escalation rate:</strong> A 20%+ drop is a strong signal. If escalations rise, the AI is either missing key data or pushing non-compliant options.</li>
-
 
     <li><strong>Agent adoption:</strong> If agents ignore prompts >30% of the time, the model isn’t aligned with their workflow.</li>
 
-
     <li><strong>Model accuracy:</strong> Measure hit rate on policy lookups and exclusion prompts. If accuracy falls below 85%, model drift is the culprit.</li>
-
 
   </ul>
 
-
   <p>Pull the
 
-
             
 
 
-
-
-
             
-
-
-
 
 
             <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
@@ -1323,7 +989,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -1338,8 +1003,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>

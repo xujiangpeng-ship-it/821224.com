@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 
-
 <title>AI policy administration automation in insurance: a 90-day build plan for insurers | Insurtech Insights</title>
     <meta name="description" content="In November 2023, Zurich’s UK SME unit cut policy issuance time from 5 days to 45 minutes by automating 87% of policy amendments with a rules-engine + ML...">
     <meta name="keywords" content="AI policy administration automation insurance guide">
@@ -398,8 +397,6 @@ FROM policies_raw;</code></pre>
 </tbody>
 </table>
 
-
-
 <pre><code>import pandas as pd
 df = pd.read_csv("renewal_rules.csv")
 with open("renewal_rules.drl", "w") as f:
@@ -415,18 +412,9 @@ then
 end
 """)</code></pre>
 
-
-
 <pre><code>javac -cp drools-core-8.44.0.Final.jar renewal_rules.drl</code></pre>
 
-
-
 <pre><code>java -cp .:drools-core-8.44.0.Final.jar:drools-compiler-8.44.0.Final.jar com.insurtech.RuleTest</code></pre>
-
-
-
-
-
 
 
 
@@ -435,16 +423,7 @@ end
   -H "Content-Type: application/json" \
   -d '{"policyId":"POL-2024-001","effective":"2024-06-01","remainingPremium":12500,"claimsRatio":0.72}'</code></pre>
 
-
-
 <pre><code>{"autoRenew":true,"newPremium":12890,"reason":"renewal flag true and claims ratio < 0.8"}</code></pre>
-
-
-
-
-
-
-
 
 
 
@@ -454,15 +433,7 @@ end
 <ul>
 
 
-
-
-
 </ul>
-
-
-
-
-
 
 
 
@@ -474,8 +445,6 @@ RUN pip install lightgbm fastapi uvicorn
 EXPOSE 8000
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]</code></pre>
 
-
-
 <pre><code>from fastapi import FastAPI
 import joblib
 model = joblib.load("/model/model.pkl")
@@ -485,19 +454,10 @@ app = FastAPI()
 def predict(body: dict):
     return {"manual_review": bool(model.predict([body["features"]])[0])}</code></pre>
 
-
-
 <pre><code>aws ecr create-repository --repository-name renewal-ml
 docker build -t renewal-ml .
 docker tag renewal-ml:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/renewal-ml:latest
 docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/renewal-ml:latest</code></pre>
-
-
-
-
-
-
-
 
 
 
@@ -527,42 +487,19 @@ with DAG("renewals_auto", schedule="0 2 * * *", ...) as dag:
 
 
 
-
-
-
-
-
-
-
-
-
-
 <ul>
-
-
 
 
 </ul>
 
 
 
-
-
-
-
 <ul>
-
-
 
 </ul>
 
 
-
-
-
 <ul>
-
-
 
 
 </ul>
@@ -578,30 +515,10 @@ with DAG("renewals_auto", schedule="0 2 * * *", ...) as dag:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <ul>
 
 
-
-
-
 </ul>
-
-
 
 
             </div>
@@ -727,7 +644,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -742,8 +658,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>

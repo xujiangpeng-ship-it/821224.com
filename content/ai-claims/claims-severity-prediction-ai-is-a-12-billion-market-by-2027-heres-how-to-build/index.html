@@ -482,20 +482,13 @@ CREATE INDEX idx_severity_v1_claims_severity_target_vin ON severity_v1.claims_se
 
 <p>Was this article helpful? Comments.</p>
 
-
-
 ---
-
-
-
 
 
 
 <pre>
 pip install scikit-learn xgboost pandas numpy mlflow evidently sqlalchemy psycopg2-binary
 </pre>
-
-
 
 <pre>
 import pandas as pd
@@ -515,7 +508,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 </pre>
 
-
 <pre>
 from xgboost import XGBRegressor
 
@@ -533,7 +525,6 @@ model = XGBRegressor(
 model.fit(X_train, y_train)
 </pre>
 
-
 <pre>
 from sklearn.metrics import mean_squared_error
 
@@ -544,12 +535,7 @@ print(f"RMSE: ${rmse:,.2f}")
 </pre>
 
 
-
-
-
 ---
-
-
 
 
 <pre>
@@ -575,18 +561,12 @@ print("Best RMSE:", study.best_value)
 # Best RMSE: $1,182.34
 </pre>
 
-
 <pre>
 {'n_estimators': 842, 'max_depth': 7, 'learning_rate': 0.07, 'subsample': 0.82, 'colsample_bytree': 0.78}
 </pre>
 
 
-
-
-
 ---
-
-
 
 
 <pre>
@@ -601,12 +581,7 @@ with mlflow.start_run():
     mlflow.xgboost.log_model(model, "model")
 </pre>
 
-
-
 ---
-
-
-
 
 
 <pre>
@@ -645,7 +620,6 @@ def predict_severity(request: ClaimRequest):
     return {"predicted_severity": float(prediction[0])}
 </pre>
 
-
 <pre>
 FROM python:3.11-slim
 
@@ -660,12 +634,7 @@ EXPOSE 8000
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 </pre>
 
-
-
 ---
-
-
-
 
 
 <pre>
@@ -677,12 +646,7 @@ then
 end
 </pre>
 
-
-
 ---
-
-
-
 
 
 <pre>
@@ -699,7 +663,6 @@ report.run(
 report.save_html("drift_report.html")
 </pre>
 
-
 <pre>
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -714,62 +677,37 @@ with DAG("drift_check", schedule_interval="@weekly", start_date=datetime(2024,1,
     drift_task = PythonOperator(task_id="drift_check", python_callable=check_drift)
 </pre>
 
-
-
 ---
-
-
 
 <table>
 <thead>
 <tr>
-
-
 
 </tr>
 </thead>
 <tbody>
 <tr>
 
-
+</tr>
+<tr>
 
 </tr>
 <tr>
 
-
+</tr>
+<tr>
 
 </tr>
 <tr>
 
-
-
 </tr>
 <tr>
-
-
-
-</tr>
-<tr>
-
-
-
-</tr>
-<tr>
-
-
 
 </tr>
 </tbody>
 </table>
 
-
-
 ---
-
-
-
-
-
 
 
 
@@ -777,27 +715,17 @@ with DAG("drift_check", schedule_interval="@weekly", start_date=datetime(2024,1,
 
 ---
 
+<ul>
 
+</ul>
+
+---
 
 <ul>
 
 
 
 </ul>
-
----
-
-
-
-<ul>
-
-
-
-
-
-
-</ul>
-
 
                 <!-- COMMUNITY-SECTION-START --><section class="community-perspectives" aria-label="Community perspectives">
   
@@ -914,7 +842,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -929,8 +856,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>

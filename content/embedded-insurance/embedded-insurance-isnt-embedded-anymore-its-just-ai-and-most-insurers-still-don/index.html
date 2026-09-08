@@ -54,56 +54,32 @@
       "@type": "Question",
       "name": "Why most embedded insurance programs are unprofitable
 
-
 I've reviewed a dozen embedded insurance programs in the last 18 months, and the pattern is consistent: premium leakage is the silent killer. A Tier-1 P&C; carrier's embedded auto insurance program launched in 2022 had a loss ratio of 124% within 12 months. Not because the distribution partner was wrong — because the AI model that priced each policy couldn't tell a used car from a new one in the same VIN. The underwriters assumed the distribution partner would pre-filter risks, but the AI just ingested garbage and priced accordingly. That's not embedded insurance. That's AI-powered adverse selection.
 
-
 Here's the hard truth: embedded insurance only works when the AI can answer one question faster and more accurately than a human underwriter: What is the real expected loss for this risk in real time? If your embedded program relies on static rules or legacy underwriting engines, you're not embedding insurance — you're embedding technical debt.
-
-
-
 
 
 Example: A digital mortgage platform embedded home insurance via an MGA. Their AI model used 14 static underwriting factors. After six months, the combined ratio hit 132%. When we overlaid real-time property data from satellite imaging and smart home IoT feeds, the combined ratio dropped to 97% in three months — not because we sold more policies, but because we stopped insuring uninhabitable properties.
 
 
 
-
-
-
-
-
 Embedded insurance isn't a distribution play — it's a data and decisioning problem
 
-
 From distribution to real-time underwriting: The embedded AI stack
-
 
 Embedded insurance isn't about slapping a quote button into a checkout flow. It's about replacing the underwriting queue with an AI decision engine that runs in milliseconds, not days. The stack has four layers:
 
 
-
-
-
 Data ingestion: Real-time feeds from the host platform (e.g., VIN from an auto marketplace, square footage from a property app, IoT sensor data from a drone delivery platform)
-
 
 Feature engineering: Transforming raw data into underwriting signals (e.g., vehicle telematics → \"moderate driver with 5 hard brakes in 30 days\")
 
-
 AI model: Predictive model that outputs loss ratio, premium, and coverage eligibility within 100ms
-
 
 Execution: API call to bind coverage, issue certificate, and trigger payment — all in one STP flow
 
 
-
-
-
 If your embedded insurance program doesn't own the entire stack from data to bind, you're renting someone else's model — and their loss ratio.
-
-
-
 
 
 Vendor comparison: Who owns the stack?",
@@ -356,231 +332,148 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             <div class="article-content">
                 <h2>Embedded insurance isn't embedded anymore — it's just AI, and most insurers still don't get it</h2>
 
-
 <p>In 2023, global embedded insurance premium volume reached $14 billion. By 2030, Allianz expects it to hit $750 billion. Yet 60% of these programs lose money in the first 24 months, according to the <a href="https://www.allianz.com/content/dam/onemarketing/azcom/Allianz-com/investor/documents/reports/Allianz_Global_Corporate_&_Specialty_Embedded_Insurance_2024.pdf" target="_blank" rel="noopener noreferrer">Allianz Global Corporate & Specialty Embedded Insurance Report 2024</a>. The delta between hype and reality? AI isn't just powering embedded insurance — it's exposing the rot in underwriting and pricing logic that traditional channels could hide. If you're still thinking about embedded insurance as a distribution channel, you're already obsolete.</p>
-
-
-
 
 
 <h3>Why most embedded insurance programs are unprofitable</h3>
 
-
 <p>I've reviewed a dozen embedded insurance programs in the last 18 months, and the pattern is consistent: premium leakage is the silent killer. A Tier-1 P&C; carrier's embedded auto insurance program launched in 2022 had a loss ratio of 124% within 12 months. Not because the distribution partner was wrong — because the AI model that priced each policy couldn't tell a used car from a new one in the same VIN. The underwriters assumed the distribution partner would pre-filter risks, but the AI just ingested garbage and priced accordingly. That's not embedded insurance. That's AI-powered adverse selection.</p>
 
-
 <p>Here's the hard truth: embedded insurance only works when the AI can answer one question faster and more accurately than a human underwriter: <em>What is the real expected loss for this risk in real time?</em> If your embedded program relies on static rules or legacy underwriting engines, you're not embedding insurance — you're embedding technical debt.</p>
-
-
-
 
 
 <p><strong>Example:</strong> A digital mortgage platform embedded home insurance via an MGA. Their AI model used 14 static underwriting factors. After six months, the combined ratio hit 132%. When we overlaid real-time property data from satellite imaging and smart home IoT feeds, the combined ratio dropped to 97% in three months — not because we sold more policies, but because we stopped insuring uninhabitable properties.</p>
 
 
 
-
-
-
-
-
 <h2>Embedded insurance isn't a distribution play — it's a data and decisioning problem</h2>
-
 
 <h3>From distribution to real-time underwriting: The embedded AI stack</h3>
 
-
 <p>Embedded insurance isn't about slapping a quote button into a checkout flow. It's about replacing the underwriting queue with an AI decision engine that runs in milliseconds, not days. The stack has four layers:</p>
-
 
 <ul>
 
-
 <li><strong>Data ingestion:</strong> Real-time feeds from the host platform (e.g., VIN from an auto marketplace, square footage from a property app, IoT sensor data from a drone delivery platform)</li>
-
 
 <li><strong>Feature engineering:</strong> Transforming raw data into underwriting signals (e.g., vehicle telematics → "moderate driver with 5 hard brakes in 30 days")</li>
 
-
 <li><strong>AI model:</strong> Predictive model that outputs loss ratio, premium, and coverage eligibility within 100ms</li>
-
 
 <li><strong>Execution:</strong> API call to bind coverage, issue certificate, and trigger payment — all in one STP flow</li>
 
-
 </ul>
-
 
 <p>If your embedded insurance program doesn't own the entire stack from data to bind, you're renting someone else's model — and their loss ratio.</p>
 
 
-
-
-
 <h3>Vendor comparison: Who owns the stack?</h3>
-
 
 <p>I've benchmarked six embedded insurance platforms and three MGAs that sell embedded via API. The AI ownership gap is stark. Platforms that only offer distribution (API + white-label UI) leave the AI risk on your balance sheet. Platforms that own the AI model transfer some risk, but at a premium.</p>
 
 
-
-
-
 <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-
 
 <thead>
 
-
 <tr style="background: #0056b3; color: white;">
-
 
 <th style="padding: 12px; text-align: left;">Vendor</th>
 
-
 <th style="padding: 12px; text-align: left;">Data Ingestion</th>
-
 
 <th style="padding: 12px; text-align: left;">AI Model Ownership</th>
 
-
 <th style="padding: 12 TPX; text-align: left;">Loss Ratio (12-month median)</th>
-
 
 <th style="padding: 12px; text-align: left;">Integration Latency (ms)</th>
 
-
 </tr>
-
 
 </thead>
 
-
 <tbody>
 
-
 <tr style="background: #f8f9fa;">
-
 
 <td style="padding: 12px;"><strong>Cover Genius</strong></td>
 
-
 <td style="padding: 12px;">Vendor-controlled (API-first)</td>
-
 
 <td style="padding: 12px;">Vendor-owned (proprietary)</td>
 
-
 <td style="padding: 12px;">108% (carrier claim)</td>
-
 
 <td style="padding: 12px;">120</td>
 
-
 </tr>
 
-
 <tr style="background: white;">
-
 
 <td style="padding: 12px;"><strong>Boost</strong></td>
 
-
 <td style="padding: 12px;">Carrier-controlled (via platform)</td>
-
 
 <td style="padding: 12px;">Carrier-owned (custom)</td>
 
-
 <td style="padding: 12px;">94% (carrier claim)</td>
-
 
 <td style="padding: 12px;">85</td>
 
-
 </tr>
 
-
 <tr style="background: #f8f9fa;">
-
 
 <td style="padding: 12px;"><strong>Lemonade Embedded</strong></td>
 
-
 <td style="padding: 12px;">Lemonade-controlled (proprietary)</td>
-
 
 <td style="padding: 12px;">Lemonade-owned</td>
 
-
 <td style="padding: 12px;">113% (public filings)</td>
-
 
 <td style="padding: 12px;">210</td>
 
-
 </tr>
-
 
 <tr style="background: white;">
 
-
 <td style="padding: 12px;"><strong>Zego Embed</strong></td>
-
 
 <td style="padding: 12px;">Zego-controlled (API-first)</td>
 
-
 <td style="padding: 12px;">Zego-owned (proprietary)</td>
-
 
 <td style="padding: 12px;">102% (carrier claim)</td>
 
-
 <td style="padding: 12px;">150</td>
 
-
 </tr>
-
 
 <tr style="background: #f8f9fa;">
 
-
 <td style="padding: 12px;"><strong>MGA: Boost</strong></td>
-
 
 <td style="padding: 12px;">MGA-controlled (via host platform)</td>
 
-
 <td style="padding: 12px;">MGA-owned (custom)</td>
-
 
 <td style="padding: 12px;">91% (MGA internal)</td>
 
-
 <td style="padding: 12px;">70</td>
-
 
 </tr>
 
-
 </tbody>
-
 
 </table>
 
-
                 
-
 
                 <p><strong>Key takeaway:</strong> If loss ratio > 100% is acceptable to your board, choose a vendor with a strong distribution play and weak AI. If not, you need to own the AI model — or partner with an MGA that does.</p>
 
 
-
-
-
 <h2>AI isn't just underwriting — it's rewriting the claims experience before the loss occurs</h2>
-
 
 <h3>Predictive claims prevention in embedded insurance</h3>
                 <!-- Ad Mid-Content -->
@@ -591,299 +484,188 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 </div>
                 <p>Embedded insurance isn't just about binding faster — it's about preventing claims before they happen. I've seen a home insurance embedded program reduce water damage claims by 38% by integrating AI-driven IoT alerts. The platform ingested smart home sensor data (leak detectors, humidity sensors) and triggered maintenance recommendations via the host platform's app. Customers who received the alert and acted reduced claims by 73%. Those who ignored it still filed claims — but the AI flagged the property as higher risk and priced it accordingly.</p>
 
-
 <p>The trade-off: privacy. Embedded insurance programs are now collecting granular behavioral data from homes, cars, and wearables. One carrier's embedded auto program shared driving telematics with the host platform to reduce premiums — but regulators in California and New York sent cease-and-desist letters within 90 days. The program survived by anonymizing data and shifting to edge computing, but the legal risk remains a ticking time bomb.</p>
-
-
-
 
 
 <h3>Parametric triggers: When AI meets immutable payouts</h3>
 
-
 <p>Parametric insurance isn't new, but embedded parametric is. A logistics platform embedded parametric cargo insurance triggered by real-time IoT data (temperature, shock, GPS anomalies). The AI model calculated payouts in milliseconds based on sensor thresholds — no adjusters, no disputes. The carrier's loss ratio dropped from 145% to 78% in 12 months. The catch: the AI model had to be auditable for model risk, and the carrier had to pre-fund the parametric pool. Most carriers aren't set up for that.</p>
-
 
 <p>From a CFO perspective: parametric embedded insurance shifts loss volatility from the balance sheet to the product ledger. You're not reserving for unknown unknowns — you're reserving for known triggers. That's a radical departure from traditional underwriting.</p>
 
 
-
-
-
 <h2>Model governance: The embedded insurance Achilles' heel
-
 
 <p>I've audited three embedded insurance programs for model risk. Every single one failed the SR 11-7 standard because they treated the host platform's data as ground truth. One carrier's embedded travel insurance program used the airline's booking data as the sole source of truth for passenger risk. The AI model assumed all passengers were healthy because the airline didn't collect medical data. When the carrier started ingesting real-time health data from wearables (with consent), the loss ratio dropped from 118% to 89% — and the model risk team flagged the original model as biased.</p>
 
 
-
-
-
 <h3>Regulatory land mines in embedded AI</h3>
-
 
 <p>The NAIC's 2023 Market Regulation Annual Report highlighted embedded insurance as a "regulatory blind spot." State insurance departments are scrutinizing:</p>
 
-
 <ul>
-
 
 <li>Data provenance: Can the AI prove the source and integrity of every data point?</li>
 
-
 <li>Consumer consent: Is the data collection opt-in or opt-out? (Hint: opt-out is a compliance disaster waiting to happen)</li>
-
 
 <li>Rate filings: If the AI adjusts premiums in real time, is each rate change a new filing?</li>
 
-
 <li>Model explainability: Can the insurer explain a denied claim to a regulator in plain English?</li>
 
-
 </ul>
-
 
 <p>The trade-off: speed vs. compliance. One MGA embedded auto insurance via a ride-hailing app. They launched in 5 states in 6 weeks using AI underwriting. Three months later, the New York DFS fined them $2.3M for failing to file the AI model as a rate algorithm. The MGA argued the model was "automated underwriting," but the regulator disagreed. Lesson: if your AI touches premium or eligibility, it's not an underwriting tool — it's a rate algorithm, and it needs a filing.</p>
 
 
-
-
-
 <h3>Model risk framework for embedded AI</h3>
-
 
 <p>I've built model risk frameworks for two embedded insurance programs. The framework has four gates:</p>
 
-
 <ol>
-
 
 <li><strong>Data lineage:</strong> Prove every data source is auditable, immutable, and consented</li>
 
-
 <li><strong>Feature stability:</strong> Monitor feature drift monthly — if a sensor starts reporting erratic values, the model must flag it</li>
-
 
 <li><strong>Fairness testing:</strong> Run demographic parity tests — if the model discriminates by neighborhood, it gets shut down</li>
 
-
 <li><strong>Explainability:</strong> Generate a plain-English explanation for every binding decision — regulators love these</li>
 
-
 </ol>
-
 
 <p>The framework slowed the MGA's model deployment from 6 weeks to 12 weeks. But it prevented a $4.7M regulatory fine and a class-action lawsuit over pricing discrimination. That's not a trade-off — that's a competitive moat.</p>
 
 
-
-
-
 <h2>The CFO's dilemma: Embedded insurance ROI is a myth without unit economics transparency</h2>
-
 
 <p>I've modeled the unit economics of embedded insurance programs for three carriers. The results are brutal: 70% of embedded programs are unprofitable at scale because they hide the cost of AI and data ingestion in the "acquisition cost" line item. The carrier that launched the embedded auto program with a 124% loss ratio? Their CFO buried the AI data ingestion cost under "marketing spend." When we ran a clean P&L;, the program lost $2.37 per policy. At 500,000 policies, that's a $1.185M quarterly loss.</p>
 
 
-
-
-
 <h3>Unit economics breakdown: Where embedded insurance loses money</h3>
-
 
 <p>Most embedded insurance ROI models assume a 15% take-rate and 2% loss ratio. Reality? Take-rate is often <10%, loss ratio is often >100%, and the hidden costs are brutal:</p>
 
 
-
-
-
 <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-
 
 <thead>
 
-
 <tr style="background: #0056b3; color: white;">
-
 
 <th style="padding: 12px; text-align: left;">Cost Category</th>
 
-
 <th style="padding: 12px; text-align: left;">Static Model (no AI)</th>
-
 
 <th style="padding: 12px; text-align: left;">AI Model (real-time)</th>
 
-
 <th style="padding: 12px; text-align: left;">Delta</th>
 
-
 </tr>
-
 
 </thead>
 
-
 <tbody>
 
-
 <tr style="background: #f8f9fa;">
-
 
 <td style="padding: 12px;"><strong>Data ingestion</strong></td>
 
-
 <td style="padding: 12px;">$0.05 (legacy API)</td>
-
 
 <td style="padding: 12px;">$0.23 (real-time streams + edge)</td>
 
-
 <td style="padding: 12px;">+360%</td>
-
 
 </tr>
 
-
 <tr style="background: white;">
-
 
 <td style="padding: 12px;"><strong>Model inference</strong></td>
 
-
 <td style="padding: 12px;">$0.01 (batch)</td>
-
 
 <td style="padding: 12px;">$0.11 (real-time)</td>
 
-
 <td style="padding: 12px;">+1000%</td>
-
 
 </tr>
 
-
 <tr style="background: #f8f9fa;">
-
 
 <td style="padding: 12px;"><strong>Regulatory compliance</strong></td>
 
-
 <td style="padding: 12px;">$0.02 (static filings)</td>
-
 
 <td style="padding: 12px;">$0.18 (real-time rate adjustments)</td>
 
-
 <td style="padding: 12px;">+800%</td>
 
-
 </tr>
-
 
 <tr style="background: white;">
 
-
 <td style="padding: 12px;"><strong>Fraud detection</strong></td>
-
 
 <td style="padding: 12px;">$0.03 (rules-based)</td>
 
-
 <td style="padding: 12px;">$0.29 (AI + graph)</td>
-
 
 <td style="padding: 12px;">+867%</td>
 
-
 </tr>
-
 
 <tr style="background: #f8f9fa;">
 
-
 <td style="padding: 12px;"><strong>Total per policy</strong></td>
-
 
 <td style="padding: 12px;">$0.11</td>
 
-
 <td style="padding: 12px;">$0.81</td>
-
 
 <td style="padding: 12px;">+636%</td>
 
-
 </tr>
-
 
 </tbody>
 
-
 </table>
-
 
 <p><strong>Key insight:</strong> If your embedded insurance program doesn't have a line-item for AI inference cost, you're not modeling the real economics. The carrier that launched the embedded program with a 124% loss ratio? Their model assumed $0.11 per policy for AI. The real cost was $0.81.</p>
 
 
-
-
-
 <h3>The "free distribution" myth</h3>
-
 
 <p>Embedded insurance isn't free distribution. It's expensive data acquisition. The host platform owns the customer relationship, the customer data, and the transactional context. The insurer gets a slice of the premium — if they can price the risk accurately and fast enough to make a profit. If the AI can't, the host platform will switch to a competitor that can. That's the embedded insurance flywheel: data → AI → profit → scale → more data.</p>
 
 
-
-
-
 <h2>From embedded to intelligent: The next frontier is closed-loop learning</h2>
-
 
 <p>The embedded insurance programs that survive the next 24 months won't be the ones with the flashiest distribution. They'll be the ones that close the loop between claims, underwriting, and pricing. I've seen one program do it: a commercial property embedded program that used AI to adjust premiums in real time based on IoT fire suppression system performance. When the system failed a test, the AI flagged the property, the carrier increased the premium, and the property owner fixed the system within 48 hours. Claims dropped 52%, loss ratio dropped to 76%, and the program became profitable at scale.</p>
 
 
-
-
-
 <h3>Closed-loop learning: How it works</h3>
-
 
 <p>The closed-loop system has four components:</p>
 
-
 <ol>
-
 
 <li><strong>Real-time risk sensing:</strong> IoT, telematics, or platform data feeds the AI model continuously</li>
 
-
 <li><strong>Predictive underwriting:</strong> The AI adjusts premiums based on real-time risk signals</li>
-
 
 <li><strong>Claims prevention:</strong> The AI triggers maintenance alerts or coverage adjustments before loss occurs</li>
 
-
 <li><strong>Feedback loop:</strong> Every claim, every alert, every preventive action feeds back into the model to improve future predictions</li>
-
 
 </ol>
 
-
 <p>From a data science perspective: this is reinforcement learning with human-in-the-loop
 
-
             
 
 
-
-
-
             
-
-
-
 
 
             <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
@@ -894,71 +676,41 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             <li>AI isn't just underwriting — it's rewriting the claims experience before the loss occurs</li>
             <li>Model governance: The embedded insurance Achilles' heel
 
-
 I've audited three embedded insurance programs for model risk. Every single one failed the SR 11-7 standard because they treated the host platform's data as ground truth. One carrier's embedded travel insurance program used the airline's booking data as the sole source of truth for passenger risk. The AI model assumed all passengers were healthy because the airline didn't collect medical data. When the carrier started ingesting real-time health data from wearables (with consent), the loss ratio dropped from 118% to 89% — and the model risk team flagged the original model as biased.
-
-
-
 
 
 Regulatory land mines in embedded AI
 
-
 The NAIC's 2023 Market Regulation Annual Report highlighted embedded insurance as a "regulatory blind spot." State insurance departments are scrutinizing:
-
-
-
 
 
 Data provenance: Can the AI prove the source and integrity of every data point?
 
-
 Consumer consent: Is the data collection opt-in or opt-out? (Hint: opt-out is a compliance disaster waiting to happen)
-
 
 Rate filings: If the AI adjusts premiums in real time, is each rate change a new filing?
 
-
 Model explainability: Can the insurer explain a denied claim to a regulator in plain English?
-
-
-
 
 
 The trade-off: speed vs. compliance. One MGA embedded auto insurance via a ride-hailing app. They launched in 5 states in 6 weeks using AI underwriting. Three months later, the New York DFS fined them $2.3M for failing to file the AI model as a rate algorithm. The MGA argued the model was "automated underwriting," but the regulator disagreed. Lesson: if your AI touches premium or eligibility, it's not an underwriting tool — it's a rate algorithm, and it needs a filing.
 
 
-
-
-
 Model risk framework for embedded AI
-
 
 I've built model risk frameworks for two embedded insurance programs. The framework has four gates:
 
 
-
-
-
 Data lineage: Prove every data source is auditable, immutable, and consented
-
 
 Feature stability: Monitor feature drift monthly — if a sensor starts reporting erratic values, the model must flag it
 
-
 Fairness testing: Run demographic parity tests — if the model discriminates by neighborhood, it gets shut down
-
 
 Explainability: Generate a plain-English explanation for every binding decision — regulators love these
 
 
-
-
-
 The framework slowed the MGA's model deployment from 6 weeks to 12 weeks. But it prevented a $4.7M regulatory fine and a class-action lawsuit over pricing discrimination. That's not a trade-off — that's a competitive moat.
-
-
-
 
 
 The CFO's dilemma: Embedded insurance ROI is a myth without unit economics transparency</li>
@@ -974,71 +726,41 @@ The CFO's dilemma: Embedded insurance ROI is a myth without unit economics trans
             <li>AI isn't just underwriting — it's rewriting the claims experience before the loss occurs</li>
             <li>Model governance: The embedded insurance Achilles' heel
 
-
 I've audited three embedded insurance programs for model risk. Every single one failed the SR 11-7 standard because they treated the host platform's data as ground truth. One carrier's embedded travel insurance program used the airline's booking data as the sole source of truth for passenger risk. The AI model assumed all passengers were healthy because the airline didn't collect medical data. When the carrier started ingesting real-time health data from wearables (with consent), the loss ratio dropped from 118% to 89% — and the model risk team flagged the original model as biased.
-
-
-
 
 
 Regulatory land mines in embedded AI
 
-
 The NAIC's 2023 Market Regulation Annual Report highlighted embedded insurance as a "regulatory blind spot." State insurance departments are scrutinizing:
-
-
-
 
 
 Data provenance: Can the AI prove the source and integrity of every data point?
 
-
 Consumer consent: Is the data collection opt-in or opt-out? (Hint: opt-out is a compliance disaster waiting to happen)
-
 
 Rate filings: If the AI adjusts premiums in real time, is each rate change a new filing?
 
-
 Model explainability: Can the insurer explain a denied claim to a regulator in plain English?
-
-
-
 
 
 The trade-off: speed vs. compliance. One MGA embedded auto insurance via a ride-hailing app. They launched in 5 states in 6 weeks using AI underwriting. Three months later, the New York DFS fined them $2.3M for failing to file the AI model as a rate algorithm. The MGA argued the model was "automated underwriting," but the regulator disagreed. Lesson: if your AI touches premium or eligibility, it's not an underwriting tool — it's a rate algorithm, and it needs a filing.
 
 
-
-
-
 Model risk framework for embedded AI
-
 
 I've built model risk frameworks for two embedded insurance programs. The framework has four gates:
 
 
-
-
-
 Data lineage: Prove every data source is auditable, immutable, and consented
-
 
 Feature stability: Monitor feature drift monthly — if a sensor starts reporting erratic values, the model must flag it
 
-
 Fairness testing: Run demographic parity tests — if the model discriminates by neighborhood, it gets shut down
-
 
 Explainability: Generate a plain-English explanation for every binding decision — regulators love these
 
 
-
-
-
 The framework slowed the MGA's model deployment from 6 weeks to 12 weeks. But it prevented a $4.7M regulatory fine and a class-action lawsuit over pricing discrimination. That's not a trade-off — that's a competitive moat.
-
-
-
 
 
 The CFO's dilemma: Embedded insurance ROI is a myth without unit economics transparency</li>
@@ -1148,7 +870,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -1163,8 +884,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>

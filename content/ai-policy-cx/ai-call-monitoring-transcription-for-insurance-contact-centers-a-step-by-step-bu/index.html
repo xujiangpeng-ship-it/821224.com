@@ -444,7 +444,6 @@ for turn, _, speaker in diarization.itertracks(yield_label=True):
 <li>Step 14: Kill switch Write a Lambda that can disable the entire pipeline in <2 minutes. Role needs <code>lambda:InvokeFunction</code> on every micro-service. Tag every resource with <code>Environment=prod</code> and <code>Owner=ai-call-audit</code>. Use AWS Systems Manager Automation to run the kill switch playbook.</li>
 <li>Step 15: Measure ROI Run a 30-day A/B: 10% of calls go through human auditors, the rest through AI. Track:</li>
 
-
 <p>Compliance fines per 1 k calls Customer NPS delta</p>
 
 <pre><code>from presidio_analyzer import AnalyzerEngine
@@ -463,7 +462,6 @@ anonymized = anonymizer.anonymize(text=transcript_text, analyzer_results=results
 <p>Agent coaching hours ↓ 19% If the fines saved pay for the system inside 6 months, green-light the full rollout. If not, delete the entire stack and move on.
 <li>Week 10 checklist — hand to Legal on Friday Bucket policy for raw audio: deny delete, enable object lock.</li>
 <li>Presidio PII detector: tested on 100 sample calls, no false negatives. CloudWatch metric filter <code>PIILeakCount</code> alarms to #ai-call-audit.</li>
-
 
 <p>Scoring rubric: published in Confluence, version-controlled in Git. Salesforce custom object <code>Call_Compliance__c</code> has field-level security set to Read-Only for all profiles except Compliance.</p>
 
@@ -506,17 +504,10 @@ anonymized = anonymizer.anonymize(text=transcript_text, analyzer_results=results
 </ol>
 
 
-
-
-
 <ul>
 
 
-
-
 </ul>
-
-
 
 <pre><code>import json, os
 from scoring_engine import score_call
@@ -530,30 +521,16 @@ def lambda_handler(event, context):
 </code></pre>
 
 
+<ul>
+
+</ul>
 
 
 
 <ul>
 
 
-
 </ul>
-
-
-
-
-
-
-
-<ul>
-
-
-
-
-
-</ul>
-
-
 
 <pre><code>import simple_salesforce as sf
 
@@ -572,17 +549,10 @@ def write_score(call_id, score_data):
 </code></pre>
 
 
-
-
-
 <ul>
 
 
-
-
 </ul>
-
-
 
 <pre><code>SELECT
     DATE_TRUNC('day', cs.created_at) AS day,
@@ -595,46 +565,23 @@ GROUP BY 1
 
 
 
-
-
-
-
 <ul>
-
-
-
 
 
 </ul>
 
 
 
-
-
-
-
-
 <ul>
-
-
 
 </ul>
 
-
 <ul>
 
-
-
 </ul>
-
-
 
 
 <ol>
-
-
-
-
 
 
 
@@ -648,23 +595,10 @@ GROUP BY 1
 
 
 
-
-
-
-
-
-
-
-
-
-
 <ul>
 
 
-
-
 </ul>
-
 
             
 
@@ -792,7 +726,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-
 <!-- COOKIE CONSENT BANNER -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:rgba(255,255,255,0.85);padding:16px 24px;z-index:9999;border-top:1px solid rgba(255,255,255,0.1);font-size:0.88rem;line-height:1.6;box-shadow:0 -4px 12px rgba(0,0,0,0.15)">
     <div style="max-width:var(--site-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -807,8 +740,5 @@ function acceptCookies(){document.cookie="cookies_accepted=true;max-age=31536000
 if(document.cookie.indexOf("cookies_accepted=true")===-1){document.getElementById("cookie-banner").style.display="block";}
 </script>
 
-
-<script>window.ChatWidgetConfig={apiBase:"https://insurtech-cs-worker.wicro.workers.dev",shopId:"821224",title:"Assistant"}</script>
-<script src="https://insurtech-cs-worker.wicro.workers.dev/chat-widget.js" defer></script>
 </body>
 </html>
