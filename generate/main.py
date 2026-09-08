@@ -190,6 +190,25 @@ def mark_pending(keyword_entry):
         json.dump(keywords, fh, indent=2, ensure_ascii=False)
 
 
+def mark_failed(keyword_entry):
+    """Roll a keyword back to unused — called when generation/render fails.
+
+    没有这一步时，失败的关键词会永远停在 is_used=True / generated_at="pending"，
+    既发不出文章、也不会再被 pick_unused_keywords 选中 —— 相当于白白烧掉一个词。
+    """
+    subdomain = keyword_entry["subdomain"]
+    kw_path = KEYWORDS_DIR / f"{subdomain}.json"
+    with open(kw_path, encoding="utf-8") as fh:
+        keywords = json.load(fh)
+    for kw in keywords:
+        if kw["keyword"] == keyword_entry["keyword"]:
+            kw["is_used"] = False
+            kw.pop("generated_at", None)
+            break
+    with open(kw_path, "w", encoding="utf-8") as fh:
+        json.dump(keywords, fh, indent=2, ensure_ascii=False)
+
+
 def mark_completed(keyword_entry):
     """Update generated_at to real timestamp — called AFTER successful render."""
     subdomain = keyword_entry["subdomain"]
@@ -1007,12 +1026,14 @@ def main():
             html_body = generate_article(kw, config)
         except Exception as exc:
             logger.error("Failed to generate '%s': %s", kw["keyword"], exc)
+            mark_failed(kw)  # 归还关键词，避免永久占用
             continue
 
         try:
             out_file, slug, title, description, sd_name, date_display = render_article(config, kw, html_body)
         except Exception as exc:
             logger.error("Failed to render '%s': %s", kw["keyword"], exc)
+            mark_failed(kw)  # 归还关键词，避免永久占用
             continue
 
         mark_completed(kw)

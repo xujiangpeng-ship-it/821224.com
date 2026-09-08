@@ -45,6 +45,25 @@ def _build_openai_client():
     )
 
 
+def _build_agnes_client():
+    """Lazy-init OpenAI-compatible client for Agnes AI (agnes-ai.com).
+
+    Agnes 接口与 OpenAI 兼容：POST https://apihub.agnes-ai.com/v1/chat/completions
+    实测可用文本模型：agnes-2.5-flash / agnes-2.5-pro / agnes-3.0-flash / agnes-2.5-pro-beta
+    （Mistral 的 mistral-small-latest 自 2026-09-04 起持续 429，改由 Agnes 主扛。）
+    """
+    try:
+        from openai import OpenAI
+    except ImportError:
+        raise ImportError("openai package not installed. Run: pip install openai")
+
+    api_key = os.environ.get("AGNES_API_KEY", "").strip()
+    if not api_key:
+        raise ValueError("AGNES_API_KEY environment variable is not set.")
+    base_url = os.environ.get("AGNES_BASE_URL", "https://apihub.agnes-ai.com/v1").strip()
+    return OpenAI(base_url=base_url, api_key=api_key)
+
+
 # ---------------------------------------------------------------------------
 # Single-run judgment
 # ---------------------------------------------------------------------------
@@ -133,6 +152,40 @@ def _call_nvidia(
     raise RuntimeError(f"Nvidia NIM: exhausted {retry_attempts} retries without success.")
 
 
+def _call_agnes(
+    model: str,
+    system_prompt: str,
+    user_prompt: str,
+    temperature: float,
+    max_tokens: int,
+    retry_attempts: int,
+    retry_delays: list,
+) -> str:
+    """Single call to Agnes AI. Non-recoverable after retries → RuntimeError."""
+    client = _build_agnes_client()
+
+    for attempt in range(retry_attempts):
+        try:
+            resp = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+            if resp and resp.choices and resp.choices[0].message.content:
+                return resp.choices[0].message.content.strip()
+        except Exception as exc:
+            delay = retry_delays[min(attempt, len(retry_delays) - 1)]
+            logger.warning("Agnes attempt %d/%d failed: %s. Retrying in %ds...",
+                           attempt + 1, retry_attempts, exc, delay)
+            time.sleep(delay)
+
+    raise RuntimeError(f"Agnes: exhausted {retry_attempts} retries without success.")
+
+
 def generate_text(
     system_prompt: str,
     user_prompt: str,
@@ -151,6 +204,24 @@ def generate_text(
 
     mistral_model = os.environ.get("MISTRAL_MODEL", "mistral-small-latest")
     nvidia_model = os.environ.get("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct")
+    agnes_model = os.environ.get("AGNES_MODEL", "agnes-2.5-flash")
+
+    # --- Primary: Agnes（Mistral 自 2026-09-04 起持续 429，Agnes 顶上）---
+    if os.environ.get("AGNES_API_KEY", "").strip():
+        try:
+            return _call_agnes(
+                model=agnes_model,
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                retry_attempts=retry_attempts,
+                retry_delays=retry_delays,
+            )
+        except Exception as exc:
+            logger.warning("Agnes failed (%s); falling back to Mistral/Nvidia.", exc)
+    else:
+        logger.info("AGNES_API_KEY not set; skipping Agnes provider.")
 
     # --- Primary: Mistral ---
     try:
