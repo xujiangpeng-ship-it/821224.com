@@ -108,6 +108,14 @@ def main():
 
     regenerated = retemplated = skipped = failed = 0
 
+    # 断点续跑：已成功处理的文章记入 .remediate_done.txt，重跑时跳过
+    done_file = Path(CONTENT_DIR.parent / ".remediate_done.txt")
+    done = set()
+    if done_file.exists():
+        done = {l.strip() for l in done_file.read_text(encoding="utf-8").splitlines() if l.strip()}
+    if done:
+        print(f"[resume] {len(done)} articles already processed, will skip.\n")
+
     for sf in sorted(CONTENT_DIR.iterdir()):
         if not sf.is_dir():
             continue
@@ -121,10 +129,17 @@ def main():
                 continue
             slug = af.name
             url = f"/{subdomain}/{slug}/"
+
+            # 断点续跑：已完成的直接跳过
+            if url in done:
+                skipped += 1
+                continue
+
             old_html = article_file.read_text(encoding="utf-8")
 
             if rr.is_benchmark_clean(old_html):
                 skipped += 1
+                done.add(url)
                 continue
 
             meta = index_lookup.get(url, {})
@@ -177,6 +192,9 @@ def main():
             html = render(body, title, description, keyword, subdomain, subdomain_name,
                          url, date_display, date_iso, faq, howto, now)
             article_file.write_text(html, encoding="utf-8")
+            done.add(url)
+            with open(done_file, "a", encoding="utf-8") as df:
+                df.write(url + "\n")
             print(f"  {'REGEN' if (has_strong_leak(old_html) and body) else 'RETEMPLATE'} {url} -> {str(title)[:55]}")
 
     print(f"\nDone: regenerated={regenerated}, retemplated={retemplated}, "

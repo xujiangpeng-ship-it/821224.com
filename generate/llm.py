@@ -204,7 +204,7 @@ def generate_text(
 
     mistral_model = os.environ.get("MISTRAL_MODEL", "mistral-small-latest")
     nvidia_model = os.environ.get("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct")
-    agnes_model = os.environ.get("AGNES_MODEL", "agnes-2.5-flash")
+    agnes_model = os.environ.get("AGNES_MODEL", "agnes-3.0-flash")
 
     # --- Primary: Agnes（Mistral 自 2026-09-04 起持续 429，Agnes 顶上）---
     if os.environ.get("AGNES_API_KEY", "").strip():
