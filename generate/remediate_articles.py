@@ -155,7 +155,7 @@ def main():
                     date_iso = ""
 
             body = None
-            if has_strong_leak(old_html):
+            if has_strong_leak(old_html) or has_semantic_slop(old_html):
                 perspective = PERSPECTIVE.get(subdomain, "senior insurance technology analyst")
                 user = (
                     f"Write the complete article body (HTML) for this assignment.\n\n"

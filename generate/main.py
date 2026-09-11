@@ -272,6 +272,12 @@ CONTENT_LENGTH_RULES = {
     "how-to":         (1200, 2500),
 }
 
+try:
+    from no_ai_slop_rules import SLOP_INSTRUCTIONS, audit_slop
+except ImportError:
+    SLOP_INSTRUCTIONS = ""
+    def audit_slop(text): return []
+
 SYSTEM_PROMPT = textwrap.dedent("""\
 You are a senior insurance technology analyst writing for "Insurtech Insights" — a Gartner/Forrester-caliber publication covering AI in insurance. Your tone: confident, direct, data-driven, skeptical where warranted.
 
@@ -473,6 +479,8 @@ SECTION 7: OUTPUT FORMAT
   • NO <!DOCTYPE>, <html>, <head>, <body> tags.
   • NO code fences (```html or otherwise).
   • Word count: adhere strictly to the range. Minimum 1200 for all types.""")
+
+SYSTEM_PROMPT = SYSTEM_PROMPT + ("\n\n" + SLOP_INSTRUCTIONS if SLOP_INSTRUCTIONS else "")
 
 TYPE_INSTRUCTIONS = {
     "tutorial": "Write a step-by-step implementation guide. Include numbered steps, code snippets or config examples where relevant, and a realistic resource estimate. Target: practitioner who will actually build this.",

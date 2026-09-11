@@ -4,6 +4,12 @@
 
 import re
 import json
+
+try:
+    from no_ai_slop_rules import SLOP_INSTRUCTIONS, audit_slop
+except ImportError:
+    SLOP_INSTRUCTIONS = ""
+    def audit_slop(text): return []
 from pathlib import Path
 from datetime import datetime
 
@@ -101,6 +107,8 @@ OUTPUT FORMAT:
 - NO code fences
 - Word count: minimum 2000 words
 '''
+
+ENHANCED_SYSTEM_PROMPT = ENHANCED_SYSTEM_PROMPT + ("\n\n" + SLOP_INSTRUCTIONS if SLOP_INSTRUCTIONS else "")
 
 print("Enhanced system prompt saved.")
 print(f"Total characters: {len(ENHANCED_SYSTEM_PROMPT)}")
