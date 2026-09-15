@@ -200,7 +200,7 @@ THEME_TO_SOURCES = {
     # 2026-09-01 按实测可达性重排；Reddit 经 ScrapeCreators 打通后已并回。
     "ai_claims":            ["reddit", "hackernews", "techmeme"],
     "ai_fraud":             ["reddit", "hackernews", "polymarket"],
-    "embedded_insurance":   ["hackernews", "github", "polymarket"],
+    "embedded_insurance":   ["reddit", "hackernews", "github", "polymarket"],
     "bnpl_embedded":        ["reddit", "hackernews", "polymarket"],
     "open_insurance_api":   ["hackernews", "github", "arxiv"],
     "microinsurance":       ["hackernews"],
@@ -223,9 +223,9 @@ SUBDOMAIN_TO_THEME = {
     "embedded-insurance":   "embedded_insurance",
 }
 
-# 半自动优先：先只给这两类主题自动注入社区区块（用户决策：先攻 ai_claims/ai_fraud）。
-# 其余主题主题路由已就绪，后续把主题名加进这个列表即可全量铺开。
-COMMUNITY_THEMES = ["ai_claims", "ai_fraud"]
+# 全量铺开：6 个内容子域全部注入社区（Reddit）区块，用于整站 AdSense 过审。
+COMMUNITY_THEMES = ["ai_claims", "ai_fraud", "ai_policy_cx", "ai_underwriting",
+                    "decision_intelligence", "embedded_insurance"]
 
 # 生成管线默认不调社区 API（避免 CI / 自动 cron 乱花 ScrapeCreators 额度）。
 # 需要注入时 export COMMUNITY_ENABLE=1 再跑生成/回填脚本。

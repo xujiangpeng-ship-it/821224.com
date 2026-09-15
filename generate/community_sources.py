@@ -694,7 +694,9 @@ def build_community_section(subdomain: str, title: str, slug: str,
         quotes = [Quote(**d) for d in cache]
     else:
         quotes = collect_for_article(theme, title, keyword)
-        _save_cache(theme, slug, quotes)
+        # 空结果（抓取失败/限流）不写缓存，便于下次重跑补全
+        if quotes:
+            _save_cache(theme, slug, quotes)
     if not quotes:
         return ""
     return render_html(quotes, theme)
