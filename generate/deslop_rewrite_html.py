@@ -64,6 +64,21 @@ AD_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Key Takeaways block — preserve verbatim (never send to LLM), reinsert after prose.
+KT_RE = re.compile(
+    r'<section class="key-takeaways"[^>]*>[\s\S]*?</section>',
+    re.IGNORECASE,
+)
+
+
+def extract_kt(region: str):
+    """Strip a Key Takeaways block out of the prose region (preserve verbatim)."""
+    m = KT_RE.search(region)
+    if not m:
+        return region, ""
+    kt = m.group(0)
+    return region[: m.start()] + region[m.end():], kt
+
 
 def split_article(html: str):
     """Return (ac_open_idx, ac_close_end_idx, community_block, prose_region).
@@ -141,6 +156,14 @@ SYSTEM_PROMPT = (
     "Output ONLY the cleaned HTML body (starting with <h2> or <p>), no code "
     "fences, no preamble, no commentary."
     + SLOP_INSTRUCTIONS
+    + (
+        "\n\nCRITICAL - eliminate ALL 'colon_reveal' patterns. Any 'Label: rest' "
+        "reveal lead-in (e.g. 'The catch:', 'Why it matters:', 'The bottom line:', "
+        "'Here is the thing:', 'The takeaway:', 'The key point:') MUST be rewritten "
+        "as ordinary prose or merged into the surrounding paragraph. Never keep a "
+        "colon-reveal lead-in. Also remove binary_contrast framing and "
+        "interpretive_metadiscourse ('This isn't just about X - it's about Y')."
+    )
 )
 
 
@@ -174,6 +197,18 @@ def rewrite(prose: str, url: str, max_retries=3):
             time.sleep(6)
     print(f"    x all {max_retries} retries failed: {last_err}")
     return None
+
+
+# ---------------------------------------------------------------------------
+# checkpoint helper (write every processed file so the self-respawning
+# wrapper can detect completion after a crash/resume)
+# ---------------------------------------------------------------------------
+def _append_done(url):
+    try:
+        with open(DONE_FILE, "a", encoding="utf-8") as df:
+            df.write(url + "\n")
+    except OSError:
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -211,8 +246,10 @@ def main():
         if parts is None:
             print(f"[{i+1}/{total}] {url}: NO article-content, SKIP")
             done.add(url)
+            _append_done(url)
             continue
         ac_open, ac_close_end, community_block, prose_region = parts
+        prose_region, kt_block = extract_kt(prose_region)
         prose, ad_slot = prose_without_ad(prose_region)
 
         slop_hits = [h for h in audit_slop(prose) if h not in COSMETIC]
@@ -222,6 +259,7 @@ def main():
             else:
                 skipped += 1
                 done.add(url)
+                _append_done(url)
                 continue
 
         if audit_only:
@@ -234,6 +272,7 @@ def main():
         if new_prose is None:
             failed += 1
             done.add(url)  # don't loop forever; revisit manually
+            _append_done(url)
             continue
 
         # guard against truncated/shortened rewrites (would lose article content)
@@ -241,11 +280,12 @@ def main():
             print(f"    x rewrite too short ({len(new_prose)} vs {len(prose)}), SKIP")
             failed += 1
             done.add(url)
+            _append_done(url)
             continue
 
         # verify community block still preserved (it is, we never touched it)
         new_with_ad = reinsert_ad(new_prose, ad_slot)
-        new_ac = AC_OPEN + "\n" + new_with_ad + "\n" + community_block + "\n</div>"
+        new_ac = AC_OPEN + "\n" + new_with_ad + "\n" + kt_block + "\n" + community_block + "\n</div>"
         new_html = html[:ac_open] + new_ac + html[ac_close_end:]
 
         # sanity: community block survived
@@ -253,6 +293,7 @@ def main():
             print("    x community block lost, SKIP")
             failed += 1
             done.add(url)
+            _append_done(url)
             continue
 
         # atomic write + retry
@@ -277,6 +318,7 @@ def main():
         else:
             failed += 1
             done.add(url)
+            _append_done(url)
 
         if (rewritten + failed) % 5 == 0:
             print(f"    [progress: {rewritten} rewritten, {failed} failed]")

@@ -252,29 +252,35 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In 2023, the average U.S. property and casualty insurer flagged 14.7% of first notice of loss (FNOL) submissions as suspicious, according to <a href="https://www.iii.org/sites/default/files/2023-05/III_Fraud_Study_2023.pdf" target="_blank" rel="noopener noreferrer">the Insurance Information Institute’s annual fraud study</a>. That’s up from 8.2% in 2019. But here’s the kicker: the same study found that only 2.3% of those flagged claims were ultimately denied due to fraud. Translation: your image recognition AI is generating more noise than signal, costing your claims team 12 extra hours per week chasing red herrings.</h2>
+<h2>In 2023, the average U.S. property and casualty insurer flagged 14.7% of first notice of loss (FNOL) submissions as suspicious, according to <a href="https://www.iii.org/sites/default/files/2023-05/III_Fraud_Study_2023.pdf" target="_blank" rel="noopener noreferrer">the Insurance Information Institute’s annual fraud study</a>. That’s up from 8.2% in 2019. The same study found that only 2.3% of those flagged claims were ultimately denied due to fraud. This mismatch means image recognition AI is generating more noise than signal, costing claims teams 12 extra hours per week chasing invalid leads.</h2>
 
-<p>I’ve reviewed dozens of AI-driven fraud detection deployments across Tier 1 and Tier 2 carriers. The pattern is consistent: image recognition models trained on synthetic fraud datasets inflate false positives by 300–600%, especially when thresholds are set to catch soft fraud like exaggerated roof damage or staged water losses. The result? A compliance nightmare, higher adjuster turnover, and—paradoxically—more actual fraud slipping through because teams are drowning in alerts. So what’s the fix? It’s not about more AI. It’s about smarter AI.</p>
+<p>Reviews of AI-driven fraud detection deployments across Tier 1 and Tier 2 carriers show a consistent pattern: image recognition models trained on synthetic fraud datasets inflate false positives by 300–600%, particularly when thresholds target soft fraud like exaggerated roof damage or staged water losses. The result is a compliance risk, higher adjuster turnover, and increased actual fraud slipping through because teams are overwhelmed by alerts. The solution requires smarter AI implementation, not just more of it.</p>
 
-<p>How image recognition AI is supposed to work—and where the wheels come off Most image recognition systems in insurance operate on a simple premise: extract features from photos of damaged property, compare them to known fraud patterns, and flag anomalies. The workflow typically uses three components:</p>
+<p><strong>How image recognition AI works and where it fails</strong><br>
+Most image recognition systems in insurance operate on a simple premise: extract features from photos of damaged property, compare them to known fraud patterns, and flag anomalies. The workflow typically uses three components:</p>
 
-<h2><strong>Feature extraction:</strong> CNN-based models like ResNet50 or EfficientNet pull out visual cues—crack patterns, water stain shapes, hail dent density. <strong>Pattern matching:</strong> A binary classifier (often XGBoost or LightGBM) scores the image against a training set of known fraud and non-fraud claims.</h2>
+<ul>
+<li><strong>Feature extraction:</strong> CNN-based models like ResNet50 or EfficientNet pull out visual cues—crack patterns, water stain shapes, hail dent density.</li>
+<li><strong>Pattern matching:</strong> A binary classifier (often XGBoost or LightGBM) scores the image against a training set of known fraud and non-fraud claims.</li>
+</ul>
 
 <p><strong>Thresholding:</strong> A probability score triggers an alert if it exceeds a static cutoff, usually set at 0.7 or higher.</p>
 
 <ul>
-<li>But the model’s training data is the rotten core. I’ve audited datasets from five major carriers. On average, 62% of the “fraud” samples were labeled based on adjuster suspicion notes, not adjudicated court rulings or SIU investigations. That’s circular logic: the model learns to detect adjuster bias, not fraud. A 2022 MIT study found that systems trained on adjuster-flagged images had a false-positive rate of 42%, versus 11% when trained on SIU-confirmed fraud cases (<a href="https://arxiv.org/abs/2204.01234" target="_blank" rel="noopener noreferrer">“Label Bias in Insurance Fraud Detection,” 2022</a>).</li>
-<li>The second failure point is threshold rigidity. Most carriers use a one-size-fits-all cutoff. But fraud probability isn’t linear—it’s bimodal. A roof with eight hail dents is likely legitimate in Colorado; the same pattern in Florida raises suspicion because hail is rare there. Static thresholds ignore geography, policy type, and historical fraud rates by ZIP code. Adjusters told me they manually override 40% of AI flags because the model is blind to the nuance of local weather patterns.</li>
+<li>The model’s training data is the primary issue. Audits of datasets from five major carriers found that on average, 62% of the “fraud” samples were labeled based on adjuster suspicion notes, not adjudicated court rulings or SIU investigations. This creates circular logic where the model learns to detect adjuster bias rather than fraud. A 2022 MIT study found that systems trained on adjuster-flagged images had a false-positive rate of 42%, versus 11% when trained on SIU-confirmed fraud cases (<a href="https://arxiv.org/abs/2204.01234" target="_blank" rel="noopener noreferrer">“Label Bias in Insurance Fraud Detection,” 2022</a>).</li>
+<li>The second failure point is threshold rigidity. Most carriers use a one-size-fits-all cutoff, but fraud probability is bimodal. A roof with eight hail dents is likely legitimate in Colorado; the same pattern in Florida raises suspicion because hail is rare there. Static thresholds ignore geography, policy type, and historical fraud rates by ZIP code. Adjusters report manually overriding 40% of AI flags because the model ignores local weather patterns.</li>
 <li>Where the math breaks down: precision-recall trade-offs in real deployments</li>
 </ul>
 
-<p>Carriers love to cite precision metrics from pilot programs—“Our model achieved 94% precision on the validation set!”—but pilots rarely reflect production reality. In a live deployment at a top-20 P&C carrier, the model’s precision dropped from 92% in the lab to 58% in production because the validation set lacked edge cases like partial roof obstructions or glare from smartphone cameras. The false-alert rate climbed from 0.8 per 1,000 claims to 3.4.</p>
+<p>Carriers cite precision metrics from pilot programs—“Our model achieved 94% precision on the validation set!”—but pilots rarely reflect production reality. In a live deployment at a top-20 P&C carrier, the model’s precision dropped from 92% in the lab to 58% in production because the validation set lacked edge cases like partial roof obstructions or glare from smartphone cameras. The false-alert rate climbed from 0.8 per 1,000 claims to 3.4.</p>
 
-<p>What’s worse, the model’s recall for actual fraud was abysmal. It caught only 18% of confirmed fraud cases—partly because fraudsters adapt. One organized ring in Texas started using high-resolution drones with polarizing filters to obscure hail patterns. The model, trained on ground-level iPhone shots, couldn’t detect the synthetic smoothness.</p>
+<p>The model’s recall for actual fraud was also low, catching only 18% of confirmed fraud cases. Fraudsters adapt; one organized ring in Texas started using high-resolution drones with polarizing filters to obscure hail patterns. The model, trained on ground-level iPhone shots, could not detect the synthetic smoothness.</p>
 
-<h3>Rebuilding the pipeline: data, not more AI If your image recognition system is bleeding false positives, the fix isn’t a bigger neural network. It’s data discipline. Here’s the playbook I’ve used to cut false alerts by 47% at two carriers:</h3>
+<h3>Rebuilding the pipeline: data, not more AI<br>
+If your image recognition system is bleeding false positives, the fix is data discipline. The playbook used to cut false alerts by 47% at two carriers:</h3>
 
-<p>1. Kill pseudo-labels and rebuild the training set Stop using adjuster suspicion notes as fraud labels. Instead:</p>
+<p><strong>1. Kill pseudo-labels and rebuild the training set</strong><br>
+Stop using adjuster suspicion notes as fraud labels. Instead:</p>
 
 <p>Pull confirmed fraud cases from SIU investigations with court documents or police reports. Add “gold standard” non-fraud cases: adjuster-verified legitimate claims with photo timestamps matching repair invoices.</p>
 
@@ -282,57 +288,69 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>At a mutual carrier in the Midwest, this cut false positives by 38% in six weeks. The key was eliminating noise: the old dataset had 1,200 images labeled as fraud based solely on adjuster notes; the new one has 400 images, all with documented evidence.</p>
 
-<h3>2. Replace static thresholds with dynamic risk scores A static cutoff ignores the context that matters to adjusters. Instead, build a lightweight Bayesian network that folds in:</h3>
+<h3><strong>2. Replace static thresholds with dynamic risk scores</strong><br>
+A static cutoff ignores the context that matters to adjusters. Instead, build a lightweight Bayesian network that folds in:</h3>
 
-<p>Geographic hail probability (NOAA data) Policyholder claim history (internal)</p>
+<p>Geographic hail probability (NOAA data)<br>
+Policyholder claim history (internal)</p>
 <ul>
-<li>Neighborhood fraud rate (LexisNexis/CUE data) Model confidence score (output from your image classifier)</li>
-<li>One carrier I worked with replaced a 0.7 threshold with a dynamic score. It reduced false alerts by 53% without dropping fraud recall. The model now flags 8% of claims instead of 14.7%, and 3.1% are confirmed fraud—up from 2.3%.</li>
-<li>3. Add multi-modal validation to catch synthetic fraud Fraudsters use AI too. They generate synthetic damage patterns or manipulate photos with editing tools. To counter this, layer in:</li>
+<li>Neighborhood fraud rate (LexisNexis/CUE data)<br>
+Model confidence score (output from your image classifier)</li>
+<li>One carrier replaced a 0.7 threshold with a dynamic score. It reduced false alerts by 53% without dropping fraud recall. The model now flags 8% of claims instead of 14.7%, and 3.1% are confirmed fraud—up from 2.3%.</li>
+<li><strong>3. Add multi-modal validation to catch synthetic fraud</strong><br>
+Fraudsters use AI too. They generate synthetic damage patterns or manipulate photos with editing tools. To counter this, layer in:</li>
 </ul>
 
-<p>Metadata analysis: GPS timestamps, EXIF data, and device fingerprints to flag edited images. Temporal consistency: Compare claim submission time to repair estimate dates—staged losses often have estimates filed before the loss occurs.</p>
+<p><strong>Metadata analysis:</strong> GPS timestamps, EXIF data, and device fingerprints to flag edited images.<br>
+<strong>Temporal consistency:</strong> Compare claim submission time to repair estimate dates—staged losses often have estimates filed before the loss occurs.</p>
 
-<h3>Neighborhood clustering: Run a DBSCAN on policyholder addresses and claim photos to detect unusual clustering of similar damage patterns. At a specialty insurer covering Florida homeowners, this approach flagged a ring staging water losses, and the model caught 87% of their synthetic claims—cases where the same water stain pattern appeared across 42 policies in a single zip code.</h3>
-                <!-- Ad Mid-Content -->
-                <div class="ad-slot" style="margin:32px 0">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-                <p>The hidden cost: how image recognition AI inflates your claims cycle time</p>
+<h3><strong>Neighborhood clustering:</strong> Run a DBSCAN on policyholder addresses and claim photos to detect unusual clustering of similar damage patterns. At a specialty insurer covering Florida homeowners, this approach flagged a ring staging water losses, and the model caught 87% of their synthetic claims—cases where the same water stain pattern appeared across 42 policies in a single zip code.</h3>
+
+<p><strong>The hidden cost: how image recognition AI inflates your claims cycle time</strong></p>
 <ul>
-<li>Adjusters at a Fortune 500 carrier told me they spend an average of 4.3 hours per week chasing AI-generated false positives. Multiply that by 250 adjusters, and you’re burning $1.2 million annually in labor costs—without counting the opportunity cost of delayed legitimate payouts. The real fraud? Your own model.</li>
-<li>I’ve seen carriers try to offset this by hiring temp adjusters during peak seasons. But that just shifts the cost upstream: temp adjusters have higher error rates, leading to more complaints and regulatory scrutiny. The net result is a 15% increase in complaint volume tied to AI-flagged claims, according to a 2023 NAIC regulatory filing.</li>
-<li>So how do you measure the true cost of image recognition AI? Track these four metrics religiously: <strong>False alert rate per 1,000 claims:</strong> Target <0.5 for Tier 1 carriers, <1.0 for Tier 2.</li>
+<li>Adjusters at a Fortune 500 carrier spend an average of 4.3 hours per week chasing AI-generated false positives. Multiply that by 250 adjusters, and you’re burning $1.2 million annually in labor costs—without counting the opportunity cost of delayed legitimate payouts.</li>
+<li>Carriers have tried to offset this by hiring temp adjusters during peak seasons, but that shifts the cost upstream. Temp adjusters have higher error rates, leading to more complaints and regulatory scrutiny. The net result is a 15% increase in complaint volume tied to AI-flagged claims, according to a 2023 NAIC regulatory filing.</li>
+<li>To measure the true cost of image recognition AI, track these four metrics: <strong>False alert rate per 1,000 claims:</strong> Target <0.5 for Tier 1 carriers, <1.0 for Tier 2.</li>
 <li><strong>Adjuster override rate:</strong> If >25% of AI flags are manually overridden, your model is broken. <strong>Cycle time delta:</strong> Compare average cycle time for AI-flagged claims vs. non-flagged claims. If AI-flagged claims take longer to resolve, the model is adding friction.</li>
 </ul>
 
-<p><strong>Complaint rate per 1,000 claims:</strong> Monitor for spikes tied to AI-flagged claims. When image recognition AI actually works: two carriers that got it right</p>
+<p><strong>Complaint rate per 1,000 claims:</strong> Monitor for spikes tied to AI-flagged claims.</p>
+
+<p><strong>When image recognition AI works: two carriers that got it right</strong></p>
 
 <h3>Carrier Use Case</h3>
 
 <p>Model Data Strategy</p>
 <ul>
-<li>Result Nationwide (P&C)</li>
+<li><strong>Result Nationwide (P&C)</strong></li>
 <li>Hail damage severity scoring Vision Transformer (ViT) fine-tuned on NOAA hail maps and adjuster-verified roof photos</li>
 <li>Replaced synthetic fraud labels with NOAA weather station data + adjuster-verified damage grades False positives dropped 51%; fraud recall improved from 22% to 47%</li>
 </ul>
 
-<p>Hippo (Homeowners) Water damage authenticity check</p>
+<p><strong>Hippo (Homeowners)</strong> Water damage authenticity check</p>
 
-<h2>Hybrid CNN + metadata classifier (ResNet50 + EXIF analysis) Added repair invoice timestamps and policyholder claim history to training set</h2>
+<h2>Hybrid CNN + metadata classifier (ResNet50 + EXIF analysis) Added repair invoice timestamps and policyholder claim history to training set
+<!-- Ad Mid-Content -->
+                <div class="ad-slot" style="margin:32px 0">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+</h2>
 
-<p>False alert rate fell from 4.2% to 1.1%; complaint volume tied to AI flags dropped 68% Lemonade (Renters)</p>
+<p>False alert rate fell from 4.2% to 1.1%; complaint volume tied to AI flags dropped 68%</p>
+
+<p><strong>Lemonade (Renters)</strong></p>
 
 <p>Staged theft detection from photos GAN-generated synthetic theft patterns + YOLOv8 object detection</p>
 
 <p>Used police report timestamps to validate theft claims; excluded adjuster notes from training Detected 12 organized rings in 2023; model recall for actual theft rose from 11% to 39%</p>
+
 <ul>
-<li>State Farm (Auto) Glass claim authenticity</li>
+<li><strong>State Farm (Auto)</strong> Glass claim authenticity</li>
 <li>MobileNetV3 + glass fracture pattern library from IIHS crash tests Augmented training set with glass repair shop invoices and VIN-specific part numbers</li>
-<li>False positives dropped 43%; glass fraud recoveries rose 29% Notice a pattern? These carriers didn’t throw more AI at the problem. They rebuilt the data pipeline, integrated external context, and eliminated pseudo-labels. The result wasn’t just better fraud detection—it was lower cycle times and fewer complaints.</li>
-<li>The compliance trap: why your AI fraud model might violate state laws</li>
+<li>False positives dropped 43%; glass fraud recoveries rose 29% These carriers did not just add more AI. They rebuilt the data pipeline, integrated external context, and eliminated pseudo-labels. The result was better fraud detection, lower cycle times, and fewer complaints.</li>
+<li><strong>The compliance trap: why your AI fraud model might violate state laws</strong></li>
 </ul>
 
 <h2>Most carriers treat image recognition AI as a “tool,” not a “decision maker.” But regulators are cracking down. In 2024, the New York Department of Financial Services sent a bulletin to 12 carriers warning that AI-driven fraud detection systems could violate <a href="https://www.dfs.ny.gov/industry_guidance/circular_letters/cl2024_02" target="_blank" rel="noopener noreferrer">Regulation 187</a> if they:</h2>
@@ -342,80 +360,40 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <tr>
 <th>Use non-public data without disclosure. Fail to provide claimants with an explanation for a denial tied to AI.</th>
 <th>Use models trained on biased or outdated datasets.</th>
-<th>A Midwest carrier got dinged for using a model trained on 2018–2020 data to flag claims in 2023—without disclosing the model’s limitations. The DFS found the model penalized older roofs disproportionately, leading to a 22% higher denial rate for homes built before 1990. The carrier had to retroactively review 1,800 claims and pay $4.2 million in restitution.</th>
-<th>So what’s the compliance playbook? Disclose AI use in policy documents and FNOL forms.</th>
+<th>A Midwest carrier received penalties for using a model trained on 2018–2020 data to flag claims in 2023—without disclosing the model’s limitations. The DFS found the model penalized older roofs disproportionately, leading to a 22% higher denial rate for homes built before 1990. The carrier had to retroactively review 1,800 claims and pay $4.2 million in restitution.</th>
+<th>The compliance playbook includes: Disclose AI use in policy documents and FNOL forms.</th>
 <th>Provide claimants with a plain-language explanation if AI flags their claim. Avoid jargon like “feature extraction” or “CNN output.” Retrain models annually and document the process. The DFS now requires carriers to submit AI model change logs.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Audit for disparate impact by ZIP code, age of home, and policyholder demographics. If your AI denies 15% of claims in a majority-Hispanic neighborhood but only 6% in a majority-white ZIP code, you’re violating fair lending laws. What’s next: from image recognition to multi-modal fraud detection</td>
-<td>The future isn’t more image classifiers. It’s systems that fuse images with behavioral data, social media signals, and telemetry. Startups like <a href="https://www.claimgenius.com" target="_blank" rel="noopener noreferrer">ClaimGenius</a> and <a href="https://www.metromile.com" target="_blank" rel="noopener noreferrer">Metromile</a> are already using dashcam footage to detect staged accidents in real time. But the real breakthrough will come from multi-modal models trained on:</td>
+<td>Audit for disparate impact by ZIP code, age of home, and policyholder demographics. If your AI denies 15% of claims in a majority-Hispanic neighborhood but only 6% in a majority-white ZIP code, you’re violating fair lending laws. <strong>What’s next: from image recognition to multi-modal fraud detection</strong></td>
+<td>Systems that fuse images with behavioral data, social media signals, and telemetry are the next step. Startups like <a href="https://www.claimgenius.com" target="_blank" rel="noopener noreferrer">ClaimGenius</a> and <a href="https://www.metromile.com" target="_blank" rel="noopener noreferrer">Metromile</a> are already using dashcam footage to detect staged accidents in real time. Breakthroughs will come from multi-modal models trained on:</td>
 <td>Images: damage severity, repair estimates, and metadata. Text: adjuster notes, repair invoices, and claimant statements.</td>
 <td>Audio: voice stress analysis during FNOL calls (controversial, but being tested). Geospatial: satellite imagery, weather data, and property history.</td>
-<td>Carriers that master this fusion will cut fraud losses by 30–40%, not because the AI is smarter, but because the data is richer. But be warned: these systems raise privacy concerns. The California Privacy Protection Agency is already probing carriers that use telemetry data without explicit consent.</td>
+<td>Carriers that master this fusion will cut fraud losses by 30–40% because the data is richer. These systems raise privacy concerns. The California Privacy Protection Agency is already probing carriers that use telemetry data without explicit consent.</td>
 </tr>
 <tr>
-<td>The bottom line? Image recognition AI is neither a silver bullet nor a scapegoat. It’s a tool—and like any tool, its effectiveness depends on the craftsmanship of the data behind it. If your false-positive rate is climbing, don’t blame the model. Blame the labels.</td>
-<td>Your next move: a 90-day action plan to fix your image recognition AI pipeline If your team is drowning in AI-generated false positives, here’s a 90-day sprint to cut the noise:</td>
-<td>Week 1–2: Audit your training data Pull your fraud and non-fraud labels. Count how many are based on adjuster notes vs. SIU investigations. If >30% are pseudo-labels, schedule a data rebuild. Budget: $50,000–$150,000 for annotation and validation.</td>
-<td>Week 3–4: Build a dynamic risk score Use a Bayesian network to fold in geography, policy history, and neighborhood fraud rates. Target: reduce false alerts by 30% without dropping fraud recall. Cost: $20,000–$40,000 for engineering time.</td>
-<td>Week 5–8: Add multi-modal validation Integrate EXIF analysis, repair invoice timestamps, and NOAA weather data. Test on a 1,000-claim sample. Expect false positives to drop by 40–50%. Cost: $10,000–$25,000 for third-party data feeds.</td>
+<td><strong>The bottom line:</strong> Image recognition AI is a tool whose effectiveness depends on the quality of the data behind it. If your false-positive rate is climbing, the issue is often the labels. <strong>Your next move: a 90-day action plan to fix your image recognition AI pipeline</strong><br>
+If your team is drowning in AI-generated false positives, follow this 90-day sprint to cut the noise:</td>
+<td><strong>Week 1–2: Audit your training data</strong><br>
+Pull your fraud and non-fraud labels. Count how many are based on adjuster notes vs. SIU investigations. If >30% are pseudo-labels, schedule a data rebuild. Budget: $50,000–$150,000 for annotation and validation.</td>
+<td><strong>Week 3–4: Build a dynamic risk score</strong><br>
+Use a Bayesian network to fold in geography, policy history, and neighborhood fraud rates. Target: reduce false alerts by 30% without dropping fraud recall. Cost: $20,000–$40,000 for engineering time.</td>
+<td><strong>Week 5–8: Add multi-modal validation</strong><br>
+Integrate EXIF analysis, repair invoice timestamps, and NOAA weather data. Test on a 1,000-claim sample. Expect false positives to drop by 40–50%. Cost: $10,000–$25,000 for third-party data feeds.</td>
 </tr>
 <tr>
-<td>Week 9–12: Deploy and monitor Set up dashboards for false alert rate, adjuster override rate, and cycle time delta. Retrain the model weekly. Target: false alert rate <0.5 per 1,000 claims. If you miss it, roll back and iterate.</td>
-<td>This isn’t a tech project. It’s a data project. The carriers that get it right treat image recognition AI as a supplement to human judgment—not a replacement. The ones that don’t will keep burning millions chasing shadows while real fraud slips through the cracks.</td>
-<td>About the Author <strong>Jiangpeng Xu</strong> — Lead Author &amp; Principal Analyst</td>
+<td><strong>Week 9–12: Deploy and monitor</strong><br>
+Set up dashboards for false alert rate, adjuster override rate, and cycle time delta. Retrain the model weekly. Target: false alert rate <0.5 per 1,000 claims. If you miss it, roll back and iterate.</td>
+<td>This is a data project. Carriers that get it right treat image recognition AI as a supplement to human judgment, not a replacement. Those that do not will continue burning resources on false positives while real fraud goes undetected.</td>
+<td><strong>About the Author</strong> <strong>Jiangpeng Xu</strong> — Lead Author &amp; Principal Analyst</td>
 <td>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</td>
 <td>Was this article helpful? Comments.</td>
-</tr>
-<tr>
-
-
-
 </tr>
 </tbody>
 </table>
 
-
-
-
-<ul>
-
-
-</ul>
-
-
-
-<ul>
-
-
-
-</ul>
-
-
-
-<ul>
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
 <!-- COMMUNITY-SECTION-START --><section class="community-perspectives" aria-label="Community perspectives">
   <h2>Community perspectives</h2>
   <p class="community-note">Selected real discussions from insurance practitioners, adjusters and policyholders on public forums. Curated for relevance and quoted with attribution; each link opens the original thread.</p>
@@ -442,17 +420,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
         </li>
   </ul>
 </section><!-- COMMUNITY-SECTION-END -->
-
-
-            
-
-            <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
-                <strong style="color:#6b7280;">            <!-- AUTHOR BIO BOX -->
-            <div class="author-bio" style="max-width:var(--content-width);margin:32px auto 0;padding:0 24px">
-                <div style="display:flex;gap:20px;background:var(--accent-light);border:1px solid #bfdbfe;border-radius:var(--radius-md);padding:24px;align-items:flex-start">
-                    <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:700;flex-shrink:0;overflow:hidden">
-                        <img src="/images/author-jiangpeng.svg" alt="Jiangpeng Xu" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.textContent='JX'">
-                    </div>
+</div>
                     <div>
                         
                         

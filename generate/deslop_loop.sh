@@ -2,7 +2,7 @@
 export PATH="/c/Users/Administrator/.workbuddy/binaries/PortableGit/versions/1.2.0/bin:/c/Users/Administrator/.workbuddy/binaries/PortableGit/versions/1.2.0/usr/bin:$PATH"
 cd /c/Users/Administrator/WorkBuddy/2026-08-30-22-49-28/821224.com
 export AGNES_API_KEY=sk-Gk3y1g10J6LNbFOOsZNReWSFERZwugKSkiqmXZddA6cha8T5
-TOTAL=223
+TOTAL=225
 for n in $(seq 1 30); do
   python -u generate/deslop_rewrite_html.py >> /tmp/deslop821.log 2>&1
   done=$(wc -l < .deslop_done.txt 2>/dev/null || echo 0)
