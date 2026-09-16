@@ -260,16 +260,16 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>A top-20 U.S. P&C insurer cut suspicious-claim leakage by 15% in eight months simply by moving from a rules-only engine to a real-time AI pipeline. The catch: it required re-engineering their data ingestion layer, retraining legacy models, and retraining adjusters to trust the model’s “medium-risk” verdicts, and this guide walks through the exact steps that team took, the code they wrote, and the cost/benefit numbers.</h2>
+<h2>A top-20 U.S. P&C insurer cut suspicious-claim leakage by 15% in eight months by moving from a rules-only engine to a real-time AI pipeline. The project required re-engineering the data ingestion layer, retraining legacy models, and training adjusters to trust the model’s “medium-risk” verdicts. This guide details the implementation steps, code, and cost/benefit numbers.</h2>
 
-<p>What we’re building By the end of the guide you will have:</p>
+<p>By the end of this guide, you will have:</p>
 
 <h3>A streaming pipeline that ingests FNOL, adjuster notes, repair invoices, and third-party data (LexisNexis, MVR, CLUE) in under 50 ms. A production-ready anomaly model (XGBoost + SHAP) that flags claims with a precision ≥ 70% and recall ≥ 60%.</h3>
-<p>An alerting dashboard that adjusters can override without engineering tickets. A rollback plan that reverts to the old rules engine if the model drifts > 8% on validation data.</p>
+<p>An alerting dashboard that allows adjusters to override without engineering tickets. A rollback plan that reverts to the old rules engine if the model drifts > 8% on validation data.</p>
 <ul>
 <li><strong>Estimated build time:</strong> 6–8 weeks for a squad of 1 FTE data engineer, 1 FTE ML engineer, 1 part-time claims analyst, and 20 hours of vendor support. Budget: $95k (AWS, Snowflake, Fivetran, open-source models). Step 1 – Instrument the data layer</li>
-<li>Insurance fraud detection starts with data that adjusters already collect but rarely share in real time. 1.1 Add three new CDC streams</li>
-<li>Claims adjusters type most of the signal into legacy case management systems. To capture it without touching the UI, we use database change-data-capture (CDC). Data source</li>
+<li>Insurance fraud detection begins with data that adjusters already collect but rarely share in real time. 1.1 Add three new CDC streams</li>
+<li>Adjusters type most of the signal into legacy case management systems. To capture this without touching the UI, we use database change-data-capture (CDC). Data source</li>
 <li>CDC tool Table pattern</li>
 </ul>
 
@@ -293,7 +293,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <td>Cost check: 500k claims/day × $0.00011 per row = $55/day. 1.3 Validate data freshness</td><td>Adjusters refuse models that lag more than 2 minutes behind the UI. Use a Snowflake task to raise an alert if watermark age spikes. Step 2 – Build the feature store</td><td>Anomaly models need features that cross silos. We built a feature store in Feast running on AWS EKS. 2.1 Define the entity</td><td>One entity per claim: 2.2 Create feature views</td><td><strong>Claim velocity</strong>: number of claims filed by the policyholder in the last 365 days. <strong>Repair burst</strong>: total labor hours reported in the last 7 days divided by historical average.</td>
 </tr>
 <tr>
-<td><strong>Adjuster churn words</strong>: TF-IDF score on phrases like “I fell”, “my cousin”, “doctor visit” from adjuster notes. <strong>Third-party risk score</strong>: LexisNexis composite score normalized to 0–1.</td><td>2.3 Push features to Redis for low-latency serving Adjusters need < 100 ms latency when they open a claim file.</td><td>Step 3 – Train the anomaly model We used a gradient-boosted tree because it handles mixed tabular data and gives us SHAP for explainability.</td><td>3.1 Label the historical set Pull closed claims with <code>fraud_flag = 1</code> from the SIU team’s case management system. We found 1,123 confirmed fraud cases in the last three years out of 1.4 million closed claims (0.08% prevalence).</td><td>To balance, we sampled 3x negatives: 3,369 claims plus synthetic minority oversampling (SMOTE) to reach 6,000 rows. 3.2 Feature matrix</td>
+<td><strong>Adjuster churn words</strong>: TF-IDF score on phrases like “I fell”, “my cousin”, “doctor visit” from adjuster notes. <strong>Third-party risk score</strong>: LexisNexis composite score normalized to 0–1.</td><td>2.3 Push features to Redis for low-latency serving Adjusters need < 100 ms latency when they open a claim file.</td><td>Step 3 – Train the anomaly model We used a gradient-boosted tree because it handles mixed tabular data and provides SHAP for explainability.</td><td>3.1 Label the historical set Pull closed claims with <code>fraud_flag = 1</code> from the SIU team’s case management system. We identified 1,123 confirmed fraud cases in the last three years out of 1.4 million closed claims (0.08% prevalence).</td><td>To balance, we sampled 3x negatives: 3,369 claims plus synthetic minority oversampling (SMOTE) to reach 6,000 rows. 3.2 Feature matrix</td>
 </tr>
 <tr>
 <td>Feature group Feature</td><td>Source Weight</td><td>Policyholder prior_claims_365d</td><td>ClaimCenter 0.18</td><td>Repair labor_hours_outlier_flag</td>
@@ -328,13 +328,8 @@ FILE_FORMAT = (TYPE = 'JSON' STRIP_OUTER_ARRAY = TRUE);</code></pre>
 <p>Third-party risk_score</p>
 
 <h4>LexisNexis 0.25</h4>
-                <!-- Ad Mid-Content -->
-                <div class="ad-slot" style="margin:32px 0">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-                <p>Network repair_shop_distance_km</p>
+
+<p>Network repair_shop_distance_km</p>
 
 <pre><code>CREATE OR REPLACE TASK DATA_FRESHNESS_WATCHDOG
 WAREHOUSE = COMPUTE_WH
@@ -350,7 +345,14 @@ QUALIFY 1=1
 HAVING lag_seconds > 120; -- 2-minute SLA
 </code></pre>
 
-<h3>Google Maps API 0.20</h3>
+<h3>Google Maps API 0.20
+<!-- Ad Mid-Content -->
+                <div class="ad-slot" style="margin:32px 0">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+</h3>
 
 <p>3.3 Model training script (XGBoost) 3.4 Validation metrics</p>
 
@@ -368,7 +370,7 @@ claim_entity = Entity(
 <h4>Step 4 – Serve the model in production 4.1 Batch scoring (daily SIU queue)</h4>
 
 <ul>
-<li>Every midnight, pull claims updated in last 24 h and append model score. 4.2 Real-time API (REST)</li>
+<li>Every midnight, pull claims updated in the last 24 hours and append the model score. 4.2 Real-time API (REST)</li>
 <li>Adjusters see the score within 80 ms via a Lambda function fronted by API Gateway. Step 5 – Build the adjuster alerting layer</li>
 <li>Adjusters refused to trust a black-box number. We built a simple three-tier UI in Looker embedded in Guidewire. Tier</li>
 <li>Score range Adjuster action</li>
@@ -415,7 +417,7 @@ r.hset("claim:CLAIM-2024-12345", mapping=feature_vector)
 <h4>12 codes (e.g., "legit repair shop", "medical records pending") High</h4>
 <p>0.61–1.00 SIU referral</p>
 
-<p>4 codes (e.g., "organized ring suspected", "prior conviction") The override rate after 90 days was 18% for medium-risk claims, proving adjusters still trusted their judgment. The override flag became a new feature for model retraining.</p>
+<p>4 codes (e.g., "organized ring suspected", "prior conviction") The override rate after 90 days was 18% for medium-risk claims, confirming adjusters still trusted their judgment. The override flag became a new feature for model retraining.</p>
 
 <h4>Step 6 – Monitor and retrain 6.1 Drift detection</h4>
 
@@ -427,10 +429,8 @@ r.hset("claim:CLAIM-2024-12345", mapping=feature_vector)
 </thead>
 <tbody>
 <tr><td>Net six-month ROI: ($2.7M + $90k + $45k) – ($95k + $108k) = $2.53M. What we learned the hard way</td><td><strong>PDF OCR accuracy matters.</strong> Textract misread 8% of invoice line items, causing false positives. We added a human-in-the-loop step for invoices > $5k. <strong>SHAP ≠ adjuster trust.</strong> We spent two weeks tuning SHAP plots; adjusters ignored them. They preferred a one-line override reason.</td><td><strong>Cold-start for new policies.</strong> The velocity feature underperformed for policies < 90 days old. We added a “prior claims in household” proxy from LexisNexis. <strong>Model drift is seasonal.</strong> Winter hail storms skewed repair_burst upward every January. We added a seasonal dummy feature.</td><td>Next-step checklist Run a 30-day shadow mode: score every claim but hide the score from adjusters to measure lift without risk.</td></tr>
-<tr><td>Build a “fraud ring” detection graph using Neo4j on policyholder phone numbers and repair shop addresses. Integrate telematics data from connected vehicles to flag staged accidents.</td><td>Set up a model governance board that includes a claims adjuster, a data scientist, and a compliance officer. If you only do one thing this quarter, instrument your adjuster notes today. Without the textual signal, every downstream model is guessing.</td><td>Community perspectives Selected real discussions from insurance practitioners, adjusters and policyholders on public forums. Curated for relevance and quoted with attribution; each link opens the original thread.</td><td><blockquote>Uninsurable Risk Thank you for quoting with Progressive. Because your customer or an insured person committed fraud or misrepresentation in connection with an application for insurance or reinstatement of insurance, or in the presentation or settlement of a claim, or issued an unauthorized payment in connection with an application for insurance or a policy, we are unable to offer your customer a new policy at this time. They were paying about 200/mo. Now I've got only one company out of 12 that will touch them. 880</td></tr>
-<tr><td><blockquote>UPDATE: i contacted the office the investigator works at and a lady was able to confirm the reason for the visit was related to the claim the at-fault person made — that’s all i know as of now! (i’m young-ish and legal stuff scares the life out of me and i thought i was in trouble, don’t hate on me lol) TLDR; would a state insurance fraud investigator come to my door about an investigation on someone else? or is it only if they think i did something?! about 2 months ago-ish i was rear ended. there was no question a</td><td><blockquote>How are people that dumb to think these huge corporations don’t know every “trick” in the book? They should count their blessings that one company is even desperate enough to consider them. Good riddance.</td><td><blockquote>My wife noticed that our insurance renewal bill has an $0.88 per vehicle fraud fee. Do all insurance companies charge this fee? Does a fraud fee have to get approved by the state insurance commissioner? We're in California. She's really on the warpath over this fee. We have Toggle insurance.</td><td><blockquote>Every important system you use today - LinkedIn job matching, Spotify&#x27;s recommendations, CapitalOne&#x27;s fraud detection, Youtube&#x27;s video ranking, DoorDash&#x27;s food search - was made good by a very small number of very expensive humans.Staff ML engineers. Applied scientists. Senior data engineers. Group product managers. Whatever the title, we have all been doing the same job: sit inside a system, understand it deeply, run hundreds of experiments, and compound its performance over years. Tiktok&#x27;</td></tr>
-<tr><td>About the Author <strong>Jiangpeng Xu</strong> — Lead Author &amp; Principal Analyst</td><td>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</td><td>Was this article helpful? Comments.</td></tr>
-<tr></tr>
+<tr><td>Build a “fraud ring” detection graph using Neo4j on policyholder phone numbers and repair shop addresses. Integrate telematics data from connected vehicles to flag staged accidents.</td><td>Set up a model governance board that includes a claims adjuster, a data scientist, and a compliance officer. If you only do one thing this quarter, instrument your adjuster notes today. Without the textual signal, every downstream model is guessing.</td>
+</tr>
 </tbody>
 </table>
 
@@ -471,8 +471,6 @@ model.save_model("s3://ai-fraud-model/xgboost_fraud_20240601.model")
 
 
 </ul>
-
-
 
 <pre><code>-- Snowflake stored procedure
 CREATE OR REPLACE PROCEDURE SCORE_NEW_CLAIMS()
@@ -564,8 +562,7 @@ if preds['data']['is_drift']:
 
 
 </ol>
-
-                <!-- COMMUNITY-SECTION-START --><section class="community-perspectives" aria-label="Community perspectives">
+<!-- COMMUNITY-SECTION-START --><section class="community-perspectives" aria-label="Community perspectives">
   
   
   <ul class="community-list">
@@ -586,7 +583,7 @@ if preds['data']['is_drift']:
         </li>
   </ul>
 </section><!-- COMMUNITY-SECTION-END -->
-            </div>
+</div>
 
             
 
