@@ -266,7 +266,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>A credit bureau score returns a single number. A fraud model returns a probability. Neither answers the question a claims adjuster faces at 2 AM: do I pay this $8,000 claim now, escalate it, or flag it for investigation?</p>
 
-<h2>Decisioning platforms solve this gap by combining model outputs with business rules, regulatory constraints, and operational workflows into actionable decisions. The difference between a model that scores well on AUC and a platform that reduces loss ratio by 3 percentage points is enormous, and my first carrier client burned through $400k on a standalone ml project that produced good predictions. They had no workflow integration, no human-in-the-loop checkpoints, and no explainability for compliance officers. I still think about that failure mode every time someone asks whether they should "just build a model."</h2>
+<p>Decisioning platforms solve this gap by combining model outputs with business rules, regulatory constraints, and operational workflows into actionable decisions. The difference between a model that scores well on AUC and a platform that reduces loss ratio by 3 percentage points is enormous, and my first carrier client burned through $400k on a standalone ml project that produced good predictions. They had no workflow integration, no human-in-the-loop checkpoints, and no explainability for compliance officers. I still think about that failure mode every time someone asks whether they should "just build a model."</p>
 
 <p>A proper decisioning platform has five layers: data ingestion, feature computation, model inference, rule engine, and action orchestration. Each layer has failure modes that will bite you. The feature store will drift. The rule engine will silently short-circuit. The model serving layer will add latency that tanks your FNOL-to-decision SLA. You need to architect around these, not after they appear.</p>
 
@@ -323,7 +323,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Step 4: Deploy the serving infrastructure</p>
 
-<h2>Model serving is where ML projects either become operational tools or remain beautiful Jupyter notebooks. The infrastructure must support A/B testing, shadow mode deployments, and instant rollback. Shadow mode is critical. Before any model touches a decision, run it in shadow for 30 days. Compare its output against human decisions without affecting the actual outcome. This reveals calibration issues and edge cases without risking claims payouts.</h2>
+<p>Model serving is where ML projects either become operational tools or remain beautiful Jupyter notebooks. The infrastructure must support A/B testing, shadow mode deployments, and instant rollback. Shadow mode is critical. Before any model touches a decision, run it in shadow for 30 days. Compare its output against human decisions without affecting the actual outcome. This reveals calibration issues and edge cases without risking claims payouts.</p>
 
 <p>Here's the KServe deployment configuration:</p>
 
@@ -337,7 +337,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Here's how I structure rules in a YAML-based engine. This approach is simpler than Drools for most insurance use cases and easier to maintain:</p>
 
-<h2>Rule conflict resolution is the hardest part. What happens when two rules apply to the same decision with conflicting actions? I use a priority system with explicit conflict logging. Every conflict gets recorded with timestamps, rule IDs, and the resolution taken. Regulators ask about this during audits, and having a documented conflict resolution process is worth more than any rule engine feature.</h2>
+<p>Rule conflict resolution is the hardest part. What happens when two rules apply to the same decision with conflicting actions? I use a priority system with explicit conflict logging. Every conflict gets recorded with timestamps, rule IDs, and the resolution taken. Regulators ask about this during audits, and having a documented conflict resolution process is worth more than any rule engine feature.</p>
 
 <p>Rule performance should be measured separately from model performance. Track rule hit rate, conflict frequency, and escalation volume. A rule that triggers 99% of the time is probably too broad. A rule that never triggers should be reviewed or removed. Unused rules accumulate technical debt and slow down the engine.</p>
 
@@ -384,7 +384,7 @@ claims_feature_view = FeatureView(
 
 <p>Temporal is my preferred workflow engine. It handles retries, timeouts, and state persistence automatically: Idempotency is non-negotiable in the payment path. Network timeouts happen. Workers crash. The orchestrator retries. Without idempotency keys, you pay claims twice. I've seen it. The fix is expensive. Prevention is cheap.</p>
 
-<h2>Workflow observability is equally important. Every decision that flows through the platform should generate an audit log with: decision timestamp, model version, feature values at decision time, rule evaluation results, action taken, and outcome. This log becomes your ground truth for model monitoring and compliance reporting. Build it before you need it.</h2>
+<p>Workflow observability is equally important. Every decision that flows through the platform should generate an audit log with: decision timestamp, model version, feature values at decision time, rule evaluation results, action taken, and outcome. This log becomes your ground truth for model monitoring and compliance reporting. Build it before you need it.</p>
 
 <p>Step 7: Monitoring and model drift detection Models decay. Insurance data shifts with inflation, regulation, and behavior change. The monitoring layer catches this before it costs money. I track four categories of drift:</p>
 
@@ -432,7 +432,7 @@ trainer = xgb.XGBClassifier(
 
 <p>Here's the drift detection pipeline:</p>
 
-<h2>Drift alerts should trigger human review, not automatic retraining. Retraining on drift signals without investigation creates a feedback loop where the model chases moving targets. The correct response is usually: investigate the data change, determine if it's temporary or structural, then decide whether retraining is warranted.</h2>
+<p>Drift alerts should trigger human review, not automatic retraining. Retraining on drift signals without investigation creates a feedback loop where the model chases moving targets. The correct response is usually: investigate the data change, determine if it's temporary or structural, then decide whether retraining is warranted.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -698,7 +698,7 @@ async def daily_drift_check():
 
 <p>Common failure modes and how to avoid them I've watched six decisioning platform projects fail or underdeliver. The reasons cluster into five patterns. Understanding these saves time and money.</p>
 
-<h2><strong>Pattern 1: Building models before defining decisions.</strong> Teams fall in love with the ML. They train sophisticated models that predict well but don't produce actionable decisions. The model outputs probabilities. Adjusters need yes/no/maybe. Bridge this gap with clear decision categorization before model development starts.</h2>
+<p><strong>Pattern 1: Building models before defining decisions.</strong> Teams fall in love with the ML. They train sophisticated models that predict well but don't produce actionable decisions. The model outputs probabilities. Adjusters need yes/no/maybe. Bridge this gap with clear decision categorization before model development starts.</p>
 
 <p><strong>Pattern 2: Ignoring the audit trail.</strong> Every decision must be reproducible. Feature values, model version, rule evaluation, and action taken. If you can't reconstruct a decision from six months ago, you don't have a compliant platform. Build the audit trail into the schema, not as an afterthought.</p>
 
