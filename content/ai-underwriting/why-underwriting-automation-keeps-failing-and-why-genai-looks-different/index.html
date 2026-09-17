@@ -465,13 +465,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             <div class="article-content">
 14% of commercial insurance underwriters still manually review 90% of submissions, a pace that carriers cannot sustain economically. This is a structural model gap, not a digitization one. Generative AI does not automate clerical underwriting tasks. It compresses the 8–12 week submission-to-quote cycle to approximately 8–12 days, provided users accept that current Large Language Models (LLMs) remain basic parsers prone to hallucination.
 
-<h2>Why underwriting automation keeps failing (and why genAI looks different)</h2>
+
 
 <p>Recent "automated underwriting" pilots, such as those by ISO, Verisk, and LexisNexis Risk Solutions, achieved 40–60% straight-through processing (STP) rates in small commercial lines like BOP and GL. In middle market or specialty lines (construction wrap-up, MGA excess & surplus, admitted property cat), STP rates drop to 15–25%. Data entry is not the bottleneck; judgment is. Underwriters spend 60% of their time aggregating disparate data sources (loss runs, COPE data, reinspection reports, third-party certifications) and only 40% rating or declinature.</p>
 
 <p>Generative AI vendors claim they can reverse this ratio by auto-generating underwriting summaries, exception memos, and draft quotes from unstructured data. LexisNexis Risk Solutions reported in November 2023 that its GenAI underwriting assistant cut cycle time by 37% in a pilot with three regional carriers. A review of their post-pilot deck shows the "cycle time" metric excluded underwriter review of AI-generated drafts and relied on a sample of 187 submissions over four months, which lacks scale.</p>
 
-<h3>Where genAI actually works today</h3>
+<h2>Where genAI actually works today</h2>
 
 <p>Commercial underwriting presents a long-tail problem. The top 20% of submissions drive 80% of the premium but command the most underwriter attention. GenAI finds traction in the remaining 80% — the "long tail" of submissions typically auto-declined or routed to junior underwriters. Evidence of this traction includes:</p>
 
@@ -481,7 +481,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
     <li><strong>Draft quote templating:</strong> CaptainAlt auto-generates ISO-aligned quote documents from structured underwriting data. The company claims 85% of draft quotes in small commercial lines require zero manual edits, but their case study covers only 47 submissions over two months and excludes middle market lines.</li>
 </ul>
 
-<h3>Where genAI still hallucinates (and why it matters)</h3>
+<h2>Where genAI still hallucinates (and why it matters)</h2>
 
 <p>Two Tier-1 carriers abandoned genAI pilots after the AI confidently hallucinated a $3M loss run for a 50-year-old account with no prior claims. Underwriters caught the error only by cross-checking the AI’s output against the carrier’s loss database. The risk involves model drift. Commercial underwriting data is non-stationary: reinspection reports change every renewal, new certifications get added, and loss trends shift with macroeconomic conditions. A model trained on 2022 data misclassifies a 2024 account with supply chain volatility as a "stable risk" if it has insufficient exposure to disrupted operations.</p>
 
@@ -529,24 +529,24 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
     </tbody>
 </table>
 
-<h2>Build vs. buy: the genAI underwriting architecture trade-off
+<p>Build vs. buy: the genAI underwriting architecture trade-off
 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-</h2>
+</p>
 
 <p>Reviewing six genAI underwriting implementations over 18 months—three in-house, three vendor-led—reveals distinct trade-offs. In-house teams took 9–11 months to ship a minimally viable product (MVP), whereas vendor-led pilots delivered a working extractor in 8–10 weeks. In-house builds ultimately yielded better error rates (<5% vs. 12–18%) and lower ongoing costs (<$0.04 per submission vs. $0.12–$0.25 per submission for vendor tools).</p>
 
-<h3>Buy: fast to market, but with hidden costs</h3>
+<h2>Buy: fast to market, but with hidden costs</h2>
 
 <p>Vendor tools from LexisNexis, Verisk, and Guidewire’s recently launched genAI add-ons prioritize quick integration. They parse unstructured data and draft documents but operate as black boxes. Users cannot audit the model’s decision-making and remain locked into vendor data schemas. This setup suits small commercial lines, but middle market and specialty underwriting demand custom risk models. One carrier attempted to integrate a vendor’s genAI extractor into their middle market energy book and incurred 23% false positives on COPE data extraction, forcing a rebuild of the extraction layer from scratch.</p>
 
 <p>Another cost factor is model drift. Vendor tools retrain quarterly but exclude carrier-specific data. If a book has unique risk characteristics, such as a heavy concentration in cannabis-related property risks, the vendor’s model drifts from the carrier’s risk profile. One carrier paid $80K/year for a custom fine-tuning engagement to align the model with their data.</p>
 
-<h3>Build: better control, but slower and riskier</h3>
+<h2>Build: better control, but slower and riskier</h2>
 
 <p>In-house builds control data governance, model explainability, and custom risk logic. The complexity is high. One team spent six months cleaning and normalizing loss runs from 12 different TPAs, achieving only 84% extraction accuracy before adding a human-in-the-loop (HITL) layer. The total cost to ship was $1.2M, and model drift issues persist for niche commercial lines.</p>
 

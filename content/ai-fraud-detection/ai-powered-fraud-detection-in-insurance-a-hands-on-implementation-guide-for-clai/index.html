@@ -260,11 +260,11 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-<h2>A top-20 U.S. P&C insurer cut suspicious-claim leakage by 15% in eight months by moving from a rules-only engine to a real-time AI pipeline. The project required re-engineering the data ingestion layer, retraining legacy models, and training adjusters to trust the model’s “medium-risk” verdicts. This guide details the implementation steps, code, and cost/benefit numbers.</h2>
+<p>A top-20 U.S. P&C insurer cut suspicious-claim leakage by 15% in eight months by moving from a rules-only engine to a real-time AI pipeline. The project required re-engineering the data ingestion layer, retraining legacy models, and training adjusters to trust the model’s “medium-risk” verdicts. This guide details the implementation steps, code, and cost/benefit numbers.</p>
 
 <p>By the end of this guide, you will have:</p>
 
-<h3>A streaming pipeline that ingests FNOL, adjuster notes, repair invoices, and third-party data (LexisNexis, MVR, CLUE) in under 50 ms. A production-ready anomaly model (XGBoost + SHAP) that flags claims with a precision ≥ 70% and recall ≥ 60%.</h3>
+<p>A streaming pipeline that ingests FNOL, adjuster notes, repair invoices, and third-party data (LexisNexis, MVR, CLUE) in under 50 ms. A production-ready anomaly model (XGBoost + SHAP) that flags claims with a precision ≥ 70% and recall ≥ 60%.</p>
 <p>An alerting dashboard that allows adjusters to override without engineering tickets. A rollback plan that reverts to the old rules engine if the model drifts > 8% on validation data.</p>
 <ul>
 <li><strong>Estimated build time:</strong> 6–8 weeks for a squad of 1 FTE data engineer, 1 FTE ML engineer, 1 part-time claims analyst, and 20 hours of vendor support. Budget: $95k (AWS, Snowflake, Fivetran, open-source models). Step 1 – Instrument the data layer</li>
@@ -275,7 +275,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Latency target Cost/month (AWS)</p>
 
-<h3>Guidewire ClaimCenter <a href="https://debezium.io/documentation/reference/stable/connectors/mysql.html" target="_blank" rel="noopener noreferrer">Debezium MySQL connector</a></h3>
+<h2>Guidewire ClaimCenter <a href="https://debezium.io/documentation/reference/stable/connectors/mysql.html" target="_blank" rel="noopener noreferrer">Debezium MySQL connector</a></h2>
 
 <p>claim, activity, diarization 300 ms</p>
 
@@ -345,14 +345,14 @@ QUALIFY 1=1
 HAVING lag_seconds > 120; -- 2-minute SLA
 </code></pre>
 
-<h3>Google Maps API 0.20
+<p>Google Maps API 0.20
 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-</h3>
+</p>
 
 <p>3.3 Model training script (XGBoost) 3.4 Validation metrics</p>
 
@@ -410,7 +410,7 @@ feature_vector = {
 r.hset("claim:CLAIM-2024-12345", mapping=feature_vector)
 </code></pre>
 
-<h3>— Medium</h3>
+<h2>— Medium</h2>
 
 <p>0.26–0.60 Manual review</p>
 

@@ -252,11 +252,11 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-<h2>In a controlled pilot, Lemonade’s GenAI-powered underwriting stack cut the combined ratio on renters policies by 5.2 points in 18 months — from 84.2 to 79.0. That 5.2-point swing translates directly to $47 million in saved loss ratio per $1 billion of written premium, assuming no rate change. These figures are disclosed in Lemonade’s 2024 10-K and audited by PwC. The pilot ran at 2.3x the compute cost of the legacy rule engine.</h2>
+<p>In a controlled pilot, Lemonade’s GenAI-powered underwriting stack cut the combined ratio on renters policies by 5.2 points in 18 months — from 84.2 to 79.0. That 5.2-point swing translates directly to $47 million in saved loss ratio per $1 billion of written premium, assuming no rate change. These figures are disclosed in Lemonade’s 2024 10-K and audited by PwC. The pilot ran at 2.3x the compute cost of the legacy rule engine.</p>
 
 <p>Agentic AI in underwriting is a multi-agent system that decomposes a risk submission into sub-tasks such as identity verification, peril modeling, reinsurance eligibility, and pricing calibration. It spawns autonomous agents per task, each equipped with domain-specific tools. For instance, one agent has direct API access to Verisk’s CLUE data while another accesses a catastrophe model.</p>
 
-<h3>How the system executes</h3>
+<h2>How the system executes</h2>
 
 <p>The agents run parallel, non-deterministic execution paths until a consensus threshold is met. The system then rolls up the result into a single underwriting decision. This is emergent orchestration; the system learns which agent combinations produce the lowest loss ratio drift on renewal cohorts. This mechanism allows Lemonade’s stack to tolerate a 2.3x compute premium because it optimizes for loss ratio rather than throughput.</p>
 
@@ -267,7 +267,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Key metrics include signal ingestion from structured and unstructured data pipelines such as PDF endorsements, drone imagery, and IoT feeds. Vendors include Cape Analytics for roof condition, Planck for property risk, and Sprout.ai for document extraction. The target signal-to-noise ratio is greater than 3:1.</p>
 
-<h3>Agent tooling</h3>
+<h2>Agent tooling</h2>
 
 <p>Lightweight microservices with domain APIs handle identity, peril, and reinsurance. Tools include FastAPI with LangChain, custom agents on crewAI, or pre-built agents from Hyperscience. The P95 latency target is less than 1.5s per agent.</p>
 
@@ -292,18 +292,18 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Most architectures skip the knowledge graph. Every one of those implementations hit a wall at renewal season when the model tried to explain why it priced a wood shake roof in Napa at 140% of ACV. The graph is necessary for interpretability at scale.</p>
 
-<h3>ROI math for a $2B personal lines book
+<p>ROI math for a $2B personal lines book
 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-</h3>
+</p>
 
 <p>Consider a book with a 65% loss ratio and 25% expense ratio. The baseline is $2B written, $1.3B loss ratio, and $500M expenses, resulting in a combined ratio of 95.0. The agentic AI target assumes a 5.2-point loss ratio reduction based on the Lemonade proxy and a 15% expense reduction via straight-through processing on 70% of submissions. Compute cost is 2.3x baseline at $0.08 per submission, totaling $3.2M/year for 4M submissions. The net improvement drops the combined ratio to 79.0, saving $280M in loss ratio. After offsetting $3.2M in compute costs and $50M in incremental opex, the net savings are $227M. This is a 38-to-1 ROI in year two. If the loss ratio only drops 2 points, the payback period extends, and the answer lies in agent failure modes.</p>
 
-<h3>Failure modes and mitigations</h3>
+<h2>Failure modes and mitigations</h2>
 
 <p><strong>1. Consensus deadlock:</strong> In a pilot, a reinsurance eligibility agent and a peril scoring agent locked in a zero-sum debate on hail-prone roofs in Colorado. The orchestrator timed out after 45 seconds and punted to human review. A tie-breaker agent using reinsurer historical loss data resolved this. Cost: +12% compute, -0% human review rate.</p>
 
@@ -313,7 +313,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>4. Latency tax on distribution partners:</strong> Integration with a regional MGA’s API introduced 800ms latency on the first call. The MGA threatened to switch to a simpler quoting engine. An edge cache on the orchestrator’s output for repeat risks solved it. Cost: +$240K/year in Redis cluster; saved $1.2M in distribution churn.</p>
 
-<h3>Vendor shortlist</h3>
+<h2>Vendor shortlist</h2>
 
 <table>
 <thead>
@@ -354,15 +354,15 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Only Lemonade discloses loss ratio impact. Hippo and State Farm publish quote metrics, not loss ratios. Guidewire’s 25% reduction claim is an internal benchmark, not audited. For verifiable ROI, Lemonade is the only public data point available.</p>
 
-<h3>Regulatory blind spot: model governance</h3>
+<h2>Regulatory blind spot: model governance</h2>
 
 <p>The EU’s Digital Operational Resilience Act (DORA) requires insurers to prove reasonable predictability in automated decisions. An agentic system that routes 15% of renewals to human review based on a consensus threshold is not predictable under DORA Article 9. UK PRA SS1/23 on model risk management explicitly classifies multi-agent systems as high complexity. Wrap the orchestrator in a deterministic override layer that logs every agent’s input, intermediate score, and consensus outcome. This allows regulators to replay decision paths deterministically. Overhead: +15% storage. The override layer doubles latency on flagged submissions, trading auditability for latency risk.</p>
 
-<h3>Hidden cost: data quality decay</h3>
+<h2>Hidden cost: data quality decay</h2>
 
 <p>Agentic systems assume clean, structured inputs. In practice, 40% of submissions have missing peril data, 12% have incorrect roof type, and 7% have conflicting IoT feeds. The system either punts to human review ($18 per submission) or imputes missing data (risk: +2.1% loss ratio drift on renewal cohort). Carriers have burned $2.3M in opex in six months cleaning data retroactively. A pre-ingestion validation agent that rejects submissions with noise >3:1 prevents downstream bleed. Cost: +$0.02 per submission.</p>
 
-<h3>When to walk away</h3>
+<h2>When to walk away</h2>
 
 <p><strong>Rule engine complexity >120 rules:</strong> If underwriting guidelines exceed 120 rules, the agentic system struggles to explain decisions. The knowledge graph collapses under its own weight.</p>
 
@@ -370,7 +370,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>Human review rate >25%:</strong> If more than 25% of submissions require human review, the compute premium is not justified. The ROI math breaks.</p>
 
-<h3>Actionable next step</h3>
+<h2>Actionable next step</h2>
 
 <p>If your book is >$500M and combined ratio is >90, spin up a sandbox in week 10 using:</p>
 

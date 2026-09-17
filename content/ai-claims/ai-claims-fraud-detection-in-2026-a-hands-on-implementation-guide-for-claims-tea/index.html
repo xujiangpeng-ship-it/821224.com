@@ -252,7 +252,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In 2023, the Coalition Against Insurance Fraud estimated that U.S. insurers lost $100 billion annually to fraudulent claims — a figure that understates the problem because most fraud goes undetected.<a href="https://insurancefraud.org/press-release/2023-fraud-stats/" target="_blank" rel="noopener noreferrer">[Coalition Against Insurance Fraud, 2023 Fraud Stats]</a> By 2026, AI-driven fraud detection models will be table stakes for Tier 1 carriers, but most implementations fail because teams treat detection as a data science project rather than a claims operations transformation. I've reviewed a dozen failed pilots where models flagged too many false positives, paralyzing adjusters with alerts. This guide walks through building a production-ready AI claims fraud detection system that scales with your claims volume and reduces false positives by at least 30% without increasing adjuster workload.</h2>
+                <p>In 2023, the Coalition Against Insurance Fraud estimated that U.S. insurers lost $100 billion annually to fraudulent claims — a figure that understates the problem because most fraud goes undetected.<a href="https://insurancefraud.org/press-release/2023-fraud-stats/" target="_blank" rel="noopener noreferrer">[Coalition Against Insurance Fraud, 2023 Fraud Stats]</a> By 2026, AI-driven fraud detection models will be table stakes for Tier 1 carriers, but most implementations fail because teams treat detection as a data science project rather than a claims operations transformation. I've reviewed a dozen failed pilots where models flagged too many false positives, paralyzing adjusters with alerts. This guide walks through building a production-ready AI claims fraud detection system that scales with your claims volume and reduces false positives by at least 30% without increasing adjuster workload.</p>
 
 
 <p>I'm writing this as a data science lead who has deployed detection systems at two national P&C; carriers and one large TPA. We'll focus on operational reality: data pipelines that don't melt under MGA bordereaux, models that update monthly without retraining hell, and thresholds that adjust automatically to seasonality and regional fraud patterns. The goal is a system that catches soft fraud (exaggerated injuries, staged incidents) and hard fraud (arson-for-profit rings) with precision that justifies the build cost.</p>
@@ -261,7 +261,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>1. Define the Fraud Detection Problem in Operational Terms Most teams start with a vague "detect fraud" mandate. That fails. Fraud detection is a multi-class problem with overlapping signals:</p>
 
 
-<h3><strong>Hard fraud: criminal intent</strong> — arson rings, slip-and-fall scams, crash-for-cash schemes. <strong>Soft fraud: opportunistic exaggeration</strong> — inflating medical bills, extending rental car periods, claiming pre-existing conditions.</h3>
+<p><strong>Hard fraud: criminal intent</strong> — arson rings, slip-and-fall scams, crash-for-cash schemes. <strong>Soft fraud: opportunistic exaggeration</strong> — inflating medical bills, extending rental car periods, claiming pre-existing conditions.</p>
 
 
 <p><strong>Organized fraud rings</strong> — linked claims across geographies with modus operandi patterns.</p>
@@ -287,7 +287,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Update Frequency Key Fields</p>
 
 
-<h3>First Notice of Loss (FNOL) Core claims system (Guidewire, Duck Creek, Guidewire ClaimCenter)</h3>
+<h2>First Notice of Loss (FNOL) Core claims system (Guidewire, Duck Creek, Guidewire ClaimCenter)</h2>
 
 
 <p>Real-time incident_date, loss_type, injury_type, vehicle_year, driver_age, location_ZIP</p>
@@ -395,7 +395,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Rule of thumb: Start with 20-25 features. Use SHAP values to prune the rest. Expect 5-7 features to drive 80% of model performance. In our deployments, the top features are provider repeat rate, claim density by ZIP-30d, and injury severity vs damage mismatch.</p>
 
 
-<h3>4. Model Selection: Gradient Boosting vs. Graph Neural Networks vs. Hybrid In 2026, the fraud detection landscape splits into three camps:</h3>
+<p>4. Model Selection: Gradient Boosting vs. Graph Neural Networks vs. Hybrid In 2026, the fraud detection landscape splits into three camps:</p>
 
 
 <p><strong>Gradient Boosting (XGBoost, LightGBM)</strong> — Still the workhorse. Fast to train, explainable via SHAP, and handles mixed data types well. Best for single-claim fraud detection. <strong>Graph Neural Networks (GNNs)</strong> — Detect organized rings by modeling claimant-provider-shop networks. High precision but slow to retrain. Use for regional rings only.</p>

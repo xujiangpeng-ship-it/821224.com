@@ -260,19 +260,19 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Honestly, when I first saw these numbers I didn't believe them either. I spent eighteen months watching State Farm try to embed car insurance into Ford’s vehicle telemetry stack. What emerged wasn’t the seamless “buy-as-you-drive” fantasy most insurtech blogs publish. It was a brittle, compliance-heavy integration that achieved measurable gains in acquisition velocity while exposing serious friction around data provenance and claims leakage.</h2>
+                <p>Honestly, when I first saw these numbers I didn't believe them either. I spent eighteen months watching State Farm try to embed car insurance into Ford’s vehicle telemetry stack. What emerged wasn’t the seamless “buy-as-you-drive” fantasy most insurtech blogs publish. It was a brittle, compliance-heavy integration that achieved measurable gains in acquisition velocity while exposing serious friction around data provenance and claims leakage.</p>
 
 <p>This is a raw look at the implementation. The numbers below come from internal deck excerpts, earnings call transcripts, and secondary vendor disclosures. I’ve cross-referenced them against public regulatory filings where possible. Background</p>
 
 <p>State Farm began its embedded strategy in early 2023 after the NAIC released revised guidelines on telematics-driven underwriting. Ford’s SYNC platform already handled location pings, hard-brake events, and mileage aggregates from millions of connected vehicles, and the strategic logic was straightforward: intercept buyers during the car-buying workflow instead of competing in post-purchase quote shops.</p>
 
-<h3>By Q3 2024, State Farm had migrated its personal auto line onto an API-first architecture. The target was to offer coverage at the point of sale, using live vehicle data to adjust premiums before the contract was signed. Challenge</h3>
+<p>By Q3 2024, State Farm had migrated its personal auto line onto an API-first architecture. The target was to offer coverage at the point of sale, using live vehicle data to adjust premiums before the contract was signed. Challenge</p>
 
 <p>The first obstacle was data latency. Ford’s original telemetry pipeline refreshed every five minutes. That’s fine for real-time driving scores, but it’s useless for underwriting decisions that require clean loss-ratio inputs. State Farm’s actuaries needed at least thirty days of historical driving behavior to produce stable risk bands.</p>
 
 <p>The second problem was compliance overhead. Each U.S. state treats embedded insurance differently. California required explicit consumer consent for every data field shared across systems. Texas allowed broader data flow but imposed strict prohibitions on using brake-force events in premium calculations. Building a single integration that satisfied all fifty states meant engineering a dynamic rules engine, not a static API call.</p>
 
-<h3>The third hurdle was internal resistance. State Farm’s traditional agents viewed embedded sales as cannibalization. Field teams initially reported a 12% drop in in-office renewals after the pilot launched in three markets. Solution</h3>
+<p>The third hurdle was internal resistance. State Farm’s traditional agents viewed embedded sales as cannibalization. Field teams initially reported a 12% drop in in-office renewals after the pilot launched in three markets. Solution</p>
 
 <p>State Farm partnered with a mid-tier insurtech vendor to build a federated data layer. The architecture separates Ford’s raw telemetry into three buckets: <strong>Immediate risk signals</strong> (hard-brake counts, rapid acceleration events) used only for real-time discount offers.</p>
 
@@ -280,7 +280,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>The pricing engine runs in a sandboxed environment that evaluates each state’s regulatory constraints before outputting a premium quote. If a driver sits in California, the engine strips brake-force events from the calculation. In Texas, those events remain active but are capped at a ten percent premium modifier.</p>
 
-<h3>To address agent friction, State Farm introduced a hybrid commission model. Agents earn 60% of the standard commission on embedded policies if they assist with policy activation within forty-eight hours. The remaining 40% goes to a digital fulfillment queue. The company also rolled out a lightweight CRM plugin so agents could view embedded-purchase history alongside traditional policy records.</h3>
+<p>To address agent friction, State Farm introduced a hybrid commission model. Agents earn 60% of the standard commission on embedded policies if they assist with policy activation within forty-eight hours. The remaining 40% goes to a digital fulfillment queue. The company also rolled out a lightweight CRM plugin so agents could view embedded-purchase history alongside traditional policy records.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -299,7 +299,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Embedded policy conversion rate at point of sale 11.3%</p>
 
-<h3>23.7% +109%</h3>
+<h2>23.7% +109%</h2>
 
 <p>Combined ratio impact (embedded vs traditional) 98.4%</p>
 

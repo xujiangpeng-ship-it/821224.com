@@ -252,13 +252,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In 2023, the average bodily injury claim severity in the U.S. auto line rose 11.2% YoY to $23,462, according to <a href="https://www.iii.org/publications/iii-insurance-fact-stat-book" target="_blank" rel="noopener noreferrer">III's 2024 Insurance Fact Book</a>. That’s $2,300 per claim above actuarial expectations—enough to wipe out underwriting profit on a $500K premium book at a 65% loss ratio, and i’ve seen claims teams react by tightening subrogation, increasing deductibles, or outsourcing to tpas that promise 7–10%. The catch? Most of those programs use static thresholds that miss the dynamic patterns hidden in adjuster notes, repair photos, and medical bills. A properly tuned AI severity model can flag 18–23% of high-severity claims before they close, according to a 2024 LexisNexis Risk Solutions internal benchmark shared with select carriers. The goal of this guide is to show you how to build one yourself, not as a pilot, but as a production-ready service that runs in your claims platform.</h2>
+                <p>In 2023, the average bodily injury claim severity in the U.S. auto line rose 11.2% YoY to $23,462, according to <a href="https://www.iii.org/publications/iii-insurance-fact-stat-book" target="_blank" rel="noopener noreferrer">III's 2024 Insurance Fact Book</a>. That’s $2,300 per claim above actuarial expectations—enough to wipe out underwriting profit on a $500K premium book at a 65% loss ratio, and i’ve seen claims teams react by tightening subrogation, increasing deductibles, or outsourcing to tpas that promise 7–10%. The catch? Most of those programs use static thresholds that miss the dynamic patterns hidden in adjuster notes, repair photos, and medical bills. A properly tuned AI severity model can flag 18–23% of high-severity claims before they close, according to a 2024 LexisNexis Risk Solutions internal benchmark shared with select carriers. The goal of this guide is to show you how to build one yourself, not as a pilot, but as a production-ready service that runs in your claims platform.</p>
 
 
 <p>Who this is for You’re a claims analytics lead, a data science-savvy adjuster, or a VP of product at an MGA. You’ve got: At least 10K closed claims with severity labels, adjuster notes, and repair invoices. SQL access to your core claims system (Guidewire, Duck Creek, or custom).</p>
 
 
-<h3>Python 3.9+ and a GPU node or SageMaker endpoint budget of $1,200/month. If you lack any of these, skip to the “Minimum Viable Model” section first. Otherwise, let’s build.</h3>
+<p>Python 3.9+ and a GPU node or SageMaker endpoint budget of $1,200/month. If you lack any of these, skip to the “Minimum Viable Model” section first. Otherwise, let’s build.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -284,13 +284,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2><strong>High</strong>: closed claim with total_paid ≥ 80th percentile of the past 12 months for the same line/state. <strong>Medium</strong>: ≥ 50th percentile. <strong>Low</strong>: below 50th percentile. To avoid leakage, compute percentiles using only data with event_date before each claim’s first_notice_date. This prevents future-looking bias.</h2>
+<p><strong>High</strong>: closed claim with total_paid ≥ 80th percentile of the past 12 months for the same line/state. <strong>Medium</strong>: ≥ 50th percentile. <strong>Low</strong>: below 50th percentile. To avoid leakage, compute percentiles using only data with event_date before each claim’s first_notice_date. This prevents future-looking bias.</p>
 
 
 <p>SQL snippet: 1.3 Feature Store Design I use Feast hosted on EKS. The offline store is Snowflake; online store is Redis. This costs ~$450/month for 50M feature rows. Example feature definitions in Feast: Trade-off: storing 365-day rolling windows doubles the storage cost, but improves model precision by 4–6% on bodily injury claims. 2. Model Design: From Baseline to Production</p>
 
 
-<h3>2.1 Baseline Model (Logistic Regression) Start here. It’s interpretable, runs in 50ms, and gives you a performance floor. I’ve seen teams skip this and jump to XGBoost; they usually waste 8–12 weeks tuning hyperparameters before realizing the data is the bottleneck.</h3>
+<p>2.1 Baseline Model (Logistic Regression) Start here. It’s interpretable, runs in 50ms, and gives you a performance floor. I’ve seen teams skip this and jump to XGBoost; they usually waste 8–12 weeks tuning hyperparameters before realizing the data is the bottleneck.</p>
 
 <table>
 

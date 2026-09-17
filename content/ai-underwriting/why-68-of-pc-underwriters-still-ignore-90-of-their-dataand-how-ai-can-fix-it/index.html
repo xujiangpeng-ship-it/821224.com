@@ -327,13 +327,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-<h2>I’ve watched underwriting teams drown in data for 15 years. They receive 10,000 data points per risk: telematics pings, credit scores, IoT feeds, social sentiment, construction blueprints, drone imagery, and satellite weather loops. Yet they still rely on a 20-page PDF submission and a 30-year-old actuarial table to price a $5M property in Miami. The loss ratio on Florida homeowners insurance has risen 124 basis points since 2019 because these data sources remain disconnected from pricing decisions.</h2>
+<p>I’ve watched underwriting teams drown in data for 15 years. They receive 10,000 data points per risk: telematics pings, credit scores, IoT feeds, social sentiment, construction blueprints, drone imagery, and satellite weather loops. Yet they still rely on a 20-page PDF submission and a 30-year-old actuarial table to price a $5M property in Miami. The loss ratio on Florida homeowners insurance has risen 124 basis points since 2019 because these data sources remain disconnected from pricing decisions.</p>
 
 <p>The data exists, but it is trapped in silos, stuck in PDFs, or too noisy to use effectively. Most “alternative data” rollouts remain vaporware. I’ve seen $120M budgets vanish into proof-of-concepts that never leave the sandbox. This article details what works today, what is coming next, and where the trade-offs lie.</p>
 
 <p>In a conversation with a CTO at an insurtech firm, I asked what counts as “alternative data” in 2024. Credit scores and loss runs are table stakes. True alternative data falls into four buckets that underwriters rarely exploit:</p>
 
-<h3><strong>Behavioral telemetry:</strong> real-time driving patterns (beyond “good driver discount” snapshots), smart-home power curves, IoT sensor anomalies in factories, and gym class attendance via wearables. <strong>Geospatial intelligence:</strong> five-meter-resolution LiDAR elevation models, hyperlocal flood risk from NOAA radar and street-level imagery, and night-time light intensity as a proxy for economic activity in emerging markets.</h3>
+<p><strong>Behavioral telemetry:</strong> real-time driving patterns (beyond “good driver discount” snapshots), smart-home power curves, IoT sensor anomalies in factories, and gym class attendance via wearables. <strong>Geospatial intelligence:</strong> five-meter-resolution LiDAR elevation models, hyperlocal flood risk from NOAA radar and street-level imagery, and night-time light intensity as a proxy for economic activity in emerging markets.</p>
 
 <p><strong>Economic metadata:</strong> anonymized supply-chain invoices from freight APIs, job-posting velocity in construction trades, and satellite-based agricultural yield forecasts. <strong>Behavioral intent:</strong> digital exhaust from search queries (“best commercial roofing contractor in Miami”), social media sentiment around climate activism, and emoji patterns in ride-hailing reviews that signal aggressive driving.</p>
 
@@ -380,14 +380,14 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>These wins only materialize if the carrier owns the full stack—from data pipeline to claims adjuster UI. If you rely on a TPA or MGA to deliver the data, you revert to PDFs by week three. I’ve seen three architectures succeed; everything else is technical debt.</p>
 
-<h3><strong>Event-driven ingestion:</strong> Kafka or Pulsar for streaming telemetry (telematics, IoT, weather). Batch ingestion via S3 or GCS for static files (blueprints, EHRs). Cost killer: tier cold data to Glacier Deep Archive after 90 days; the signal-to-noise ratio drops anyway. <strong>Feature store:</strong> Feast or Tecton standardizes raw feeds into underwriting features: “mean night-time power draw,” “30-day flood risk delta,” and “social sentiment volatility score.” Feature stores add latency; don’t serve real-time quotes if your feature store takes 200ms to assemble a vector.
+<p><strong>Event-driven ingestion:</strong> Kafka or Pulsar for streaming telemetry (telematics, IoT, weather). Batch ingestion via S3 or GCS for static files (blueprints, EHRs). Cost killer: tier cold data to Glacier Deep Archive after 90 days; the signal-to-noise ratio drops anyway. <strong>Feature store:</strong> Feast or Tecton standardizes raw feeds into underwriting features: “mean night-time power draw,” “30-day flood risk delta,” and “social sentiment volatility score.” Feature stores add latency; don’t serve real-time quotes if your feature store takes 200ms to assemble a vector.
 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-</h3>
+</p>
 
 <p><strong>Modeling layer:</strong> Two-stage pipeline: (1) risk classification with XGBoost or LightGBM for explainability, (2) deep learning (TabNet or FT-Transformer) for non-linear interactions. Chubb’s marine team uses a transformer that ingests raw AIS pings and outputs a dynamic war-risk score every 15 minutes. Loss ratio fell 14% in the first year. <strong>Serving layer:</strong> Real-time API on Kubernetes with feature store cache for &lt;500ms SLA. Batch scoring for renewals nightly via Spark on Databricks. <strong>Feedback loop:</strong> Claims bordereaux ingested via OCR and matched to underwriting vectors. Loss ratio drift triggers model retraining automatically. The deeper you go into alternative data, the more you need a data engineering team that speaks actuarial language. I’ve seen carriers hire ex-Google SREs who couldn’t explain a combined ratio to a line underwriter. That’s a recipe for shelfware.</p>
 
@@ -403,7 +403,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>70% of “alternative data” pilots fail because the carrier didn’t pre-define the underwriting question.</strong> If you’re asking, “Can we price this risk?” you’re already too late. The question must be, “How do we reduce the loss ratio on this sub-segment by 20 bps?” That reframing cuts the pilot list in half.</p>
 
-<h3>Regulatory and ethical landmines</h3>
+<h2>Regulatory and ethical landmines</h2>
 
 <p>I’ve advised three carriers that hit cease-and-desist orders within 18 months of rolling out alternative data. The culprits:</p>
 
@@ -415,7 +415,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>Trade-off:</strong> The more alternative the data, the higher the compliance overhead. If you’re not willing to staff a team of ex-regulators and privacy lawyers, stick to telematics and IoT.</p>
 
-<h3>Parametric triggers: the underwriting hack</h3>
+<h2>Parametric triggers: the underwriting hack</h2>
 
 <p>Parametric insurance is crossing into mainstream underwriting. The trick isn’t the trigger—it’s the data source that feeds it. I’ve seen carriers bind $50M parametric flood policies in &lt;30 seconds by combining:</p>
 
@@ -429,7 +429,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Result: loss ratio of 8% vs. 45% for traditional flood policies in Florida. Carriers still need a traditional underwriting layer to price the basis risk. You can’t just slap a parametric trigger on a property policy and call it done.</p>
 
-<h3>How to pilot without wasting $120M</h3>
+<h2>How to pilot without wasting $120M</h2>
 
 <p>I’ve seen three pilots succeed where 12 others failed. The pattern:</p>
 
@@ -444,7 +444,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>Trade-off:</strong> The fastest path to ROI is often a hybrid model: use a vendor for data feeds, build the underwriting logic in-house. But that hybrid creates integration challenges—vendor SLA mismatches, data format drift, and API rate limits. Plan for a data engineer to spend 40% of their time on glue code.</p>
 
-<h3>What’s coming in 2025–2026</h3>
+<h2>What’s coming in 2025–2026</h2>
 
 <p>Three trends will hit underwriting desks in the next 18 months.</p>
 
@@ -456,7 +456,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>Trade-off:</strong> The more generative the AI, the more hallucinations you’ll see. Treat LLMs as “autocomplete for underwriters,” not replacements.</p>
 
-<h3>Playbook for underwriting leaders</h3>
+<h2>Playbook for underwriting leaders</h2>
 
 <p>If you’re a mid-level underwriting leader, follow this playbook:</p>
 

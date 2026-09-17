@@ -273,7 +273,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI Anomaly Detection for Claims Fraud: A Practitioner’s Implementation Guide</h2>
+                
 
 <p>I’ve seen claims teams burn 15–20% of their bandwidth chasing false positives from rule-based fraud engines. That’s not a knock on rules—it’s the ceiling of static logic. Anomaly detection flips the model: it finds what doesn’t belong instead of what does. In production systems I’ve built, shifting from rules to unsupervised anomaly scoring cut false positives by 42% while preserving 87% of confirmed fraud cases. That’s the tangible delta you can hit with today’s tooling.</p>
 
@@ -281,7 +281,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <hr>
 
-<h3>1. Data Ingestion: Getting Clean Bordereaux</h3>
+<p>1. Data Ingestion: Getting Clean Bordereaux</p>
 
 <p>Fraud lives in the edges of your bordereaux—duplicate VINs, same adjuster on 20 claims in a week, claim amounts just under your auto-approve threshold. The first step is collecting those edges at scale.</p>
 
@@ -326,7 +326,7 @@ FROM read_csv_auto('/mnt/claims/2024-05-*.csv', ignore_errors=true);
 
 <hr>
 
-<h3>2. Feature Engineering: Turning Bordereaux into Signals</h3>
+<p>2. Feature Engineering: Turning Bordereaux into Signals</p>
 
 <p>Anomaly detection is only as good as the signals you feed it. You’re not modeling fraud directly; you’re modeling “normal claim behavior” so that anything far from normal pops.</p>
 
@@ -398,7 +398,7 @@ torch.save(encoder.state_dict(), "adjuster_encoder.pt")
 
 <hr>
 
-<h3>3. Model Selection: Unsupervised vs Hybrid</h3>
+<p>3. Model Selection: Unsupervised vs Hybrid</p>
 
 <p>I’ve seen teams default to Isolation Forest because it’s simple. That’s a mistake when fraud patterns drift monthly. The best production pipelines I’ve shipped use a two-stage hybrid:</p>
 
@@ -491,7 +491,7 @@ anomaly_score = score_claim(claim_vec, class_cov)
 
 <hr>
 
-<h3>4. Threshold Tuning: From Scores to Alerts</h3>
+<p>4. Threshold Tuning: From Scores to Alerts</p>
 
 <p>A detection system without a threshold is a noise machine. You need to map anomaly scores to a binary alert with a clear business impact.</p>
 
@@ -529,7 +529,7 @@ else:
 
 <hr>
 
-<h3>5. Deployment Patterns: From Lab to Production</h3>
+<p>5. Deployment Patterns: From Lab to Production</p>
 
 <p>You can’t run a VAE in a stored procedure. Here’s how to package the model so claims adjusters actually see it.</p>
 
@@ -606,7 +606,7 @@ def vae_score_udf(features_iter):
 
 <hr>
 
-<h3>6. Feedback Loop: Closing the Loop Without Poisoning</h3>
+<p>6. Feedback Loop: Closing the Loop Without Poisoning</p>
 
 <p>A fraud model decays the moment it’s deployed. The key is collecting ground truth without contaminating the training set.</p>
 

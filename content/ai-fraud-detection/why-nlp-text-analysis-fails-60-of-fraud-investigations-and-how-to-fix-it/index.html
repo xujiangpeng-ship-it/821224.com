@@ -252,7 +252,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2><strong>In 2023, the Coalition Against Insurance Fraud estimated that $80 billion in premiums was lost to fraud in the U.S. alone</strong> — yet LexisNexis Risk Solutions reported that 62% of SIUs still rely on manual reviews of unstructured claim notes, adjuster emails, and third-party reports to detect fraud. <a href="https://fraud.org/wp-content/uploads/2024/01/CAIF_Fraud_Facts_and_Stats_2023.pdf" target="_blank" rel="noopener noreferrer">[Coalition Against Insurance Fraud, 2023 Fraud Facts & Stats]</a> This isn’t a data problem — it’s a pipeline problem. Most SIUs treat NLP as a bolt-on to existing workflows rather than the foundational signal layer it needs to be.</h2>
+                <p><strong>In 2023, the Coalition Against Insurance Fraud estimated that $80 billion in premiums was lost to fraud in the U.S. alone</strong> — yet LexisNexis Risk Solutions reported that 62% of SIUs still rely on manual reviews of unstructured claim notes, adjuster emails, and third-party reports to detect fraud. <a href="https://fraud.org/wp-content/uploads/2024/01/CAIF_Fraud_Facts_and_Stats_2023.pdf" target="_blank" rel="noopener noreferrer">[Coalition Against Insurance Fraud, 2023 Fraud Facts & Stats]</a> This isn’t a data problem — it’s a pipeline problem. Most SIUs treat NLP as a bolt-on to existing workflows rather than the foundational signal layer it needs to be.</p>
 
 <p>As a Claims Adjuster turned Head of Analytics at a $3.2B regional P&C; carrier, I’ve stood in the war room when SIUs hit the “red flag” threshold — only to realize the trigger was a typo in a police report (“break-in” vs. “burglary”), not fraud. That’s not AI — that’s noise amplification. This guide walks through building an NLP fraud detection pipeline that actually reduces false positives and identifies anomalies, not just buzzwords.</p>
 
@@ -263,7 +263,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2><strong>Optimize for cycle time:</strong> Adding 30 seconds to triage means 60 fewer claims closed per adjuster per month. Trade-off: Rule-based keyword matching (e.g., “accident occurred at 3:17 PM”). catches 15–20% of clear fraud but generates 40–50% false positives. NLP can reduce false positives to 15–20%, but only if you accept 5–10% of true positives slipping through.</h2>
+<p><strong>Optimize for cycle time:</strong> Adding 30 seconds to triage means 60 fewer claims closed per adjuster per month. Trade-off: Rule-based keyword matching (e.g., “accident occurred at 3:17 PM”). catches 15–20% of clear fraud but generates 40–50% false positives. NLP can reduce false positives to 15–20%, but only if you accept 5–10% of true positives slipping through.</p>
 
 <p>2. Data Layer: What You Feed the Model Will Kill Your Model 2.1. Curate the corpus, don’t ingest it</p>
 
@@ -284,10 +284,10 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2><strong>Process:</strong> Adjusters label 200 claims in 3 sessions of 70 minutes each. Inter-annotator agreement (IAA) must hit Cohen’s κ ≥ 0.75 before proceeding. Trade-off: Manual labeling costs $15–$25 per claim. A $50,000 claim with 10% fraud probability justifies $25 labeling — but a $5,000 claim does not. Use active learning to prioritize labeling budget.</h2>
+<p><strong>Process:</strong> Adjusters label 200 claims in 3 sessions of 70 minutes each. Inter-annotator agreement (IAA) must hit Cohen’s κ ≥ 0.75 before proceeding. Trade-off: Manual labeling costs $15–$25 per claim. A $50,000 claim with 10% fraud probability justifies $25 labeling — but a $5,000 claim does not. Use active learning to prioritize labeling budget.</p>
 
 
-<h3>3. Model Architecture: Start Simple, Then Scale 3.1. Baseline: Regex + Spacy NER If you’re still in pilot phase or your SIU handles <500 claims/month, start here. You’ll catch 20–25% of fraud with 10–15% false positives. <strong>Rule set (YAML config):</strong></h3>
+<p>3. Model Architecture: Start Simple, Then Scale 3.1. Baseline: Regex + Spacy NER If you’re still in pilot phase or your SIU handles <500 claims/month, start here. You’ll catch 20–25% of fraud with 10–15% false positives. <strong>Rule set (YAML config):</strong></p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -342,7 +342,7 @@ df = df[~df['cleaned_text'].str.contains('test|sample|demo', case=False)]  # dro
 </code></pre>
 
 
-<h3><strong>Layer 1:</strong> Real-time claim ingestion (Kafka topic <code>claims.fraud.input</code>). <strong>Layer 2:</strong> NLP service (FastAPI) with DistilBERT endpoint. <strong>Layer 3:</strong> Decision engine (Drools or custom) applies business rules (e.g., “score > 0.85 + multi-claim applicant = SIU escalation”). <strong>Layer 4:</strong> Adjusters interact via Guidewire ClaimCenter or Duck Creek UI with fraud score and rationale.</h3>
+<p><strong>Layer 1:</strong> Real-time claim ingestion (Kafka topic <code>claims.fraud.input</code>). <strong>Layer 2:</strong> NLP service (FastAPI) with DistilBERT endpoint. <strong>Layer 3:</strong> Decision engine (Drools or custom) applies business rules (e.g., “score > 0.85 + multi-claim applicant = SIU escalation”). <strong>Layer 4:</strong> Adjusters interact via Guidewire ClaimCenter or Duck Creek UI with fraud score and rationale.</p>
 
 <p>4.2. Explainability: The Override Lever Adjusters won’t trust a black box. Expose the top 3 tokens driving the score using LIME or SHAP. <strong>LIME explainer (Python):</strong> Output: Trade-off: LIME adds 15–20ms latency per claim. Only enable for high-risk claims (score > 0.8). 5. Deployment Checklist: What Your CTO Will Ask 5.1. Resource Estimate (Mid-Market P&C;, 20k claims/year) Component</p>
 
@@ -367,10 +367,10 @@ df = df[~df['cleaned_text'].str.contains('test|sample|demo', case=False)]  # dro
 ---
 
 
-<h2>6.1. KPIs That Matter Metric Target Baseline Formula False Positive Rate ≤</h2>
+<p>6.1. KPIs That Matter Metric Target Baseline Formula False Positive Rate ≤</p>
 
 
-<h3> </h3>
+<h2> </h2>
 
 <p><section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
             <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>

@@ -247,7 +247,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>I run a 40-person claims team at a specialty P&C insurer. In the last 18 months we processed 14,200 auto and property claims by hand. That’s 27 minutes per claim on average, but the real cost is the rework: 14% of initial estimates get revised upward after we find a receipt or photo we missed the first time. The adjuster who caught the error is usually the one who already knows the policy and the claimant. We can’t clone those humans, but we can give every adjuster the same second set of eyes.</h2>
+                <p>I run a 40-person claims team at a specialty P&C insurer. In the last 18 months we processed 14,200 auto and property claims by hand. That’s 27 minutes per claim on average, but the real cost is the rework: 14% of initial estimates get revised upward after we find a receipt or photo we missed the first time. The adjuster who caught the error is usually the one who already knows the policy and the claimant. We can’t clone those humans, but we can give every adjuster the same second set of eyes.</p>
 
 <p>Over six weeks we built a lightweight NLP pipeline that reads the first notice of loss (FNOL), the adjuster’s notes, repair estimates, and supplementary documents, then surfaces the top five discrepancies between what the claimant said and what the paperwork later shows. The model runs in a 16-core VM with 64 GB RAM and returns a JSON alert in under two seconds. After a three-month pilot on 2,100 claims it reduced rework spend by $198,000 and cut cycle time by 3.2 days. Below is the step-by-step build we wish we’d had.</p>
 
@@ -257,9 +257,9 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <hr>
 
-<h2><strong>Compute</strong>: AWS m6i.4xlarge (16 vCPU, 64 GB) or equivalent on-prem. Cost: ≈ $0.68/hr on-demand. <strong>Storage</strong>: 5 TB S3 bucket in the same region as the VM. Lifecycle policy to Glacier after 90 days.</h2>
+<p><strong>Compute</strong>: AWS m6i.4xlarge (16 vCPU, 64 GB) or equivalent on-prem. Cost: ≈ $0.68/hr on-demand. <strong>Storage</strong>: 5 TB S3 bucket in the same region as the VM. Lifecycle policy to Glacier after 90 days.</p>
 
-<h3><strong>Data</strong>: 10,000 anonymized claims from the last two years (FNOL text, adjuster notes, estimates, photos). <strong>Tooling</strong>: Python 3.11, spaCy 3.7, Hugging Face transformers 4.37, scikit-learn 1.4, FastAPI 0.110.</h3>
+<p><strong>Data</strong>: 10,000 anonymized claims from the last two years (FNOL text, adjuster notes, estimates, photos). <strong>Tooling</strong>: Python 3.11, spaCy 3.7, Hugging Face transformers 4.37, scikit-learn 1.4, FastAPI 0.110.</p>
 <ul>
 <li><strong>Time</strong>: Two weeks for the MVP, four weeks for calibration and A/B deployment. Data governance checklist</li>
 <li>Verify HIPAA/PHI masking: claims file numbers must be hashed before ingestion. Obtain signed data-use agreements from every adjuster who reviews sample labels.</li>
@@ -269,7 +269,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <li><strong>Mismatched VIN</strong>: the VIN in the FNOL does not match the one on the repair invoice. <strong>Date mismatch</strong>: date of loss vs. date of repair differs by >30 days.</li>
 </ul>
 
-<h3><strong>Policy exclusion</strong>: the damaged part is explicitly excluded in the policy schedule. 1.2 Build the annotation tool</h3>
+<h2><strong>Policy exclusion</strong>: the damaged part is explicitly excluded in the policy schedule. 1.2 Build the annotation tool</h2>
 <ul>
 <li>We forked <a href="https://github.com/heartexlabs/label-studio" target="_blank" rel="noopener noreferrer">Label Studio 1.7</a> and created a single-question interface: Field</li>
 <li>Type Example</li>
@@ -337,7 +337,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <h2>4.2 Containerize and deploy Dockerfile:</h2>
 
-<h3>Push to Amazon ECR. Deploy as an ECS Fargate service with 2 vCPU, 4 GB memory. Auto-scaling policy: 70% CPU target. Cost: $36/month for 1000 claims/day. 4.3 Real-time alerting</h3>
+<p>Push to Amazon ECR. Deploy as an ECS Fargate service with 2 vCPU, 4 GB memory. Auto-scaling policy: 70% CPU target. Cost: $36/month for 1000 claims/day. 4.3 Real-time alerting</p>
 <p>We attach an EventBridge rule that triggers the service whenever a new FNOL lands in S3. The JSON alert goes to an internal Slack webhook and to the adjuster’s queue: Step 5: Calibrate precision vs. recall</p>
 
 <table>
@@ -398,7 +398,7 @@ def merge_pages(claim_id):
 
 <h2>document hash for replayability We set a CloudWatch alarm for latency >100 ms or error rate >1%.</h2>
 
-<h3>7.2 Bias audit We ran a subgroup analysis by claim severity (low/medium/high) and by ZIP code median income. No subgroup fell below 82% F1, so we proceeded. If we see drift we’ll retrain on the next quarterly batch.</h3>
+<p>7.2 Bias audit We ran a subgroup analysis by claim severity (low/medium/high) and by ZIP code median income. No subgroup fell below 82% F1, so we proceeded. If we see drift we’ll retrain on the next quarterly batch.</p>
 <p>7.3 Retraining pipeline Every Sunday at 02:00 UTC an AWS Step Functions workflow:</p>
 <table>
 <thead>
@@ -479,7 +479,7 @@ quantized.save_pretrained("./claims_distilroberta_int8")
 
 <h2><strong>Jiangpeng Xu</strong> — Lead Author &amp; Principal Analyst</h2>
 
-<h3>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</h3>
+<p>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</p>
 <pre>&lt;code&gt;
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -509,7 +509,7 @@ async def predict(payload: ClaimPayload):
     }
 &lt;/code&gt;</pre>
 
-<h3>Was this article helpful? Comments.</h3>
+<p>Was this article helpful? Comments.</p>
 
 <pre>&lt;code&gt;
 FROM python:3.11-slim

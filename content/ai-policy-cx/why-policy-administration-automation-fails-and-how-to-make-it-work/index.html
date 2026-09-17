@@ -252,7 +252,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In 2023, a Tier-1 U.S. carrier spent $1.8B on policy admin system upgrades. Four years later, its loss ratio on personal lines jumped 8 points as underwriters reverted to manual overrides to manage exception-heavy rules. The automation looked good on paper; it collapsed in practice because no one accounted for the 37% of policies that required exception handling. I’ve reviewed a dozen post-mortems like this. The pattern is consistent: vendors oversell straight-through processing (STP) rates, IT underestimates data quality remediation, and the claims team inherits the fallout.</h2>
+                <p>In 2023, a Tier-1 U.S. carrier spent $1.8B on policy admin system upgrades. Four years later, its loss ratio on personal lines jumped 8 points as underwriters reverted to manual overrides to manage exception-heavy rules. The automation looked good on paper; it collapsed in practice because no one accounted for the 37% of policies that required exception handling. I’ve reviewed a dozen post-mortems like this. The pattern is consistent: vendors oversell straight-through processing (STP) rates, IT underestimates data quality remediation, and the claims team inherits the fallout.</p>
 
 <p>This guide is written from the perspective of a product manager launching a new MGA. You care about launch velocity, not vendor slides. The steps below assume you’re starting with a clean slate — no legacy core integration — and that you’ll use modern, cloud-native components you can assemble in 90 days with a $250K budget and 8 engineers. If you’re mired in legacy, treat this as a target architecture and budget for a 12-month rip-and-replace.</p>
 
@@ -260,7 +260,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>1. Define “Automation” Before You Touch Code Most teams conflate three distinct problems: <strong>Data ingestion automation</strong> — moving data from brokers, TPAs, or portals into your system without manual keying. <strong>Rules automation</strong> — applying underwriting rules, rating engines, and compliance checks to produce a bound policy.</p>
 
 
-<h3><strong>Exception automation</strong> — routing non-standard risks to underwriters with the right context, not just flagging them.</h3>
+<h2><strong>Exception automation</strong> — routing non-standard risks to underwriters with the right context, not just flagging them.</h2>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -283,7 +283,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Sprint Objective Deliverable Resource 1 Ingest all premium data sources Bronze layer tables in Snowflake, with Great Expectations tests 2 data engineers + 1 analyst</p>
 
 
-<h3>2 Standardize schema across sources Silver layer with unified policy, insured, location tables 1 data engineer + 1 domain expert 3 Add business logic for rating and classification Gold layer with clean, modeled data ready for policy admin 1 data engineer + 1 actuary</h3>
+<h2>2 Standardize schema across sources Silver layer with unified policy, insured, location tables 1 data engineer + 1 domain expert 3 Add business logic for rating and classification Gold layer with clean, modeled data ready for policy admin 1 data engineer + 1 actuary</h2>
 
 <p>Trade-off: You’re building an internal data product. That means 30–40% of your engineering capacity goes to data infrastructure instead of features. If you can’t staff this, use a prebuilt data mesh like <strong>Reltio</strong> or <strong>Sapiens’ Decision Modeler</strong>, but expect 20–30% lower data quality without custom rules.</p>
 
@@ -365,7 +365,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>SFTP, SQS, async processing Exception UI (Retool) $24K $10/user/month for 20 underwriters Compliance & model governance $80K 1 compliance consultant, 1 actuary Contingency (20%)</p>
 
 
-<h3>$100K Data remediation, rule tuning, broker onboarding <strong>Total</strong> <strong>$604K</strong> <strong>60% of budget goes to data + governance</strong></h3>
+<h2>$100K Data remediation, rule tuning, broker onboarding <strong>Total</strong> <strong>$604K</strong> <strong>60% of budget goes to data + governance</strong></h2>
 
 <p>Trade-off: If you use a vendored stack like Guidewire or EIS, your Year 1 cost jumps to $1.2M–$1.5M. The hidden cost is data remediation — teams underestimate this by 40–60%. Budget 2–3 months of dedicated effort to clean broker data before you integrate.</p>
 

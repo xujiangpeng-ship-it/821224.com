@@ -279,7 +279,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>I’ve seen claims teams waste months on fraud models that never get past POC. Most failures come from one of three places: bad data assumptions, over-engineering the model, or ignoring the operational friction of deploying it. This guide cuts through the noise. It’s a field manual for building a claims fraud scoring model that actuaries trust, adjusters use, and fraudsters fear. You’ll get the exact steps we used to reduce our loss ratio by 1.8 points at a mid-size P&C; carrier, with code snippets and resource estimates you can copy-paste into your own stack.</h2>
+                <p>I’ve seen claims teams waste months on fraud models that never get past POC. Most failures come from one of three places: bad data assumptions, over-engineering the model, or ignoring the operational friction of deploying it. This guide cuts through the noise. It’s a field manual for building a claims fraud scoring model that actuaries trust, adjusters use, and fraudsters fear. You’ll get the exact steps we used to reduce our loss ratio by 1.8 points at a mid-size P&C; carrier, with code snippets and resource estimates you can copy-paste into your own stack.</p>
 
 
 <p>Target: a model that scores every new claim in under 300ms, flags the top 5% most suspicious cases for review, and reduces paid fraudulent claims by at least 25%. We’ll hit that with a hybrid approach: supervised learning for labeled fraud cases, unsupervised anomaly detection for emerging fraud patterns, and a rules engine for known red flags. The model will integrate with Guidewire ClaimCenter, Duck Creek Claims, or any core via REST API.</p>
@@ -294,7 +294,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h3>Access to a data warehouse (Snowflake, BigQuery, Redshift) and a feature store (Feast, Tecton, or open-source). A Python environment with scikit-learn, XGBoost, LightGBM, PyOD, and SHAP installed. A fraud analyst or SIU (Special Investigations Unit) team willing to label 200–300 claims per month for active learning. Budget: $25K–$50K for cloud compute (GCP/AWS), feature engineering, and model monitoring. This excludes core system integration costs.</h3>
+<p>Access to a data warehouse (Snowflake, BigQuery, Redshift) and a feature store (Feast, Tecton, or open-source). A Python environment with scikit-learn, XGBoost, LightGBM, PyOD, and SHAP installed. A fraud analyst or SIU (Special Investigations Unit) team willing to label 200–300 claims per month for active learning. Budget: $25K–$50K for cloud compute (GCP/AWS), feature engineering, and model monitoring. This excludes core system integration costs.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -327,7 +327,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h3>Feature Category Top Signal SHAP Importance Data Source Risk Direction Behavioral Claim velocity (12-month claims per policy) 0.184</h3>
+<h2>Feature Category Top Signal SHAP Importance Data Source Risk Direction Behavioral Claim velocity (12-month claims per policy) 0.184</h2>
 
 
 <p>Internal claims warehouse >5 claims = high fraud risk Behavioral Payment lag (days reported to first payment) 0.142 Payment ledger >45 days = elevated risk Behavioral</p>
@@ -386,7 +386,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h3><strong>Suspected Fraud:</strong> Claims flagged by adjusters or TPAs but not yet investigated. We treated these as weak labels with a 0.3 probability of being fraud. <strong>Negative Labels:</strong> All other closed claims. We assumed these were clean unless proven otherwise.</h3>
+<p><strong>Suspected Fraud:</strong> Claims flagged by adjusters or TPAs but not yet investigated. We treated these as weak labels with a 0.3 probability of being fraud. <strong>Negative Labels:</strong> All other closed claims. We assumed these were clean unless proven otherwise.</p>
 
 
 <p>For active learning, we prioritized labeling claims the model scored in the 80th–95th percentile. This gave us the most bang for our labeling buck. Example query to identify candidates: We hired a retired adjuster to label 200 claims per month. Cost: $5K/month. ROI: we reduced false positives by 12% in the first quarter.</p>

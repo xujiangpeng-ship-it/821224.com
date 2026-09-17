@@ -285,7 +285,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Parametric Insurance on Autopilot: How to Wire IoT Data Streams into AI Models in 7 Weeks</h2>
+                
 
 <p>I’ve worked with half a dozen MGAs rolling out parametric products since 2020. The difference between pilots that die on the vine and those that actually price in the market comes down to one thing: <strong>getting clean IoT data into the underwriting engine before the carrier’s actuarial team changes its mind.</strong> This guide walks you through a repeatable 7-week build that embeds AI on top of IoT feeds, from sensor selection to policy payout. I’ll call out the places where teams burn budget on “cool tech” instead of actuarial math.</p>
 
@@ -293,7 +293,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 ---
 
-<h3>1. Pick the Trigger and the Feed</h3>
+<p>1. Pick the Trigger and the Feed</p>
 
 <p>Parametric insurance pays on a <strong>parametric trigger</strong>, not on loss. The trigger must be:</p>
 <ul>
@@ -321,7 +321,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 ---
 
-<h3>2. Build the “Digital Twin” Pipeline</h3>
+<p>2. Build the “Digital Twin” Pipeline</p>
 
 <p>You need a data pipeline that:</p>
 <ol>
@@ -370,7 +370,7 @@ WHERE status IN ('FAIL', 'STALE')
 
 ---
 
-<h3>3. Compute the Trigger—Without Overfitting</h3>
+<p>3. Compute the Trigger—Without Overfitting</p>
 
 <p>You cannot use the raw sensor value as the trigger. You need a <strong>synthetic trigger</strong> that smooths noise and removes outliers. Example for hail:</p>
 
@@ -404,7 +404,7 @@ def trigger_from_radar(dBZ_series, threshold_mm=20):
 
 ---
 
-<h3>4. Embed the AI Layer</h3>
+<p>4. Embed the AI Layer</p>
 
 <p>AI is not magic. It is <strong>signal extraction + noise removal</strong>. Two use cases:</p>
 
@@ -453,7 +453,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>5. Policy Engine Integration</h3>
+<p>5. Policy Engine Integration</p>
 
 <p>You have two paths:</p>
 <ol>
@@ -479,7 +479,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>6. Claims Automation</h3>
+<p>6. Claims Automation</p>
 
 <p>Automated claims require <strong>parametric trigger + loss verification</strong>. Without loss verification, you’re just automating fraud.</p>
 
@@ -519,7 +519,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>7. Compliance and Audit</h3>
+<p>7. Compliance and Audit</p>
 
 <p>You are now a data processor. GDPR, CCPA, and state insurance laws apply. Key items:</p>
 <ul>
@@ -532,7 +532,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>8. Resource Plan (7 Weeks)</h3>
+<p>8. Resource Plan (7 Weeks)</p>
 
 <table>
 <thead>
@@ -564,7 +564,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>9. What Kills Parametric Programs</h3>
+<p>9. What Kills Parametric Programs</p>
 
 <p>I’ve shut down three parametric pilots. The killers:</p>
 <ol>
@@ -578,7 +578,7 @@ print(f"AUC: {roc_auc_score(y_test, model.predict_proba(X_test)[:,1]):.3f}")</co
 
 ---
 
-<h3>10. Quick-Start Checklist</h3>
+<p>10. Quick-Start Checklist</p>
 
 <ul>
 <li><strong>Week 0</strong>: Pick trigger + data source. Validate with 10k historical events.</li>

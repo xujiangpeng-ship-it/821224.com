@@ -303,7 +303,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Cut Claims Cycle Time by 40%: A Step-by-Step AI Playbook</h2>
+                
 
 
 <p>Most insurers still treat claims as an afterthought—until the quarterly loss ratio screams red. A typical P/C carrier with $500M premium might run 18,000 open claims at any moment, each averaging 32 days to closure. A 40 % reduction (from 32 to 19 days) frees $15M in paid losses and $11M in float interest, boosting combined ratio by 2.7 points. This playbook shows exactly how to hit that target with AI in 12 weeks.</p>
@@ -324,7 +324,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 
 
-<h3>Step 1: Instrument the Friction Log (Week 0)</h3>
+<h2>Step 1: Instrument the Friction Log (Week 0)</h2>
 
 <p>Before touching AI, map every human touch. I’ve run this exercise with two regional carriers and one MGA; the average claim had 14 handoffs across 4 departments. The biggest surprise: adjuster rework on re-submitted photos added 3.2 days per claim. Build a simple event log in your core admin system (Guidewire, Duck Creek, or custom) that tags:</p>
 
@@ -341,7 +341,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Export one month of data (≈5,000 claims) and run an 80/20 Pareto chart. Invariably two issues dominate: <strong>duplicate uploads</strong> and <strong>missing loss details</strong>. Fix these two first; the rest can wait.</p>
 
 
-<h3>Step 2: Deploy a Tiered FNOL Widget (Week 1–2)</h3>
+<h2>Step 2: Deploy a Tiered FNOL Widget (Week 1–2)</h2>
 
 <p>Start with the first 15 minutes. Every second counts because 60 % of cycle time lies in the first 72 hours.</p>
 
@@ -375,7 +375,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Pitfall</strong>: Don’t let the bot ask for the same data twice. I once saw a carrier’s chatbot request driver license twice because the NLP entity extraction failed on the first pass. Measure “data re-entry rate” weekly; anything above 8 % means the model needs retraining.</p>
 
 
-<h3>Step 3: OCR + NLP Pipeline in the Cloud (Week 2–4)</h3>
+<h2>Step 3: OCR + NLP Pipeline in the Cloud (Week 2–4)</h2>
 
 <p>Next, automate the document avalanche. A mid-size carrier receives 2.3M documents a year—photos, estimates, police reports, medical bills. Humans spend 6 days per 1,000 claims just sorting PDFs.</p>
 
@@ -424,7 +424,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 <p><strong>Shortcut</strong>: If your volume is <$50M premium, skip the custom parser. Use Duck Creek’s built-in OCR or Duck Creek Lens; you’ll still cut 2.3 days per claim at 1/10 the cost.</p>
 
 
-<h3>Step 4: Real-Time Coverage Verification (Week 3–5)</h3>
+<h2>Step 4: Real-Time Coverage Verification (Week 3–5)</h2>
 
 <p>Coverage delays add 5–7 days to cycle time. The root cause isn’t the underwriter; it’s the 48-hour wait for ACORD forms and prior carrier loss runs.</p>
 
@@ -448,7 +448,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 <p><strong>Risk</strong>: Third-party data APIs can throttle during catastrophes. Cache the last 30 days of loss runs locally; fall back to cached data if API returns 503.</p>
 
 
-<h3>Step 5: Subrogation Flagging at First Notice (Week 4–6)</h3>
+<h2>Step 5: Subrogation Flagging at First Notice (Week 4–6)</h2>
 
 <p>Subrogation identification is the highest-leverage AI use case I’ve seen. A single missed subrogation on a $120K collision claim costs $110K in paid losses. Most carriers flag subro manually at closure, when the evidence is cold.</p>
 
@@ -474,7 +474,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 <p><strong>Limitation</strong>: The model’s precision is 87 %. False positives add 0.4 days per claim to adjuster review. Accept the noise; the recoveries outweigh the rework.</p>
 
 
-<h3>Step 6: Dynamic Payment Approval & Closure (Week 5–8)</h3>
+<h2>Step 6: Dynamic Payment Approval & Closure (Week 5–8)</h2>
 
 <p>Closure drags because every payment over $5K needs two signatures. In a $250M book, 18 % of claims trigger this rule.</p>
 
@@ -502,7 +502,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 <p><strong>Trade-off</strong>: The model needs 500–1,000 adjudicated claims to stabilize. If you lack volume, use a simple rule: auto-approve if loss ratio on peril < 60 %. It’s 70 % as effective and costs nothing.</p>
 
 
-<h3>Step 7: Continuous Feedback Loop (Week 6–12)</h3>
+<h2>Step 7: Continuous Feedback Loop (Week 6–12)</h2>
 
 <p>AI models decay at 1 % accuracy per month. Set up a lightweight feedback pipeline:</p>
 
@@ -522,7 +522,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 <p><strong>Risk</strong>: Shadow IT drift. Claims managers sometimes tweak rules in Excel and bypass the pipeline. Lock the rule set in a Git repo; require pull requests reviewed by the data science team.</p>
 
 
-<h3>Metrics Dashboard (What to Track Weekly)</h3>
+<h2>Metrics Dashboard (What to Track Weekly)</h2>
 
 <table border="1" cellpadding="4" cellspacing="0">
 
@@ -551,7 +551,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 </table>
 
 
-<h3>Common Pitfalls & Quick Fixes</h3>
+<h2>Common Pitfalls & Quick Fixes</h2>
 
 <ul>
 
@@ -564,7 +564,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 </ul>
 
 
-<h3>Vendor Shortlist (No Affiliation)</h3>
+<h2>Vendor Shortlist (No Affiliation)</h2>
 
 <ul>
 
@@ -581,7 +581,7 @@ S3 → Textract/Google Document AI → NLP parser → Neo4j graph store
 </ul>
 
 
-<h3>12-Week Timeline (Gantt)</h3>
+<h2>12-Week Timeline (Gantt)</h2>
 
 <pre>
 
@@ -608,7 +608,7 @@ Week 9–12: Weekly retraining, dashboard tuning
 </pre>
 
 
-<h3>Budget Snapshot</h3>
+<h2>Budget Snapshot</h2>
 
 <table border="1" cellpadding="4" cellspacing="0">
 

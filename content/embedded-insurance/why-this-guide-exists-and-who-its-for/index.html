@@ -279,17 +279,17 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Why this guide exists and who it’s for</h2>
+                
 
 <p>In August 2023, Allianz Global Corporate & Specialty (AGCS) disclosed that 37% of its large corporate property claims from 2018–2022 could have been avoided with real-time API-driven data sharing between carrier, broker, and inspection vendors. The loss impact exceeded €1.2 billion in direct and indirect costs. I’ve spent the last six months working with a Lloyd’s syndicate to replicate AGCS’s results for SME cyber and property risks. The biggest blocker wasn’t the AI model; it was the plumbing—specifically, which open insurance API standard to adopt and how to wire it into an embedded ecosystem before the underwriting cycle blows past 30 days. This guide is for the engineers, product managers, and integration leads who own that plumbing.</p>
 
 
-<h2>Which standard to pick: FAPI 2.0 vs. OpenAPI 3.1 vs. ISO 20022</h2>
+<p>Which standard to pick: FAPI 2.0 vs. OpenAPI 3.1 vs. ISO 20022</p>
 
 <p>There are three viable paths, and none are free of friction.</p>
 
 
-<h3>Path A: FAPI 2.0 (Financial-grade API) – for high-value, regulated cash flows</h3>
+<h2>Path A: FAPI 2.0 (Financial-grade API) – for high-value, regulated cash flows</h2>
 
 <p>FAPI 2.0 is the only standard that satisfies PSD2 RTS SCA and GDPR Article 9 consent requirements out of the box. It is also the slowest to implement because of its layered security profile (PAR, CIBA, JARM). If your embedded use case touches payments, commissions, or claims payouts, this is the only realistic choice. Expect 12–18 engineering weeks for a minimal viable integration.</p>
 
@@ -302,17 +302,17 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 
 
-<h3>Path B: OpenAPI 3.1 – for rapid prototyping and sandbox ecosystems</h3>
+<h2>Path B: OpenAPI 3.1 – for rapid prototyping and sandbox ecosystems</h2>
 
 <p>OpenAPI 3.1 is the default if you are launching a pre-MGA or parametric product that only needs claims notices and exposure data. It lacks built-in consent and strong authentication, so you must bolt on OAuth 2.1 and FAPI 1.0 Message Signing yourself. I’ve seen teams go from spec to sandbox in 6 weeks, but moving to production required a 3-month security audit. That audit uncovered a broken refresh token rotation bug that let expired tokens call the FNOL endpoint for 48 hours.</p>
 
 
-<h3>Path C: ISO 20022 pain/gain – when you must talk to reinsurers and banks</h3>
+<h2>Path C: ISO 20022 pain/gain – when you must talk to reinsurers and banks</h2>
 
 <p>ISO 20022 is the lingua franca of large commercial lines, but it is not an API standard; it is a messaging framework. To expose it as an API, you must implement the ISO 20022 REST profile (pain.001, camt.053, see <a href="https://www.iso20022.org/iso-20022-message-definitions-rest" target="_blank" rel="noopener noreferrer">[ISO 20022, REST Profile, v2.2]</a>). The conversion layer (XSD → JSON) alone consumes 30% of compute budget at >10k TPS. If your embedded flow writes bordereaux to a reinsurer on a daily basis, budget 10 senior weeks and a dedicated middleware engineer.</p>
 
 
-<h3>Decision matrix</h3>
+<h2>Decision matrix</h2>
 
 <table>
 
@@ -475,7 +475,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Export the spreadsheet as a JSON schema bundle and validate against <code>draft-07</code> to catch shape mismatches early. Use <a href="https://www.jsonschemavalidator.net/" target="_blank" rel="noopener noreferrer">JSON Schema Validator</a>.</p>
 
 
-<h2>Step 2: Choose your transport layer (gRPC vs. REST vs. GraphQL)</h2>
+<p>Step 2: Choose your transport layer (gRPC vs. REST vs. GraphQL)</p>
 
 <p>I’ve seen teams waste six weeks arguing over this. The decision is binary:</p>
 

@@ -260,7 +260,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-<h2>Ancova reported in 2024 that the embedded insurance market reached $12 billion globally, up from under $2 billion in 2020. When I ask a Lloyd's syndicate audit room's product owner to explain how their NLP model makes FNOL determinations, the silence is loud.</h2>
+<p>Ancova reported in 2024 that the embedded insurance market reached $12 billion globally, up from under $2 billion in 2020. When I ask a Lloyd's syndicate audit room's product owner to explain how their NLP model makes FNOL determinations, the silence is loud.</p>
 
 <p>Embedded insurance using computer vision and NLP sits at the intersection of real-time data processing, third-party API dependency, and automated underwriting decisions that trigger regulatory obligations. The technology works. The challenge is explaining the model's decision path to a claims adjuster, a regulator, or a court, rather than proving the model can classify a car accident photo or extract injury details from a chat transcript.</p>
 
@@ -268,7 +268,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>This article addresses the compliance, governance, and regulatory risk that most embedded insurance programs will face within eighteen months of launch. If you are a CCO or GC, you need to understand where the liability sits when a computer vision model embedded in a ride-hailing app misclassifies damage and the underlying insurer pays out on a fraudulent claim.</p>
 
-<h2>Embedded insurance means the insurance product is woven into a non-insurance transaction. The customer buys travel insurance at checkout on Expedia. They purchase device protection when they order a laptop on Amazon. They get roadside assistance automatically when they sign up for a car-sharing service. Computer vision and NLP are the two technologies most commonly layered onto these transactions to automate claims handling and underwriting decisions.</h2>
+<p>Embedded insurance means the insurance product is woven into a non-insurance transaction. The customer buys travel insurance at checkout on Expedia. They purchase device protection when they order a laptop on Amazon. They get roadside assistance automatically when they sign up for a car-sharing service. Computer vision and NLP are the two technologies most commonly layered onto these transactions to automate claims handling and underwriting decisions.</p>
 
 <p>Computer vision models process visual inputs—photos of damaged property, vehicle license plates, facial recognition for identity verification. NLP models process text and speech—chat transcripts, voice recordings from FNOL calls, customer emails, social media posts used in fraud detection. Together, they create a system that can assess a claim in seconds rather than days.</p>
 
@@ -278,7 +278,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>The core tension is speed versus auditability. Embedded insurance exists to make insurance frictionless, but every step removed from the process is a step lost from the audit trail. Computer vision models trained on merchant-supplied images face distribution shift when lighting conditions or camera quality differ from the training set. NLP models processing customer-submitted text encounter slang, regional dialects, and incomplete information not represented in the training data. Both create false positive and false negative rates that vary by segment, and those variations become regulatory exposure.</p>
 
-<h2>The insurance regulatory framework isn't designed for automated decisions made in milliseconds by models that didn't exist when the relevant statutes were written. This creates gaps. Below are the specific areas where embedded CV and NLP programs hit compliance walls.</h2>
+<p>The insurance regulatory framework isn't designed for automated decisions made in milliseconds by models that didn't exist when the relevant statutes were written. This creates gaps. Below are the specific areas where embedded CV and NLP programs hit compliance walls.</p>
 
 <p>Adverse impact and fair lending considerations apply more broadly than most insurers realize. The Department of Housing and Urban Development's 2023 guidance on algorithmic discrimination established that any automated system used in insurance pricing or claims decisions must undergo disparate impact analysis across protected classes. A computer vision model trained primarily on photos taken with iPhone cameras may perform differently on images from Android devices used more frequently in certain demographic segments. An NLP model trained on formal English may misinterpret injury descriptions from speakers of AAVE or Indian English. You need to test for these biases before the program launches, not after a complaint triggers a regulatory inquiry.</p>
 
@@ -288,14 +288,14 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Unfair claims settlement practices under state insurance codes also apply to embedded programs. The National Association of Insurance Commissioners' model regulation on unfair settlement practices prohibits denying claims based on automated system errors without a reasonable investigation. If your CV model misclassifies pre-existing damage as new damage and denies the claim, the insurer is liable regardless of whose algorithm made the error. The merchant platform's terms of service don't shield the carrier.</p>
 
-<h2>Most embedded insurance programs don't build their computer vision and NLP capabilities in-house. They contract with specialty vendors—startups and larger tech companies that provide the models as part of an embedded insurance platform. This creates a supply chain risk that most compliance teams haven't adequately addressed.
+<p>Most embedded insurance programs don't build their computer vision and NLP capabilities in-house. They contract with specialty vendors—startups and larger tech companies that provide the models as part of an embedded insurance platform. This creates a supply chain risk that most compliance teams haven't adequately addressed.
 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
                     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3057389153621190" data-ad-slot="5189099721" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-</h2>
+</p>
 
 <p>The fundamental problem is that the vendor owns the model, the training data, and the update cadence. You license the output. When the vendor updates the model version—often monthly or quarterly—your compliance documentation becomes stale. The model card you filed with the department of insurance last quarter may describe a different model than what is currently in production. I've seen three programs where the production model had drifted significantly from the validated version and nobody in the carrier organization noticed because the vendor's SLA covered uptime, not model stability.</p>
 
@@ -303,7 +303,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Negotiate three things into every vendor contract: version locking for a defined validation period, audit rights to the vendor's training data and model development process, and contractual penalties for undisclosed model updates that affect claim outcomes. The last one is the hardest to enforce, and most vendors will resist it. Insist on it anyway.</p>
 
-<h2>The California Department of Insurance published its 2023 report on algorithmic fairness in property and casualty insurance that explicitly addresses computer vision systems used in claims assessment. The report found that CV-based damage assessment models showed a twelve percent higher denial rate for claims from ZIP codes with lower median incomes, even after controlling for actual damage severity. The model wasn't using ZIP code as a direct input. It was learning correlated features—vehicle age indicators, repair shop proximity, neighborhood visual characteristics—that served as proxies for protected demographics.</h2>
+<p>The California Department of Insurance published its 2023 report on algorithmic fairness in property and casualty insurance that explicitly addresses computer vision systems used in claims assessment. The report found that CV-based damage assessment models showed a twelve percent higher denial rate for claims from ZIP codes with lower median incomes, even after controlling for actual damage severity. The model wasn't using ZIP code as a direct input. It was learning correlated features—vehicle age indicators, repair shop proximity, neighborhood visual characteristics—that served as proxies for protected demographics.</p>
 
 <p>This finding matters for embedded insurance because the same model architecture is used across multiple programs. A CV model sold to a ride-hailing platform for accident assessment is functionally identical to one sold to an e-commerce platform for device return fraud detection. The bias patterns discovered in one context will likely appear in the other.</p>
 

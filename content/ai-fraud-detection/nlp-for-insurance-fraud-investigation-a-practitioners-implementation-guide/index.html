@@ -279,13 +279,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>NLP for Insurance Fraud Investigation: A Practitioner’s Implementation Guide</h2>
+                
 
 <p>I’ve spent years watching claims teams drown in unstructured data—adjuster notes, police reports, repair invoices, social media posts—while fraudsters exploit gaps in manual review. Natural Language Processing (NLP) can automate much of this, but only if you build systems that handle insurance’s unique linguistic patterns: dense jargon, contradictory narratives, and intentional obfuscation. This guide walks you through building an end-to-end NLP pipeline for fraud detection, from data ingestion to model deployment, with realistic trade-offs at each step.</p>
 
 <p>We’ll use a real-world example: detecting padded auto repair claims. The average padded claim costs insurers 12% more than legitimate ones, according to the Insurance Research Council. But without NLP, flagging these requires armies of investigators squinting at PDFs of "1987 Toyota Camry radiator replacement" receipts that seem identical to legitimate ones. NLP won’t replace investigators—it will let them focus where it matters: the 3% of claims that actually need human scrutiny.</p>
 
-<h3>Assumptions and Prerequisites</h3>
+<h2>Assumptions and Prerequisites</h2>
 
 <p>This tutorial targets a practitioner with:</p>
 
@@ -298,7 +298,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>If your data is locked in legacy systems, plan for 4–6 weeks of ETL work before this pipeline. Most insurers underestimate the cost of cleaning 30-year-old claims notes written in shorthand by adjusters who retired in 1998.</p>
 
-<h3>Step 1: Data Acquisition and Legal Scoping</h3>
+<h2>Step 1: Data Acquisition and Legal Scoping</h2>
 
 <p>Start with a narrow, high-impact use case. Padded auto repair claims are ideal: fraudsters often reuse the same inflated labor codes across multiple shops, and the language patterns are repetitive enough for NLP to catch.</p>
 
@@ -320,7 +320,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>Resource estimate:</strong> 3–4 weeks for data acquisition if you’re pulling from multiple TPAs and legacy systems. The biggest bottleneck is usually PDF OCR accuracy—older estimates scanned as images will require manual correction.</p>
 
-<h3>Step 2: Text Preprocessing for Insurance-Specific Noise</h3>
+<h2>Step 2: Text Preprocessing for Insurance-Specific Noise</h2>
 
 <p>Insurance text isn’t normal text. It’s full of:</p>
 
@@ -372,7 +372,7 @@ print(cleaned)
                 </div>
                 <p><strong>Trade-off:</strong> Aggressive normalization can strip away meaningful context. For example, "adjuster" vs "adjustor" might seem like a typo, but in some claims systems, "adjustor" refers to a specific role. Always validate preprocessing rules against a sample of your data.</p>
 
-<h3>Step 3: Feature Engineering for Fraud Signals</h3>
+<h2>Step 3: Feature Engineering for Fraud Signals</h2>
 
 <p>Fraud in insurance isn’t just about "lying"—it’s about <em>anomalous patterns</em>. The best NLP features capture linguistic and temporal anomalies.</p>
 
@@ -424,7 +424,7 @@ def compute_passive_voice_ratio(text):
 
 <p><strong>Trade-off:</strong> Linguistic features can be gamed. Fraudsters learn to mimic legitimate language patterns over time. I’ve seen shops start using active voice after a model flagged their passive-heavy narratives. Combine NLP with behavioral signals (e.g., claim velocity) to stay ahead.</p>
 
-<h3>Step 4: Labeling Strategy and Weak Supervision</h3>
+<h2>Step 4: Labeling Strategy and Weak Supervision</h2>
 
 <p>You need labels to train a model, but fraud labels are scarce. Most insurers have <em>a few hundred</em> confirmed fraud cases (from SIUs) but <em>millions</em> of claims. Here’s how to bridge the gap:</p>
 
@@ -483,7 +483,7 @@ label_model.fit(L_train=L_train, n_epochs=50)
 
 <p><strong>Trade-off:</strong> Weak supervision introduces label noise. A model trained on labels from loss ratios will inherit those ratios’ biases. Always validate weak labels against a small expert-labeled set. I’ve seen models flag claims from rural facilities (lower expected labor costs) as fraudulent because the loss ratio heuristic didn’t account for regional differences.</p>
 
-<h3>Step 5: Model Selection and Training</h3>
+<h2>Step 5: Model Selection and Training</h2>
 
 <p>For fraud detection, you need a model that:</p>
 <ul>
@@ -567,7 +567,7 @@ model.fit(X_train_processed, y_train)
 
 <p><strong>Trade-off:</strong> Transformer models are overkill for most fraud use cases. The marginal gain in AUC (0.82 vs 0.88) rarely justifies the 5–10x cost in compute and latency. Stick with hybrid models unless you’re processing tens of thousands of claims daily.</p>
 
-<h3>Step 6: Threshold Tuning and False Positive Management</h3>
+<h2>Step 6: Threshold Tuning and False Positive Management</h2>
 
 <p>Fraud models aren’t evaluated on AUC alone. The real metric is <em>net savings</em>:</p>
 

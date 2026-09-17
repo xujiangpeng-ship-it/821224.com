@@ -273,7 +273,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Why Policy Renewal Automation Needs an AI Reset — $1.2B in Preventable Attrition Hides in Plain Sight</h2>
+                
 
 <p>In 2023, Allianz Life’s U.S. block alone lost $1.2B in annualized premiums to preventable renewal lapses, according to its <a href="https://www.allianzlife.com/-/media/allianz-life/documents/reports/annual-reports/allianz-life-2023-annual-report.pdf" target="_blank" rel="noopener noreferrer">2023 Annual Report, p. 42</a>. The culprit? Static renewal notices sent to inboxes that treat every insured the same. I’ve seen claims teams waste 30–40% of retention calls chasing policies that could have been auto-renewed with 95%+ retention confidence if the right signal had been surfaced 90 days out.</p>
 
@@ -285,7 +285,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2>1. Define the Retention Objective That Actually Moves the Combined Ratio</h2>
+<p>1. Define the Retention Objective That Actually Moves the Combined Ratio</p>
 
 <p>Most renewal automation projects optimize for cycle time or email open rates. Those metrics don’t move the combined ratio. Your objective must be <strong>expected retained premium at renewal</strong>:</p>
 
@@ -296,7 +296,7 @@ s.t. P(renewal_i | x_i) ≥ 0.95 for policies routed to auto-renewal</blockquote
 <p>In plain English: route policies to auto-renewal only if the model predicts a 95%+ chance the insured will stay, otherwise flag for human retention call. I’ve seen a 0.8pp combined ratio improvement at one MGA after enforcing this constraint.</p>
 
 
-<h3>Trade-off: 95% Confidence Kills 60% of “Easy” Renewals</h3>
+<h2>Trade-off: 95% Confidence Kills 60% of “Easy” Renewals</h2>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -306,7 +306,7 @@ s.t. P(renewal_i | x_i) ≥ 0.95 for policies routed to auto-renewal</blockquote
                 <p>Setting a 95% threshold sounds conservative, but it eliminates 60% of the policies your sales team thought were “no-brainers.” At a $50M premium block, that’s $30M in policies you’ll now handle manually. The alternative — lowering the threshold to 80% — risks pushing 8–10% of those policies to auto-renew only to lapse, wiping out any cycle-time gains with a 2.3pp loss ratio hit.</p>
 
 
-<h3>Resource Checkpoint #1: Stakeholder Alignment</h3>
+<h2>Resource Checkpoint #1: Stakeholder Alignment</h2>
 
 <ul>
 
@@ -322,7 +322,7 @@ s.t. P(renewal_i | x_i) ≥ 0.95 for policies routed to auto-renewal</blockquote
 ---
 
 
-<h2>2. Assemble the Minimal Viable Feature Set — No More Than 12 Signals</h2>
+<p>2. Assemble the Minimal Viable Feature Set — No More Than 12 Signals</p>
 
 <p>Insurers drown in renewal data but starve on retention signals. I’ve seen teams build 200-feature pipelines that collapse under explainability reviews. The minimal set that consistently explains 70% of retention variance is:</p>
 
@@ -449,7 +449,7 @@ s.t. P(renewal_i | x_i) ≥ 0.95 for policies routed to auto-renewal</blockquote
 </table>
 
 
-<h3>When Three Extra Signals Are Worth the Risk</h3>
+<h2>When Three Extra Signals Are Worth the Risk</h2>
 
 <p>If you have >50k policies and spare compute, add:</p>
 
@@ -464,7 +464,7 @@ s.t. P(renewal_i | x_i) ≥ 0.95 for policies routed to auto-renewal</blockquote
 </ul>
 
 
-<h3>Data Pipeline Skeleton (Python)</h3>
+<h2>Data Pipeline Skeleton (Python)</h2>
 
 <pre><code>import pandas as pd
 
@@ -548,12 +548,12 @@ def calculate_retention_score(features: dict) -> float:
 ---
 
 
-<h2>3. Model Selection: Survival Analysis Beats Classification</h2>
+<p>3. Model Selection: Survival Analysis Beats Classification</p>
 
 <p>Most teams default to XGBoost or logistic regression. Those models optimize for AUC, not retention economics. Survival analysis (Cox Proportional Hazards) directly models the time-to-lapse, letting you set a 90-day horizon with a clear dollar cost of misclassification.</p>
 
 
-<h3>Why CoxPH Wins on Explainability</h3>
+<h2>Why CoxPH Wins on Explainability</h2>
 
 <p>The hazard ratio for each feature is interpretable by underwriters:</p>
 
@@ -564,7 +564,7 @@ e.g., β = 0.12 for premium_increase_pct → 12.7% higher lapse risk per 1% incr
 <p>Underwriters can veto features with hazard ratios >1.3 (23% higher lapse risk) without derailing the pipeline.</p>
 
 
-<h3>Model Training Script (Lifelines Library)</h3>
+<h2>Model Training Script (Lifelines Library)</h2>
 
 <pre><code>from lifelines import CoxPHFitter
 
@@ -610,7 +610,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </code></pre>
 
 
-<h3>Trade-off: CoxPH Requires Censored Data</h3>
+<h2>Trade-off: CoxPH Requires Censored Data</h2>
 
 <p>You’ll need 24 months of historical renewal outcomes to fit a stable model. If your data is thin (<10k policies), switch to a parametric survival model (Weibull) or accept a 5–8% drop in AUC by using a gradient-boosted survival model (LightGBM + `sksurv`).</p>
 
@@ -618,7 +618,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 ---
 
 
-<h2>4. Build the Auto-Renewal Decision Engine with Actuarial Guardrails</h2>
+<p>4. Build the Auto-Renewal Decision Engine with Actuarial Guardrails</p>
 
 <p>Your engine must produce two outputs:</p>
 
@@ -631,7 +631,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </ol>
 
 
-<h3>Decision Rule Template</h3>
+<h2>Decision Rule Template</h2>
 
 <pre><code>def should_auto_renew(policy_id: str, threshold: float = 0.95) -> dict:
 
@@ -671,7 +671,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </code></pre>
 
 
-<h3>Real-Time Serving Architecture</h3>
+<h2>Real-Time Serving Architecture</h2>
 
 <p>Use a feature store to avoid recomputing signals per request:</p>
 
@@ -702,7 +702,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </figure>
 
 
-<h3>Infrastructure Cost (AWS)</h3>
+<h2>Infrastructure Cost (AWS)</h2>
 
 <table>
 
@@ -780,7 +780,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 ---
 
 
-<h2>5. Run a Controlled Pilot to Prove Retention Lift</h2>
+<p>5. Run a Controlled Pilot to Prove Retention Lift</p>
 
 <p>Do not roll out to the entire book. Treat 10% of policies as the holdout and measure:</p>
 
@@ -795,7 +795,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </ul>
 
 
-<h3>Pilot Metrics Dashboard (Looker Example)</h3>
+<h2>Pilot Metrics Dashboard (Looker Example)</h2>
 
 <table>
 
@@ -880,7 +880,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </table>
 
 
-<h3>When to Abort the Pilot</h3>
+<h2>When to Abort the Pilot</h2>
 
 <p>If the false positive rate exceeds 2% or agent NPS drops below +25, the model is either too aggressive or the 95% threshold is miscalibrated. In one MGA, we had to reduce the threshold to 88% to cap false positives at 1.5%, but that required adding a “premium increase >10%” veto rule to avoid lapse cannibalization.</p>
 
@@ -888,7 +888,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 ---
 
 
-<h2>6. Harden for Regulatory and Operational Risk</h2>
+<p>6. Harden for Regulatory and Operational Risk</p>
 
 <p>The moment your model auto-renews a policy that later lapses, your state DOI will ask for model documentation. You need two artifacts:</p>
 
@@ -901,7 +901,7 @@ hazard_ratios.to_csv("renewal_hazard_ratios.csv")
 </ol>
 
 
-<h3>Regulatory Checklist (NAIC + State Variations)</h3>
+<h2>Regulatory Checklist (NAIC + State Variations)</h2>
 
 <table>
 

@@ -291,7 +291,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Predictive Analytics in Insurance Claims Settlement Optimization: A Practitioner’s Build Guide</h2>
+                
 
 
 <p>I’ve seen claims teams drown in unstructured data—adjuster notes in PDFs, handwritten estimates, phone recordings—while trying to settle claims faster. Predictive analytics isn’t magic. It’s a repeatable process of turning raw data into actionable loss ratio improvements. This guide walks you through building a production-grade claims optimization system from data ingestion to model deployment. I’ll focus on practical steps, not theory, with cost and performance trade-offs at each stage.</p>
@@ -311,7 +311,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 
 
-<h3>1. Define the Optimization Objective</h3>
+<p>1. Define the Optimization Objective</p>
 
 
 <p>Before touching data, quantify what “optimization” means. In claims, it’s usually:</p>
@@ -344,7 +344,7 @@ claims['optimal_settlement'] = claims.groupby(['severity_bin', 'injury_flag'])['
 claims['leakage_flag'] = (claims['paid_amount'] > claims['optimal_settlement']).astype(int)</code></pre>
 
 
-<h3>2. Assemble the Feature Pipeline</h3>
+<p>2. Assemble the Feature Pipeline</p>
 
 
 <p>Claims data is messy. You’ll need to join at least six sources:</p>
@@ -421,7 +421,7 @@ pdf_text = pdf_text.withColumn(
 )</code></pre>
 
 
-<h3>3. Build the Feature Store</h3>
+<p>3. Build the Feature Store</p>
 
 
 <p>Claims features degrade fast. A 6-month-old fraud flag is useless. You need a feature store with TTL (time-to-live) policies.</p>
@@ -499,7 +499,7 @@ registry: s3://claims/features/registry.db
 <p><strong>Cost:</strong> ~$1k/mo for DynamoDB online store (10M features, 1KB each).</p>
 
 
-<h3>4. Train the Settlement Model</h3>
+<p>4. Train the Settlement Model</p>
 
 
 <p>Target: Predict <code>leakage_flag</code> (binary) and <code>optimal_settlement</code> (continuous). I recommend a two-stage model:</p>
@@ -580,7 +580,7 @@ quantile_model.fit(X_train, y_train)</code></pre>
 <p><strong>Resource estimate:</strong> 4 weeks for training, 1 FTE (actuary + data scientist). Run on AWS SageMaker with ml.m5.2xlarge (8 vCPU, 32GB RAM). Cost: ~$500 for full training run.</p>
 
 
-<h3>5. Deploy Real-Time Scoring</h3>
+<p>5. Deploy Real-Time Scoring</p>
 
 
 <p>Adjuster needs predictions at point of contact. Build a REST API with latency < 200ms.</p>
@@ -665,7 +665,7 @@ quantile_model.fit(X_train, y_train)</code></pre>
 </ul>
 
 
-<h3>6. Integrate with Workflow Systems</h3>
+<p>6. Integrate with Workflow Systems</p>
 
 
 <p>Predictions are useless without action. Integrate with core claims system (Guidewire, Duck Creek) via REST hooks or event bus.</p>
@@ -706,7 +706,7 @@ if (claim.getEstimatedRepairCost() < 5000 &&
 <p><strong>Resource estimate:</strong> 2 weeks for integration, 0.5 FTE (integration engineer).</p>
 
 
-<h3>7. Measure Business Impact</h3>
+<p>7. Measure Business Impact</p>
 
 
 <p>Track these KPIs for 6 months:</p>
@@ -791,7 +791,7 @@ if (claim.getEstimatedRepairCost() < 5000 &&
 <p><strong>Trade-off:</strong> The 0.8-day increase in cycle time is due to additional reviews. But it’s offset by 20% fewer SIU cases.</p>
 
 
-<h3>8. Maintain and Iterate</h3>
+<p>8. Maintain and Iterate</p>
 
 
 <p>Claims patterns drift. Plan for monthly retraining.</p>
@@ -840,7 +840,7 @@ if drift:
     trigger_retraining()</code></pre>
 
 
-<h3>9. Extend to Other Lines</h3>
+<p>9. Extend to Other Lines</p>
 
 
 <p>This model works for auto/home, but workers’ comp requires different features:</p>

@@ -273,7 +273,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Natural Language Processing for Insurance Claims Documents: A Practitioner’s Implementation Guide</h2>
+                
 
 
 <p>I’ve processed thousands of claims documents across P&C;, life, and specialty lines. Most carriers still rely on armies of clerks to extract data from PDFs, emails, and scanned faxes—even when those documents scream for automation. Natural language processing (NLP) can turn unstructured text into structured, actionable data, but only if you build it right. This guide walks you through a production-grade pipeline from ingestion to actionable insights, with trade-offs, resource estimates, and code you can run today.</p>
@@ -285,7 +285,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h3>1. Define the Problem and Scope</h3>
+<p>1. Define the Problem and Scope</p>
 
 
 <p>Before you touch a model, lock down what you’re solving. Claims documents are messy:</p>
@@ -324,7 +324,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h3>2. Build the Data Pipeline</h3>
+<p>2. Build the Data Pipeline</p>
 
 
 <h4>Step 1: Ingest Documents</h4>
@@ -503,7 +503,7 @@ clean = clean_text(raw)  # "date of injury: 05/12/2024"
 ---
 
 
-<h3>3. Design the Extraction Architecture</h3>
+<p>3. Design the Extraction Architecture</p>
 
 
 <p>You have two paths:</p>
@@ -577,7 +577,7 @@ def extract_fields(text):
 ---
 
 
-<h3>4. Train a Custom Model (If Needed)</h3>
+<p>4. Train a Custom Model (If Needed)</p>
 
 
 <p>When rules fail, train. For workers’ comp FROIs, I fine-tune <code>dslim/bert-base-NER</code> on annotated data. Here’s the pipeline:</p>
@@ -713,7 +713,7 @@ trainer.train()
 ---
 
 
-<h3>5. Validate and Monitor</h3>
+<p>5. Validate and Monitor</p>
 
 
 <p>Validation isn’t optional. I’ve seen carriers deploy models with 90% F1 on a lab set, only to hemorrhage accuracy in production because their test set was biased.</p>
@@ -763,7 +763,7 @@ trainer.train()
 ---
 
 
-<h3>6. Integrate with Claims Workflow</h3>
+<p>6. Integrate with Claims Workflow</p>
 
 
 <p>Data extraction is useless if it doesn’t feed downstream systems. Here’s how to plug it in:</p>
@@ -852,7 +852,7 @@ def route_claim(extracted_data):
 ---
 
 
-<h3>7. Scale and Optimize</h3>
+<p>7. Scale and Optimize</p>
 
 
 <p>After the MVP, focus on performance and cost.</p>
@@ -918,7 +918,7 @@ print(nlp(text))
 ---
 
 
-<h3>8. Real-World Pitfalls and How to Avoid Them</h3>
+<p>8. Real-World Pitfalls and How to Avoid Them</p>
 
 
 <h4>Pitfall 1: OCR Errors Masked as Model Failures</h4>

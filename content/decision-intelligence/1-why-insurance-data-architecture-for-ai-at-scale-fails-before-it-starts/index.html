@@ -303,17 +303,17 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>1. Why “insurance data architecture for AI at scale” fails before it starts</h2>
+                
 
 <p>In 2023, a Tier-1 P&C; carrier spent $14 M building a real-time underwriting pipeline on Apache Kafka, only to scrap it six months later when the actuarial team discovered the streaming events had 38 % duplicate policies because the ingestion connector lacked schema evolution checks. The combined ratio for that line jumped from 94 % to 103 % while the project was live. I’ve seen this pattern repeat at three other carriers: the root cause isn’t the AI model—it’s the data layer.</p>
 
 
-<h3>1.1 The two architectural anti-patterns I see in every failed deployment</h3>
+<h2>1.1 The two architectural anti-patterns I see in every failed deployment</h2>
 
 <p>First, “Lake-first” sprawl. Claims teams export raw JSON from FNOL portals into a data lake, then run dbt models to produce “clean” tables. By the time the cleaned table hits the warehouse, the raw JSON has mutated (new fields, renamed keys, changed data types) and the dbt model breaks nightly. Second, “API-first” stitching. Every system exposes a REST endpoint; ETL jobs poll each API on a 5-minute cadence. The result is 180 endpoints queried per policy, 2.3 TB of duplicated network traffic per day, and a 7 % loss ratio in billing because the billing system never receives the final policy status change.</p>
 
 
-<h3>1.2 The real cost of 99 % data freshness</h3>
+<h2>1.2 The real cost of 99 % data freshness</h2>
 
 <p>I benchmarked a carrier that paid $0.04 per GB for S3 Standard and $0.15 per GB for S3 Express One Zone. They insisted on 5-second freshness for AI triage. Over 12 months, the streaming layer cost $2.9 M versus $0.3 M for batch micro-batching at 30-minute windows. The triage model’s AUC improved by 0.003. The trade-off is clear: chase 99 % freshness and the unit economics collapse.</p>
 
@@ -321,7 +321,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2>2. A reference architecture that actually works</h2>
+<p>2. A reference architecture that actually works</p>
 
 <p>I’ve deployed this pattern at two MGAs and one regional carrier; each now runs AI models at 100 % data volume growth with linear cost scaling. The stack is:</p>
 
@@ -432,12 +432,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2>3. Step-by-step: build the streaming ingestion pipeline</h2>
+<p>3. Step-by-step: build the streaming ingestion pipeline</p>
 
 <p>I’ll assume you already have Kafka deployed. If not, provision a Confluent Cloud cluster in GCP us-central1 with three availability zones and 100 MB/s egress throughput. Budget $22 k/year.</p>
 
 
-<h3>3.1 Define the canonical schema once</h3>
+<h2>3.1 Define the canonical schema once</h2>
 
 <p>Create a Protobuf schema that covers 90 % of insurance events. My schema is 420 lines and covers policy, claim, exposure, and payment events. Any new field must be backward-compatible or trigger a schema version bump.</p>
 
@@ -484,7 +484,7 @@ message PolicyCreated {
 <p><a href="https://protobuf.dev/" target="_blank" rel="noopener noreferrer">[Google Protobuf official docs]</a></p>
 
 
-<h3>3.2 Register the schema in Confluent Schema Registry</h3>
+<h2>3.2 Register the schema in Confluent Schema Registry</h2>
 
 <p>Register with curl:</p>
 
@@ -509,7 +509,7 @@ props.put("schema.registry.url", "http://schema-registry:8081");
 </code></pre>
 
 
-<h3>3.3 Exactly-once ingestion with Spark Structured Streaming</h3>
+<h2>3.3 Exactly-once ingestion with Spark Structured Streaming</h2>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -547,7 +547,7 @@ spark.conf.set("spark.sql.streaming.schemaEvolution.enabled", "true")
 </code></pre>
 
 
-<h3>3.4 Recover from poison pills without data loss</h3>
+<h2>3.4 Recover from poison pills without data loss</h2>
 
 <p>In one carrier, a malformed JSON from the legacy portal produced a poison pill every 47 seconds. I added a dead-letter queue (DLQ) topic:</p>
 
@@ -577,12 +577,12 @@ spark.conf.set("spark.sql.streaming.schemaEvolution.enabled", "true")
 ---
 
 
-<h2>4. Lakehouse storage: Iceberg over S3</h2>
+<p>4. Lakehouse storage: Iceberg over S3</p>
 
 <p>I moved from Delta to Iceberg in October 2023 after a 1.2 TB Delta table corrupted during a compaction. Iceberg’s snapshot isolation saved the day.</p>
 
 
-<h3>4.1 Create the raw zone Iceberg table</h3>
+<h2>4.1 Create the raw zone Iceberg table</h2>
 
 <p>Spark SQL:</p>
 
@@ -619,7 +619,7 @@ TBLPROPERTIES (
 </code></pre>
 
 
-<h3>4.2 Enforce schema evolution at write time</h3>
+<h2>4.2 Enforce schema evolution at write time</h2>
 
 <p>Configure Iceberg to reject incompatible writes:</p>
 
@@ -634,7 +634,7 @@ TBLPROPERTIES (
 </code></pre>
 
 
-<h3>4.3 Backfill with Spark</h3>
+<h2>4.3 Backfill with Spark</h2>
 
 <p>For historical data, use Spark to read JSON from S3 and write Iceberg:</p>
 
@@ -648,12 +648,12 @@ df.writeTo("insurance.raw_events").partitionedBy("days(event_time)").create()
 ---
 
 
-<h2>5. Warehouse layer: Delta Lake on Databricks</h2>
+<p>5. Warehouse layer: Delta Lake on Databricks</p>
 
 <p>I benchmarked Databricks against Snowflake on 5 TB TPC-DS insurance workloads. Databricks was 2.3× faster on join-heavy queries and 40 % cheaper once reserved compute was factored in.</p>
 
 
-<h3>5.1 Create Delta table with Z-order</h3>
+<h2>5.1 Create Delta table with Z-order</h2>
 
 <p>Z-order policy_id and event_type for low-cardinality columns:</p>
 
@@ -673,7 +673,7 @@ ZORDER BY (policy_id, event_type);
 </code></pre>
 
 
-<h3>5.2 Build incremental ETL with Databricks Auto Loader</h3>
+<h2>5.2 Build incremental ETL with Databricks Auto Loader</h2>
 
 <p>Auto Loader watches the raw Iceberg path and triggers when new files land:</p>
 
@@ -693,12 +693,12 @@ ZORDER BY (policy_id, event_type);
 ---
 
 
-<h2>6. Feature store: Feast with Redis for online serving</h2>
+<p>6. Feature store: Feast with Redis for online serving</p>
 
 <p>The carrier I advised in 2024 launched an AI triage model that reduced claims cycle time by 18 %. The secret was the feature store: 120 features updated in <500 ms p99.</p>
 
 
-<h3>6.1 Register features in Feast</h3>
+<h2>6.1 Register features in Feast</h2>
 
 <p>Define a feature view for policy risk score:</p>
 
@@ -730,7 +730,7 @@ policy_risk_fv = FeatureView(
 </code></pre>
 
 
-<h3>6.2 Push features to Redis for online serving</h3>
+<h2>6.2 Push features to Redis for online serving</h2>
 
 <p>Use Feast’s Redis online store:</p>
 
@@ -741,7 +741,7 @@ feast serve redis://redis:6379
 </code></pre>
 
 
-<h3>6.3 Latency benchmark</h3>
+<h2>6.3 Latency benchmark</h2>
 
 <p>I measured p99 latency at 480 ms end-to-end. The breakdown:</p>
 
@@ -759,12 +759,12 @@ feast serve redis://redis:6379
 ---
 
 
-<h2>7. Data quality and governance at scale</h2>
+<p>7. Data quality and governance at scale</p>
 
 <p>OpenMetadata caught a schema drift in March 2024: a new field “policy_renewal_flag” was added upstream but not propagated to the warehouse. Data quality tests failed within 15 minutes and blocked the nightly model retraining job.</p>
 
 
-<h3>7.1 OpenMetadata data quality tests</h3>
+<h2>7.1 OpenMetadata data quality tests</h2>
 
 <p>Define a test suite:</p>
 
@@ -791,7 +791,7 @@ feast serve redis://redis:6379
 </code></pre>
 
 
-<h3>7.2 Integrate with Airflow</h3>
+<h2>7.2 Integrate with Airflow</h2>
 
 <p>Add the OpenMetadata operator:</p>
 
@@ -814,7 +814,7 @@ task = OpenMetadataValidationOperator(
 ---
 
 
-<h2>8. Cost guardrails and scaling knobs</h2>
+<p>8. Cost guardrails and scaling knobs</p>
 
 <p>The same carrier that spent $2.9 M on streaming later throttled ingestion to 10 MB/s peak and batched writes to Iceberg every 30 minutes. Cost dropped to $0.6 M/year while the AI model’s AUC stayed within 0.002 of the 99 % freshness version.</p>
 
@@ -895,7 +895,7 @@ task = OpenMetadataValidationOperator(
 ---
 
 
-<h2>9. Migration checklist for an existing carrier</h2>
+<p>9. Migration checklist for an existing carrier</p>
 
 <p>If you’re already on a point-to-point ETL stack, follow this sequence:</p>
 
@@ -921,7 +921,7 @@ task = OpenMetadataValidationOperator(
 ---
 
 
-<h2>10. Real trade-offs you cannot ignore</h2>
+<p>10. Real trade-offs you cannot ignore</p>
 
 <p>First, schema evolution. If your upstream systems change fields frequently, budget 1.5 FTE for schema stewardship. Second, exactly-once semantics. Kafka’s idempotent producer raises broker load by 12 % and requires 256 MB heap per broker. Third, feature store cost. Feast with Redis at 100 K QPS costs ~$18 k/month on GCP Memorystore Standard tier. Fourth, data quality noise. OpenMetadata tests can generate thousands of alerts; set severity thresholds to avoid alert fatigue.</p>
 
@@ -929,7 +929,7 @@ task = OpenMetadataValidationOperator(
 ---
 
 
-<h2>11. What to do Monday morning</h2>
+<p>11. What to do Monday morning</p>
 
 <p>Open a ticket to inventory your top 10 API endpoints. Measure payload size and latency for one week. If any endpoint exceeds 500 KB or 2 s latency, prioritize it for Kafka ingestion first. That single action will likely save you $500 k in network and storage costs within 90 days.</p>
 

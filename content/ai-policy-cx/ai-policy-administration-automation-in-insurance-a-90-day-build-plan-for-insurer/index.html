@@ -247,7 +247,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In November 2023, Zurich’s UK SME unit cut policy issuance time from 5 days to 45 minutes by automating 87% of policy amendments with a rules-engine + ML hybrid. That result was achieved with a team of three developers, one data engineer, two underwriters, and a cloud budget of £84k. This guide shows how to replicate it with your own stack.</h2>
+                <p>In November 2023, Zurich’s UK SME unit cut policy issuance time from 5 days to 45 minutes by automating 87% of policy amendments with a rules-engine + ML hybrid. That result was achieved with a team of three developers, one data engineer, two underwriters, and a cloud budget of £84k. This guide shows how to replicate it with your own stack.</p>
 
 <p>I’ve reviewed this exact path at three Tier-2 insurers and one Lloyd’s syndicate. The common failure point is scope creep: teams try to automate the entire policy lifecycle on day one. Instead, start with renewal processing, then add endorsements, then new business. Each phase must pay for itself within 90 days or you stop.</p>
 
@@ -303,9 +303,9 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Compile the DRL: Run a smoke test:</p>
 
-<h2>Resource estimate: 1.5 FTE weeks for a developer who knows Java. Step 3.3 integrate the engine into the policy admin system</h2>
+<p>Resource estimate: 1.5 FTE weeks for a developer who knows Java. Step 3.3 integrate the engine into the policy admin system</p>
 
-<h3>Most policy admin systems expose a REST endpoint for “pre-bind checks”. Route the auto-renew decision through that endpoint. Example cURL:</h3>
+<p>Most policy admin systems expose a REST endpoint for “pre-bind checks”. Route the auto-renew decision through that endpoint. Example cURL:</p>
 
 <p>The response: Log every call to <code>prebind_logs</code> with a 200ms SLA. If you exceed 500ms for 5% of calls, switch to a rules-as-a-service provider like <a href="https://www.inrule.com" target="_blank" rel="noopener noreferrer">InRule</a>.</p>
 
@@ -345,7 +345,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Renewal processing must run on a schedule tied to the policy admin system’s renewal calendar. Use Apache Airflow. DAG snippet:</p>
 
-<h3>Set concurrency to 50 to avoid overwhelming downstream systems. Log every failure to <code>renewal_failures</code> with a reason code. Resource estimate: 1.5 FTE weeks for an Airflow admin.</h3>
+<p>Set concurrency to 50 to avoid overwhelming downstream systems. Log every failure to <code>renewal_failures</code> with a reason code. Resource estimate: 1.5 FTE weeks for an Airflow admin.</p>
 
 <p>Step 5.2 human-in-the-loop queue For policies flagged for manual review, push to a queue in your case management system (Guidewire, Duck Creek, or custom). Use the <code>manualReviewRequired</code> flag from the rules engine response.</p>
 
@@ -357,7 +357,7 @@ FROM policies_raw;</code></pre>
 
 <p>Ensure the adjuster sees the same data the ML saw: claims history, broker notes, previous endorsements. No context switching. Phase 6: integration and cutover (week 12)</p>
 
-<h2>Step 6.1 dry run Run the pipeline on last month’s renewals. Measure:</h2>
+<p>Step 6.1 dry run Run the pipeline on last month’s renewals. Measure:</p>
 
 <h3>Auto-renew rate Manual review rate</h3>
                 <!-- Ad Mid-Content -->

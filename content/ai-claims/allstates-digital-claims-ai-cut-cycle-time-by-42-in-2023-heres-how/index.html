@@ -247,19 +247,19 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In March 2023 Allstate stopped printing 1.2 million physical claim checks each quarter, a move that reduced mail float by 5 days and freed $32 million in trapped cash. The trigger was a three-year rebuild of its end-to-end digital claims platform that now handles 68% of auto FNOLs without human adjusters. This is not a pilot. It is live production at national scale.</h2>
+                <p>In March 2023 Allstate stopped printing 1.2 million physical claim checks each quarter, a move that reduced mail float by 5 days and freed $32 million in trapped cash. The trigger was a three-year rebuild of its end-to-end digital claims platform that now handles 68% of auto FNOLs without human adjusters. This is not a pilot. It is live production at national scale.</p>
 
 <p>I spent six weeks in Chicago with the team that owns the pipeline—from first notice of loss to final payment—and reviewed every post-deployment metric published by Allstate. The numbers are stark: average cycle time for digital claims dropped from 8.4 days to 4.9 days in the first 90 days after launch. Severity leakage fell 11% because the AI now flags under-disclosed injuries earlier in the process, and the project cost $28 million to build and delivered a 2.7× roi inside the first year, according to the cfo’s office. Below is the exact architecture, the specific failure modes they hit, and the lessons they say every insurer should steal.</p>
 
 <p>Background: the legacy claims stack</p>
 
-<h3>In 2020 Allstate’s auto claims operation ran on three separate systems: Guidewire ClaimCenter for bodily injury claims, Duck Creek Claims for property damage, and a custom mainframe batch processor that printed checks every Thursday. Each system had its own image repository, telephony IVR, and rules engine. FNOL data entered via IVR was transcribed by a third-party speech-to-text vendor that produced a 12% word-error rate on noisy car calls. Adjusters spent 35% of their time re-keying the same injury narratives into three different screens.</h3>
+<p>In 2020 Allstate’s auto claims operation ran on three separate systems: Guidewire ClaimCenter for bodily injury claims, Duck Creek Claims for property damage, and a custom mainframe batch processor that printed checks every Thursday. Each system had its own image repository, telephony IVR, and rules engine. FNOL data entered via IVR was transcribed by a third-party speech-to-text vendor that produced a 12% word-error rate on noisy car calls. Adjusters spent 35% of their time re-keying the same injury narratives into three different screens.</p>
 
 <p>Loss ratio on auto physical damage had crept up from 64.2% in 2018 to 68.9% in 2022. The combined ratio for the personal auto line was 102.3%—the first time it breached 100 since 2016. Investor calls asked repeatedly about “structural cost inflation.” In February 2021 the board approved a $120 million transformation budget and told the claims organization to cut cycle time in half within 24 months.</p>
 
 <p>Challenge: seven failure modes the team could not ignore Failure mode</p>
 
-<h3>Evidence Root cause</h3>
+<h2>Evidence Root cause</h2>
 
 <table>
 <thead>
@@ -318,7 +318,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>All seven models are versioned in Amazon SageMaker Model Registry and retrained weekly. The engineering team set a hard SLA: no model can be promoted to production without a <em>model degradation test</em> that simulates a 20% shift in claim type distribution.</p>
 
-<h3>Results: hard numbers after 12 months Metric</h3>
+<h2>Results: hard numbers after 12 months Metric</h2>
 
 <p>2022 baseline 2023 after ClaimIQ</p>
 
@@ -369,7 +369,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>3. Build the API before you build the model.</strong> The team spent six months reverse-engineering the legacy mainframe’s check-printing API so the auto-payment engine could push ACH files directly to the bank. Without that plumbing, the digital claims would have been stuck waiting for a human to press “print.” The engineering lead now insists every new AI feature must include an API contract before the data science team starts coding.</p>
 
-<h3><strong>4. Budget for the human-in-the-loop tax.</strong> Even after the platform launched, 32% of high-severity claims still required an adjuster. The team discovered that adjusters needed a new dashboard—one that pulled in. the AI’s triage score, the fraud graph, and the repair-shop routing decision. They allocated an extra $3 million for UX work and training; without it, adoption stalled at 55%.</h3>
+<p><strong>4. Budget for the human-in-the-loop tax.</strong> Even after the platform launched, 32% of high-severity claims still required an adjuster. The team discovered that adjusters needed a new dashboard—one that pulled in. the AI’s triage score, the fraud graph, and the repair-shop routing decision. They allocated an extra $3 million for UX work and training; without it, adoption stalled at 55%.</p>
 
 <table>
 <thead>

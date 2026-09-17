@@ -279,14 +279,14 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Why 87% of cloud migration projects in P&C; carriers stall at the first integration layer — and what the CTO can do about it</h2>
+                
 
 <p>In 2023, Accenture tracked 217 cloud migrations across Tier-1 and Tier-2 P&C; insurers. Eighty-seven percent of projects hit first production release, then remained in pilot for an average of 20 months while the “real” core stayed on-premise. The culprit was not bandwidth, budget, or security — it was the integration layer between legacy policy, billing, and claims systems and the new cloud services.</p>
 
 <p>I’ve reviewed a dozen of these “stuck” programs. The pattern is predictable: vendors sell shiny AI modules for FNOL extraction and underwriting scoring, but the AI never leaves the sandbox because the upstream policy system won’t push clean, real-time data to the cloud service. The CFO signs off on the AI ROI model assuming 90-day deployment; the CTO ends up rewriting custom ETL scripts for 18 months. That disconnect costs $2.3 M per stalled project in sunk cloud spend and missed AI acceleration benefits, according to Deloitte’s 2024 <a href="https://www2.deloitte.com/us/en/insights/industry/financial-services/cloud-migration-costs-2024.html" target="_blank" rel="noopener noreferrer">Cloud Migration in Financial Services Report</a>.</p>
 
 
-<h3>For the CTO: where the rubber meets the road</h3>
+<h2>For the CTO: where the rubber meets the road</h2>
 
 <p>As CTO of a regional carrier, I’ve made every integration mistake you can name. The worst was migrating claims FNOL to a new cloud service while the policy system still emitted 20-character policy numbers with embedded dashes and spaces. The cloud AI expected a clean integer ID. Result: 3,400 open claims halted in mid-FNOL because the downstream service rejected the malformed key. We spent six weeks rewriting a Python data quality pipeline that should never have been necessary.</p>
 
@@ -494,19 +494,19 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>I’ve seen three patterns that actually move data to the cloud without rewriting the legacy core:</p>
 
 
-<h3>1. Event streaming + schema registry</h3>
+<p>1. Event streaming + schema registry</p>
 
 <p>Instead of batch ETL, stream policy and claim events from the legacy system to a Kafka cluster running in the cloud VPC. Use a schema registry (Confluent or AWS Glue Schema) to enforce canonical data types. The legacy system publishes raw JSON; the cloud service consumes canonical Avro. The trade-off: you need a dedicated streaming platform team, which most insurers under-resource. The upside: 99.8% clean data at scale with sub-second latency.</p>
 
 
-<h3>2. API façade over the legacy core</h3>
+<p>2. API façade over the legacy core</p>
 
 <p>Build a thin GraphQL façade around the legacy policy system that exposes only the fields the cloud AI needs. Use request batching and caching to avoid overloading the mainframe. The trade-off: façade logic becomes a new maintenance surface; any schema change in the legacy system breaks downstream services. The upside: you can deprecate the façade once the core is fully cloud-native, with zero data migration risk.</p>
 
 <p>Hiscox claimed in its June 2022 press release that its API façade reduced FNOL cycle time by 68% in six weeks, but that figure assumes clean upstream data. In practice, façade projects still require data quality fixes at the source — just fewer of them.</p>
 
 
-<h3>3. Dual-write with reconciliation</h3>
+<p>3. Dual-write with reconciliation</p>
 
 <p>Run the legacy core and the cloud service in parallel for 90 days. Every transaction writes to both systems, then reconciliation jobs flag mismatches. The trade-off: dual-write doubles write latency and doubles storage costs. The upside: you can validate data quality before cutting over. I’ve used this pattern successfully for billing integrations, but it’s brutal for claims FNOL because adjuster workflows get confused by duplicate records.</p>
 

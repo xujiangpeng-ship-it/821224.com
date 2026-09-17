@@ -291,12 +291,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Why conversational AI is failing your insurance sales pipeline — and how to fix it</h2>
+                
 <p>In 2023, Lemonade reported a 28% sales conversion rate for its AI-powered Maya chatbot, while the industry average for direct-to-consumer insurance sales hovers at 8–12%. The gap isn’t just performance: it’s structural. Most carriers treat conversational AI as a chatbot, not a sales engine.</p>
 <p>I’ve audited a dozen implementations in the last 18 months. In all but two, the bot collected lead data without qualifying intent, pushed static quotes, or hung up when underwriting got complex. The result: higher FNOL volumes, lower quote-to-bind ratios, and frustrated agents who inherit unqualified leads. That’s not automation — that’s digitized inefficiency.</p>
 <p>This guide walks through a field-tested framework to turn conversational AI into a measurable sales converter. We’ll cover: intent modeling that actually works, real-time risk scoring during dialogue, seamless handoff to agents, and attribution that ties revenue to chat sessions. If you’re not measuring quote-to-close from each conversation, you’re optimizing the wrong metric.</p>
 
-<h2>1. Start with the conversational maturity model (it’s not about the tech stack)</h2>
+<p>1. Start with the conversational maturity model (it’s not about the tech stack)</p>
 <p>Most carriers skip the maturity assessment and jump to vendor demos. That’s why 70% of implementations stall at the first hurdle: collecting basic lead data. Conversational maturity has five levels:</p>
 <ul>
 <li><strong>Level 0:</strong> Static FAQs. Exit rate: >95%. Conversion: 1–3%.</li>
@@ -308,7 +308,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>I’ve seen carriers move from Level 0 to Level 3 in 12 weeks using open-source models and in-house data. Level 4 requires clean underwriting data and a real-time rules engine — a 6–9 month project.</p>
 <p><strong>Trade-off:</strong> Level 3 bots improve quote volume but increase underwriting leakage if risk scoring isn’t embedded in dialogue. Lemonade’s Maya sits at Level 3 for personal lines but caps at $1M coverage because risk scoring halts at higher limits.</p>
 
-<h3>Step 1: Audit your current conversation flows</h3>
+<h2>Step 1: Audit your current conversation flows</h2>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -325,7 +325,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Use a simple spreadsheet or Tableau. If you can’t map exit reasons to revenue, your attribution is broken.</p>
 <p><strong>Tool stack:</strong> Python + Pandas for parsing, spaCy or Rasa for intent tagging. Cost: $0 if you already license the data.</p>
 
-<h3>Step 2: Define your sales funnel in dialogue</h3>
+<h2>Step 2: Define your sales funnel in dialogue</h2>
 <p>Map the funnel into five conversational stages:</p>
 <ol>
 <li><strong>Discovery:</strong> “What brings you here today?”</li>
@@ -337,7 +337,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Most bots fail at Stage 2: intent detection. They classify “car insurance” as a single intent, not “car insurance for a teen driver” or “car insurance with rideshare coverage.” That misclassification inflates your quote volume but deflates your close rate.</p>
 <p><strong>Trade-off:</strong> Adding more intents increases model complexity and reduces precision unless you have at least 5,000 labeled examples per intent.</p>
 
-<h2>2. Build an intent model that actually qualifies leads</h2>
+<p>2. Build an intent model that actually qualifies leads</p>
 <p>In 2023, I benchmarked five intent classifiers across carriers. The best performers used a two-stage architecture:</p>
 <ul>
 <li><strong>Stage 1:</strong> BERT-based classifier for coarse-grained intents (auto, home, life)</li>
@@ -345,7 +345,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 <p>The worst performers used a single BERT model with 142 intents. Precision dropped to 45% when the model confused “teen driver” with “named driver exclusion.”</p>
 
-<h3>Step 3: Collect and label your intent taxonomy</h3>
+<h2>Step 3: Collect and label your intent taxonomy</h2>
 <p>Start with 20 core intents. Example taxonomy for auto:</p>
 <table>
 <thead>
@@ -386,7 +386,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Data source:</strong> LexisNexis Risk Solutions 2024 Auto Quote Intent Study reported that 62% of teen quotes include prior claim history, yet only 18% of carriers capture it in real time.</p>
 <p><strong>Trade-off:</strong> Adding more slots increases dropout rate. Each additional field beyond three drops completion by 7–10%.</p>
 
-<h3>Step 4: Train or fine-tune your classifier</h3>
+<h2>Step 4: Train or fine-tune your classifier</h2>
 <p>Option A: Use an open-source model and fine-tune.</p>
 
                 <!-- Ad Mid-Content -->

@@ -252,7 +252,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average property damage claim cycle time by 18% and cut reopened claims by 12%. The pilot processed 14,000 claims across three states. That’s not a pilot result—it’s a threshold. If your team is still building monthly Excel reports pulled from a mainframe, you’re already behind.</h2>
+                <p>In August 2023, Zurich North America shut down its legacy claims analytics portal after a 6-week pilot of a real-time, AI-driven dashboard reduced average property damage claim cycle time by 18% and cut reopened claims by 12%. The pilot processed 14,000 claims across three states. That’s not a pilot result—it’s a threshold. If your team is still building monthly Excel reports pulled from a mainframe, you’re already behind.</p>
 
 
 <p>I’ve led the implementation of three live claims analytics dashboards for Tier-1 P&C; carriers, and the gap between “dashboard” and “real-time AI” is wider than most vendors admit. This guide is written for the person who will actually build it: a claims ops lead with Python basics, SQL competence, and a mandate to ship something that won’t collapse under the 3 a.m. claim storm. We’ll cover: streaming ingestion, feature engineering for claims, a lightweight ML service, and a BI layer that updates every 30 seconds—not daily. I’ll include resource estimates, code snippets, and the trade-offs I’ve had to defend with CFOs and regulators alike.</p>
@@ -261,12 +261,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Who This Is For</p>
 
 
-<h3>You’re a claims adjuster-turned-tech lead, or a data engineer assigned to “make the dashboard faster.” You need something that survives the Monday morning 8 a.m. surge after a hailstorm hits Colorado. You have a PostgreSQL cluster, a Snowflake license, and access to the FNOL pipeline. You don’t have a data lake budget or a DevOps army. This guide assumes you’ll deploy on AWS (EKS + RDS) but the architecture is portable to GCP or Azure. I’ll call out AWS-specific services so you can translate.</h3>
+<p>You’re a claims adjuster-turned-tech lead, or a data engineer assigned to “make the dashboard faster.” You need something that survives the Monday morning 8 a.m. surge after a hailstorm hits Colorado. You have a PostgreSQL cluster, a Snowflake license, and access to the FNOL pipeline. You don’t have a data lake budget or a DevOps army. This guide assumes you’ll deploy on AWS (EKS + RDS) but the architecture is portable to GCP or Azure. I’ll call out AWS-specific services so you can translate.</p>
 
 <p>What We Won’t Do We won’t build a monolithic “AI claims engine” that scores every claim on day 1.</p>
 
 
-<h3>We won’t try to predict bodily injury reserves in real time—regulatory and ethical red lines. We won’t promise 99.9% uptime without discussing how you’ll page a human when the model drifts.</h3>
+<p>We won’t try to predict bodily injury reserves in real time—regulatory and ethical red lines. We won’t promise 99.9% uptime without discussing how you’ll page a human when the model drifts.</p>
 
 <ul>
 
@@ -518,7 +518,7 @@ send_fnol({
 <p>Regulatory & Ethical Safeguards I’ve had to defend this dashboard to three state DOI exams. Key red flags:</p>
 
 
-<h3><strong>Proxy discrimination:</strong> Your <code>adjuster_workload</code> feature correlates with adjuster tenure and location. Include <code>adjuster_tenure</code> as a protected attribute and run fairness tests (Demographic Parity, Equal Opportunity). Use Aequitas or Fairlearn. <strong>Explainability:</strong> If a claim is flagged for “catastrophic” cycle time, the adjuster must see the top 3 features. SHAP values in Grafana using the ONNX runtime SHAP library.</h3>
+<p><strong>Proxy discrimination:</strong> Your <code>adjuster_workload</code> feature correlates with adjuster tenure and location. Include <code>adjuster_tenure</code> as a protected attribute and run fairness tests (Demographic Parity, Equal Opportunity). Use Aequitas or Fairlearn. <strong>Explainability:</strong> If a claim is flagged for “catastrophic” cycle time, the adjuster must see the top 3 features. SHAP values in Grafana using the ONNX runtime SHAP library.</p>
 
 
 <p><strong>Data retention:</strong> FNOL images (photos, videos) are PHI/PII under HIPAA if bodily injury is involved. Delete after 90 days or implement a redaction pipeline with AWS Rekognition. Trade-off: Fairness testing adds 20% to model training time and requires a protected attribute file. If you can’t source <code>adjuster_tenure</code>, use <code>adjuster_id</code> hashed and bucketed by hire year range (pre-2010, 2010–2015, etc.).</p>

@@ -285,12 +285,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>That’s the attrition rate I’ve measured across the dozen carriers I’ve reviewed since 2021. Eight out of ten projects never make it past the PoC because teams overlook edge cases in first notice of loss (FNOL) data and underestimate the effort required to unify unstructured notes with structured claims fields. The single biggest mistake is assuming triage can operate in a vacuum—without integrating with subrogation, salvage, and reserve workflows you’ll hit a wall at 30% automation and watch your loss ratio climb from 62% to 71%.</h2>
+                <p>That’s the attrition rate I’ve measured across the dozen carriers I’ve reviewed since 2021. Eight out of ten projects never make it past the PoC because teams overlook edge cases in first notice of loss (FNOL) data and underestimate the effort required to unify unstructured notes with structured claims fields. The single biggest mistake is assuming triage can operate in a vacuum—without integrating with subrogation, salvage, and reserve workflows you’ll hit a wall at 30% automation and watch your loss ratio climb from 62% to 71%.</p>
 
 <p>How I’ve Seen It Go Wrong</p>
 
 
-<h3>In 2022, a Tier-1 P&C; carrier deployed a transformer-based triage model for auto claims. By month six, the model was flagging 48% of claims as “complex,” but the adjuster acceptance rate for those flags was only 21%. The root cause: the model had learned to associate high. deductibles and late-night accidents with “complexity,” not actual injury severity. The team spent six months re-labeling the training set and rebalancing the loss ratio impact before pulling the plug. The final write-off: $1.8M in unnecessary escalations.</h3>
+<p>In 2022, a Tier-1 P&C; carrier deployed a transformer-based triage model for auto claims. By month six, the model was flagging 48% of claims as “complex,” but the adjuster acceptance rate for those flags was only 21%. The root cause: the model had learned to associate high. deductibles and late-night accidents with “complexity,” not actual injury severity. The team spent six months re-labeling the training set and rebalancing the loss ratio impact before pulling the plug. The final write-off: $1.8M in unnecessary escalations.</p>
 
 <p>The one project that succeeded? A regional carrier that treated triage as a data pipeline problem first, an AI problem second. They treated FNOL data as the primary feature set, mapped every free-text field to a structured schema, and built a feedback loop that pushed adjuster notes back into the model within 48 hours. They hit 65% straight-through processing (STP) on bodily injury liability claims within nine months, with no degradation in loss ratio.</p>
 
@@ -298,7 +298,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Step 1: Define the Triage Thresholds That Actually Move the Loss Ratio Start with loss ratio, not accuracy. A model that hits 95% precision but misses 25% of salvage opportunities will increase your combined ratio by 3–5 points. Define your thresholds using historical loss data:</p>
 
 
-<h2><strong>Straight-Through Processing (STP) threshold:</strong> Claims where reserve < $2,500 and no bodily injury (BI) indicator. This represents 58% of your volume and 12% of your incurred losses. <strong>Escalation threshold:</strong> Claims where reserve ≥ $10,000 or BI indicator present. These represent 8% of volume but 63% of incurred losses.</h2>
+<p><strong>Straight-Through Processing (STP) threshold:</strong> Claims where reserve < $2,500 and no bodily injury (BI) indicator. This represents 58% of your volume and 12% of your incurred losses. <strong>Escalation threshold:</strong> Claims where reserve ≥ $10,000 or BI indicator present. These represent 8% of volume but 63% of incurred losses.</p>
 
 <p><strong>Reserve accuracy tolerance:</strong> ±15% on final paid. Miss by more than 20% and you’ve introduced noise that breaks downstream pricing models.</p>
 
@@ -320,7 +320,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Policy master:</strong> Coverage limits, deductibles, underwriting class, prior losses, vehicle age, driver age. Without this, your model can’t distinguish a $500 theft claim from a $50k hail claim on the same policy. If any of these are missing or gated behind a third-party administrator (TPA), assume a 4–6 week delay to onboard the data. I’ve seen projects stall for months waiting on bordereaux from MGAs.</p>
 
 
-<h3>Step 2: Build the Unified Claims Schema—Before You Write a Single Line of ML Code Most teams jump straight to model selection. Don’t. Build the schema first. Your schema must resolve conflicts between FNOL and historical claims. Like when :</h3>
+<p>Step 2: Build the Unified Claims Schema—Before You Write a Single Line of ML Code Most teams jump straight to model selection. Don’t. Build the schema first. Your schema must resolve conflicts between FNOL and historical claims. Like when :</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -345,7 +345,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Extraction:</strong> Run OCR on photos and PDFs to extract text. Use Tesseract 5.3.0 or AWS Textract. Expect 15–25% OCR error rate on low-quality images. <strong>Transformation:</strong> Concatenate all unstructured text into a single field, then apply a regex-based parser to extract entities (vehicle damage, injury type, fault determination). Flag any record with no structured injury indicator but positive entities (e.g., “fractured radius” in notes).</p>
 
 
-<h2>I’ve seen two carriers where poor OCR introduced 11% false negatives on BI flags. The fix: add a human-in-the-loop step for photos with <code>confidence < 0.75</code>. Step 3: Choose the Model Architecture That Matches Your Data Volume and Latency Targets</h2>
+<p>I’ve seen two carriers where poor OCR introduced 11% false negatives on BI flags. The fix: add a human-in-the-loop step for photos with <code>confidence < 0.75</code>. Step 3: Choose the Model Architecture That Matches Your Data Volume and Latency Targets</p>
 
 <p>You have three viable paths. Pick one based on your data volume and latency SLA: Path</p>
 
@@ -379,7 +379,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>C. Transformer-based (DistilBERT or RoBERTa) > 500K claims/month</p>
 
 
-<h3>< 2 seconds Fine-tuned DistilBERT on FNOL text + structured fields</h3>
+<h2>< 2 seconds Fine-tuned DistilBERT on FNOL text + structured fields</h2>
 
 <p>High GPU cost; 30% inference latency spike during peak hours I’ve seen two Tier-1 carriers try Path C on < 200K claims/month. Both hit 30% latency spikes and rolled back to Path B. The GPU cost alone added $180k/year.</p>
 
@@ -396,7 +396,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Resource estimate (Week 5–8): One ML engineer, one data scientist, one DevOps engineer. Budget: $84k. Feature Engineering: The Silent Killer of Loss Ratio Drift</p>
 
 
-<h2>Your model will leak if you don’t engineer features for: <strong>Deductible leakage:</strong> Create a feature <code>deductible_coverage_gap</code> = <code>loss_amount - min(deductible, policy_limit)</code>. If this gap > $1,500, flag for review.</h2>
+<p>Your model will leak if you don’t engineer features for: <strong>Deductible leakage:</strong> Create a feature <code>deductible_coverage_gap</code> = <code>loss_amount - min(deductible, policy_limit)</code>. If this gap > $1,500, flag for review.</p>
 
 <p><strong>Adjuster override pattern:</strong> Create a feature <code>adjuster_override_rate</code> = (# overrides in last 90 days) / (# claims handled). If > 0.3, flag for review. <strong>Fraud indicator overlap:</strong> Create a feature <code>fraud_indicator_count</code> = count of fraud flags across FNOL, police report, and adjuster notes. If ≥ 2, escalate.</p>
 

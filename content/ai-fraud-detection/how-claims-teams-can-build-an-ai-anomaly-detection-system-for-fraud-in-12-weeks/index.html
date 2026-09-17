@@ -260,7 +260,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>The first time I saw an AI flag a claim as 99.8% likely fraudulent, it was a single-car accident in rural Texas with no witnesses and a repair quote for $18,472. The adjuster had already suspected it — the insured had filed three claims in two years — but the AI caught it two days before the adjuster opened the file. The savings? $16,800 in indemnity and $3,200 in investigative costs.</h2>
+                <p>The first time I saw an AI flag a claim as 99.8% likely fraudulent, it was a single-car accident in rural Texas with no witnesses and a repair quote for $18,472. The adjuster had already suspected it — the insured had filed three claims in two years — but the AI caught it two days before the adjuster opened the file. The savings? $16,800 in indemnity and $3,200 in investigative costs.</p>
 
 <p>That system was built in 12 weeks by a team of three: a data engineer, a claims adjuster, and a data scientist who had never worked in insurance. They used open-source tools, AWS credits from a startup accelerator, and a fraud label dataset from the National Insurance Crime Bureau (NICB) that cost $0. The project paid for itself in the first month. The adjuster on the team later told me: "We didn't build a fraud detector. We built a claims prioritization engine that surfaces the 0.3% of claims that cost 30% of losses."</p>
 
@@ -277,7 +277,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>You’ll tune thresholds on business loss, not model confidence You’ll surface uncertainty bands (e.g., "medium", "high") to guide adjuster workload</p>
 
-<h2>This realization alone cuts 40% of model churn in production. Step 1: collect the right data — and ignore the rest</h2>
+<p>This realization alone cuts 40% of model churn in production. Step 1: collect the right data — and ignore the rest</p>
 
 <p>Fraud signals live in three places: policyholder behavior, claim features, and external data. Most teams over-index on claim features (VIN, repair shop, injury type) and under-index on policyholder behavior (claim frequency, address changes, payment delinquency). The table below shows the data sources that matter most, ranked by lift@5% in our benchmark across four carriers (2019–2023).</p>
 
@@ -409,7 +409,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <li>Adjuster time: 4 hours (to review SHAP plots) Productionizing the model: the API layer</li>
 </ul>
 
-<h3>We used FastAPI for the inference endpoint. The API accepts a claim_id and returns: fraud_score (0–1)</h3>
+<p>We used FastAPI for the inference endpoint. The API accepts a claim_id and returns: fraud_score (0–1)</p>
 
 <p>confidence_interval (95%) top_3_driving_features (SHAP values)</p>
 
@@ -649,23 +649,23 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <li><strong>Month 12:</strong> Model is stable. ROI is proven. Now pitch the CFO for a larger budget to expand to new lines (workers' comp, health, property).</li>
 </ul>
 
-<h2>The adjuster who built the first system told me: "We didn’t build a fraud detector. We built a claims prioritization engine that surfaces the 0.3% of claims that cost 30% of losses." This is the mindset that separates successful implementations from shelfware. Start with a small pilot, measure lift in dollars saved, and expand only when the numbers justify it. Everything else is noise.</h2>
+<p>The adjuster who built the first system told me: "We didn’t build a fraud detector. We built a claims prioritization engine that surfaces the 0.3% of claims that cost 30% of losses." This is the mindset that separates successful implementations from shelfware. Start with a small pilot, measure lift in dollars saved, and expand only when the numbers justify it. Everything else is noise.</p>
 
 <p>Community perspectives Selected real discussions from insurance practitioners, adjusters and policyholders on public forums. Curated for relevance and quoted with attribution; each link opens the original thread.</p>
 
-<h3><blockquote>This is really interesting decision. Especially the CLAIMS BASED ON SCRAPING AND SELLING OF DATATo summarize. X Corp. and other social media companies have to choose:1. License to use data does not copyright make. Others can use the data too.2. Copyright makes the company liable.X Corp. v. Bright Data Ltd. (3:23-cv-03698) District Court, N.D. CaliforniaOrder on Motion to Dismiss https:&#x2F;&#x2F;www.courtlistener.com&#x2F;docket&#x2F;67637345&#x2F;83&#x2F;x-corp-v-br...--- beginINTRODUCTIONA social media company a</h3>
+<p><blockquote>This is really interesting decision. Especially the CLAIMS BASED ON SCRAPING AND SELLING OF DATATo summarize. X Corp. and other social media companies have to choose:1. License to use data does not copyright make. Others can use the data too.2. Copyright makes the company liable.X Corp. v. Bright Data Ltd. (3:23-cv-03698) District Court, N.D. CaliforniaOrder on Motion to Dismiss https:&#x2F;&#x2F;www.courtlistener.com&#x2F;docket&#x2F;67637345&#x2F;83&#x2F;x-corp-v-br...--- beginINTRODUCTIONA social media company a</p>
 
 <p><blockquote>Passive voiceprinting for call centers, including trying to detect frauds and deepfakes. From the page:&gt; Call centers use Pindrop Voiceprinting™ technology to analyze the characteristics of their customers’ voices. With the Deep Voice™ Engine, they can verify that callers are who they claim to be, or if a caller’s voice matches that of a known fraudster profile.&gt; Every caller’s voice presents unique acoustic and behavioral features over the wire. Pindrop analyzes these unique signals, extracted from short utt</p>
 
 <p><blockquote>Were you also partially responsible for designing a GNSS system? Otherwise it isn&#x27;t clear how you can make any claim as to the difficulty of that, if you&#x27;re using your experience on the former as your bona fides. I think the difficulty of payment processing isn&#x27;t in the happy path, but in fraud&#x2F;anomaly detection, merchant servicing&#x2F;outreach, dispute resolution, all of which do not have a &quot;set it and forget it&quot; solution.</p>
 
-<h3><blockquote>I don&#x27;t work directly for insurance companies so I am not a good judge of what jobs will be around. I would expect that any job that deals manually with claims--line entry, price evaluation, even fraud detection--will decline, maybe a lot, and flip side:,i don&#x27;t see them going away entirely--there are just too many anomalies and the data you&#x27;re dealing. That&#x27;s not sticking my neck out too much; you can say pretty much the same thing for any broad industry. :)I assume that Lemonade is</h3>
+<p><blockquote>I don&#x27;t work directly for insurance companies so I am not a good judge of what jobs will be around. I would expect that any job that deals manually with claims--line entry, price evaluation, even fraud detection--will decline, maybe a lot, and flip side:,i don&#x27;t see them going away entirely--there are just too many anomalies and the data you&#x27;re dealing. That&#x27;s not sticking my neck out too much; you can say pretty much the same thing for any broad industry. :)I assume that Lemonade is</p>
 
 <p><blockquote>Medicare is notorious for being rife with fraud and waste. This ring is far from the only one.This includes mom-and-pop doctors who “upcode” certain procedure codes so that they get paid more. There’s obviously very little the govt can do to check or know. That kind of stuff happens all the time. Like I wonder if the govt is even doing basic anomaly detection on claims data to catch these things...if a ring is getting away with $1bil it makes me think no.Also...there got to be so much opportunity to build a company</p>
 
 <p>About the Author <strong>Jiangpeng Xu</strong> — Lead Author &amp; Principal Analyst</p>
 
-<h3>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</h3>
+<p>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</p>
 
 <p>Was this article helpful? Comments.</p>
 

@@ -446,6 +446,17 @@ SECTION 5: ARTICLE STRUCTURE
   • Include at least 1 <table> with minimum 4 rows × 4 columns, comparing
     specific vendors / frameworks / metrics / approaches — not generic pros/cons.
   • No inline bold keyword lists. Rewrite as flowing paragraphs.
+  • HEADING STRUCTURE RULES (HARD — violations are structural bugs):
+    - NEVER repeat the article title as an <h2>. The title is the <h1>;
+      do not echo it as a body section heading.
+    - A heading MUST be a short label (ideally under ~12 words, a phrase,
+      not a full sentence or paragraph). NEVER wrap a sentence, run-on, or
+      multi-sentence paragraph in <h2>/<h3> — that content belongs in <p>.
+    - Every <h3> MUST be nested under an <h2>. NEVER use <h3> as a
+      top-level section divider; if a section has no <h2> above it, emit
+      it as <h2> instead.
+    - A heading must be a single line. Never put line breaks / blank lines
+      inside a heading tag.
 
 5.3 ENDING
   • NO summary / conclusion / "key takeaways" paragraph.
@@ -582,6 +593,43 @@ def split_content_at_third(html_body: str) -> tuple:
     return html_body, ""
 
 
+def _heading_issues(html_body: str):
+    """Validate article-body heading structure. Returns list of issue strings.
+
+    Catches the structural bugs that were historically common in generated
+    articles (see fix_h2_structure.py):
+      - orphan <h3> used as a top-level section (no <h2> above it)
+      - a heading that is really a paragraph / run-on (contains a line break,
+        is multi-sentence, or exceeds ~70 chars)
+    """
+    issues = []
+    seen_h2 = False
+    for m in re.finditer(r'<h([23])[^>]*>(.*?)</h\1>', html_body, re.S | re.I):
+        lvl = m.group(1).lower()
+        attrs = m.group(0)[:m.group(0).find('>') + 1]
+        if 'style=' in attrs.lower():
+            # Key Takeaways / Comments styled headings — not LLM-generated body.
+            if lvl == '2':
+                seen_h2 = True
+            continue
+        inner = m.group(2)
+        text = re.sub(r'<[^>]+>', '', inner).strip()
+        if '\n' in text:
+            issues.append(f"heading contains a line break (prose in <h{lvl}>): {text[:60]!r}")
+            continue
+        # A heading that is really a paragraph / run-on (multi-sentence). Note:
+        # a long single-clause label (e.g. with a colon) is a legitimate heading,
+        # so length alone is NOT flagged here.
+        if re.search(r'[.?!]\s+[A-Z]', text):
+            issues.append(f"<h{lvl}> is multi-sentence prose: {text[:60]!r}")
+        if lvl == '3':
+            if not seen_h2:
+                issues.append(f"orphan <h3> used as top-level section: {text[:60]!r}")
+        else:
+            seen_h2 = True
+    return issues
+
+
 def render_article(config, keyword_entry, html_body: str) -> Path:
     """Render one article to content/{subdomain}/{slug}/index.html"""
     jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
@@ -613,6 +661,11 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
         return tag
 
     html_body = re.sub(r'<img\s[^>]*>', _fix_img, html_body)
+
+    # Heading-structure guard: warn (not block) on structural bugs so CI keeps
+    # shipping while surfacing regressions from the LLM.
+    for issue in _heading_issues(html_body):
+        logger.warning("heading-structure issue: %s", issue)
 
     title = extract_title(html_body)
     description = generate_description(html_body)

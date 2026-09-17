@@ -279,7 +279,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Parametric Insurance Meets AI and Embedded IoT: A Build-Your-Own Guide</h2>
+                
 
 
 <p>I’ve helped three MGAs launch parametric products in the last 18 months. Two flamed out because they underestimated the data plumbing; one is now writing $12 M in premium against a 15 % loss ratio. The difference wasn’t actuarial skill—it was wiring the sensors to the pay-as-you-go claims engine before the broker even got the quote. This guide walks you through the exact steps I give my engineering teams when we stand up a new parametric line. If you finish, you’ll have a working prototype that quotes, binds, and pays in under 5 minutes using live IoT data and an AI underwriting layer.</p>
@@ -288,7 +288,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Assumptions:</strong> You already have an MGA license or a partnership with one, and you can touch the underwriting API. If you’re a carrier building in-house, swap the MGA for your internal underwriting desk. All dollar figures are FY23 market averages; your mileage will vary.</p>
 
 
-<h3>1. Decide What to Parametrize—and How to Sense It</h3>
+<p>1. Decide What to Parametrize—and How to Sense It</p>
 
 
 <p>Not every peril is a fit. I only touch perils with:</p>
@@ -325,7 +325,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Pick one. I’ll use “commercial roof leak” for the rest of the guide because it’s the easiest to prototype in a garage.</p>
 
 
-<h3>2. Procure the Sensor Fleet</h3>
+<p>2. Procure the Sensor Fleet</p>
 
 
 <p>You have three sourcing routes:</p>
@@ -366,7 +366,7 @@ Total per node: $48.10 + $2/mo cellular</code></pre>
 <p><strong>Resource estimate:</strong> 2 engineers × 3 weeks = $24 k to build the first 10 nodes, including PCB layout and firmware.</p>
 
 
-<h3>3. Build the Edge Firmware</h3>
+<p>3. Build the Edge Firmware</p>
 
 
 <p>We need a device that:</p>
@@ -454,7 +454,7 @@ void loop() {} // never reached</code></pre>
 <p><strong>Validation:</strong> Run 50 nodes in a humidity chamber at 35 °C / 90 % RH for 72 hours; discard any unit that drifts > ±2 % humidity.</p>
 
 
-<h3>4. Stand Up the IoT Gateway Network</h3>
+<p>4. Stand Up the IoT Gateway Network</p>
 
 
 <p>You have two choices:</p>
@@ -489,7 +489,7 @@ config gateway
 <p><strong>Resource estimate:</strong> 1 gateway × $1 k + 2 engineer-days for TTN console setup.</p>
 
 
-<h3>5. Design the AI Underwriting Model</h3>
+<p>5. Design the AI Underwriting Model</p>
 
 
 <p>We don’t use a black-box neural net. We use a <strong>Gradient Boosting Machine</strong> on four inputs:</p>
@@ -561,7 +561,7 @@ s3.upload_file('leak_model.joblib', 'mga-models', 'leak_model.joblib')</code></p
 <p><strong>Validation:</strong> On a held-out test set, AUC-ROC = 0.89. If you drop leakScore, AUC drops to 0.61—so the IoT sensor is material.</p>
 
 
-<h3>6. Expose an Underwriting API</h3>
+<p>6. Expose an Underwriting API</p>
 
 
 <p>We wrap the model in a <strong>FastAPI</strong> service that the MGA’s rating engine can call. The endpoint expects:</p>
@@ -634,7 +634,7 @@ async def quote_with_sensor(payload: QuoteIn):
 <p><strong>Resource estimate:</strong> 2 engineers × 1 week = $12 k to stand up the API on AWS t3.medium ($36/mo).</p>
 
 
-<h3>7. Build the Bordereaux & Claims Engine</h3>
+<p>7. Build the Bordereaux & Claims Engine</p>
 
 
 <p>Parametric claims should be <strong>STP</strong>—no adjuster touch. We do it in three steps:</p>
@@ -726,7 +726,7 @@ def lambda_handler(event, context):
 <p><strong>Resource estimate:</strong> 2 engineers × 1.5 weeks = $15 k for Lambda + Dynamo + Stripe plumbing.</p>
 
 
-<h3>8. Integrate with the MGA Backend</h3>
+<p>8. Integrate with the MGA Backend</p>
 
 
 <p>Most MGAs run on Guidewire or Duck Creek. We expose a <strong>REST hook</strong> that fires when a policy is bound:</p>
@@ -777,7 +777,7 @@ app.post('/policy_created', async (req, res) => {
 app.listen(3000);</code></pre>
 
 
-<h3>9. Run a Controlled Pilot</h3>
+<p>9. Run a Controlled Pilot</p>
 
 
 <p>We picked 200 roofs in a single ZIP code with high hail frequency. Engineering ran the fleet; actuarial ran the model; marketing ran the broker portal.</p>

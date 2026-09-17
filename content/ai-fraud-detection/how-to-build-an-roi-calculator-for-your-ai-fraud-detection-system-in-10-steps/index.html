@@ -247,13 +247,13 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>I've reviewed three dozen ROI models for fraud detection systems. The ones that actually got built shared one trait: they started with a hard allocation of fraud dollars already being spent by claims adjusters, not theoretical fraud prevention. The adjusters I work with don't care about "potential savings." They care about the $47K they personally write off every quarter because the current SIU workflow misses soft fraud.</h2>
+                <p>I've reviewed three dozen ROI models for fraud detection systems. The ones that actually got built shared one trait: they started with a hard allocation of fraud dollars already being spent by claims adjusters, not theoretical fraud prevention. The adjusters I work with don't care about "potential savings." They care about the $47K they personally write off every quarter because the current SIU workflow misses soft fraud.</p>
 
 <p>This guide is written from the perspective of a claims supervisor who needs to justify building a new AI system to the CFO. It uses real numbers from a 2023 report by the Coalition Against Insurance Fraud and a 2024 pilot we ran at a regional P&C carrier. The steps include the exact SQL queries we used to pull claims data, the Python notebook we shared with finance, and the cost model that made the CFO sign off.</p>
 
 <p>Step 1: Define the fraud dollar pool that actually moves</p>
 
-<h3>Most ROI calculators begin with industry averages: "Insurance fraud costs the industry $80 billion annually." That number is useless to a claims adjuster. Instead, isolate the dollars that your team already flags as fraud but fails to close. Pull the last 12 months of closed claims with a "Fraud" disposition flag. The dollar amount in the "Reserve Released" column is the pool you can actually recover.</h3>
+<p>Most ROI calculators begin with industry averages: "Insurance fraud costs the industry $80 billion annually." That number is useless to a claims adjuster. Instead, isolate the dollars that your team already flags as fraud but fails to close. Pull the last 12 months of closed claims with a "Fraud" disposition flag. The dollar amount in the "Reserve Released" column is the pool you can actually recover.</p>
 
 <p>In our pilot, this query returned $1.2M across 147 claims. That became our baseline "current state fraud dollars recoverable." The query runs in 34 seconds on a 500K-claim table and should be scheduled weekly for the model to stay current.</p>
 
@@ -267,7 +267,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Step 2: Map the adjuster workflow to AI use cases</p>
 
-<h3>Adjusters don't spend time on obvious fraud. They spend time on borderline cases where the red flags are weak but the dollar amounts are high. The AI model needs to target those edge cases, not the clear-cut frauds. Build a simple matrix from the claims data:</h3>
+<p>Adjusters don't spend time on obvious fraud. They spend time on borderline cases where the red flags are weak but the dollar amounts are high. The AI model needs to target those edge cases, not the clear-cut frauds. Build a simple matrix from the claims data:</p>
 
 <p>Adjuster action % of claims</p>
 
@@ -284,7 +284,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p><strong>Injury gap:</strong> Days between injury and first medical visit. Gaps > 7 days are suspicious. <strong>Attorney involvement:</strong> Binary flag for attorney representation at FNOL.</p>
 
-<h3><strong>Policy zip vs accident zip:</strong> Distance between policyholder residence and accident location. <strong>Claim amount:</strong> Total incurred loss.</h3>
+<p><strong>Policy zip vs accident zip:</strong> Distance between policyholder residence and accident location. <strong>Claim amount:</strong> Total incurred loss.</p>
 
 <p><strong>Prior claims:</strong> Number of claims in the last 3 years. <strong>Body part injured:</strong> Categorical field (back, knee, whiplash, etc.).</p>
 
@@ -296,7 +296,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Use LightGBM with a custom objective:</p>
 
-<h3>Adjust the threshold dynamically based on the adjuster's workload. In our pilot, we set the threshold to 0.45 during peak season and 0.60 during slow periods. The model reduced review rate from 100% to 28% while maintaining 68% of the fraud recovery.</h3>
+<p>Adjust the threshold dynamically based on the adjuster's workload. In our pilot, we set the threshold to 0.45 during peak season and 0.60 during slow periods. The model reduced review rate from 100% to 28% while maintaining 68% of the fraud recovery.</p>
 
 <p>Step 7: Build the triage queue and human-in-the-loop workflow The AI model should not replace adjusters. It should prioritize the queue. Build a triage queue that sorts claims by fraud probability, then by dollar amount:</p>
 
@@ -312,7 +312,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>The adjuster reviews the top 28% of claims first. If the AI score is wrong, the adjuster can override it and feed the feedback back into the model. This human-in-the-loop approach improved model accuracy by 12% over six months. Step 8: Calculate the direct ROI with hard numbers</p>
 
-<h3>The ROI model must answer two questions: How much fraud dollars do we recover?</h3>
+<h2>The ROI model must answer two questions: How much fraud dollars do we recover?</h2>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -335,7 +335,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>$525 $525</p>
 
-<h3>Fraud recovery rate 12%</h3>
+<h2>Fraud recovery rate 12%</h2>
 
 <p>8.4% -3.6 pp</p>
 
@@ -354,7 +354,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>$1.38M $180K</p>
 
-<h3>The total annual benefit is $180K (fraud recovery) + $27K (adjuster time) = $207K. The build cost was $67K. The payback period is 4 months. The model was approved within two weeks. Step 9: Model the capital and operating costs with contingencies</h3>
+<p>The total annual benefit is $180K (fraud recovery) + $27K (adjuster time) = $207K. The build cost was $67K. The payback period is 4 months. The model was approved within two weeks. Step 9: Model the capital and operating costs with contingencies</p>
 
 <p>Use a 3-year cash flow model. Include these line items: Cost category</p>
 
@@ -369,7 +369,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Year 0 Year 1</p>
 
-<h3>Year 2 Year 3</h3>
+<h2>Year 2 Year 3</h2>
 
 <p>Data engineering (ETL, labeling) $22K</p>
 
@@ -396,7 +396,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Pick a book of business with at least 50K claims in the last 18 months. Run the SQL from Step 1. If the fraud dollar pool is less than $500K, the ROI won't justify the build cost. If it's above $1.5M, you have a strong case.</p>
 
-<h3>Schedule a 30-minute workshop with the top 5 adjusters who handle the borderline claims. Ask them what red flags matter most. Use their answers to engineer the features in Step 5. Without adjuster buy-in, the model will gather dust.</h3>
+<p>Schedule a 30-minute workshop with the top 5 adjusters who handle the borderline claims. Ask them what red flags matter most. Use their answers to engineer the features in Step 5. Without adjuster buy-in, the model will gather dust.</p>
 
 <p>The fastest path to approval is a 90-day pilot on a single claims team. Budget $25K for data prep, $15K for model training, and $8K for change management. The pilot should prove a 25% reduction in review rate and $150K in recovered fraud dollars. That's enough for the CFO to sign off on the full build.</p>
 

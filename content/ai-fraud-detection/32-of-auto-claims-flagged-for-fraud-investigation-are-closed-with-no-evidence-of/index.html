@@ -285,17 +285,17 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>I've reviewed dozens of AI anomaly detection implementations across Tier 1 and Tier 2 carriers. The ones that deliver real ROI don't start with the model. They start with data lineage, edge-case governance, and a kill switch for model drift. I'm writing this from the perspective of the claims engineering team that has to own the model in production, not the data science team that hands it off.</h2>
+                <p>I've reviewed dozens of AI anomaly detection implementations across Tier 1 and Tier 2 carriers. The ones that deliver real ROI don't start with the model. They start with data lineage, edge-case governance, and a kill switch for model drift. I'm writing this from the perspective of the claims engineering team that has to own the model in production, not the data science team that hands it off.</p>
 
 <p>What "AI anomaly detection" actually means in claims fraud Anomaly detection is not a model type; it's a strategy layered on top of multiple models. The moment you scope this as "just run Isolation Forest," you've failed.</p>
 
 
-<h2>Five techniques that move the loss ratio needle <strong>Temporal clustering:</strong> Detects staged losses by spotting abnormal claim frequency per claimant across multiple policies. McKinsey's 2024 Global Insurance Report found carriers using temporal clustering reduced questionable claims by 11.3%.</h2>
+<p>Five techniques that move the loss ratio needle <strong>Temporal clustering:</strong> Detects staged losses by spotting abnormal claim frequency per claimant across multiple policies. McKinsey's 2024 Global Insurance Report found carriers using temporal clustering reduced questionable claims by 11.3%.</p>
 
 <p><strong>Geospatial outliers:</strong> Flags claims reported within 15 minutes of each other from locations separated by >25 miles. LexisNexis Risk Solutions' 2023 Vehicle Claims Study documented a 19% false-positive reduction when geospatial outliers were combined with repair shop proximity data.</p>
 
 
-<h3><strong>Repair shop network deviations:</strong> Identifies shops where average labor time per claim exceeds the industry median by >30% for three consecutive months. CCC Intelligent Solutions' 2024 Repair Industry Trends report shows 27% of body shops flagged under this rule are later linked to fraud rings.</h3>
+<p><strong>Repair shop network deviations:</strong> Identifies shops where average labor time per claim exceeds the industry median by >30% for three consecutive months. CCC Intelligent Solutions' 2024 Repair Industry Trends report shows 27% of body shops flagged under this rule are later linked to fraud rings.</p>
 
 <ul>
 
@@ -312,7 +312,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 
 
-<h3>Nine out of ten implementations fail here. The cost isn't the model; it's the brittle pipelines.</h3>
+<p>Nine out of ten implementations fail here. The cost isn't the model; it's the brittle pipelines.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -322,10 +322,10 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 <p><strong>Extract claim header and line-item data from core claims system.</strong> Use a CDC tool like Debezium to stream changes from your policy admin system (Guidewire, Duck Creek, or EIS). Do not batch nightly — claims teams need real-time correlation. <a href="https://debezium.io/documentation/reference/2.4/operations/openshift.html" target="_blank" rel="noopener noreferrer">[Debezium OpenShift Deployment Guide, 2024]</a></p>
 
 
-<h2><strong>Join repair estimates and bills with claimant demographics.</strong> Use a data virtualization layer (Denodo or Dremio) to avoid ETL nightmares. I've seen teams spend three months building a star schema only to discover the repair estimate table doesn't have last service date.</h2>
+<p><strong>Join repair estimates and bills with claimant demographics.</strong> Use a data virtualization layer (Denodo or Dremio) to avoid ETL nightmares. I've seen teams spend three months building a star schema only to discover the repair estimate table doesn't have last service date.</p>
 
 
-<h3><strong>Enrich with third-party signals within 15 minutes of FNOL.</strong> Pull LexisNexis CLUE reports, repair shop affiliations, and weather data at the moment the claim is opened. Vendors like Verisk and ISO provide streaming APIs; use them.</h3>
+<p><strong>Enrich with third-party signals within 15 minutes of FNOL.</strong> Pull LexisNexis CLUE reports, repair shop affiliations, and weather data at the moment the claim is opened. Vendors like Verisk and ISO provide streaming APIs; use them.</p>
 
 <p><strong>Log every enrichment call with a unique claim_id hash.</strong> You'll need this for model explainability. I've had IR teams ask for audit trails 18 months after deployment; if you can't reconstruct why a claim was flagged, you're non-compliant with NAIC 2023 Market Regulation Bulletin 2023-01.</p>
 
@@ -343,14 +343,14 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ol>
 
 
-<h3><strong>Add repair shop deviation scores.</strong> Compute labor_time_per_claim vs. CCC Intelligent Solutions' 2024 repair labor time benchmark. Flag if labor_time > 1.3 * benchmark for three consecutive months. The threshold matters—1.2 is too loose; 1.4 is too strict. Start at 1.3 and tune weekly.</h3>
+<p><strong>Add repair shop deviation scores.</strong> Compute labor_time_per_claim vs. CCC Intelligent Solutions' 2024 repair labor time benchmark. Flag if labor_time > 1.3 * benchmark for three consecutive months. The threshold matters—1.2 is too loose; 1.4 is too strict. Start at 1.3 and tune weekly.</p>
 
                 
 
                 <p><strong>Encode narrative anomalies.</strong> Use spaCy to parse claim narratives and flag sentences containing "sudden impact" or "pre-existing damage" with POS tagging. Verisk's 2023 Claims Narrative Analysis whitepaper documents a 14% reduction in investigative workload when combined with other signals.</p>
 
 
-<h3><strong>Create loss ratio deviation scores.</strong> Train a simple XGBoost model on historical claims to predict expected loss ratio per ZIP code, vehicle class, and policy type. Flag policies where actual LR - predicted LR > 1.5 * std. Swiss Re sigma 02/2024 reports this approach reduces fraudulent payouts by 5.8%.</h3>
+<p><strong>Create loss ratio deviation scores.</strong> Train a simple XGBoost model on historical claims to predict expected loss ratio per ZIP code, vehicle class, and policy type. Flag policies where actual LR - predicted LR > 1.5 * std. Swiss Re sigma 02/2024 reports this approach reduces fraudulent payouts by 5.8%.</p>
 
 
 <ol start="5">
@@ -368,7 +368,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ol>
 
 
-<h3>Isolation Forest Low latency, handles high-dimensional data, native anomaly scoring</h3>
+<h2>Isolation Forest Low latency, handles high-dimensional data, native anomaly scoring</h2>
 
 <pre><code>import pandas as pd
 
@@ -412,12 +412,12 @@ temporal_features = calculate_temporal_features(claims_df)
 temporal_features.to_parquet('temporal_features.parquet')</code></pre>
 
 
-<h3>Struggles with clustered anomalies; requires manual feature scaling Scikit-learn, H2O.ai, Amazon SageMaker</h3>
+<h2>Struggles with clustered anomalies; requires manual feature scaling Scikit-learn, H2O.ai, Amazon SageMaker</h2>
 
 <p>Local Outlier Factor Captures density-based anomalies in spatial features</p>
 
 
-<h3>High memory usage; fails on sparse datasets Scikit-learn, PyOD</h3>
+<h2>High memory usage; fails on sparse datasets Scikit-learn, PyOD</h2>
 
 
 <p>Autoencoder Learns non-linear patterns in unsupervised manner</p>
@@ -499,7 +499,7 @@ temporal_features.to_parquet('temporal_features.parquet')</code></pre>
 <p>            </p>
 
 
-<h3></h3>
+<h2></h2>
 
 <pre><code>from sklearn.ensemble import IsolationForest
 
@@ -534,7 +534,7 @@ import joblib
 joblib.dump(model, 'isolation_forest_v1.pkl')</code></pre>
 
 
-<h3>            <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
+<p>            <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
             <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>
             <ul style="margin:0;padding-left:20px;color:#1E293B;line-height:1.85;font-size:0.95rem;">
             <li>I've reviewed dozens of AI anomaly detection implementations across Tier 1 and Tier 2 carriers. The ones that deliver real ROI don't start with the model. They start with data lineage, edge-case governance, and a kill switch for model drift. I'm writing this from the perspective of the claims engineering team that has to own the model in production, not the data science team that hands it off.</li>
@@ -550,7 +550,7 @@ joblib.dump(model, 'isolation_forest_v1.pkl')</code></pre>
             <li>Five techniques that move the loss ratio needle Temporal clustering: Detects staged losses by spotting abnormal claim frequency per claimant across multiple policies. McKinsey's 2024 Global Insurance Report found carriers using temporal clustering reduced questionable claims by 11.3%.</li>
             <li>Join repair estimates and bills with claimant demographics. Use a data virtualization layer (Denodo or Dremio) to avoid ETL nightmares. I've seen teams spend three months building a star schema only to discover the repair estimate table doesn't have last service date.</li>
             </ul>
-        </section></h3>
+        </section></p>
             </div>
 <!-- COMMUNITY-SECTION-START --><section class="community-perspectives" aria-label="Community perspectives">
   <h2>Community perspectives</h2>

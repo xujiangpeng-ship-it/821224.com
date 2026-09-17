@@ -247,21 +247,21 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>I’ve spent 14 months inside a Tier-1 P&C carrier helping the claims team rip the 1998 mainframe adjuster UI out of production and replace it with a Python microservice that ingests loss runs in 2.4 seconds and surfaces the correct coverage code in 0.8 seconds. We dropped cycle time on repetitive auto losses from 16 days to 3.2 days without adding staff. This guide is the exact runbook we used, including every Terraform snippet, every SQL dialect quirk, and the hard resource numbers we promised the CFO before we even touched a line of code.</h2>
+                <p>I’ve spent 14 months inside a Tier-1 P&C carrier helping the claims team rip the 1998 mainframe adjuster UI out of production and replace it with a Python microservice that ingests loss runs in 2.4 seconds and surfaces the correct coverage code in 0.8 seconds. We dropped cycle time on repetitive auto losses from 16 days to 3.2 days without adding staff. This guide is the exact runbook we used, including every Terraform snippet, every SQL dialect quirk, and the hard resource numbers we promised the CFO before we even touched a line of code.</p>
 
 <p>Who this is for</p>
 
-<h3>Honestly, when I first saw these numbers I didn't believe them either. You are the claims adjuster who got handed a 20-page slide deck labelled “GenAI Modernization” and told to “make it happen.” You have Python scripts that scrape green-screen screens today, a data warehouse that still runs nightly batch COBOL sorts, and a CFO who freezes when you mention “real-time.” This playbook is written from the floor, not from a deck.</h3>
+<p>Honestly, when I first saw these numbers I didn't believe them either. You are the claims adjuster who got handed a 20-page slide deck labelled “GenAI Modernization” and told to “make it happen.” You have Python scripts that scrape green-screen screens today, a data warehouse that still runs nightly batch COBOL sorts, and a CFO who freezes when you mention “real-time.” This playbook is written from the floor, not from a deck.</p>
 <p>What you won’t get Marketing slides on “digital transformation.”</p>
 
-<h3>“Leverage the power of AI” platitudes. Third-party vendor price lists.</h3>
+<p>“Leverage the power of AI” platitudes. Third-party vendor price lists.</p>
 <ul>
 <li>Step 1. freeze the mainframe and harden SLA targets</li>
 <li>First week: lock the mainframe in read-only mode for a 48-hour window. Record every job that writes to the loss-run dataset. We discovered 17 batch jobs that nobody remembered existed; they were quietly updating premium calculations while claims sat in “pending” status for 72 hours. Freeze them all.</li>
 <li>Set SLA targets based on real adjuster pain: Loss-run ingest ≤ 5 seconds.</li>
 </ul>
 
-<h2>Coverage look-up ≤ 1 second. Day-end batch ≤ 15 minutes (the mainframe batch was 3 hours).</h2>
+<p>Coverage look-up ≤ 1 second. Day-end batch ≤ 15 minutes (the mainframe batch was 3 hours).</p>
 
 <p>Step 2. pick the first loss type that screams for modernization</p>
 
@@ -291,7 +291,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </tbody>
 </table>
 
-<h2>Mean time to close a loss (MTCL). Adjuster satisfaction score (Slack emoji survey).</h2>
+<p>Mean time to close a loss (MTCL). Adjuster satisfaction score (Slack emoji survey).</p>
 
 <p>After 30 days MTOL dropped from 168 seconds to 32 seconds; MTCL dropped from 1,382,400 seconds (16 days) to 276,480 seconds (3.2 days). Satisfaction rose from 2.1 to 4.6 on a 5-point scale. Step 9. scale to all loss types with a data mesh</p>
 
@@ -310,7 +310,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Resource estimate: 1 data engineer for 3 weeks, $2,400 cloud cost for the mesh layer. Step 10. sunset the mainframe extract job and reclaim batch window</p>
 
-<h2>After 90 days we turned off the nightly VSAM-to-S3 extract. The mainframe batch window freed up 2 hours 47 minutes, which we re-allocated to a new underwriting ML model. We kept the CICS policy admin alive because the underwriting team still uses 3270 terminals for bind/unbind.</h2>
+<p>After 90 days we turned off the nightly VSAM-to-S3 extract. The mainframe batch window freed up 2 hours 47 minutes, which we re-allocated to a new underwriting ML model. We kept the CICS policy admin alive because the underwriting team still uses 3270 terminals for bind/unbind.</p>
 
 <p>Hard savings: AWS compute: $4,100/month.</p>
                 <!-- Ad Mid-Content -->
@@ -339,7 +339,7 @@ RETURN
 
 <p>Common failure modes and how we fixed them 1. “The model works in test but blows up in prod”</p>
 
-<h2>Root cause: deductible field was VARCHAR in the mainframe but DECIMAL in the model. We added a CAST in the SQL UDF and added a data-quality check in the ETL. 2. “The UI is slower than the green screen”</h2>
+<p>Root cause: deductible field was VARCHAR in the mainframe but DECIMAL in the model. We added a CAST in the SQL UDF and added a data-quality check in the ETL. 2. “The UI is slower than the green screen”</p>
 
 <p>Root cause: we forgot to cache policy look-ups. Added Redis layer; latency dropped from 2.1 seconds to 0.3 seconds. 3. “Adjuster pushback”</p>
 
@@ -362,7 +362,7 @@ RETURN
 
 <p>Start with a data contract instead of a UI rewrite. Adjuster screens change every 18 months; the loss-run schema rarely does. Use Apache Iceberg instead of Delta Lake if you’re on AWS. Iceberg’s time travel saved us 3 days of regression testing.</p>
 
-<h2>Put the model registry in Git, not Databricks. We lost 2 weeks when the Databricks workspace got locked after a finance audit. Train the claims trainer on SQL first. Our trainer spent 6 days learning Python lambdas we didn’t need.</h2>
+<p>Put the model registry in Git, not Databricks. We lost 2 weeks when the Databricks workspace got locked after a finance audit. Train the claims trainer on SQL first. Our trainer spent 6 days learning Python lambdas we didn’t need.</p>
 
 <p>One question you must answer before you start</p>
 <ol>

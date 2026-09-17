@@ -260,7 +260,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>I've reviewed six production-grade severity models across carriers ranging from $500 million to $12 billion in annual premium. The difference between a model that saves 3-5% on loss ratio and one that sits on a shelf is rarely the algorithm. It’s the data pipeline, the business integration, and the feedback loop. This guide walks through a production-ready implementation using open-source tools, realistic resource estimates, and the trade-offs I’ve seen kill projects.</h2>
+                <p>I've reviewed six production-grade severity models across carriers ranging from $500 million to $12 billion in annual premium. The difference between a model that saves 3-5% on loss ratio and one that sits on a shelf is rarely the algorithm. It’s the data pipeline, the business integration, and the feedback loop. This guide walks through a production-ready implementation using open-source tools, realistic resource estimates, and the trade-offs I’ve seen kill projects.</p>
 
 <p>We’ll build a severity model for auto physical damage claims using: Postgres for claim history and telematics</p>
 
@@ -275,7 +275,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>I’ve seen carriers budget $200k for a model that only saves $150k. That failure mode is avoidable. My rule: the expected annual savings must exceed 3x the fully-loaded cost of the project over three years.</p>
 
-<h3>For our example: Annual auto premium: $5 billion</h3>
+<h2>For our example: Annual auto premium: $5 billion</h2>
 <p>Claims frequency: 8% Average severity: $6,200</p>
 
 <p>LAE ratio: 3.2% Target savings: 5% of LAE = $8 million</p>
@@ -284,7 +284,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 ---
 
-<h2>Step 2. Define the target and the time horizon The target variable is <strong>paid_amount</strong> from the claims warehouse, not reported_amount. Paid_amount is the actual dollars the carrier issued, net of subrogation and recoveries.</h2>
+<p>Step 2. Define the target and the time horizon The target variable is <strong>paid_amount</strong> from the claims warehouse, not reported_amount. Paid_amount is the actual dollars the carrier issued, net of subrogation and recoveries.</p>
 
 <p>We’ll predict paid_amount at 60 days post-accident. Claims closed in under 60 days are outliers (catastrophe claims, total losses). Data source: claims warehouse with 4 years of history. For our $5B book, that’s ~1.6 million claims.</p>
 
@@ -320,7 +320,7 @@ print(f"Expected savings: ${expected_savings:,.0f}")
 
 ---
 
-<h2>Step 4. Engineer features that explain variance, not noise Common failure mode: adding every telematics metric available. Correlated features inflate RMSE and make the model brittle.</h2>
+<p>Step 4. Engineer features that explain variance, not noise Common failure mode: adding every telematics metric available. Correlated features inflate RMSE and make the model brittle.</p>
 
 <p>Feature list (v1): Feature</p>
 
@@ -339,7 +339,7 @@ print(f"Expected savings: ${expected_savings:,.0f}")
 
 <p>Average miles driven in last 90 days float</p>
 
-<h3>positive hard_brakes_per_1000</h3>
+<h2>positive hard_brakes_per_1000</h2>
 <p>Hard brakes per 1000 miles float</p>
 
 <p>positive zip_code_urbanicity</p>
@@ -416,7 +416,7 @@ CREATE INDEX idx_severity_v1_claims_severity_target_vin ON severity_v1.claims_se
 
 ---
 
-<h2>We’ll optimize for RMSE on the validation set. Best hyperparameters:</h2>
+<p>We’ll optimize for RMSE on the validation set. Best hyperparameters:</p>
 
 <p>Improvement: 5%. Not transformative, but real. Resource estimate: 1 data scientist, 1 day.</p>
 

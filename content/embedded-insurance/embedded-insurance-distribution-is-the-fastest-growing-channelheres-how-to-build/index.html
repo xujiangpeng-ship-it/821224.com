@@ -309,12 +309,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>Embedded insurance distribution is the fastest-growing channel—here’s how to build it right</h2>
+                
 
 <p>By 2028, embedded insurance will drive over $300 billion in premiums globally, according to <a href="https://www.pwc.com/gx/en/industries/financial-services/assets/pwc-embedded-insurance-2023.pdf" target="_blank" rel="noopener noreferrer">PwC’s 2023 Embedded Insurance Report</a>. That’s a 5x increase from 2021, and most of it will be sold through non-insurance platforms using AI-driven matching and real-time underwriting. If you’re still relying on portals or traditional brokers, you’re already behind. I’ve seen carriers launch embedded programs in 90 days using APIs and thin underwriting models—here’s how to do it without bleeding capital.</p>
 
 
-<h3>Who this is for: the Product Manager at an MGA</h3>
+<h2>Who this is for: the Product Manager at an MGA</h2>
 
 <p>You’re not drowning in legacy tech, but you’re not at Stripe’s scale either. Your job is to ship a product that sells insurance where customers already are—ride-hailing apps, e-commerce checkouts, gig platforms—without building a new sales org. That means leaning on AI to match risk, price in real time, and auto-issue policies. Miss the mark on latency or accuracy, and you’ll either get blocked by the host platform’s fraud filters or lose money on every sale. I’ve reviewed a dozen embedded programs that looked good on paper but failed on execution. The difference between success and failure is in the data pipeline and the underwriting model, not the marketing copy.</p>
 
@@ -322,7 +322,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2>1. Pick the right embedded model before you write a line of code</h2>
+<p>1. Pick the right embedded model before you write a line of code</p>
 
 <p>There are three ways to embed insurance: white-label, co-branded, or platform-native. Each has different tech and regulatory requirements.</p>
 
@@ -402,12 +402,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2>2. Choose your AI underwriting stack: thin vs. thick models</h2>
+<p>2. Choose your AI underwriting stack: thin vs. thick models</p>
 
 <p>You have two choices: a thin model that relies on third-party signals (credit, telco, telematics) or a thick model that ingests your own data and builds proprietary risk features. Thin models are faster to ship but have higher loss ratios. Thick models are more accurate but require months of data labeling and actuarial review.</p>
 
 
-<h3>Thin underwriting: the 30-day MVP</h3>
+<h2>Thin underwriting: the 30-day MVP</h2>
 
 <p>Use pre-built risk scores from vendors like <a href="https://www.verisk.com/insurance/products/iso-predictive-analytics/" target="_blank" rel="noopener noreferrer">Verisk’s ISO Predictive Analytics</a> or <a href="https://www.experian.com/decision-analytics/insurance" target="_blank" rel="noopener noreferrer">Experian’s Insurance Insights</a>. These models give you a loss ratio proxy in minutes, but they’re not tailored to your book. Expect a 15–20% loss ratio bump compared to a proprietary model.</p>
 
@@ -417,7 +417,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>You’ll pay $0.02–$0.05 per score at scale. That’s cheap until you hit 100,000 policies, then the pennies add up. And if the vendor retires a feature (like Experian did with its driving behavior score in 2023), your model breaks overnight.</p>
 
 
-<h3>Thick underwriting: the 6-month build</h3>
+<h2>Thick underwriting: the 6-month build</h2>
 
 <p>If you’re targeting auto or property, you’ll need to build your own model. Start with telematics (OBD-II or mobile SDK) and property imagery (satellite + street view). A basic logistic regression on these features can cut loss ratio by 10–15% vs. thin models. But you’ll need:</p>
 
@@ -438,12 +438,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 ---
 
 
-<h2>3. Build the real-time policy issuance API in 4 weeks</h2>
+<p>3. Build the real-time policy issuance API in 4 weeks</p>
 
 <p>Your embedded program lives or dies by latency. If the host platform’s iframe times out at 500ms, your sale is gone. Here’s the minimal stack:</p>
 
 
-<h3>Step 1: Define the policy schema</h3>
+<h2>Step 1: Define the policy schema</h2>
 
 <p>Keep it flat. Example for a rideshare passenger policy:</p>
 
@@ -476,7 +476,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 }</pre>
 
 
-<h3>Step 2: Set up the inference service</h3>
+<h2>Step 2: Set up the inference service</h2>
 
                 
 
@@ -532,7 +532,7 @@ def score():
                 <p><strong>Resource estimate:</strong> 1 FTE data scientist for 2 weeks to containerize the model. AWS Lambda costs ~$0.0000002 per invocation. At 10,000 policies/day, you’re looking at $2/day.</p>
 
 
-<h3>Step 3: Add fraud checks</h3>
+<h2>Step 3: Add fraud checks</h2>
 
 <p>Embedded sales are magnets for synthetic fraud. Use a real-time fraud API like <a href="https://sift.com/" target="_blank" rel="noopener noreferrer">Sift</a> or <a href="https://www.featurespace.com/frs/" target="_blank" rel="noopener noreferrer">Feedzai</a>. Expect 3–5% false positives, which will cost you sales. Tune the threshold to your appetite—if you’re in rideshare, accept a higher false positive rate than if you’re in mortgage protection.</p>
 
@@ -545,17 +545,17 @@ def score():
 ---
 
 
-<h2>4. Integrate with the host platform without getting blocked</h2>
+<p>4. Integrate with the host platform without getting blocked</p>
 
 <p>The host platform (Uber, Shopify, DoorDash) will give you an API key only if you meet their security and compliance standards. Here’s how to pass muster:</p>
 
 
-<h3>Step 1: Get SOC 2 Type II certified</h3>
+<h2>Step 1: Get SOC 2 Type II certified</h2>
 
 <p>Most platforms won’t talk to you without it. Budget $20k–$50k for an audit. If you’re a small MGA, this can wipe out your runway.</p>
 
 
-<h3>Step 2: Use their SDK, not an iframe</h3>
+<h2>Step 2: Use their SDK, not an iframe</h2>
 
 <p>Stripe-style checkout pages are out. Platforms want you to use their native UI. Example for Shopify:</p>
 
@@ -585,7 +585,7 @@ def score():
 <p><strong>Gotcha:</strong> Shopify’s policy ID is tied to your merchant account. If you switch carriers mid-stream, you have to re-issue all policies. Plan for churn.</p>
 
 
-<h3>Step 3: Handle edge cases</h3>
+<h2>Step 3: Handle edge cases</h2>
 
 <ul>
 
@@ -618,7 +618,7 @@ def uber_webhook():
 ---
 
 
-<h2>5. Price dynamically using reinforcement learning</h2>
+<p>5. Price dynamically using reinforcement learning</p>
 
 <p>Static pricing kills embedded programs. You need to adjust premiums based on real-time signals: weather (for property), traffic (for auto), cart abandonment (for retail). A simple bandit algorithm can cut loss ratio by 5–8% vs. static pricing.</p>
 
@@ -680,12 +680,12 @@ bandit.update(action, 1 - loss)</pre>
 ---
 
 
-<h2>6. Automate claims with NLP and third-party data</h2>
+<p>6. Automate claims with NLP and third-party data</p>
 
 <p>Embedded claims are high-volume, low-value. You can’t afford human adjusters. Use NLP to triage and third-party APIs to validate.</p>
 
 
-<h3>Step 1: Triage with a fine-tuned BERT model</h3>
+<h2>Step 1: Triage with a fine-tuned BERT model</h2>
 
 <p>Train a model on your historical claims to classify severity:</p>
 
@@ -723,7 +723,7 @@ result = classifier(
 severity = result[0]['label']  # 'level1'</pre>
 
 
-<h3>Step 2: Validate with public data</h3>
+<h2>Step 2: Validate with public data</h2>
 
 <p>Use APIs like <a href="https://www.weatherapi.com/" target="_blank" rel="noopener noreferrer">WeatherAPI</a> to check if hail was reported in the area at the time of the claim. If not, flag as suspicious.</p>
 
@@ -739,7 +739,7 @@ severity = result[0]['label']  # 'level1'</pre>
 ---
 
 
-<h2>7. Measure success with embedded-specific KPIs</h2>
+<p>7. Measure success with embedded-specific KPIs</p>
 
 <p>Most carriers still track loss ratio and combined ratio. For embedded, those metrics are lagging indicators. You need leading indicators:</p>
 
@@ -833,17 +833,17 @@ severity = result[0]['label']  # 'level1'</pre>
 ---
 
 
-<h2>8. Scale without blowing up your combined ratio</h2>
+<p>8. Scale without blowing up your combined ratio</p>
 
 <p>Embedded programs look cheap until you hit 10,000 policies. Then the pennies add up. Here’s how to control costs:</p>
 
 
-<h3>Cost lever 1: Offload underwriting to the host platform</h3>
+<h2>Cost lever 1: Offload underwriting to the host platform</h2>
 
 <p>If you’re selling auto insurance via Uber, let Uber handle the driver rating. Your AI model only needs to price the incremental risk (e.g., passenger injury). This cuts your feature engineering by 60%.</p>
 
 
-<h3>Cost lever 2: Use parametric triggers</h3>
+<h2>Cost lever 2: Use parametric triggers</h2>
 
 <p>Instead of traditional claims, pay out automatically when a trigger occurs (e.g., hail >1 inch diameter). No adjusters,
 

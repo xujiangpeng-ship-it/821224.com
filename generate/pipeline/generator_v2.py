@@ -348,7 +348,9 @@ def enhance_article(
             "Return ONLY the article BODY HTML (h2/h3/p/ul/li/table/blockquote etc.) with your "
             "additions clearly integrated. Do NOT wrap the output in <!DOCTYPE>, <html>, <head>, or "
             "<body> tags, and do not add any explanatory preamble — output the HTML directly. "
-            "Preserve all original content and structure."
+            "Preserve all original content and structure. CRITICAL: preserve the existing h2/h3 "
+            "heading hierarchy exactly — do not add, remove, or re-level any heading, and never "
+            "wrap a sentence or paragraph in a heading tag (that stays in <p>)."
         )
         user_prompt = f"{stance_info['prompt']}\n\nOriginal article:\n\n{article_text}"
 

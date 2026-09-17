@@ -291,7 +291,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI Policy Administration Automation in Insurance: A Practitioner’s Implementation Guide</h2>
+                
 
 
 <p>A policy administration system (PAS) is the backbone of an insurer’s operations. Modernizing it with AI isn’t about replacing humans—it’s about reducing manual effort in underwriting, rating, and servicing so underwriters can focus on exceptions and relationships. I’ve seen claims teams cut first-pass review time by 40% after automating policy data extraction, but only when the automation was tightly integrated with existing workflows.</p>
@@ -300,7 +300,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>This guide walks through a practical, step-by-step implementation of AI-powered policy administration automation. You’ll see how to integrate LLMs for document ingestion, use ML models for risk rating, and orchestrate everything in a real-time STP (straight-through processing) pipeline. I’ll call out where the trade-offs hurt—like when model drift in underwriting rules increases loss ratio by 2%—and give you concrete code and config examples you can adapt.</p>
 
 
-<h3>1. Define Your Automation Scope and KPIs</h3>
+<p>1. Define Your Automation Scope and KPIs</p>
 
 
 <p><strong>Start small.</strong> Don’t boil the ocean. Pick one line of business—say, small commercial property—and target 80% straight-through processing for new business quotes. Track:</p>
@@ -324,7 +324,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><em>Real example:</em> A regional MGA automated 65% of homeowners quotes using an LLM + rules engine. Within six months, their loss ratio dropped from 62% to 58%, but the CEO noticed a 7% increase in claims from risks that previously would have been declined manually. They rolled back partial automation in high-risk geographies.</p>
 
 
-<h3>2. Audit Your Current Policy Data Pipeline</h3>
+<p>2. Audit Your Current Policy Data Pipeline</p>
 
 
 <p>Before adding AI, map every data source feeding your PAS:</p>
@@ -348,7 +348,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Tool tip:</strong> Use dbt (data build tool) to create a staging layer that cleans and normalizes policy data before it hits your ML models. I’ve seen teams save 30% dev time by reusing dbt macros for address standardization and NAICS code mapping.</p>
 
 
-<h3 id="step3">3. Choose Your AI Architecture: LLM + Rules Engine Hybrid</h3>
+<p>3. Choose Your AI Architecture: LLM + Rules Engine Hybrid</p>
 
 
 <p>Pure LLM policy extraction is overhyped. I’ve tested dozens of systems—LLMs hallucinate on coverage endorsements, miss endorsements entirely, and misread limits when documents are scanned at 150 DPI. Instead, use a hybrid:</p>
@@ -406,7 +406,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Note: Use GPU instances (A100 40GB) for inference. Batch size of 16 gives ~100 ms per document. Scale horizontally with Ray Serve.</p>
 
 
-<h3>4. Build the Policy Extraction Layer</h3>
+<p>4. Build the Policy Extraction Layer</p>
 
 
 <p><strong>Step-by-step:</strong></p>
@@ -473,7 +473,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-<h3>5. Integrate with Your Underwriting Engine</h3>
+<p>5. Integrate with Your Underwriting Engine</p>
 
 
 <p>Your AI doesn’t replace underwriting—it accelerates it. Feed extracted data into your existing UW engine via REST API. Use the XGBoost risk score to prioritize submissions:</p>
@@ -547,7 +547,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Use async/await to avoid blocking. I’ve seen teams hit 1000 QPS with a single Node.js instance on a t3.xlarge.</p>
 
 
-<h3>6. Automate Rating and Billing</h3>
+<p>6. Automate Rating and Billing</p>
 
 
 <p>Once the policy is bound, automate rating and billing. Use your PAS’s native rating engine, but feed it AI-enriched data:</p>
@@ -620,7 +620,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-<h3>7. Orchestrate in Real-Time with STP</h3>
+<p>7. Orchestrate in Real-Time with STP</p>
 
 
 <p>To achieve <5-minute quote-to-bind, you need a real-time orchestration layer. Use Kafka + Faust (Python stream processing) to handle events:</p>
@@ -805,7 +805,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-<h3>8. Build Human-in-the-Loop Review Queues</h3>
+<p>8. Build Human-in-the-Loop Review Queues</p>
 
 
 <p>Even with 80% automation, 20% of submissions need human review. Design queues that:</p>

@@ -339,7 +339,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI Policy Administration Automation: A Practitioner’s Implementation Guide</h2>
+                
 
 
 <p>I’ve seen claims teams drown in paperwork while underwriters struggle with manual data entry. Policy administration automation isn’t just about saving keystrokes—it’s about cutting loss ratios by preventing errors before they happen. When done right, it drops combined ratios by 3-5 points and frees up underwriters for actual risk assessment.</p>
@@ -348,7 +348,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>This guide walks through building a production-grade AI policy admin system from scratch. We’ll cover ingestion to billing, including the trade-offs no one mentions. Skip the vendor brochures—this is the playbook I’ve used to deploy systems handling 500k policies/month at a $2B premium carrier.</p>
 
 
-<h3>Why Most AI Policy Automation Fails (And How to Avoid It)</h3>
+<h2>Why Most AI Policy Automation Fails (And How to Avoid It)</h2>
 
 
 <p>Most projects fail because they treat AI like a magic wand. It’s not. The real leverage comes from combining deterministic rules (for 80% of cases) with AI models (for the messy 20%).</p>
@@ -484,7 +484,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 
 
-<h3>Step 1: Define Your Policy Data Model (The Foundation)</h3>
+<h2>Step 1: Define Your Policy Data Model (The Foundation)</h2>
 
 
 <p>Start with a canonical policy schema that handles 95% of your product lines. Don’t over-engineer for niche products—handle them via extension points.</p>
@@ -559,7 +559,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 
 
-<h3>Step 2: Build the Ingestion Layer (Where AI Begins)</h3>
+<h2>Step 2: Build the Ingestion Layer (Where AI Begins)</h2>
 
 
 <p>Policy data comes from everywhere: agents via ACORD XML, brokers via CSV, MGAs via APIs, and carriers via bordereaux. You need a single ingestion point that normalizes everything.</p>
@@ -616,7 +616,7 @@ def parse_acord25(xml_file):
 <p>Resource estimate: 2 FTEs for 3 months to build and test ingestion adapters. Budget for 50% more time for edge cases.</p>
 
 
-<h3>Step 3: Clean and Enrich Policy Data (The Silent Killer)</h3>
+<h2>Step 3: Clean and Enrich Policy Data (The Silent Killer)</h2>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -689,7 +689,7 @@ def standardize_address(address, city, state, zipcode):
 <p>Resource estimate: 1 data engineer for 2 months to build cleaning pipelines. Budget $15k/year for third-party enrichment APIs.</p>
 
 
-<h3>Step 4: Build the AI Underwriting Engine (Not Just a Model)</h3>
+<h2>Step 4: Build the AI Underwriting Engine (Not Just a Model)</h2>
 
 
 <p>Most insurtech startups build a single model to “predict risk.” That’s table stakes. A real AI underwriting engine combines:</p>
@@ -820,7 +820,7 @@ print(f"RMSE: {model.score(X_test, y_test):.2f}")</code></pre>
 <p>Resource estimate: 2 data scientists for 4 months to build and validate models. Budget $20k/month for cloud GPUs (we use AWS g4dn.xlarge instances).</p>
 
 
-<h3>Step 5: Implement Straight-Through Processing (STP) for Quotes</h3>
+<h2>Step 5: Implement Straight-Through Processing (STP) for Quotes</h2>
 
 
 <p>STP isn’t about removing humans—it’s about letting them focus on exceptions. Aim for 60-70% STP for standard policies, 20-30% for complex ones.</p>
@@ -874,7 +874,7 @@ print(f"RMSE: {model.score(X_test, y_test):.2f}")</code></pre>
 <p>Resource estimate: 1 FTE for 1 month to build the STP engine. Budget $5k for logging and monitoring.</p>
 
 
-<h3>Step 6: Build the Endorsement and Cancellation Engine</h3>
+<h2>Step 6: Build the Endorsement and Cancellation Engine</h2>
 
 
 <p>Most policy admin systems treat endorsements as an afterthought. That’s a mistake. Endorsements drive 30% of premium leakage because underwriters forget to adjust premiums when coverages change.</p>
@@ -936,7 +936,7 @@ print(f"RMSE: {model.score(X_test, y_test):.2f}")</code></pre>
 <p>Resource estimate: 1 FTE for 2 months to build the endorsement engine. Budget $10k for billing integration.</p>
 
 
-<h3>Step 7: Integrate with Billing and Payments</h3>
+<h2>Step 7: Integrate with Billing and Payments</h2>
 
 
 <p>Billing is where policy admin automation either shines or fails spectacularly. I’ve seen carriers lose $5M/year because their billing system couldn’t handle AI-generated premiums.</p>
@@ -976,7 +976,7 @@ print(f"RMSE: {model.score(X_test, y_test):.2f}")</code></pre>
 <p>Resource estimate: 1 billing specialist + 1 backend engineer for 3 months. Budget $15k for tax engine integration.</p>
 
 
-<h3>Step 8: Deploy and Monitor (Where Most Projects Fail)</h3>
+<h2>Step 8: Deploy and Monitor (Where Most Projects Fail)</h2>
 
 
 <p>Deployment isn’t just about pushing code to prod. It’s about ensuring the AI model doesn’t drift and the system stays up.</p>

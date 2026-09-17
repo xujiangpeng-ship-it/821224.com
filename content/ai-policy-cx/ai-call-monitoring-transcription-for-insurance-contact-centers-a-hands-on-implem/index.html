@@ -297,7 +297,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>AI Call Monitoring & Transcription for Insurance Contact Centers: A Hands-On Implementation Guide for Claims & Customer Service</h2>
+                
 
 
 <p>In 2023, a Tier-1 P&C; carrier reduced its average claims cycle time by 14 days after deploying AI call monitoring across 8 regional contact centers. The project cost $280k in cloud compute and vendor licensing and required 3.5 FTEs to run. I ran the pilot. Here’s how we built it—and what I’d do differently.</p>
@@ -306,7 +306,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>The goal wasn’t just to “transcribe calls.” We needed structured, actionable data from every FNOL and service call to: feed downstream loss runs, power automated bordereaux, and flag compliance gaps in real time. Most off-the-shelf solutions failed to deliver that. So we assembled a pipeline from raw audio to SQL tables in 10 weeks using open-source ASR, a custom intent engine, and a lightweight MLOps layer. This is the playbook I’d give a CTO or Head of Claims Operations today.</p>
 
 
-<h3>Why This Stack Won’t Work for You</h3>
+<h2>Why This Stack Won’t Work for You</h2>
 
 <p>I’ve reviewed at least a dozen “insurance-ready” call monitoring vendors. None produced fully structured transcripts with claim IDs, policy numbers, loss types, and adjuster notes in a single pass. The best vendor achieved 86% entity recall on policy numbers but required manual post-processing to map claims to transcripts. That’s not good enough when your combined ratio is under 95%.</p>
 
@@ -322,7 +322,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <h2>Before You Start: Requirements & Gating Criteria</h2>
 
 
-<h3>1. Data Inventory</h3>
+<p>1. Data Inventory</p>
 
 <p>You’ll need:</p>
 
@@ -342,7 +342,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>If your TPAs or MGAs can’t provide policy and claim IDs in near-real time, stop. Build a lightweight REST endpoint that accepts a call_id and returns policy/claim metadata in <500ms. We used a Python FastAPI service backed by PostgreSQL with pg_trgm for fuzzy matching. Without this, transcripts are useless.</p>
 
 
-<h3>2. Compliance & Privacy Gates</h3>
+<p>2. Compliance & Privacy Gates</p>
 
 <p><strong>GDPR/CCPA</strong>: You must redact PII in audio and transcripts. We used NVIDIA NeMo’s PII redaction model (nemo_punctuation_and_capitalization) to strip SSNs, credit card numbers, and driver’s license numbers. The model adds 15–20% latency but is non-negotiable.</p>
 
@@ -353,7 +353,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p><strong>Model governance</strong>: If you’re transcribing calls in regulated states, you’ll need SOC 2 Type II, HIPAA, and FedRAMP certifications for your ASR vendor. We self-hosted Whisper v3 large on AWS EKS with Istio for network segmentation and Vault for secrets. The SOC 2 gap analysis took 6 weeks and $45k in audit fees.</p>
 
 
-<h3>3. Success Metrics</h3>
+<p>3. Success Metrics</p>
 
 <p>Define these before touching infrastructure:</p>
 

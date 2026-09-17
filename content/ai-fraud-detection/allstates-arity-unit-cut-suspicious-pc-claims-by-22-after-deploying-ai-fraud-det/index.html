@@ -273,7 +273,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In 2023, Allstate's Arity unit processed 1.1 million first notice of loss (FNOL) submissions across auto and property lines, with fraud flags surfacing on 4.7% of cases. By mid-2024, after rolling out an AI triage layer at FNOL, the company reduced <strong>suspicious claims by 22%</strong> in the first 90 days post-deployment — without increasing false positives that would expand adjuster workloads. The drop translated to an estimated $47 million in avoided leakage across Allstate's P&C; portfolio in 2023 dollars, according to internal modeling shared with <a href="https://www.insurancejournal.com/news/national/2024/03/04/762115.htm" target="_blank" rel="noopener noreferrer">Insurance Journal, March 2024</a>. This is one of the few publicly documented cases where AI fraud detection integrated into FNOL produced measurable loss ratio improvements, not just detection metrics.</h2>
+                <p>In 2023, Allstate's Arity unit processed 1.1 million first notice of loss (FNOL) submissions across auto and property lines, with fraud flags surfacing on 4.7% of cases. By mid-2024, after rolling out an AI triage layer at FNOL, the company reduced <strong>suspicious claims by 22%</strong> in the first 90 days post-deployment — without increasing false positives that would expand adjuster workloads. The drop translated to an estimated $47 million in avoided leakage across Allstate's P&C; portfolio in 2023 dollars, according to internal modeling shared with <a href="https://www.insurancejournal.com/news/national/2024/03/04/762115.htm" target="_blank" rel="noopener noreferrer">Insurance Journal, March 2024</a>. This is one of the few publicly documented cases where AI fraud detection integrated into FNOL produced measurable loss ratio improvements, not just detection metrics.</p>
 
 
 <p>The CTO of Claims Operations at Arity (who requested anonymity due to ongoing litigation exposure) told me that the AI layer caught patterns the fraud team's rules-based system missed: <strong>serial submitters exploiting soft fraud</strong> across multiple geographies and carriers, and <strong>staged accidents</strong> where the same vehicle appeared in multiple claims within weeks. What surprised the team was how fast the model learned to flag these cohorts — within 60 days of production, the model's precision on suspicious claims hit 88%, up from 63% when initially trained on historical data.</p>
@@ -282,7 +282,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>How Arity's AI triage works under the hood The Arity implementation is a supervised learning pipeline built on a proprietary telemetry dataset of 1.3 billion anonymized driving events from Allstate's pay-as-you-drive programs. The model ingests:</p>
 
 
-<h3><strong>Pre-accident kinematics</strong>: hard braking, acceleration, cornering G-forces captured in the 30 seconds before impact <strong>Post-accident kinematics</strong>: trajectory consistency during emergency maneuvers</h3>
+<h2><strong>Pre-accident kinematics</strong>: hard braking, acceleration, cornering G-forces captured in the 30 seconds before impact <strong>Post-accident kinematics</strong>: trajectory consistency during emergency maneuvers</h2>
 
 
 <p><strong>Claim metadata</strong>: time of day, location match to geofenced crash hotspots, repair shop proximity, and prior claim history at the policyholder and VIN level <strong>Social network signals</strong>: phone pings clustered around accident scenes, normalized against anonymized carrier network data</p>
@@ -307,7 +307,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 <p>Worse, the rules engine had no memory across claims. A repeat offender could file five claims in six months, each under a different deductible, and still fly under the radar because none of the individual claims triggered a rule. Solution: Build a supervised model that learns from telemetry, not just claims data</p>
 
 
-<h2>The Arity team chose a gradient-boosted tree model (XGBoost) over deep learning because of explainability requirements from SIU leadership. The model was trained on 2.1 million labeled claims from 2020–2022, with labels provided by SIU investigators using a custom labeling tool that ingested:</h2>
+<p>The Arity team chose a gradient-boosted tree model (XGBoost) over deep learning because of explainability requirements from SIU leadership. The model was trained on 2.1 million labeled claims from 2020–2022, with labels provided by SIU investigators using a custom labeling tool that ingested:</p>
 
 
 <p>Closed SIU case files Phone records and geolocation data subpoenaed during investigations</p>

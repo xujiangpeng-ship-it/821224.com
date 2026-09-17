@@ -252,7 +252,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In 2023, Tesla sold 1.8 million cars. Only 12% of those buyers bought insurance through the embedded option. That’s 216,000 policies — a rounding error compared with the 1.2 million Tesla owners who walked away from the carmaker’s offering because the quote was too high or the coverage too thin.</h2>
+                <p>In 2023, Tesla sold 1.8 million cars. Only 12% of those buyers bought insurance through the embedded option. That’s 216,000 policies — a rounding error compared with the 1.2 million Tesla owners who walked away from the carmaker’s offering because the quote was too high or the coverage too thin.</p>
 
 <p>At first glance, the embedded model looks like a slam dunk: real-time telematics data, seamless customer experience, and a shot at higher lifetime value. Yet most insurers are stuck at 5-15% take-up rates. The bottleneck isn’t the AI pipeline or the API latency. It’s the actuarial model.</p>
 
@@ -260,7 +260,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Telematics isn’t telemetry. It’s a new risk surface The industry still frames telematics as a way to “improve underwriting accuracy.” That’s backwards. Telematics doesn’t just refine existing risk classes — it explodes them into thousands of dynamic micro-classes that shift every mile and every second.</p>
 
-<h2><strong>Example:</strong> A 2022 Subaru Outback with a 2.4L engine and a clean MVR can have a different risk profile in the Bay Area during rush hour than it does on a Sunday morning in Sedona. The difference isn’t driver age or credit score. It’s the interaction between traffic density, road curvature, and driver behavior captured by the accelerometer and gyroscope.</h2>
+<p><strong>Example:</strong> A 2022 Subaru Outback with a 2.4L engine and a clean MVR can have a different risk profile in the Bay Area during rush hour than it does on a Sunday morning in Sedona. The difference isn’t driver age or credit score. It’s the interaction between traffic density, road curvature, and driver behavior captured by the accelerometer and gyroscope.</p>
 
 <p>Most insurers still bucket telematics data into crude buckets: “aggressive,” “moderate,” “conservative.” That’s like using a slide rule after buying a supercomputer. The loss ratio on policies priced with three-tier telematics is 18-22 basis points worse than those priced with 200+ micro-classes, according to a 2023 LexisNexis Risk Solutions internal study based on 1.3 million policy-years.</p>
 
@@ -270,7 +270,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Accelerometer (10-50 Hz) Gyroscope (10-50 Hz)</p>
 
-<h3>Brake/accelerator pedal pressure (CAN bus) Time of day, temperature, precipitation</h3>
+<h2>Brake/accelerator pedal pressure (CAN bus) Time of day, temperature, precipitation</h2>
 
 <p>Driver ID via smartphone Bluetooth or OBD-II dongle That’s roughly 10,000 data points per minute per vehicle. Most insurers feed this straight into a GLM with telematics covariates. The model might use 12 months of historical loss data and call it a day.</p>
 <ul>
@@ -301,7 +301,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Step 1: Stop shipping models to OEMs. Ship a streaming feature pipeline instead.</p>
 
-<h3>The OEM doesn’t need another API endpoint. It needs a data contract: “Give us the last 30 days of telematics data for Vehicle VIN X, and we’ll return a loss cost per mile.” The insurer’s job is to maintain the feature pipeline, not the API wrapper.</h3>
+<p>The OEM doesn’t need another API endpoint. It needs a data contract: “Give us the last 30 days of telematics data for Vehicle VIN X, and we’ll return a loss cost per mile.” The insurer’s job is to maintain the feature pipeline, not the API wrapper.</p>
 
 <p><a href="https://www.verisk.com/insurance/products/telematics-data-pipeline/" target="_blank" rel="noopener noreferrer">[Verisk, “Telematics Data Pipeline for Embedded Insurance,” 2024]</a> Step 2: Build a micro-class factory, not a pricing engine.</p>
 
@@ -322,7 +322,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 </div>
                 <p>Assume an insurer sells 50,000 embedded policies through an OEM at an average premium of $1,200 per year. The embedded take rate is 12%. The insurer’s blended loss ratio is 78%, expense ratio 28%, and combined ratio 106%.</p>
 
-<h2>Now assume the insurer upgrades to a micro-class factory and real-time pricing. The loss ratio drops to 69% because the model catches risk earlier. The expense ratio jumps to 32% because of the streaming pipeline and Bayesian model updates. The combined ratio is now 101%.</h2>
+<p>Now assume the insurer upgrades to a micro-class factory and real-time pricing. The loss ratio drops to 69% because the model catches risk earlier. The expense ratio jumps to 32% because of the streaming pipeline and Bayesian model updates. The combined ratio is now 101%.</p>
 
 <p>That’s a 500-basis-point improvement in combined ratio. For a $60 million premium book, that’s $3 million in underwriting profit. The question isn’t whether the tech pays for itself. It’s whether the insurer can afford not to do it. The hidden cost: model governance in a firmware-driven world</p>
 
@@ -330,7 +330,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>One insurer I reviewed saw a 12% loss ratio spike after a Tesla OTA update in Q2 2023. The root cause? A firmware change that altered the lateral G-force scaling factor. The insurer’s featurization pipeline didn’t have a versioning layer, so the model ingested corrupted signals for three weeks before the anomaly was detected.</p>
 
-<h3>Model governance for embedded insurance isn’t just about model drift. It’s about sensor drift, firmware drift, and API drift. Most insurers treat governance as a compliance checkbox. In embedded insurance, it’s a survival mechanism. <a href="https://www.mckinsey.com/industries/automotive-and-assembly/our-insights/the-future-of-car-data" target="_blank" rel="noopener noreferrer">[McKinsey & Company, “The Future of Car Data: Monetization and Governance,” 2024]</a></h3>
+<p>Model governance for embedded insurance isn’t just about model drift. It’s about sensor drift, firmware drift, and API drift. Most insurers treat governance as a compliance checkbox. In embedded insurance, it’s a survival mechanism. <a href="https://www.mckinsey.com/industries/automotive-and-assembly/our-insights/the-future-of-car-data" target="_blank" rel="noopener noreferrer">[McKinsey & Company, “The Future of Car Data: Monetization and Governance,” 2024]</a></p>
 
 <p>What the CTO should actually build (hint: it’s not another API) The typical embedded insurance stack looks like this:</p>
 
@@ -477,7 +477,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Actionable next steps for the insurance professional If you’re an insurance professional evaluating embedded automotive insurance, do this:</p>
 
-<h2><strong>Audit your telematics pipeline:</strong> Can you ingest raw telematics data in 5-minute windows? If not, you’re not ready for embedded. <strong>Build a micro-class prototype:</strong></h2>
+<p><strong>Audit your telematics pipeline:</strong> Can you ingest raw telematics data in 5-minute windows? If not, you’re not ready for embedded. <strong>Build a micro-class prototype:</strong></p>
 
 <p>Grab 90 days of telematics data for 1,000 policies Featurize using lateral G-force, harsh braking, and cornering events</p>
 

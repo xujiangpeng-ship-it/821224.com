@@ -260,7 +260,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>The vendors making the pitch sound like they're selling you a new API. They're not. What they're actually selling is your claims department trying to approximate latency, layered on top of a 1990s-era policy administration system that hasn't seen a synchronous workflow since before the iPhone launched, wrapped in a micro-frontend that makes five REST calls before returning a quote.</h2>
+                <p>The vendors making the pitch sound like they're selling you a new API. They're not. What they're actually selling is your claims department trying to approximate latency, layered on top of a 1990s-era policy administration system that hasn't seen a synchronous workflow since before the iPhone launched, wrapped in a micro-frontend that makes five REST calls before returning a quote.</p>
 
 <p>I've reviewed seven embedded insurance implementations across P&C and commercial lines this year. Four were still running their AI scoring in batch mode overnight, not during the customer transaction. Three had sub-300ms response time targets on paper; none met them in production. Two of the four who deployed something that qualified as embedded insurance had it powered by a rules engine from 2018 with no machine learning layer at all. They'd simply added an "AI-enhanced" label to the marketing copy and called it a day.</p>
 
@@ -301,7 +301,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>The regulatory constraint you can't design around Real-time embedded ecommerce using AI in insurance operates in a regulatory environment that was written for batch underwriting, not millisecond-by-millisecond pricing decisions. That mismatch creates two specific compliance risks.</p>
 
-<h2>The first is adverse selection. When your AI model prices a policy in real time based on dynamic data inputs, you need to ensure the pricing factors comply with your jurisdiction's rated and unrated classes. A model that uses real-time driving behavior data to adjust auto premiums is fine in a usage-based insurance framework. A model that uses the same data to adjust premiums in a standard personal auto product may violate rating regulations depending on your state or country. The compliance review for real-time embedded products has to happen at the model design stage, not after deployment. I've seen two implementations where the model was approved for testing with one set of features and then shipped with additional features that the compliance team hadn't reviewed, creating a regulatory exposure that took four months to remediate.</h2>
+<p>The first is adverse selection. When your AI model prices a policy in real time based on dynamic data inputs, you need to ensure the pricing factors comply with your jurisdiction's rated and unrated classes. A model that uses real-time driving behavior data to adjust auto premiums is fine in a usage-based insurance framework. A model that uses the same data to adjust premiums in a standard personal auto product may violate rating regulations depending on your state or country. The compliance review for real-time embedded products has to happen at the model design stage, not after deployment. I've seen two implementations where the model was approved for testing with one set of features and then shipped with additional features that the compliance team hadn't reviewed, creating a regulatory exposure that took four months to remediate.</p>
 
 <p>The second is explainability. If your AI model declines a quote or adjusts a premium in real time, you need to be able to explain the decision to the customer and to regulators. Most production ML models used in insurance — particularly deep learning models — don't provide clean feature importance explanations at inference time. SHAP values and LIME explanations add latency to the inference pipeline, which defeats the purpose of running in real time. The practical solution is using inherently interpretable models (rule-based or tree-based with constrained depth) for decisions that require explanation, and reserving complex models for scoring layers that feed into human-underwritten decisions rather than automated ones.</p>
 
@@ -313,7 +313,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Average premium per embedded transaction: $120 to $400 for consumer products, $2,000 to $15,000 for commercial products. The variance is enormous and depends entirely on. the partner's audience and the product depth offered. Cost per real-time quote generation: $0.02 to $0.15. depending on model complexity, feature store lookups, and infrastructure. This is significantly higher than batch pricing because you're paying for ultra-low-latency inference infrastructure, not commodity cloud compute.</p>
 
-<h2>Combined ratio impact: embedded insurance products tend to have slightly worse combined ratios than traditional distribution because the urgency of the moment of need reduces price sensitivity. Expect a 3 to 8 point COR increase relative to the carrier's book, depending on the product type and the control you have over risk selection.</h2>
+<p>Combined ratio impact: embedded insurance products tend to have slightly worse combined ratios than traditional distribution because the urgency of the moment of need reduces price sensitivity. Expect a 3 to 8 point COR increase relative to the carrier's book, depending on the product type and the control you have over risk selection.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -330,7 +330,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Build your feature store before you build your first model. A feature store isn't just a database — it's a managed system for feature definition, computation, versioning, and serving. Feast, Tecton, and AWS Feature Store are the leading options. Pick one and invest in it before you try to serve models against ad hoc queries. The time you spend here saves you six months of refactoring later.</p>
 
-<h2>Choose your first use case for data simplicity, not revenue potential. The parametric trigger use case has the cleanest data pipeline because the triggering event comes from an external API with a well-defined schema. The commercial micro-transaction use case has the best unit economics but the messiest data pipeline because every partner has a different data format and you're normalizing it in real time. Start with the former. Move to the latter once you've proven the architecture.</h2>
+<p>Choose your first use case for data simplicity, not revenue potential. The parametric trigger use case has the cleanest data pipeline because the triggering event comes from an external API with a well-defined schema. The commercial micro-transaction use case has the best unit economics but the messiest data pipeline because every partner has a different data format and you're normalizing it in real time. Start with the former. Move to the latter once you've proven the architecture.</p>
 
 <p>Don't build a monolithic model. Compose your inference pipeline from small, interchangeable models — one for eligibility, one for pricing, one for fraud risk, one for propensity to buy. Each can be updated independently without retraining the others. A monolithic model that predicts all of these together is harder to debug, harder to explain to regulators, and harder to update when one component degrades.</p>
 
@@ -342,7 +342,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Second: do you co-locate model inference with event processing, or do you route through an external API endpoint? The answer determines your latency floor. External API routing adds 50 to 150ms per call minimum. Co-located inference eliminates that entirely.</p>
 
-<h2>Third: what is your feature store architecture, and does it support streaming feature computation? If the vendor is computing features on the fly per request rather than maintaining a precomputed feature store, your latency will degrade as feature complexity grows. This is the single most predictive factor for whether an embedded insurance implementation scales or stalls.</h2>
+<p>Third: what is your feature store architecture, and does it support streaming feature computation? If the vendor is computing features on the fly per request rather than maintaining a precomputed feature store, your latency will degrade as feature complexity grows. This is the single most predictive factor for whether an embedded insurance implementation scales or stalls.</p>
 
 <p>The market is crowded with vendors who can build a demo that works in a sandbox. The ones who can build a system that survives real traffic, regulatory scrutiny, and infrastructure cost pressure are fewer than the RFP pipeline suggests. Distinguish between the two before you invest.</p>
 
@@ -352,7 +352,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</p>
 
-<h2>Was this article helpful? Comments.</h2>
+<p>Was this article helpful? Comments.</p>
 
 
 

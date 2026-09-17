@@ -291,21 +291,21 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h2>In late 2021, Aviva UK’s motor claims team processed an average of 13 days from first notice of loss (FNOL) to settlement. By December 2023, that dropped to 4 hours — not for all claims, but for the 70% of straightforward incidents handled without human adjuster review. The project, internally codenamed “FastTrack,” used a proprietary AI claims engine built on a foundation of computer vision, natural language processing (NLP), and a real-time rules engine that integrates with Aviva’s core policy admin system (Guidewire) and third-party repair networks. The result: a combined ratio improvement of 1.8 points and a 15% reduction in motor claims leakage, per Aviva’s FY2023 results presentation.</h2>
+                <p>In late 2021, Aviva UK’s motor claims team processed an average of 13 days from first notice of loss (FNOL) to settlement. By December 2023, that dropped to 4 hours — not for all claims, but for the 70% of straightforward incidents handled without human adjuster review. The project, internally codenamed “FastTrack,” used a proprietary AI claims engine built on a foundation of computer vision, natural language processing (NLP), and a real-time rules engine that integrates with Aviva’s core policy admin system (Guidewire) and third-party repair networks. The result: a combined ratio improvement of 1.8 points and a 15% reduction in motor claims leakage, per Aviva’s FY2023 results presentation.</p>
 
 <p>I’ve audited six Tier-1 insurers’ 2023 loss ratio (LR) programs and seen no other program scale AI-driven straight-through processing (STP) so aggressively across an entire P&C; line. The trade-off? A 300% increase in model refresh frequency and a near-total reliance on synthetic data for edge-case training. Let’s break down how they did it — and where it nearly collapsed.</p>
 
 <p>Background: Why Aviva Bet the Motor Book on AI</p>
 
 
-<h3>Aviva UK’s motor portfolio is the second-largest in the country, with £2.4 billion in GWP and a 2022 LR of 68%, 8 points above the UK market median. Operational cost per claim was £178, and 42% of claims required at least one adjuster visit. The CFO’s team modeled a 5-point LR improvement as sufficient to offset motor’s drag on the group’s 2025 ROE target of 12%.</h3>
+<p>Aviva UK’s motor portfolio is the second-largest in the country, with £2.4 billion in GWP and a 2022 LR of 68%, 8 points above the UK market median. Operational cost per claim was £178, and 42% of claims required at least one adjuster visit. The CFO’s team modeled a 5-point LR improvement as sufficient to offset motor’s drag on the group’s 2025 ROE target of 12%.</p>
 
 <p>The board approved a £15 million program in March 2022, with a mandate to deliver STP for claims under £2,000 — 65% of volume. The engineering team, led by CTO Paul Cross, chose a build-over-buy strategy: “We evaluated three commercial platforms, and duck creek’s ai suite would have cost £3 million upfront and £1 million annually, but it couldn’t ingest unstructured repair invoices without. Guidewire’s ClaimCenter AI module required a full ClaimsCenter upgrade we weren’t ready to fund. We built in-house in 12 months, but we still depend on Guidewire for policy lookups and Repairify for network selection.”</p>
 
 <p>The Challenge: Data Silos, Garbage In, and a Culture of Manual Review Three friction points killed STP velocity:</p>
 
 
-<h3><strong>Unstructured repair invoices:</strong> 68% of repairer invoices arrived as PDFs or images. OCR error rates hit 22% when extracting line-item labor, parts, and VAT codes. <strong>Legacy policy admin latency:</strong> Guidewire ClaimCenter’s SOAP API averaged 8 seconds per policy lookup. At 3,000 claims/day, that’s 6.7 hours of idle time.</h3>
+<p><strong>Unstructured repair invoices:</strong> 68% of repairer invoices arrived as PDFs or images. OCR error rates hit 22% when extracting line-item labor, parts, and VAT codes. <strong>Legacy policy admin latency:</strong> Guidewire ClaimCenter’s SOAP API averaged 8 seconds per policy lookup. At 3,000 claims/day, that’s 6.7 hours of idle time.</p>
                 <!-- Ad Mid-Content -->
                 <div class="ad-slot" style="margin:32px 0">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3057389153621190" crossorigin="anonymous"></script>
@@ -327,9 +327,9 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 <p>Field-level accuracy: 94.1% (parts list), 96.3% (VAT), 91.4% (labor hours). Total error cost: £12.40 per claim, down from £38.70 pre-model.</p>
 
 
-<h2>The model feeds into a rules engine that flags anomalies: VAT outside 20% ±1%, labor hours > 8/day, or parts with no OEM match. Any flag triggers a human review queue with a 2-hour SLA. Stage 2: NLP for FNOL and Police Reports</h2>
+<p>The model feeds into a rules engine that flags anomalies: VAT outside 20% ±1%, labor hours > 8/day, or parts with no OEM match. Any flag triggers a human review queue with a 2-hour SLA. Stage 2: NLP for FNOL and Police Reports</p>
 
-<h3>For non-injury incidents, Aviva ingests voice-to-text FNOL transcripts and police reports. A RoBERTa-based NLP model classifies accident severity, liability indicators, and injury presence. In a blind test against 5,000 claims, the model agreed with senior adjusters on liability in 92% of cases. Disagreements skewed toward low-velocity incidents where liability was borderline — exactly the edge cases where human judgment adds value.</h3>
+<p>For non-injury incidents, Aviva ingests voice-to-text FNOL transcripts and police reports. A RoBERTa-based NLP model classifies accident severity, liability indicators, and injury presence. In a blind test against 5,000 claims, the model agreed with senior adjusters on liability in 92% of cases. Disagreements skewed toward low-velocity incidents where liability was borderline — exactly the edge cases where human judgment adds value.</p>
 
 <p>Stage 3: Real-Time Rules and Pricing Integration The engine runs in a Kubernetes cluster on AWS EKS, with Guidewire ClaimCenter as the system of record. A custom Kafka pipeline streams events at ~200 ms latency. When a claim is submitted, the AI engine:</p>
 
@@ -346,12 +346,12 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
                 <p>Issues a settlement offer via the customer portal if the claim meets all rules. The system auto-declines claims that:</p>
 
 
-<h3>Exceed £2,000 total cost. Involve third-party injury.</h3>
+<p>Exceed £2,000 total cost. Involve third-party injury.</p>
 
 <p>Have a liability flag in the NLP model. Include parts not in the approved list for the repairer network.</p>
 
 
-<h3>Integration Risks and Mitigations</h3>
+<h2>Integration Risks and Mitigations</h2>
 
 <p>Aviva’s biggest near-miss occurred during the May 2023 Bank Holiday weekend, when a CAP HPI API outage caused 3,400 claims to queue. The team rerouted to Audatex and Mitchell data feeds. within 47 minutes, but the incident exposed a single-point dependency. Post-incident, Aviva built a fallback pricing layer that caches 30 days of parts data nightly.</p>
 
@@ -384,7 +384,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 </ul>
 
 
-<h3>6.8% 5.2%</h3>
+<h2>6.8% 5.2%</h2>
 
 <p>Aviva 2023 Leakage Analytics Report AI introduced new leakage vectors in parts pricing anomalies</p>
 
