@@ -621,6 +621,17 @@ response = client.put_targets(
 
 
             </div>
+
+            <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
+            <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>
+            <ul style="margin:0;padding-left:20px;color:#1E293B;line-height:1.85;font-size:0.95rem;">
+            <li>A three-month pilot on 2,100 claims reduced rework spend by $198,000 and cut cycle time by 3.2 days using a lightweight NLP pipeline running on a 16-core VM.</li>
+            <li>The system achieved 89% precision and 76% recall by selecting a 0.65 decision threshold, resulting in 11 false positives per 100 claims processed.</li>
+            <li>Developers fine-tuned a DistilRoBERTa-base model on 3,142 labeled discrepancies, achieving an F1 score of 0.85 on the holdout set.</li>
+            <li>The solution processes claims in under two seconds on 64 GB RAM, costing approximately $0.68 per hour for AWS on-demand compute resources.</li>
+            </ul>
+        </section>
+
 <!-- COMMUNITY-SECTION-START --><section class="community-perspectives" aria-label="Community perspectives">
   <h2>Community perspectives</h2>
   <p class="community-note">Selected real discussions from insurance practitioners, adjusters and policyholders on public forums. Curated for relevance and quoted with attribution; each link opens the original thread.</p>
@@ -638,29 +649,9 @@ response = client.put_targets(
 
             
 
-            <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
-            <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>
-            <ul style="margin:0;padding-left:20px;color:#1E293B;line-height:1.85;font-size:0.95rem;">
-            <li>I run a 40-person claims team at a specialty P&C insurer. In the last 18 months we processed 14,200 auto and property claims by hand. That’s 27 minutes per claim on average, but the real cost is the rework: 14% of initial estimates get revised upward after we find a receipt or photo we missed the first time. The adjuster who caught the error is usually the one who already knows the policy and the claimant. We can’t clone those humans, but we can give every adjuster the same second set of eyes.</li>
-            <li>Compute: AWS m6i.4xlarge (16 vCPU, 64 GB) or equivalent on-prem. Cost: ≈ $0.68/hr on-demand. Storage: 5 TB S3 bucket in the same region as the VM. Lifecycle policy to Glacier after 90 days.</li>
-            <li>Text (hashed) a1b2c3…</li>
-            <li>4.2 Containerize and deploy Dockerfile:</li>
-            <li>document hash for replayability We set a CloudWatch alarm for latency >100 ms or error rate >1%.</li>
-            <li>Jiangpeng Xu — Lead Author &amp; Principal Analyst</li>
-            </ul>
-        </section>
+            
 
-            <section class="key-takeaways" style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px 28px 18px;margin:36px 0 8px;">
-            <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>
-            <ul style="margin:0;padding-left:20px;color:#1E293B;line-height:1.85;font-size:0.95rem;">
-            <li>I run a 40-person claims team at a specialty P&C insurer. In the last 18 months we processed 14,200 auto and property claims by hand. That’s 27 minutes per claim on average, but the real cost is the rework: 14% of initial estimates get revised upward after we find a receipt or photo we missed the first time. The adjuster who caught the error is usually the one who already knows the policy and the claimant. We can’t clone those humans, but we can give every adjuster the same second set of eyes.</li>
-            <li>Compute: AWS m6i.4xlarge (16 vCPU, 64 GB) or equivalent on-prem. Cost: ≈ $0.68/hr on-demand. Storage: 5 TB S3 bucket in the same region as the VM. Lifecycle policy to Glacier after 90 days.</li>
-            <li>Text (hashed) a1b2c3…</li>
-            <li>4.2 Containerize and deploy Dockerfile:</li>
-            <li>document hash for replayability We set a CloudWatch alarm for latency >100 ms or error rate >1%.</li>
-            <li>Jiangpeng Xu — Lead Author &amp; Principal Analyst</li>
-            </ul>
-        </section>
+            
 
             <div class="editorial-note" style="border-top:1px solid #e5e7eb;padding-top:24px;margin-top:40px;color:#9ca3af;font-size:0.85rem;line-height:1.6;">
                 <strong style="color:#6b7280;">            <!-- AUTHOR BIO BOX -->

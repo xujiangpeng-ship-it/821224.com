@@ -11,6 +11,7 @@ import random
 import re
 import sys
 import textwrap
+import html as html_lib
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
@@ -459,7 +460,8 @@ SECTION 5: ARTICLE STRUCTURE
       inside a heading tag.
 
 5.3 ENDING
-  • NO summary / conclusion / "key takeaways" paragraph.
+  • Inside the body: NO summary / conclusion / "key takeaways" paragraph.
+    (Takeaways are delivered separately — see PART 2 in Section 7.)
   • End on: a specific forward-looking observation, a hard unanswered
     question, or an actionable next step.
   • No positive-energy sign-off ("The future looks bright" etc.).
@@ -485,11 +487,136 @@ analyst" voice.
 SECTION 7: OUTPUT FORMAT
 ———————————————————————————————————————————————————————————————
 
+  Return TWO parts, in this order, with no commentary in between:
+
+  PART 1 — ARTICLE BODY
   • Raw HTML for Jinja2 {{ content }} block insertion.
   • Use <h2>, <h3>, <p>, <ul>/<li>, <table>/<thead>/<tbody>/<th>/<td>.
   • NO <!DOCTYPE>, <html>, <head>, <body> tags.
   • NO code fences (```html or otherwise).
-  • Word count: adhere strictly to the range. Minimum 1200 for all types.""")
+  • Word count: adhere strictly to the range. Minimum 1200 for all types.
+
+  PART 2 — KEY TAKEAWAYS
+  Immediately after PART 1, emit exactly this structure and nothing else:
+
+  <!--KEY-TAKEAWAYS-START-->
+  <li>...</li>
+  <li>...</li>
+  <li>...</li>
+  <li>...</li>
+  <!--KEY-TAKEAWAYS-END-->
+
+  Exactly 4 <li> elements. Every one MUST satisfy all of:
+  • ONE complete, self-contained sentence — never a section heading, never
+    a sentence fragment, never a list of numbers.
+  • Contains at least one concrete fact already stated in the article: a
+    dollar figure, percentage, named vendor, named insurer, or time frame.
+  • 15–40 words.
+  • Plain text inside <li> only — no nested tags, no markdown, no links.
+
+  FORBIDDEN (these get the block rejected): copying your own section headings
+  into the bullets; bullets that end with a colon; bullets shorter than 15
+  words; anything not grounded in the article above.""")
+
+KEY_TAKEAWAY_RE = re.compile(
+    r'<!--KEY-TAKEAWAYS-START-->(.*?)<!--KEY-TAKEAWAYS-END-->', re.S | re.I)
+KT_LI_RE = re.compile(r'<li[^>]*>(.*?)</li>', re.S | re.I)
+
+KT_STYLE = ('background:#fff;border:1px solid #E2E8F0;border-radius:12px;'
+            'padding:24px 28px 18px;margin:36px 0 8px;')
+
+KT_MIN_WORDS = 8
+
+
+def _render_kt_block(bullets: list) -> str:
+    """Turn a list of plain-text sentences into the Key Takeaways section."""
+    if not bullets:
+        return ""
+    items = ''.join('            <li>%s</li>\n' % html_lib.escape(x) for x in bullets[:5])
+    return (
+        '            <section class="key-takeaways" style="%s">\n'
+        '            <h2 style="font-size:1.15rem;font-weight:700;color:#0B1121;'
+        'margin-bottom:12px;letter-spacing:-0.01em;">Key Takeaways</h2>\n'
+        '            <ul style="margin:0;padding-left:20px;color:#1E293B;'
+        'line-height:1.85;font-size:0.95rem;">\n'
+        '%s'
+        '            </ul>\n'
+        '        </section>'
+    ) % (KT_STYLE, items)
+
+
+KT_FALLBACK_SYSTEM = (
+    "You are a senior editor at an insurance-technology trade publication.\n"
+    "You write Key Takeaways blocks for busy claims and insurance executives.\n"
+    "Every bullet you write is one complete sentence containing a concrete "
+    "fact taken from the article. You never write section headings, fragments, "
+    "hype, or rhetorical questions. Plain text only, no markdown."
+)
+KT_FALLBACK_USER = (
+    "Write 4 Key Takeaways for the article below.\n\n"
+    "TITLE: {title}\n\nBODY:\n{body}\n\n"
+    "Return exactly 4 lines, each starting with '- '. Each line must be one "
+    "complete sentence of 15-40 words, grounded in a specific number, vendor, "
+    "insurer, or time frame that appears in this article."
+)
+
+
+def _fallback_key_takeaways(html_body: str, title: str) -> str:
+    """Second chance when the article body came back without a usable block.
+
+    Without this, a model that skips or flubs PART 2 ships an article with no
+    Key Takeaways at all — which is how the site ended up 32% deficient.
+    """
+    text = re.sub(r'<(script|style)[^>]*>.*?</\1>', ' ', html_body, flags=re.S | re.I)
+    text = html_lib.unescape(re.sub(r'<[^>]+>', ' ', text))
+    text = re.sub(r'\s+', ' ', text).strip()[:6000]
+    if len(text) < 400:
+        return ""
+    try:
+        from llm import generate_text
+        raw = generate_text(
+            KT_FALLBACK_SYSTEM,
+            KT_FALLBACK_USER.format(title=title or '(untitled)', body=text),
+            temperature=0.4,
+            max_tokens=700,
+        )
+    except Exception as e:
+        logger.warning("Key Takeaways fallback unavailable: %s", e)
+        return ""
+    bullets = []
+    for line in (raw or '').splitlines():
+        s = line.strip()
+        if s.startswith('- '):
+            s = s[2:].strip()
+        s = re.sub(r'^\d+[\.\)]\s*', '', s).strip()
+        if len(s.split()) >= KT_MIN_WORDS and not s.rstrip().endswith(':'):
+            bullets.append(s)
+    if len(bullets) < 3:
+        return ""
+    logger.info("Key Takeaways produced by fallback generator (%d bullets)", len(bullets))
+    return _render_kt_block(bullets)
+
+
+def _extract_key_takeaways(html_body: str) -> tuple:
+    """Split LLM output into (body_without_kt, key_takeaways_html).
+
+    The generator asks the model to append its takeaways between two comment
+    markers; we lift them out here so they can be rendered at a guaranteed-safe
+    position in the template instead of wherever the model happened to put them.
+    """
+    m = KEY_TAKEAWAY_RE.search(html_body)
+    if not m:
+        return html_body, ""
+    bullets = []
+    for b in KT_LI_RE.finditer(m.group(1)):
+        text = html_lib.unescape(re.sub(r'<[^>]+>', '', b.group(1))).strip()
+        words = text.split()
+        # reject heading-labels / fragments: too short, or trailing colon
+        if len(words) >= 8 and not text.rstrip().endswith(':'):
+            bullets.append(text)
+    if len(bullets) < 3:
+        return KEY_TAKEAWAY_RE.sub('', html_body), ""
+    return KEY_TAKEAWAY_RE.sub('', html_body), _render_kt_block(bullets)
 
 SYSTEM_PROMPT = SYSTEM_PROMPT + ("\n\n" + SLOP_INSTRUCTIONS if SLOP_INSTRUCTIONS else "")
 
@@ -630,6 +757,37 @@ def _heading_issues(html_body: str):
     return issues
 
 
+def _repair_heading_structure(html_body: str) -> tuple:
+    """Auto-repair known LLM heading bugs. Returns (body, list_of_repairs).
+
+    Reuses the exact rules from fix_h2_structure.py so the one-off cleanup and
+    the live pipeline can never drift apart:
+      - prose/run-on heading -> <p>
+      - <h2> duplicating the article title -> removed
+      - orphan <h3> used as a top-level section -> <h2>
+    Headings carrying style= (Key Takeaways / Comments) are left untouched.
+    """
+    try:
+        from fix_h2_structure import fix_body, norm
+    except Exception as e:      # pragma: no cover - defensive
+        logger.warning("heading auto-repair unavailable (%s); falling back to warn-only", e)
+        return html_body, []
+
+    title_m = re.search(r'<h1[^>]*>(.*?)</h1>', html_body, re.S | re.I)
+    title_norm = norm(title_m.group(1)) if title_m else ''
+    repaired = fix_body(html_body, title_norm)
+    if repaired == html_body:
+        return html_body, []
+
+    # Report what changed, for CI log visibility.
+    before = {re.sub(r'<[^>]+>', '', m.group(3)).strip()[:60]
+              for m in re.finditer(r'<h([23])([^>]*)>(.*?)</h\1>', html_body, re.S | re.I)}
+    after = {re.sub(r'<[^>]+>', '', m.group(3)).strip()[:60]
+             for m in re.finditer(r'<h([23])([^>]*)>(.*?)</h\1>', repaired, re.S | re.I)}
+    fixes = ['removed/rewrote: %r' % h for h in sorted(before - after)]
+    return repaired, fixes
+
+
 def render_article(config, keyword_entry, html_body: str) -> Path:
     """Render one article to content/{subdomain}/{slug}/index.html"""
     jinja_env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
@@ -662,12 +820,27 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
 
     html_body = re.sub(r'<img\s[^>]*>', _fix_img, html_body)
 
-    # Heading-structure guard: warn (not block) on structural bugs so CI keeps
-    # shipping while surfacing regressions from the LLM.
+    # Heading structure: auto-repair the known LLM bugs rather than only
+    # warning, so structural defects never reach production.
+    html_body, repairs = _repair_heading_structure(html_body)
+    for r in repairs:
+        logger.warning("heading auto-repaired -> %s", r)
     for issue in _heading_issues(html_body):
-        logger.warning("heading-structure issue: %s", issue)
+        logger.warning("heading-structure issue remains after repair: %s", issue)
 
     title = extract_title(html_body)
+
+    # Key Takeaways: lift the model's block out of the body and render it in a
+    # guaranteed-safe template slot (right before Community perspectives)
+    # instead of wherever the model happened to emit it. If the model skipped
+    # or flubbed it, make one dedicated request rather than shipping without.
+    html_body, key_takeaways = _extract_key_takeaways(html_body)
+    if not key_takeaways:
+        logger.warning("model emitted no usable Key Takeaways; running dedicated pass")
+        key_takeaways = _fallback_key_takeaways(html_body, title)
+    if not key_takeaways:
+        logger.error("article rendered WITHOUT Key Takeaways: %r", title)
+
     description = generate_description(html_body)
     slug = make_slug(title)
     subdomain = keyword_entry["subdomain"]
@@ -710,6 +883,7 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
         subdomain=subdomain,
         subdomain_name=subdomain_name,
         community_section=community_section,
+        key_takeaways=key_takeaways,
         adsense_pub_id=pub_id or None,
         ad_slot_top=ad_slots.get("top_banner", {}).get("slot", ""),
         ad_slot_in=ad_slots.get("in_content", {}).get("slot", ""),
@@ -741,6 +915,18 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
 
     logger.info("enhance_article: stance=%s, personas=%s, llm=%s",
                 v2_result["stance_used"], v2_result["personas_used"], v2_result["llm_called"])
+
+    # Key Takeaways guard: the de-AI and stance passes rewrite the whole
+    # document and can silently drop the block. Re-inject it if it vanished.
+    if key_takeaways and 'class="key-takeaways"' not in html:
+        logger.warning("Key Takeaways lost in deai/enhance pass — re-injecting")
+        for anchor in ('<!-- COMMUNITY-SECTION-START -->', '<!-- COMMENTS -->'):
+            idx = html.find(anchor)
+            if idx != -1:
+                html = html[:idx] + key_takeaways + "\n\n" + html[idx:]
+                break
+        else:
+            logger.error("could not find an anchor to re-inject Key Takeaways")
 
     out_dir = CONTENT_DIR / subdomain / slug
     out_dir.mkdir(parents=True, exist_ok=True)
