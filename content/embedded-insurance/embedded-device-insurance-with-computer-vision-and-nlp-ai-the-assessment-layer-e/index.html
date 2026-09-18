@@ -268,7 +268,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Traditional property claims adjusters assess damage using standardized rubrics: fire severity, water intrusion depth, structural compromise. The categories are bounded. A roof is a roof. A foundation is a foundation. Device damage does not fit those categories.</p>
 
-<h2>A cracked smartphone screen is a defect claim. A water-damaged laptop might be a manufacturing fault or an act of negligence. A battery that swells could be a design flaw or abuse. The same visual evidence supports entirely different outcomes depending on policy language, warranty terms, and the original equipment manufacturer's service bulletins. This is why manual triage exists, and why it is expensive.</h2>
+<p>A cracked smartphone screen is a defect claim. A water-damaged laptop might be a manufacturing fault or an act of negligence. A battery that swells could be a design flaw or abuse. The same visual evidence supports entirely different outcomes depending on policy language, warranty terms, and the original equipment manufacturer's service bulletins. This is why manual triage exists, and why it is expensive.</p>
 
 <p>Swiss Re reported in its 2024 <em>Smart Technology: Insights from a Connected World</em> that global smart device shipments exceeded 12 billion units annually, with replacement and warranty markets growing at 14 percent year over year. The insured population is expanding faster than the adjuster workforce. Embedded insurance programs onboard devices at point of sale, which means claims arrive faster and with less context than traditional policies ever did. The FNOL is often a single photo and a voice note from the policyholder.</p>
 
@@ -278,7 +278,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Our CV pipeline starts with policyholder-submitted imagery. The phone camera captures 12 to 20 megapixels. The model needs to answer four questions in sequence: what device is this, what category of damage is present, how severe is it, and is the damage consistent with the claimed event.</p>
 
-<h2>We fine-tuned a ResNet-50 backbone on a proprietary dataset of 340,000 device images spanning smartphones, laptops, tablets, wearables, and hearing aids. The training set came from three sources: OEM service center intake photos,. our own historical claims images, and licensed third-party imagery from iFixit teardown documentation. Model accuracy on held-out test sets reached 91.3 percent for device classification and 84.7 percent for damage category assignment. Those numbers are real. They are also insufficient on their own.</h2>
+<p>We fine-tuned a ResNet-50 backbone on a proprietary dataset of 340,000 device images spanning smartphones, laptops, tablets, wearables, and hearing aids. The training set came from three sources: OEM service center intake photos,. our own historical claims images, and licensed third-party imagery from iFixit teardown documentation. Model accuracy on held-out test sets reached 91.3 percent for device classification and 84.7 percent for damage category assignment. Those numbers are real. They are also insufficient on their own.</p>
 
 <p>The failure modes reveal the actual work. A scratched screen and a cracked screen look nearly identical at low resolution. A shadow cast by a charging cable can mimic a hairline fracture. Reflections from glass surfaces break edge-detection pipelines. We solved most of these with a preprocessing step: polarization-aware normalization and synthetic data augmentation using physically-based rendering to simulate real-world lighting conditions. The augmentation alone improved crack detection precision by 6.1 percentage points on our validation set.</p>
 
@@ -295,7 +295,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Computer vision captures the visible. NLP captures the narrative. Policyholder descriptions are messy. People describe symptoms the way they experienced them, not the way a technician diagnoses them. A claimant will say their laptop shut down during a video call. The engineer will call it a thermal throttling event, which points to a different failure mode than a battery controller fault, which points to a different warranty coverage.</p>
 
-<h2>We deployed a distilled version of Llama 3.1 fine-tuned on 45,000 historical claim notes and OEM technical service bulletins. The model extracts structured attributes from free-text input: reported symptom, onset condition, device model, age of device, prior repair history, and claimed causation. It also scores semantic consistency between the text description and the visual evidence. Mismatches trigger the escalation path.</h2>
+<p>We deployed a distilled version of Llama 3.1 fine-tuned on 45,000 historical claim notes and OEM technical service bulletins. The model extracts structured attributes from free-text input: reported symptom, onset condition, device model, age of device, prior repair history, and claimed causation. It also scores semantic consistency between the text description and the visual evidence. Mismatches trigger the escalation path.</p>
 
 <p>The consistency check is the part that matters. In our pilot, 11 percent of claims showed semantic-visual mismatches that would have passed through a vision-only system. Common patterns: the image showed a physical crack but the text described an internal failure, the text claimed water exposure but the image showed no liquid contact indicators, the device model in the text did not match the device in the photo. Each mismatch was a fraud signal or a misdiagnosis waiting to happen. The combined system caught 7.3 percent of those as likely fraudulent. The vision-only baseline caught 1.8 percent. The difference is the NLP layer.</p>
 
@@ -357,7 +357,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Selected real discussions from insurance practitioners, adjusters and policyholders on public forums. Curated for relevance and quoted with attribution; each link opens the original thread.</p>
 
-<h2><blockquote>Global insurance premiums are on track to cross USD 7 trillion by the end of 2022 (Source: Swiss Re). But underinsurance continues to be a serious challenge. India, for example, has a substantial protection gap of 70–80% for life and non-life insurance combined (Source: SBI). This means only 20–30% of the country’s insurance needs are being met, and a large section of the Indian population remains vulnerable to the financial impacts of death, illness, and other contingencies. How can insurers close this protection</h2>
+<p><blockquote>Global insurance premiums are on track to cross USD 7 trillion by the end of 2022 (Source: Swiss Re). But underinsurance continues to be a serious challenge. India, for example, has a substantial protection gap of 70–80% for life and non-life insurance combined (Source: SBI). This means only 20–30% of the country’s insurance needs are being met, and a large section of the Indian population remains vulnerable to the financial impacts of death, illness, and other contingencies. How can insurers close this protection</p>
 
 <p><blockquote>&gt; Compare use case to use case, not language to language.Then you are comparing &quot;bank account interest and debt systems&quot; to &quot;embedded drivers&quot;.Or &quot;tax systems&quot; to &quot;embedded drivers&quot;.Or &quot;insurance policy engines&quot; to &quot;embedded drivers&quot;, etc.COBOL is not a use-case, and all of the above could be done in any language. If we are discussing the qualities, ease of training , workforce availability and overall viability of COBOL, it is against the qualities, ea</p>
 
@@ -367,7 +367,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Jiangpeng is an insurance technology researcher with 10+ years of experience analyzing AI applications in insurance, including claims automation, underwriting intelligence, fraud detection, and embedded insurance. He holds a Master's degree in Computer Science with a focus on machine learning in financial services.</p>
 
-<h2>Was this article helpful? Comments.</h2>
+<p>Was this article helpful? Comments.</p>
 
 
 
