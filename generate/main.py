@@ -917,16 +917,27 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
                 v2_result["stance_used"], v2_result["personas_used"], v2_result["llm_called"])
 
     # Key Takeaways guard: the de-AI and stance passes rewrite the whole
-    # document and can silently drop the block. Re-inject it if it vanished.
-    if key_takeaways and 'class="key-takeaways"' not in html:
-        logger.warning("Key Takeaways lost in deai/enhance pass — re-injecting")
-        for anchor in ('<!-- COMMUNITY-SECTION-START -->', '<!-- COMMENTS -->'):
-            idx = html.find(anchor)
-            if idx != -1:
-                html = html[:idx] + key_takeaways + "\n\n" + html[idx:]
-                break
-        else:
-            logger.error("could not find an anchor to re-inject Key Takeaways")
+    # document. Two distinct failures were observed in production:
+    #   (a) the block is dropped entirely
+    #   (b) the block survives but its <li> and <h2> are gutted — so checking
+    #       only for the class name is NOT enough; count the bullets.
+    if key_takeaways:
+        block = re.search(r'<section class="key-takeaways"[^>]*>.*?</section>',
+                          html, re.S | re.I)
+        bullets = len(re.findall(r'<li[\s>]', block.group(0), re.I)) if block else 0
+        if bullets < 3:
+            reason = 'gutted by post-processing' if block else 'dropped entirely'
+            logger.warning("Key Takeaways %s — restoring", reason)
+            if block:
+                html = html[:block.start()] + key_takeaways + html[block.end():]
+            else:
+                for anchor in ('<!-- COMMUNITY-SECTION-START -->', '<!-- COMMENTS -->'):
+                    idx = html.find(anchor)
+                    if idx != -1:
+                        html = html[:idx] + key_takeaways + "\n\n" + html[idx:]
+                        break
+                else:
+                    logger.error("could not find an anchor to re-inject Key Takeaways")
 
     out_dir = CONTENT_DIR / subdomain / slug
     out_dir.mkdir(parents=True, exist_ok=True)
