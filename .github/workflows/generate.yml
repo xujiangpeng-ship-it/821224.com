@@ -41,6 +41,8 @@ jobs:
           AGNES_MODEL: "agnes-2.5-flash"
         run: python generate/main.py --count 1
 
+      - name: Validate & auto-fix article structure (hard gate)
+        run: python generate/validate_articles.py --check
 
       - name: Commit and push
         run: |

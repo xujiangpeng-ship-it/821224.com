@@ -779,7 +779,9 @@ def _demote_long_headings(html_body: str) -> str:
 
     A heading longer than ~160 characters is almost always prose the model
     dressed up as a section title; the text is preserved, only the tag changes.
-    Styled headings (Key Takeaways / Comments) are left untouched.
+    Styled headings (Key Takeaways / Comments) are left untouched. Empty
+    headings (no meaningful text) are dropped entirely — they carry no
+    semantic value and only signal a generation glitch.
     """
     out = []
     last = 0
@@ -787,7 +789,11 @@ def _demote_long_headings(html_body: str) -> str:
         out.append(html_body[last:m.start()])
         tag, attrs, inner = m.group(1).lower(), m.group(2), m.group(3)
         text = re.sub(r'<[^>]+>', '', inner).strip()
-        if 'style=' in attrs.lower() or len(text) <= _LONG_HEADING_CHARS:
+        if 'style=' in attrs.lower():
+            out.append(html_body[m.start():m.end()])
+        elif not text:
+            pass  # drop empty heading
+        elif len(text) <= _LONG_HEADING_CHARS:
             out.append(html_body[m.start():m.end()])
         else:
             out.append('<p>' + inner + '</p>')
