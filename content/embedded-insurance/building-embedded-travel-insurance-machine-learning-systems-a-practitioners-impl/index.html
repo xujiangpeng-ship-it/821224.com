@@ -246,7 +246,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
             <header class="article-header">
                 <a href="/embedded-insurance/" class="tag tag-indigo">Embedded Insurance</a>
-                <h1>Building Embedded Travel Insurance Machine Learning Systems: A Practitioner's Implementation Guide Building Embedded Travel Insurance Machine Learning Systems: A Practitioner's Implementation Guide</h1>
+                <h1>Building Embedded Travel Insurance Machine Learning Systems: A Practitioner's Implementation Guide</h1>
                 <div class="article-meta">
                     <span>September 19, 2026</span>
                     <span class="dot"></span>
@@ -260,11 +260,11 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
             
 
             <div class="article-content">
-                <h1>Travel insurance conversion rates sit at 3.2 percent for generic pop-up offers and jump to 18.7 percent when the pricing engine adjusts premiums dynamically based on trip parameters. That gap exists because most embedded insurance implementations still rely on static decision trees instead of living models. I spent the last 14 months helping three. MGAs replace their rule-based underwriting with ML pipelines. Here is what actually works, where it breaks, and the headcount you need to keep it running.</h1>
+                
 
 <p>Understanding the embedded travel insurance use case</p>
 
-<h2>Embedded travel insurance appears at three distinct touchpoints in the travel booking flow: flight checkout, hotel reservation, and rental car confirmation. The machine learning problem differs at each one. Flight checkout needs a real-time approval score under 200 milliseconds because the customer is in active payment mode. Hotel reservations allow 2-3 second response times since the purchase path is wider. Rental car confirmations are mostly post-purchase upsells where the latency budget expands to 5-8 seconds.</h2>
+<p>Embedded travel insurance appears at three distinct touchpoints in the travel booking flow: flight checkout, hotel reservation, and rental car confirmation. The machine learning problem differs at each one. Flight checkout needs a real-time approval score under 200 milliseconds because the customer is in active payment mode. Hotel reservations allow 2-3 second response times since the purchase path is wider. Rental car confirmations are mostly post-purchase upsells where the latency budget expands to 5-8 seconds.</p>
 
 <p>The core ML task splits into two categories. The first predicts whether a traveler will buy coverage at a given price point. This is a conversion probability model trained on historical booking data. The second estimates trip risk characteristics, particularly cancellation likelihood and claim frequency by destination. That model requires geospatial and temporal features you will not find in standard transaction logs.</p>
 
@@ -274,7 +274,7 @@ function ga4Feedback(answer){gtag('event','article_feedback',{'event_category':'
 
 <p>Before writing any model code, you need to nail down what you are predicting and which features actually move the needle. Most teams skip this step and jump straight to feature engineering, which produces models that perform well in staging but collapse in production. I have reviewed the architecture decks for eleven embedded insurance launches. Seven of them failed or required full rebuilds because the prediction target was misaligned with the business outcome they actually cared about.</p>
 
-<h2>Your prediction target for a flight checkout embed should be binary: did the customer accept the insurance offer at the displayed price? Record the exact price shown, the displayed benefit amount, the customer's loyalty tier, and whether they purchased anything else in the same session. Do not conflate acceptance with eventual claim activity. Those are separate models that serve different purposes.</h2>
+<p>Your prediction target for a flight checkout embed should be binary: did the customer accept the insurance offer at the displayed price? Record the exact price shown, the displayed benefit amount, the customer's loyalty tier, and whether they purchased anything else in the same session. Do not conflate acceptance with eventual claim activity. Those are separate models that serve different purposes.</p>
 
 <p>Build a data schema document that maps each feature to its source system. Here is the minimum set every production system needs: Feature Category</p>
 
