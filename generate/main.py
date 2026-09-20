@@ -447,12 +447,17 @@ SECTION 5: ARTICLE STRUCTURE
   • Include at least 1 <table> with minimum 4 rows × 4 columns, comparing
     specific vendors / frameworks / metrics / approaches — not generic pros/cons.
   • No inline bold keyword lists. Rewrite as flowing paragraphs.
-  • HEADING STRUCTURE RULES (HARD — violations are structural bugs):
+    • HEADING STRUCTURE RULES (HARD — violations are structural bugs):
+    - NEVER use <h1> anywhere in the body. The page already has exactly one
+      <h1> (the title), rendered by the template. A second <h1> in the body is
+      a structural defect — do not emit one.
     - NEVER repeat the article title as an <h2>. The title is the <h1>;
       do not echo it as a body section heading.
-    - A heading MUST be a short label (ideally under ~12 words, a phrase,
-      not a full sentence or paragraph). NEVER wrap a sentence, run-on, or
-      multi-sentence paragraph in <h2>/<h3> — that content belongs in <p>.
+    - A heading MUST be a short label (ideally under ~12 words / ~90 characters,
+      a phrase, not a full sentence or paragraph). Headings longer than ~160
+      characters are almost always prose — write them as <p> instead.
+      NEVER wrap a sentence, run-on, or multi-sentence paragraph in <h2>/<h3>
+      — that content belongs in <p>.
     - Every <h3> MUST be nested under an <h2>. NEVER use <h3> as a
       top-level section divider; if a section has no <h2> above it, emit
       it as <h2> instead.
@@ -670,11 +675,19 @@ def generate_article(keyword_entry, config) -> str:
 # ---------------------------------------------------------------------------
 
 def extract_title(html_content: str) -> str:
-    """Extract first <h[12]> as title."""
+    """Extract first <h[12]> as title, collapsing an accidental double emission.
+
+    The model sometimes writes the title twice ("Title Title"); collapse that to
+    a single copy so the rendered <h1> is never duplicated.
+    """
     m = re.search(r"<h[12]>(.+?)</h[12]>", html_content)
-    if m:
-        return m.group(1).strip()
-    return "Untitled"
+    if not m:
+        return "Untitled"
+    title = m.group(1).strip()
+    for i, ch in enumerate(title):
+        if ch == ' ' and title[:i] == title[i + 1:] and len(title[:i]) > 10:
+            return title[:i]
+    return title
 
 
 def generate_description(html_content: str, max_chars: int = 160) -> str:
@@ -757,6 +770,32 @@ def _heading_issues(html_body: str):
     return issues
 
 
+_HEAD_RE = re.compile(r'<h([23])([^>]*)>(.*?)</h\1>', re.S | re.I)
+_LONG_HEADING_CHARS = 160
+
+
+def _demote_long_headings(html_body: str) -> str:
+    """Convert non-styled <h2>/<h3> whose text exceeds the length cap to <p>.
+
+    A heading longer than ~160 characters is almost always prose the model
+    dressed up as a section title; the text is preserved, only the tag changes.
+    Styled headings (Key Takeaways / Comments) are left untouched.
+    """
+    out = []
+    last = 0
+    for m in _HEAD_RE.finditer(html_body):
+        out.append(html_body[last:m.start()])
+        tag, attrs, inner = m.group(1).lower(), m.group(2), m.group(3)
+        text = re.sub(r'<[^>]+>', '', inner).strip()
+        if 'style=' in attrs.lower() or len(text) <= _LONG_HEADING_CHARS:
+            out.append(html_body[m.start():m.end()])
+        else:
+            out.append('<p>' + inner + '</p>')
+        last = m.end()
+    out.append(html_body[last:])
+    return ''.join(out)
+
+
 def _repair_heading_structure(html_body: str) -> tuple:
     """Auto-repair known LLM heading bugs. Returns (body, list_of_repairs).
 
@@ -776,6 +815,14 @@ def _repair_heading_structure(html_body: str) -> tuple:
     title_m = re.search(r'<h1[^>]*>(.*?)</h1>', html_body, re.S | re.I)
     title_norm = norm(title_m.group(1)) if title_m else ''
     repaired = fix_body(html_body, title_norm)
+
+    # The template renders the single canonical <h1>; the model must never emit
+    # one inside the body. Strip any stray <h1> so an h1 x2 bug can never ship.
+    repaired = re.sub(r'<h1[^>]*>.*?</h1>', '', repaired, flags=re.S | re.I)
+
+    # Over-long body headings are prose dressed as a heading — demote to <p>.
+    repaired = _demote_long_headings(repaired)
+
     if repaired == html_body:
         return html_body, []
 
@@ -820,6 +867,11 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
 
     html_body = re.sub(r'<img\s[^>]*>', _fix_img, html_body)
 
+    # Capture the title from the raw body BEFORE heading repair: repair may strip
+    # a stray <h1> the model used to carry the title, so extracting after would
+    # lose it.
+    title = extract_title(html_body)
+
     # Heading structure: auto-repair the known LLM bugs rather than only
     # warning, so structural defects never reach production.
     html_body, repairs = _repair_heading_structure(html_body)
@@ -827,8 +879,6 @@ def render_article(config, keyword_entry, html_body: str) -> Path:
         logger.warning("heading auto-repaired -> %s", r)
     for issue in _heading_issues(html_body):
         logger.warning("heading-structure issue remains after repair: %s", issue)
-
-    title = extract_title(html_body)
 
     # Key Takeaways: lift the model's block out of the body and render it in a
     # guaranteed-safe template slot (right before Community perspectives)
